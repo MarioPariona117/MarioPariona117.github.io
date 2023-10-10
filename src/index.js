@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
+import './styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './assets/PressStart2P-Regular.ttf'
+import './assets/static/RobotoSlab-Regular.ttf'
+import './assets/background.png'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <HashRouter>
+        <App />  
+    </HashRouter>  
   </React.StrictMode>
 );
 
