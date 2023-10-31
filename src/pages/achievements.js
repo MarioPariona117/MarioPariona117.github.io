@@ -7,20 +7,20 @@ function Achievements() {
   return (
     <div>
       <h2>High School Achievements</h2>
-      <dl>
+      <ol class = "alternating-colors">
         {
           achievementItems.map(
             (achievement, index) => {
               return (
-                <dt className = 'Achievement-name'>
-                  {achievement.name}
-                  <dd className='Achievement-desc'>{achievement.description}</dd>
-                </dt>
+                <li className = 'Achievement-name'>
+                  <strong> {achievement.name} </strong>
+                  <p className='Achievement-desc'>{achievement.description}</p>
+                </li>
               );
             }
           )
         }
-      </dl>
+      </ol>
       <button onClick={() => SetCount(count + 1)}>
         "Click on me!!"
       </button>

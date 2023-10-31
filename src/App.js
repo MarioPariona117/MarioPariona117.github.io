@@ -4,11 +4,11 @@ import { Routes, Route, HashRouter } from 'react-router-dom';
 // import List from "./Components/List";
 import "./styles/App.css";
 import Home from './pages/home';
-import About from './pages/about_me';
+import About from './pages/about';
 import Achievements from './pages/achievements';
 import Skills from './pages/skills';
 import Projects from './pages/projects';
-import CV from './pages/projects';
+import CV from './pages/cv';
 import Contact from './pages/contact';
 
 import Layout from "./components/Layout";
