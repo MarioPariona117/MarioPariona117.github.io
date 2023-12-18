@@ -6,7 +6,7 @@ function Achievements() {
   const [count, SetCount] = useState(0);
   return (
     <div>
-      <h2>High School Achievements</h2>
+      <h2>Academic Achievements</h2>
       <ol class = "alternating-colors">
         {
           achievementItems.map(
@@ -21,13 +21,13 @@ function Achievements() {
           )
         }
       </ol>
-      <button onClick={() => SetCount(count + 1)}>
+
+      {/* <button onClick={() => SetCount(count + 1)}>
         "Click on me!!"
       </button>
       <p>
         You clicked {count}, muahahhaahahha
-      </p>
-      <p>Your achievements go here.</p>
+      </p> */}
     </div>
   );
 }

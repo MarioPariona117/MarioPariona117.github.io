@@ -21,13 +21,12 @@ const Projects = () => {
           )
         }
       </ol>
-      <button onClick={() => SetCount(count + 1)}>
+      {/* <button onClick={() => SetCount(count + 1)}>
         "Click on me!!"
       </button>
       <p>
         You clicked {count}, muahahhaahahha
-      </p>
-      <p>Your achievements go here.</p>
+      </p> */}
     </div>
   );
 };

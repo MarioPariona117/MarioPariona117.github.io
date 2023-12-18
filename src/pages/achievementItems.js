@@ -1,7 +1,7 @@
 export const achievementItems = [
   {
     name: "Gold Medal in Iranian Geometry Olympiad 2016",
-    description: "Top 5, only 4 Chinese above me?",
+    // description: "Top 5, only 4 Chinese above me?",
   },
   {
     name: "Bronze Medal in Olimpiada de Mayo 2015"
@@ -34,22 +34,25 @@ export const achievementItems = [
     name: "Gold Medal in Cyberspace Mathematical Competition 2020",
   },
   {
-    name: "Bronze Medal in Competencia Iberoamericana de Informática y Computación (CIIC) 2020, 2021",
+    name: "Bronze Medal in Competencia Iberoamericana de Informática y Computación (CIIC) 2020",
   },
   {
     name: "Bronze Medal International Olympiad of Metropolises en la modalidad de Informatica 2020",
   },
   {
+    name: "1017th, Google Code Jam Round 2, 2021"
+  },
+  {
+    name: "Bronze Medal in Competencia Iberoamericana de Informática y Computación (CIIC) 2021",
+  },
+  {
     name: "Gold Medal in IberoAmerican Olympiad of Mathematics 2021"
   },
   {
-    name: "Google Code Jam"
+    name: "538th, Meta Hacker Cup Round 2, 2022"
   },
   {
     name: "Bronze Medal in the Northwestern Europe Regional Contest 2022"
   },
-  {
-
-  }
 
 ];
