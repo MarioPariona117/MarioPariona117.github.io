@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.fa72a2f1.chunk.css",
-    "main.js": "/static/js/main.2708ae2d.chunk.js",
-    "main.js.map": "/static/js/main.2708ae2d.chunk.js.map",
+    "main.js": "/static/js/main.18f1e82d.chunk.js",
+    "main.js.map": "/static/js/main.18f1e82d.chunk.js.map",
     "runtime~main.js": "/static/js/runtime~main.efc0c561.js",
     "runtime~main.js.map": "/static/js/runtime~main.efc0c561.js.map",
     "static/js/2.444fa182.chunk.js": "/static/js/2.444fa182.chunk.js",
@@ -10,7 +10,7 @@
     "static/js/3.69c2b8f0.chunk.js": "/static/js/3.69c2b8f0.chunk.js",
     "static/js/3.69c2b8f0.chunk.js.map": "/static/js/3.69c2b8f0.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.a295da8cd9f795ec4af2b691ea8599f6.js": "/precache-manifest.a295da8cd9f795ec4af2b691ea8599f6.js",
+    "precache-manifest.1fe7d0df3f394c104cfd5109293966ed.js": "/precache-manifest.1fe7d0df3f394c104cfd5109293966ed.js",
     "service-worker.js": "/service-worker.js",
     "static/css/main.fa72a2f1.chunk.css.map": "/static/css/main.fa72a2f1.chunk.css.map",
     "static/media/PressStart2P-Regular.ttf": "/static/media/PressStart2P-Regular.f98cd910.ttf",
