@@ -285,22 +285,22 @@ li {
   font-size: 16px;
   line-height: 20px;
   
-  &:before {
+  /* &:before {
     content: '';
     display: block;
     height: 42px;
     width: 42px;
     border-radius: 50%;
     border: 2px solid #ddd;
-    position: absolute; /* yeah, you have to manually position it based on the text size, line height, etc. (in the parent li style). it's not the smarest solution */
+    position: absolute; // yeah, you have to manually position it based on the text size, line height, etc. (in the parent li style). it's not the smarest solution 
     top: -12px;
     left: -46px;
-  }
+  } */
 }
 
 strong { color: #292929; }
 
-ol.alternating-colors { 
+/* ol.alternating-colors { 
   li:nth-child(odd):before { border-color: #0BAD02; }
   li:nth-child(even):before { border-color: #2378D5; }
-}
+} */
