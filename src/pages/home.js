@@ -5,7 +5,7 @@ const Home = () => {
     <div>
       <section id="home" className="hero" >
         <div>
-          <h1>Hey! I'm <span id="name">Mario</span> :D</h1>
+          <h1>Hey! I'm Mario :D</h1>
           {/* <p className="about"> */}
           <p>
           I'm Mario Pariona, a Computer Science student at the University of Cambridge. My journey into the world of Computer Science began with a passion for Mathematical Olympiads. 

@@ -2,6 +2,7 @@ export const achievementItems = [
   {
     name: "Gold Medal in Iranian Geometry Olympiad 2016",
     // description: "Top 5, only 4 Chinese above me?",
+    // date: "2016"
   },
   {
     name: "Bronze Medal in Olimpiada de Mayo 2015"

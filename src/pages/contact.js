@@ -1,12 +1,27 @@
-import { Email } from "@mui/icons-material";
 import React from "react";
-import { Link } from "react-router-dom";
-
+import { Typography } from "@mui/material";
 const Contact = () => {
     return (
+        
         <div>
-            Don't hesitate to contact me at{' '}
-            <a href="mailto:mariopariona117@gmail.com">mariopariona117@gmail.com</a>
+            <Typography>
+                Don't hesitate to contact me at {' '}
+                <Typography 
+                variant="body1" 
+                component={"a"} 
+                href="mailto:mariopariona117@gmail.com"
+                sx={{
+                    color: 'primary.main',
+                    textDecoration: 'none',
+                    '&:hover': {
+                    textDecoration: 'underline',
+                    color: 'secondary.main', // Change color on hover
+                    },
+                }}
+                >
+                mariopariona117@gmail.com
+                </Typography>.
+            </Typography>
         </div>
     )
 };

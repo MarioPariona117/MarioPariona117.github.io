@@ -14,10 +14,11 @@ export const menuItems = [
   {
     title: <HomeIcon sx={{ fontSize: 30}}/>,
     url: '/',
+    // submenu:[]
   },
   {
     title: 'About Me',
-    url: '/about'
+    url: '/about',
   },
   {
     title: 'Portfolio',
@@ -25,20 +26,32 @@ export const menuItems = [
     submenu: [
       {
         title: 'Achievements',
-        url: 'achievements',
+        url: 'p/achievements',
+        // submenu: [
+        //   {
+        //     title: 'Skills',
+        //     url: 'skills',
+        //   },
+        //   {
+        //     title: 'Projects',
+        //     url: 'projects',
+        //   },
+        // ]
       },
       {
         title: 'Projects',
-        url: 'projects',
+        url: 'p/projects',
       },
     ]
   },
   {
     title: 'CV',
     url: '/cv',
+    // submenu: []
   },
   {
     title: 'Contact',
-    url: '/contact'
+    url: '/contact',
+    // submenu: []
   }
 ];        

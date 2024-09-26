@@ -7,12 +7,20 @@ import reportWebVitals from './reportWebVitals';
 import './assets/PressStart2P-Regular.ttf'
 import './assets/static/RobotoSlab-Regular.ttf'
 import './assets/background.png'
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './styles/theme';
+
+import { CssBaseline, Box } from '@mui/material';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <HashRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
         <App />  
+      </ThemeProvider>
     </HashRouter>  
   </React.StrictMode>
 );
