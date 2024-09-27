@@ -4,7 +4,10 @@ import { Link } from 'react-router-dom';
 
 const Portfolio = () => {
     return (
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, backgroundColor: '#ecf2fa', // Set the desired background color here
+            padding: 4, // Add padding for inner spacing
+            borderRadius: 2, // Optional: rounded corners
+          }}>
             <Typography variant="h4" align="center" gutterBottom>
                 Portfolio
             </Typography>
