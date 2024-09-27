@@ -79,9 +79,9 @@ const Header = () => {
       >
         <Toolbar disableGutters
           display="flex"
-          flexDirection="row"
+          // flexDirection="row"
           // justifyContent="space-between"
-          flexWrap="wrap" 
+          // flexWrap="wrap" 
         >
           {
             menuItems.map((item, index) => {
@@ -96,8 +96,6 @@ const Header = () => {
                     onMouseLeave={(event)=>handleClose(event, index)}
                     style={{ zIndex: 1301 }}
                     sx={{
-                      // mr:10,
-                      // ml:10,
                       display: { xs: 'flex', md: 'flex' },
                       letterSpacing: '.1rem',
                       // color: 'inherit',
@@ -108,14 +106,13 @@ const Header = () => {
                       variant="body"
                       noWrap
                       sx={{
-                        // pr:10,
-                        // pl:10,
                         display: { xs: 'flex', md: 'flex' },
                         // letterSpacing: '.1rem',
                         color: 'inherit',
                         textDecoration: 'none',
                         borderBottom:`2px solid ${thingy.color}`,
                         paddingBottom: '2px',
+                        cornerRadius: '0.5px',
                       }}
                       component={Link}
                       to={item.url}

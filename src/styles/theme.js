@@ -3,78 +3,6 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#2d2e35',
-    },
-    secondary: {
-      main: '#f50057',
-    },
-    background: {
-      default: '#fff7df',
-    },
-  },
-  typography: {
-    fontFamily: 'Roboto, Arial, monospace',
-    // h1: {
-    //     fontSize: '2.rem',
-    //     fontWeight: 600,
-    // },
-    body1: {
-        fontSize: '13px',
-    },
-    button: {
-        textTransform: 'none',
-    },
-    spacing: 8,
-    shape: {
-      borderRadius: 8,
-    },
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-            borderRadius: 5,
-            padding: '1x 1px',
-        },
-      },
-    },
-    MuiContainer: {
-      styleOverrides: {
-        // '&[classname="menu"]':{
-        //   backgroundColor: 'red', // Example: Change background color for the container with id="menu"
-        //   padding: '1px', // Example: Change padding for the container with id="menu"
-        //   borderRadius: '12px', // Example: Change border radius for the container with id="menu"
-        
-        // },
-        root: {
-          // Add any global styles for the Container here
-          backgroundColor: '#ecf2fa', // Default background for all Containers
-          padding: '16px', // Optional: Add padding
-          borderRadius: '20px', // Optional: Add rounded corners
-        },
-        
-        // '&[id="menu"]': {
-        //   backgroundColor: '#ffeb3b', // Example: Change background color for the container with id="menu"
-        //   padding: '24px', // Example: Change padding for the container with id="menu"
-        //   borderRadius: '12px', // Example: Change border radius for the container with id="menu"
-        // }
-      },
-    },
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 960,
-      lg: 1280,
-      xl: 1920,
-    },
-  },
-  mode: 'dark',
-}); 
-const theme1 = createTheme({
-  palette: {
-    primary: {
       main: '#1976d2', // A nice blue
       contrastText: '#ffffff',
     },
@@ -178,4 +106,4 @@ const theme1 = createTheme({
   },
 });
 
-export default theme1;
+export default theme;
