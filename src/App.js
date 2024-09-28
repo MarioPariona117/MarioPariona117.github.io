@@ -9,8 +9,8 @@ import CV from './pages/cv';
 import Contact from './pages/contact';
 import Portfolio from './pages/portfolio';
 import Layout from "./components/Layout";
-import { projectItems } from "./components/Projects/projectItems";
-import Project from "./components/Project";
+import { projectItems } from "./components/items/projectItems";
+import Project from "./pages/project";
 import { Typography, Box } from "@mui/material";
 
 function App() {
