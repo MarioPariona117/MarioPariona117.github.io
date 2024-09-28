@@ -1,8 +1,7 @@
 import React from "react";
 import TicTacToe from "../Projects/TicTacToe/TicTacToe"
-import { Typography, Button } from "@mui/material";
-// import Button from "@mui/material";
-import { Link } from 'react-router-dom'
+import { Typography } from "@mui/material";
+
 export const projectItems = [
 	// These were just demos!! :))
 	{

@@ -71,11 +71,10 @@ const ProjecTab = ({project, index}) => {
           </Typography>
           
           {Boolean(project.render)?
-            <Button component={Link} to="tic-tac-toe" variant="contained" color="primary" sx={{ mt: 2}}>
+            <Button component={Link} to={`/p/projects/${project.url}`} variant="contained" color="primary" sx={{ mt: 2}}>
                 Check Now
             </Button> : (null)
           }
-          
         </CardContent>
       </Card>
     // </li>
