@@ -7,10 +7,11 @@ const Project = ({ project }) => {
             <Typography variant="h3" >
                 {project.title}
             </Typography>
-            <p>{project.description}</p>
+            {project.description}
             {/* <a href={project.url} target="_blank" rel="noopener noreferrer">
                 View Project
             </a> */}
+            {project.log || <></>}
             {project.render || <></>}
         </div>
     );

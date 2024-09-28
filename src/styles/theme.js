@@ -85,8 +85,9 @@ const theme = createTheme({
           mt: 4,
           mb: 4,
           backgroundColor: '#ecf2fa', // Light background for containers
-          padding: 4,
+          // padding: 4,
           borderRadius: 2, // Optional: rounded corners
+          // boxShadow: 3, // Adding shadow for a subtle elevation effect
         },
       },
     },

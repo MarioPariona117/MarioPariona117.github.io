@@ -1,75 +1,34 @@
 import { Typography, Container, Box } from '@mui/material';
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import AchievementTab from '../components/AchievementTab';
+
+const portfolioItems = [
+    {
+        name: "Achievements",
+        url: "/p/achievements",
+    },
+    {
+        name: "Projects",
+        url: "/p/projects",
+    }
+];
 
 const Portfolio = () => {
     return (
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, backgroundColor: '#ecf2fa', // Set the desired background color here
-            padding: 4, // Add padding for inner spacing
-            borderRadius: 2, // Optional: rounded corners
-          }}>
-            <Typography variant="h4" align="center" gutterBottom>
+        <Container maxWidth="lg" sx={{mb: 4, p:4,  borderRadius:2, boxShadow:3}}>
+            {/* <Typography variant="h4" align="center" gutterBottom>
+                Portfolio
+            </Typography> */}
+            <Typography variant="h2" component="h1" gutterBottom sx={{ textAlign: 'center', color: 'primary.main', mb:2}}>
                 Portfolio
             </Typography>
             <Box display="flex" flexDirection="column" gap={2}>
-                <Box 
-                    sx={{ 
-                        padding: 2,
-                        border: '1px solid #ddd',
-                        borderRadius: 2,
-                        backgroundColor: '#f9f9f9',
-                        boxShadow: '0px 2px 5px rgba(0,0,0,0.1)',
-                        transition: 'transform 0.3s',
-                        '&:hover': {
-                            transform: 'scale(1.02)',
-                        },
-                    }}
-                >
-                    <Typography 
-                        variant="body1" 
-                        component={Link} 
-                        to="/p/achievements"
-                        sx={{
-                            color: 'primary.main',
-                            textDecoration: 'none',
-                            '&:hover': {
-                                textDecoration: 'underline',
-                                color: 'secondary.main',
-                            },
-                        }}
-                    >
-                        Achievements
-                    </Typography>
-                </Box>
-                <Box 
-                    sx={{ 
-                        padding: 2,
-                        border: '1px solid #ddd',
-                        borderRadius: 2,
-                        backgroundColor: '#f9f9f9',
-                        boxShadow: '0px 2px 5px rgba(0,0,0,0.1)',
-                        transition: 'transform 0.3s',
-                        '&:hover': {
-                            transform: 'scale(1.02)',
-                        },
-                    }}
-                >
-                    <Typography 
-                        variant="body1" 
-                        component={Link} 
-                        to="/p/projects"
-                        sx={{
-                            color: 'primary.main',
-                            textDecoration: 'none',
-                            '&:hover': {
-                                textDecoration: 'underline',
-                                color: 'secondary.main',
-                            },
-                        }}
-                    >
-                        Projects
-                    </Typography>
-                </Box>
+                {
+                    portfolioItems.map((portfolioItem, index) => (
+                        <AchievementTab key={index} index ={index} achievement={portfolioItem} />
+                    ))
+                }
             </Box>
             <Typography 
                 variant="body1" 

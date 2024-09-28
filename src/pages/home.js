@@ -1,19 +1,19 @@
 import React from "react";
 import { Typography, Container, Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import { projectItems } from "../components/Projects/projectItems"; // Assuming you have projectItems already
-import backgroundImage from "../assets/background.avif"; // Add your background image path
+import { projectItems } from "../components/items/projectItems"; 
+import backgroundImage from "../assets/background.avif"; 
 import ProjectTab from "../components/ProjectTab";
 
-const featuredIndices = [0, 1, 4, 5]; // Assuming you want to show the first 3 projects as featured
+const featuredIndices = [5, 4, 0, 1]; 
 
 const Home = () => {
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, p:2}}>
+    <Container maxWidth="lg" sx={{mb: 4, p:4,  borderRadius:2, boxShadow:3}}>
       {/* /* Hero Section */}
       <Box
         sx={{
-          backgroundImage: `url(${backgroundImage})`, // Add your background image path
+          backgroundImage: `url(${backgroundImage})`, 
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           height: '300px',
@@ -41,9 +41,12 @@ const Home = () => {
       </Box>
 
       {/* Featured Projects Section */}
-      <Typography variant="h4" align="center" gutterBottom>
+      <Typography variant="h2" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold', color: '#1976d2' }}>
         Featured Projects
       </Typography>
+      {/* <Typography variant="h4" align="center" gutterBottom>
+        Featured Projects
+      </Typography> */}
       <Box display="flex" flexDirection="column" gap={2}>
         {featuredIndices.map(index => projectItems[index]).map((project, index) => (
           <ProjectTab key={index} project={project} />
@@ -58,21 +61,20 @@ const Home = () => {
       </Box>
 
       {/* Skills Overview Section */}
-      <Box sx={{ mt: 4, textAlign: 'center' }}>
-        <Typography variant="h4" gutterBottom>
+      {/* <Box sx={{ mt: 4, textAlign: 'center' }}>
+        <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: '#1976d2' }}>
           Skills Overview
         </Typography>
         <Typography variant="body1" color="text.secondary">
           Here are some of my skills:
         </Typography>
         <Box sx={{ mt: 2 }}>
-          {/* You can replace this with an actual skills representation (e.g., skill bars or icons) */}
           <Typography variant="body2">• JavaScript</Typography>
           <Typography variant="body2">• React</Typography>
           <Typography variant="body2">• Machine Learning</Typography>
           <Typography variant="body2">• Flutter</Typography>
         </Box>
-      </Box>
+      </Box> */}
 
       {/* Testimonials Section */}
       {/* <Box sx={{ mt: 4, textAlign: 'center' }}>

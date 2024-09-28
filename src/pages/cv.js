@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 import { Typography } from "@mui/material";
-
+import Container from "@mui/material/Container";
 const CV = () => {
   return (
-    <div>
+    <Container sx={{mb: 4, p:4,  borderRadius:2, boxShadow:3}}>
       <Typography>
         I'll upload my CV soon; but for now feel free to contact me in {' '}
         <Typography 
@@ -25,7 +25,7 @@ const CV = () => {
       </Typography>
       
       {/* <a href="CV.pdf" download="Mario_Pariona_CV.pdf">Download CV</a> */}
-    </div>
+    </Container>
   )
 };
 
