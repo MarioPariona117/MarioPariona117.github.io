@@ -1,7 +1,7 @@
 import React from 'react';
-import { Typography, Container, Box } from '@mui/material';
-
-const AchievementTab = ({ achievement , index}) => {
+import { Typography, Box } from '@mui/material';
+import { Link } from 'react-router-dom';
+const AchievementTab = ({ achievement , index, enumerate=false}) => {
   return (
     <Box 
       key={index} 
@@ -17,15 +17,33 @@ const AchievementTab = ({ achievement , index}) => {
         },
       }}
     >
-      <Typography 
-        variant="body1" // Changed to body1 for a less title-like appearance
-        sx={{
-          fontWeight: 500,
-          color: 'primary.main',
-        }}
-      >
-        {index + 1}. {achievement.name} 
-      </Typography>
+        {achievement.url ? (
+          <Typography 
+            variant="body1" 
+            component={Link} 
+            to={achievement.url}
+            sx={{
+              color: 'primary.main',
+              textDecoration: 'none',
+              '&:hover': {
+                textDecoration: 'underline',
+                color: 'secondary.main',
+              },
+            }}
+          >
+            {enumerate? `${index + 1}. ` : ''}{achievement.name}
+          </Typography>
+        ) : (
+          <Typography 
+            variant="body1" // Changed to body1 for a less title-like appearance
+            sx={{
+              fontWeight: 500,
+              color: 'primary.main',
+            }}
+          >
+            {enumerate? `${index + 1}. ` : ''}{achievement.name}
+        </Typography>
+        )}
       <Typography 
         variant="caption" 
         color="text.secondary"

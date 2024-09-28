@@ -87,7 +87,7 @@ const Header = () => {
             menuItems.map((item, index) => {
               const thingy = location.pathname.includes(item.url) ? {color:'brown', weight:'bold'} : {color:'transparent', weight:'normal'};
               return (
-                <div id={index}>
+                <div key={index}>
                   <Button
                     id={`button-${index}`}
                     aria-owns={open[index]? "menu-appbar" + index : null}

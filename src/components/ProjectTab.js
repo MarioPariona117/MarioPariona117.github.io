@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Container, Card, CardContent } from "@mui/material";
+import { Typography, Card, CardContent, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
@@ -7,13 +7,15 @@ import WarningIcon from '@mui/icons-material/Warning';
 
 const getStatusIcon = (status) => {
   switch (status) {
-    case "Finished!":
+    case "Finished":
       return <CheckCircleIcon color="success" />;
-    case "Evolving!":
+    case "Evolving":
       return <PendingIcon color="warning" />;
-    case "Ongoing!":
+    case "Stopped":
+      return <WarningIcon color="action" />;
+    case "Ongoing":
       return <PendingIcon color="primary" />;
-    case "Starting stage!":
+    case "Starting stage":
       return <WarningIcon color="action" />;
     case "Crawling Baby":
       return <WarningIcon color="action" />;
@@ -68,6 +70,11 @@ const ProjecTab = ({project, index}) => {
             {project.description}
           </Typography>
           
+          {Boolean(project.render)?
+            <Button component={Link} to="tic-tac-toe" variant="contained" color="primary" sx={{ mt: 2}}>
+                Check Now
+            </Button> : (null)
+          }
           
         </CardContent>
       </Card>
