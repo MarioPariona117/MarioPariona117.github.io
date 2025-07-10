@@ -5,7 +5,7 @@ import { projectItems } from "../components/items/projectItems";
 import backgroundImage from "../assets/background.avif"; 
 import ProjectTab from "../components/ProjectTab";
 
-const featuredIndices = [5, 4, 0, 1]; 
+const featuredIndices = [6, 4, 0, 1]; 
 
 const Home = () => {
   return (

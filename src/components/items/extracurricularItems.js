@@ -16,7 +16,7 @@ const extracurricularItems = [
     },
     {
         name: "Trinity College Ultimate Frisbee Team",
-        date: "2022-2024",
+        date: "2022-2025",
         description: "Played for the college team",
     }
 ];
