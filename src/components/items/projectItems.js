@@ -18,7 +18,11 @@ export const projectItems = [
 				<li> Collaborated on creating a user-friendly app for stargazers, offering real-time weather data, pollution and cloudiness maps, and curated space news articles.</li>
 				<li> Used Flutter for front-end development, Git for version control.</li>
 			</ul>
-			The project codebase is available on <a href="https://github.com/Layomiiety/Stargazing-Weather-App-Hi-fi" target="_blank">Github</a>.
+			{/* The project codebase is available on{" "}
+			<a href="..." target="_blank" rel="noopener noreferrer">Github</a>. */}
+			<p>
+				The project codebase is available on <a href="https://github.com/Layomiiety/Stargazing-Weather-App-Hi-fi" target="_blank" rel="noopener noreferrer">Github</a>.
+			</p>
 			</>
 		),
 		url: "stargazing-weather-app",

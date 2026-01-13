@@ -4,12 +4,15 @@ import { Link } from "react-router-dom";
 import { projectItems } from "../components/items/projectItems"; 
 import backgroundImage from "../assets/background.avif"; 
 import ProjectTab from "../components/ProjectTab";
+import "../styles/App1.css";
 
 const featuredIndices = [6, 4, 0, 1]; 
 
 const Home = () => {
   return (
-    <Container maxWidth="lg" sx={{mb: 4, p:4,  borderRadius:2, boxShadow:3}}>
+    <Container className="card" maxWidth="lg" 
+    // sx={{mb: 4, p:4,  borderRadius:2, boxShadow:3}}
+    >
       {/* /* Hero Section */}
       <Box
         sx={{
