@@ -47,12 +47,12 @@ function About() {
           It's-a me, Mario!
         </Typography>
         <Typography variant="h6" component="p" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
-          Computer Science Student • ML Learner • Committed to Global Impact
+          Computer Science Graduate • ML Learner • Committed to Global Impact
         </Typography>
       </Box>
         
       <Typography variant="body1" paragraph>
-        Hi there! I’m Mario Pariona, a third-year Computer Science student at the University of Cambridge with a passion for harnessing the power of Machine Learning to make a positive impact in the world. 
+        Hi there! I'm Mario Pariona, a Computer Science graduate from the University of Cambridge with a passion for harnessing the power of Machine Learning to make a positive impact in the world. 
         My journey in computer science began in 2020 after high school when I discovered my love for programming through competitive programming. 
         This passion has evolved into a keen interest in Neural Networks, Convolutional Networks (CNNs), and reinforcement learning (RL), as I seek to leverage these technologies to solve real-world problems.
       </Typography>
@@ -64,13 +64,13 @@ function About() {
 
       <Typography variant="body1" paragraph>
         Beyond academics, I cherish the joy of movement and the friendship of sports.
-        Whether it’s playing football, engaging in ultimate frisbee, or going for a run, I discover balance and joy through physical activity.
-        These experiences highlight the value of physical activity, friendship, and mental well-being in people’s lives, which align with my core values. 
+        Whether it's playing football, engaging in ultimate frisbee, or going for a run, I discover balance and joy through physical activity.
+        These experiences highlight the value of physical activity, friendship, and mental well-being in people's lives, which align with my core values. 
         I strive to embody principles of love, humility, and compassion in everything I do, drawing strength and motivation from my Catholic faith.
       </Typography>
 
       <Typography variant="body1" paragraph>
-        As I continue to explore the intersections of technology and humanity, I’m committed to creating innovative solutions that enhance lives and empower communities.
+        As I continue to explore the intersections of technology and humanity, I'm committed to creating innovative solutions that enhance lives and empower communities.
         I invite you to join me on this journey, as I learn, grow, and strive to make a difference in the world.
       </Typography>
       <Box sx={{ mt: 4 }}>

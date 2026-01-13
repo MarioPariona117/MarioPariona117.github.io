@@ -46,7 +46,7 @@ function App() {
                 }}
             >
                 <Typography variant="body2" color="text.secondary">
-                    &copy; 2024 Mario Pariona Molocho
+                    © 2024–{new Date().getFullYear()} Mario Pariona. All rights reserved.
                 </Typography>
             </footer>
         </Box>
