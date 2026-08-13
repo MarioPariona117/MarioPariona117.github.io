@@ -5078,6 +5078,131 @@ core({
   ],
 }),
 
+// Added 13 August — St. John Fisher, "to get to know." Kept separate from
+// Thomas More (below) rather than merged: they share a feast and a cause
+// but were a bishop and a layman living very different lives, unlike
+// Cyril and Methodius who genuinely worked as a pair.
+core({
+  slug: "john-fisher", listTier: "toKnow",
+  name: "St. John Fisher", sortName: "John Fisher",
+  religiousName: "—", titles: ["Bishop of Rochester", "Cardinal", "Martyr"],
+  rank: "Optional Memorial (22 June), shared with St. Thomas More",
+  feast: "06-22", feastLabel: "22 June",
+  born: "1469", bornPlace: "Beverley, Yorkshire, England",
+  died: "22 June 1535", diedPlace: "Tower Hill, London", ageAtDeath: "c. 65–66",
+  deathManner: "Beheaded for treason, for refusing the Oath of Succession and Henry VIII's claim to headship of the Church in England — his sentence commuted from hanging, drawing and quartering",
+  beatified: { date: "1886", by: "Pope Leo XIII" },
+  canonized: { date: "19 May 1935", by: "Pope Pius XI", note: "Canonised together with Thomas More, four centuries after their deaths" },
+  nationality: "English", order: "Diocesan clergy", state: "Bishop, theologian, university chancellor",
+  summary: "A Yorkshire-born scholar who became Bishop of Rochester — England's poorest see, which he refused to leave for richer ones — and Chancellor of the University of Cambridge, where he was a serious patron of humanist learning and brought Erasmus to teach Greek. He was confessor to Lady Margaret Beaufort, Henry VIII's grandmother, and helped found two Cambridge colleges with her endowment. When Henry demanded the bishops accept his supremacy over the Church in England, Fisher was the only one of them to refuse outright. Imprisoned in the Tower, he was made a cardinal by Pope Paul III while awaiting execution; Henry was said to have responded that the hat could come, but there would be no head to wear it. He was beheaded two weeks before More.",
+  charism: "Episcopal backbone — a scholar-bishop who simply would not be moved by his entire bench of colleagues going the other way.",
+  anecdotes: [
+    { title: "The only bishop who refused", text: "When Henry VIII required the English bishops to accept the Act of Succession and his headship of the Church, every serving bishop in England submitted except Fisher. His isolation was the point: he was not part of a resistance movement but a single dissenting voice among his own peers.", source: "Standard Tudor historical accounts", legend: false },
+    { title: "A cardinal's hat for a condemned man", text: "Pope Paul III created Fisher a cardinal in May 1535 while he was already imprisoned in the Tower — a deliberate signal of Rome's support. It backfired: it enraged Henry and is widely thought to have hastened the execution. Henry is traditionally reported to have said the hat might be sent, but Fisher would have no head to put it on.", source: "Traditional accounts; the remark itself is reported rather than documented", legend: true },
+    { title: "Cambridge", text: "Fisher was Chancellor of the University of Cambridge and a serious force in its intellectual life — he recruited Erasmus to teach Greek there, and worked with Lady Margaret Beaufort on the foundations that became Christ's College and St John's College.", source: "Documented university history", legend: false },
+  ],
+  writings: [
+    { title: "Treatise on the Seven Penitential Psalms", original: "—", genre: "Scriptural exposition / sermons", year: "1508", language: "English", note: "Preached for Lady Margaret Beaufort and among the earliest works of printed English devotional prose.", translation: "—", publisher: "—", free: "Public domain", difficulty: "Moderate (early modern English)", order: 1 },
+    { title: "Defence of the Royal Assertion / anti-Lutheran writings", original: "Assertionis Lutheranae Confutatio", genre: "Controversial theology", year: "1520s", language: "Latin", note: "Fisher was one of the most substantial theological opponents of Luther in England — the irony being that he was later killed by the king he had defended against Luther.", translation: "—", publisher: "—", free: "—", difficulty: "Technical", order: 2 },
+  ],
+  patronages: [{ of: "The Diocese of Rochester; invoked with Thomas More for the Church in England", why: "His see and his martyrdom" }],
+  attributes: ["Bishop's mitre and crozier", "A cardinal's hat, often shown beside rather than on him", "An axe or block"],
+  related: ["thomas-more"],
+  cards: [
+    { q: "St. John Fisher — feast day, and what was he?", a: "22 June (shared with St. Thomas More); Bishop of Rochester and Chancellor of the University of Cambridge, beheaded 1535" },
+    { q: "What made Fisher's stand against Henry VIII unusual?", a: "He was the only serving bishop in England to refuse the Oath and the king's headship of the Church — every one of his fellow bishops submitted" },
+    { q: "What happened when Fisher was made a cardinal?", a: "Paul III created him cardinal in 1535 while he was already imprisoned in the Tower; it enraged Henry VIII and is widely thought to have hastened his execution" },
+  ],
+}),
+
+// Added 13 August — St. Thomas More, "to get to know."
+core({
+  slug: "thomas-more", listTier: "toKnow",
+  name: "St. Thomas More", sortName: "Thomas More",
+  note: "Spelled 'More', not 'Moore'. Also worth knowing: the widely circulated 'Prayer for Good Humor' attributed to him is almost certainly not his — the earliest traceable copy is anonymous, found at Chester Cathedral, with no connection to his writings.",
+  religiousName: "—", titles: ["Lord Chancellor of England", "Martyr", "Layman", "Humanist"],
+  epithets: ["A man for all seasons (from Robert Whittington's description, later Robert Bolt's play)"],
+  rank: "Optional Memorial (22 June), shared with St. John Fisher",
+  feast: "06-22", feastLabel: "22 June",
+  born: "7 February 1478", bornPlace: "London, England",
+  died: "6 July 1535", diedPlace: "Tower Hill, London", ageAtDeath: "57",
+  deathManner: "Beheaded for treason, for refusing to swear to the Act of Supremacy",
+  beatified: { date: "1886", by: "Pope Leo XIII" },
+  canonized: { date: "19 May 1935", by: "Pope Pius XI", note: "Canonised together with John Fisher" },
+  nationality: "English", order: "Layman — a Third Order Franciscan by some accounts; lived for a time with the Carthusians without joining them", state: "Lawyer, statesman, husband and father",
+  summary: "Lawyer, humanist scholar, friend of Erasmus, and author of Utopia (1516) — the book that gave the word to the language. He rose to be Lord Chancellor of England, the first layman to hold the office, and resigned it in 1532 rather than endorse Henry VIII's break with Rome over his marriage. He then tried simply to stay silent, arguing that silence implied consent rather than dissent; the Crown would not accept that, and he was convicted on testimony he maintained was perjured. He is one of the few saints in this collection who was neither cleric nor religious: a married layman with children, executed for a refusal made entirely within his civil office.",
+  charism: "Conscience held under pressure by a public man with everything to lose — and held quietly, through legal silence rather than protest, right up to the scaffold.",
+  anecdotes: [
+    { title: "'The King's good servant, but God's first'", text: "His reported words on the scaffold — that he died the King's good servant, but God's first — are the most quoted thing about him, and compress the whole conflict: not a rejection of legitimate civil authority, but a limit placed on it.", source: "Contemporary accounts of his execution", legend: false },
+    { title: "The strategy of silence", text: "More did not denounce the king's supremacy. He declined to swear to it and then said nothing at all about why, resting on the legal principle that silence is taken to mean consent, not dissent. The prosecution had to produce testimony that he had spoken against it — evidence More insisted was perjured — to convict him.", source: "Trial records and standard accounts", legend: false },
+    { title: "Utopia", text: "His 1516 Latin book describes an imagined island commonwealth with religious tolerance, communal property and six-hour working days. Scholars still argue over how much of it More endorsed and how much is satire — a live question given that the author went on to prosecute heretics as Lord Chancellor.", source: "The text itself; ongoing scholarly debate", legend: false },
+  ],
+  writings: [
+    { title: "Utopia", original: "Libellus vere aureus... de optimo rei publicae statu deque nova insula Utopia", genre: "Political philosophy / satire", year: "1516", language: "Latin", note: "Coined the word 'utopia' (from Greek for 'no place'), and the enduring interpretive puzzle is how seriously to take it.", translation: "Paul Turner (Penguin Classics); Clarence Miller (Yale)", publisher: "Penguin / Yale UP", free: "Public domain", difficulty: "Accessible", order: 1 },
+    { title: "A Dialogue of Comfort against Tribulation", original: "—", genre: "Spiritual dialogue", year: "Written 1534–35 in the Tower", language: "English", note: "Written while imprisoned and awaiting death, framed as a conversation between a Hungarian uncle and nephew facing Turkish invasion — a displaced way of writing about his own situation. Far less read than Utopia and arguably the more revealing book.", translation: "—", publisher: "Yale UP (Complete Works)", free: "Public domain", difficulty: "Moderate", order: 2 },
+  ],
+  patronages: [
+    { of: "Statesmen and politicians", why: "Declared by St. John Paul II in 2000" },
+    { of: "Lawyers, civil servants, difficult marriages, large families", why: "His profession and household" },
+  ],
+  attributes: ["Chain of office (the Lord Chancellor's collar of esses)", "An axe", "A book", "Tudor dress and fur-trimmed gown"],
+  relics: "Head preserved at St Dunstan's Church, Canterbury, by his daughter Margaret Roper; body buried at St Peter ad Vincula in the Tower of London.",
+  related: ["john-fisher", "john-paul-ii"],
+  cards: [
+    { q: "St. Thomas More — feast day, dates, and office?", a: "22 June (shared with John Fisher); 1478–1535, Lord Chancellor of England — the first layman to hold the post — beheaded 6 July 1535" },
+    { q: "What were More's reported last words?", a: "That he died 'the King's good servant, but God's first'" },
+    { q: "Why is Thomas More patron of statesmen and politicians?", a: "Declared so by St. John Paul II in 2000 — a public official who resigned rather than endorse what he judged unlawful, and then died for it" },
+    { q: "What was More's legal strategy at trial?", a: "Silence — declining to swear and refusing to say why, on the principle that silence implies consent rather than dissent. He was convicted on testimony he maintained was perjured" },
+  ],
+}),
+
+// Added 13 August — St. John Paul II, "favourite." Already present in the
+// Library as the author of three quotes; this is his saint dossier.
+core({
+  slug: "john-paul-ii", listTier: "favourite",
+  name: "St. John Paul II", sortName: "John Paul II",
+  birthName: "Karol Józef Wojtyła",
+  religiousName: "John Paul II — taken in 1978 in continuity with his short-lived predecessor John Paul I",
+  epithets: ["John Paul the Great (popular, not official)", "the Pilgrim Pope", "Totus Tuus ('Wholly Yours' — his papal motto, addressed to Our Lady)"],
+  titles: ["Pope", "Bishop of Rome"],
+  rank: "Optional Memorial (22 October)",
+  feast: "10-22", feastLabel: "22 October",
+  altFeasts: [{ date: "04-02", label: "2 April", calendar: "Date of his death, kept in some places" }],
+  born: "18 May 1920", bornPlace: "Wadowice, Poland",
+  died: "2 April 2005", diedPlace: "Apostolic Palace, Vatican City", ageAtDeath: "84",
+  deathManner: "Long illness, including Parkinson's disease, which he declined to hide from public view",
+  beatified: { date: "1 May 2011", by: "Pope Benedict XVI" },
+  canonized: { date: "27 April 2014", by: "Pope Francis", note: "Canonised on Divine Mercy Sunday — the feast he himself had instituted — alongside John XXIII" },
+  nationality: "Polish", order: "Diocesan clergy", state: "Pope (1978–2005)",
+  summary: "Orphaned young in occupied Poland, he studied for the priesthood in a clandestine seminary while working in a quarry and a chemical plant under Nazi occupation, and was later a philosopher and archbishop under a Communist state that watched him closely. Elected in October 1978, he was the first non-Italian pope in 455 years and the first ever Slav. His pontificate ran nearly 27 years — the second longest in history — and covered the collapse of Communism in Eastern Europe (in which his 1979 visit to Poland is widely judged to have played a real part), 104 foreign journeys, the Catechism of the Catholic Church, World Youth Day, and more canonisations than all his 20th-century predecessors combined. He survived an assassination attempt in St Peter's Square in 1981 and later visited his would-be assassin in prison to forgive him in person. He died on the vigil of Divine Mercy Sunday, the feast he had instituted from the visions of his fellow Pole St. Faustina Kowalska.",
+  charism: "Public witness at scale — a philosopher's mind joined to an actor's presence, taking Catholicism physically to the world's crowds rather than waiting for them to come to Rome, and finally making his own decline visible rather than hiding it.",
+  anecdotes: [
+    { title: "The clandestine seminary", text: "Under Nazi occupation, with Polish universities and seminaries suppressed and priests being deported, Wojtyła worked in a limestone quarry and then a chemical factory while studying secretly for the priesthood in an underground seminary run by the Archbishop of Kraków. He was ordained in 1946.", source: "Documented biography", legend: false },
+    { title: "Forgiving his assassin in person", text: "Shot and gravely wounded in St Peter's Square on 13 May 1981 — the feast of Our Lady of Fátima, a coincidence he took seriously — he publicly forgave the gunman, Mehmet Ali Ağca, and in 1983 visited him in his cell at Rebibbia prison to say so face to face. The photograph of the two men talking quietly became one of the defining images of his pontificate.", source: "Documented; widely photographed", legend: false },
+    { title: "Not hiding the decline", text: "In his final years, visibly bent and slurred by Parkinson's disease, he continued appearing in public rather than withdrawing — a deliberate choice, and read by many as his last and most argumentative teaching on the worth of a life that has stopped being useful or impressive.", source: "Widely documented", legend: false },
+    { title: "Dying on the vigil of the feast he created", text: "He died on the evening of 2 April 2005, the vigil of Divine Mercy Sunday — a feast he had himself instituted in 2000, drawn from the visions of St. Faustina Kowalska, a Polish sister he had canonised. He was then canonised on that same feast in 2014.", source: "Documented", legend: false },
+  ],
+  writings: [
+    { title: "Love and Responsibility", original: "Miłość i odpowiedzialność", genre: "Philosophical ethics", year: "1960", language: "Polish", note: "Written as a working bishop, before the papacy — a philosophical account of sexual ethics grounded in the person, and the seedbed of what later became the Theology of the Body.", translation: "Grzegorz Ignatik (Pauline Books)", publisher: "Pauline", free: "—", difficulty: "Demanding", order: 1 },
+    { title: "Man and Woman He Created Them: A Theology of the Body", original: "—", genre: "Catechesis", year: "129 Wednesday audiences, 1979–1984", language: "Italian/Polish", note: "Not a book he sat down to write but a five-year cycle of general audiences, later collected — the most influential single body of his teaching for lay Catholics.", translation: "Michael Waldstein", publisher: "Pauline", free: "—", difficulty: "Demanding; many accessible summaries exist", order: 2 },
+    { title: "Salvifici Doloris", original: "Salvifici Doloris", genre: "Apostolic letter", year: "1984", language: "Latin/Italian", note: "On the Christian meaning of human suffering — the source of the line already in this app's Library, that suffering is present 'to unleash love in the human person.'", translation: "Vatican.va (free)", publisher: "—", free: "Yes — vatican.va", difficulty: "Moderate", order: 3 },
+    { title: "Slavorum Apostoli", original: "Slavorum Apostoli", genre: "Encyclical", year: "1985", language: "Latin", note: "On Ss. Cyril and Methodius, whom he had named Co-Patrons of Europe in 1980 — a Slavic pope writing on the Slavs' own apostles.", translation: "Vatican.va (free)", publisher: "—", free: "Yes — vatican.va", difficulty: "Moderate", order: 4 },
+  ],
+  writingsNotes: "He published 14 encyclicals, 15 apostolic exhortations and a large philosophical corpus predating the papacy — one of the most prolific writers ever to hold the office. Nearly all of it is free on vatican.va.",
+  patronages: [{ of: "World Youth Day; young Catholics; families; Poland (widely invoked)", why: "He founded World Youth Day in 1985 and made the young a deliberate centre of his pontificate" }],
+  attributes: ["Papal white cassock", "The distinctive crucifix-topped pastoral staff (ferula)", "Often shown kissing the ground on arrival in a country"],
+  relics: "Tomb in St Peter's Basilica, Rome, at the Chapel of St Sebastian; a vial of his blood is a widely distributed relic.",
+  shrines: ["St Peter's Basilica, Vatican City", "Sanctuary of St John Paul II, Kraków, Poland"],
+  related: ["faustina-kowalska", "maximilian-kolbe", "catherine-of-siena", "thomas-more", "cyril-and-methodius"],
+  cards: [
+    { q: "St. John Paul II — feast day, dates, and length of pontificate?", a: "22 October (the date of his 1978 papal inauguration); Karol Wojtyła, 1920–2005; pope for nearly 27 years, the second-longest pontificate in history" },
+    { q: "What was unprecedented about his election in 1978?", a: "First non-Italian pope in 455 years, and the first Slavic pope ever" },
+    { q: "What did he do after the 1981 assassination attempt?", a: "Publicly forgave the gunman, Mehmet Ali Ağca, and in 1983 visited him in prison at Rebibbia to say so in person" },
+    { q: "What is the connection between John Paul II, St. Faustina and Divine Mercy?", a: "He canonised Faustina, a fellow Pole, and instituted Divine Mercy Sunday from her visions in 2000 — then died on that feast's vigil in 2005, and was himself canonised on the feast in 2014" },
+    { q: "What is John Paul II's papal motto and what does it mean?", a: "'Totus Tuus' — 'Wholly Yours', addressed to the Virgin Mary" },
+  ],
+}),
+
 ];
 
 // ═══════════════════════════════════════════════════════════════════
