@@ -4937,6 +4937,53 @@ core({
   ],
 }),
 
+// Added 13 August — Ss. Cyril and Methodius, second-tier "favourite."
+// Kept as ONE joint entry: the Church commemorates them together on a
+// single feast, and their work was genuinely done as a pair.
+core({
+  slug: "cyril-and-methodius", listTier: "favourite",
+  name: "Ss. Cyril and Methodius", sortName: "Cyril and Methodius",
+  religiousName: "Cyril was born Constantine — he took the name Cyril only on becoming a monk, weeks before his death",
+  epithets: ["Apostles to the Slavs", "The Thessalonian Brothers"],
+  titles: ["Co-Patrons of Europe", "Missionaries", "Bishop (Methodius)", "Monk (Cyril)"],
+  rank: "Memorial (14 February)",
+  feast: "02-14", feastLabel: "14 February",
+  altFeasts: [
+    { date: "05-11", label: "11 May", calendar: "Byzantine / Eastern Orthodox calendar" },
+    { date: "07-05", label: "5 July", calendar: "Czech Republic and Slovakia — national feast" },
+  ],
+  born: "Methodius c. 815–825; Cyril c. 826–827", bornPlace: "Thessalonica, Byzantine Empire (modern Greece)",
+  died: "Cyril 14 February 869; Methodius 6 April 885",
+  diedPlace: "Cyril in Rome (buried in the Basilica of San Clemente); Methodius in Great Moravia",
+  canonized: { date: "Pre-congregation cult; declared Co-Patrons of Europe 31 December 1980", by: "Pope St. John Paul II (as Co-Patrons, alongside St. Benedict)" },
+  nationality: "Byzantine Greek", order: "Monks; Methodius later archbishop", state: "Missionaries",
+  summary: "Two brothers from Thessalonica, sent in 863 by the Byzantine Emperor Michael III to Great Moravia after Prince Rastislav asked for missionaries who could teach in the people's own language. Rather than impose Greek or Latin, they built an alphabet for a language that had never been written — the Glagolitic — and used it to translate the Gospels and the liturgy, producing the first Scriptures in any Slavic tongue. That choice put them directly against the so-called 'trilingual heresy,' the view that God could lawfully be worshipped only in Hebrew, Greek and Latin; they argued the case in Venice and then in Rome, where Pope Adrian II approved the Slavonic liturgy in 869. Cyril died in Rome weeks later; Methodius carried the work on alone for sixteen more years against sustained opposition from German clergy, who accused him of heresy and at one point imprisoned him.",
+  charism: "Evangelising in the vernacular as a matter of principle — that a people should hear the Gospel and worship in their own tongue, defended against the settled assumption of their age that only three sacred languages would do.",
+  anecdotes: [
+    { title: "An alphabet built for the purpose", text: "Finding that Slavonic had no written form, Cyril devised the Glagolitic alphabet specifically to carry it, then used it to translate the Gospels and liturgical books — the first time Scripture existed in any Slavic language.", source: "Standard historical accounts; Vita Constantini", legend: false },
+    { title: "Arguing against the 'trilingual heresy' at Venice", text: "On their way to Rome the brothers stopped at Venice and were confronted by clergy holding that God might lawfully be praised only in Hebrew, Greek and Latin — the three languages of the inscription on the Cross. The brothers argued forcefully against it, and carried the argument to Rome, where Pope Adrian II approved the Slavonic liturgy in 869.", source: "Vita Constantini; recounted by Benedict XVI, General Audience, 17 June 2009", legend: false },
+    { title: "Methodius imprisoned by fellow churchmen", text: "After Cyril's death Methodius continued alone as archbishop, and was accused of heresy and of the 'scandalous' use of Slavonic in the liturgy by German bishops, who imprisoned him for roughly two and a half years. Pope John VIII secured his release and reconfirmed the Slavonic liturgy.", source: "Standard historical accounts of the Moravian mission", legend: false },
+  ],
+  writings: [
+    { title: "Old Church Slavonic translations of the Gospels and liturgy", original: "—", genre: "Scripture and liturgical translation", year: "863 onward", language: "Old Church Slavonic (Glagolitic script)", note: "Their central work, and the foundation of Slavic literary culture — not a book about the faith but the faith itself made readable in a new language.", translation: "—", publisher: "—", free: "—", difficulty: "—", order: 1 },
+  ],
+  writingsNotes: "The Cyrillic alphabet is named in Cyril's honour but was almost certainly not his own work — scholars attribute it to his disciples in the generation after him, developed from Greek uncials, with the earlier Glagolitic being the alphabet Cyril actually devised. So the script used today across Russia, Ukraine, Bulgaria, Serbia and beyond carries his name at one remove rather than directly.",
+  about: { note: "St. John Paul II — himself a Slav, and the pope who named them Co-Patrons of Europe — devoted the 1985 encyclical Slavorum Apostoli ('Apostles of the Slavs') to them." },
+  patronages: [
+    { of: "Europe (co-patrons, with St. Benedict)", why: "Declared by St. John Paul II in 1980, pairing the Latin West's monastic father with the evangelisers of the Slavic East" },
+    { of: "Ecumenism and Christian unity; the Slavic peoples; Czechia, Slovakia, Bulgaria, North Macedonia", why: "Their work predates the East–West schism and is claimed by both traditions, which is much of why they are invoked for unity" },
+  ],
+  attributes: ["Two brothers shown together", "A book or scroll in Slavonic script", "Byzantine episcopal or monastic vesture", "A church held between them"],
+  relics: "Cyril is buried in the Basilica of San Clemente, Rome — the same church where relics were later returned by Paul VI to Bulgaria and by John Paul II to other Slavic nations.",
+  related: ["benedict"],
+  cards: [
+    { q: "Ss. Cyril and Methodius — feast day, and who were they?", a: "14 February (11 May in the Byzantine calendar); two Greek brothers from Thessalonica, sent to Great Moravia in 863, known as the Apostles to the Slavs" },
+    { q: "What was the 'trilingual heresy,' and what did they do about it?", a: "The view that God could lawfully be worshipped only in Hebrew, Greek and Latin. They argued against it at Venice and in Rome, and Pope Adrian II approved the Slavonic liturgy in 869" },
+    { q: "Did Cyril invent the Cyrillic alphabet?", a: "No — he devised the earlier Glagolitic alphabet. Cyrillic is named in his honour but was developed by his disciples in the next generation, from Greek uncials" },
+    { q: "Why are Cyril and Methodius Co-Patrons of Europe?", a: "Declared by St. John Paul II in 1980 alongside St. Benedict — pairing the monastic father of the Latin West with the evangelisers of the Slavic East; JPII also wrote the 1985 encyclical Slavorum Apostoli about them" },
+  ],
+}),
+
 ];
 
 // ═══════════════════════════════════════════════════════════════════
