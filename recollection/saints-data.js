@@ -4984,6 +4984,100 @@ core({
   ],
 }),
 
+// Added 13 August — St. Anthony of Padua, "favourite" tier. Note the
+// database already held St. Anthony the Great (the Egyptian Desert
+// Father) — an entirely different saint, four centuries earlier, whose
+// name this Anthony actually took on entering the Franciscans.
+core({
+  slug: "anthony-of-padua", listTier: "favourite",
+  name: "St. Anthony of Padua", sortName: "Anthony of Padua",
+  birthName: "Fernando Martins de Bulhões",
+  religiousName: "Anthony — taken on joining the Franciscans, after St. Anthony the Great of Egypt",
+  epithets: ["il Santo ('the Saint' — what Padua simply calls him)", "the Wonder-Worker", "Hammer of the Heretics"],
+  titles: ["Priest", "Friar Minor", "Doctor of the Church"],
+  doctorTitle: "Doctor Evangelicus — the Evangelical Doctor, for how directly the Gospel comes through his preaching",
+  doctorDeclared: "16 January 1946, by Pope Pius XII",
+  rank: "Memorial (13 June)",
+  feast: "06-13", feastLabel: "13 June",
+  altFeasts: [{ date: "02-15", label: "Mid-February (movable)", calendar: "Feast of the Translation / 'Feast of the Tongue' — Basilica of St. Anthony, Padua" }],
+  born: "c. 1195", bornPlace: "Lisbon, Portugal",
+  died: "13 June 1231", diedPlace: "Arcella, just outside Padua, Italy", ageAtDeath: "c. 35–36",
+  deathManner: "Illness (long thought to be dropsy/oedema), after years of relentless preaching and fasting",
+  canonized: { date: "30 May 1232", by: "Pope Gregory IX", note: "Under a year after his death — among the fastest canonisations in the Church's history" },
+  nationality: "Portuguese", order: "Franciscan (O.F.M.) — previously an Augustinian canon", state: "Priest, friar, itinerant preacher",
+  summary: "Born to a wealthy Lisbon family and already a well-educated Augustinian canon, he left that order in 1220 after seeing the bodies of five Franciscan martyrs brought back from Morocco, joined the Franciscans, and set out hoping to be martyred among the Muslims himself. Illness and a storm-driven shipwreck landed him in Italy instead, where he lived unknown as a kitchen helper at a remote hermitage — until an ordination at Forlì where no one had prepared a homily, he was told to say whatever came to him, and astonished the room. Francis of Assisi then set him to preach and teach theology, and he spent the last decade of his short life as one of the most sought-after preachers in Europe, drawing crowds too large for any church. He died at about 35 and was canonised within a year.",
+  charism: "Preaching of extraordinary power and clarity, joined to real learning — but arrived at by accident, after his own plans for martyrdom and obscurity both failed.",
+  anecdotes: [
+    { title: "The sermon he never meant to give", text: "Living hidden as a kitchen helper at the hermitage of San Paolo near Forlì, Anthony attended an ordination in 1222 where, through a mix-up, no one had prepared to preach. Told by his superior simply to say whatever the Holy Spirit gave him, he spoke — and the assembled friars and clergy, who had taken him for an unlettered lay brother, discovered a theologian and orator. He was sent out to preach from then on.", source: "The 'Assidua' (Vita Prima), his earliest biography, written c. 1232 within a year of his death", legend: false },
+    { title: "The stolen psalter — why he is patron of lost things", text: "A novice who left the community took with him Anthony's psalter, which carried Anthony's own notes for teaching and was, before printing, laborious and costly to replace. Anthony prayed for its return; the novice, by the traditional account, was moved to bring it back and rejoin the order. This small episode is the root of the worldwide habit of asking Anthony for anything lost.", source: "Early Franciscan accounts", legend: false },
+    { title: "Preaching to the fish at Rimini", text: "Finding the people of Rimini unwilling to listen, Anthony is said to have gone to the water's edge and preached to the fish instead, which gathered in ranks with their heads above the surface to hear him — at which the townspeople, shamed, came back to listen. One of the best-loved stories about him and a favourite subject in art.", source: "Later Franciscan legend (the Fioretti tradition), not the earliest biography", legend: true },
+    { title: "The tongue found incorrupt", text: "On 8 April 1263, thirty-two years after his death, his remains were moved to the new basilica in Padua. St. Bonaventure, then Minister General of the Franciscans, opened the tomb: the body had gone to dust and bones, but the tongue was found intact and lifelike. Bonaventure is recorded as taking it into his hands. It is still venerated in the basilica, and Padua keeps a 'Feast of the Tongue' for it each February.", source: "Well-documented 1263 translation; Basilica of St. Anthony, Padua", legend: false },
+  ],
+  phenomena: ["The tongue found incorrupt at the 1263 translation, while the rest of the body had decayed — still displayed in the Basilica of St. Anthony", "A very large number of miracles reported both in his lifetime and immediately after, which is much of why his canonisation moved so fast"],
+  writings: [
+    { title: "Sermons for Sundays and Feast Days", original: "Sermones Dominicales et Festivi", genre: "Sermon outlines / theological preaching material", year: "c. 1227–1230", language: "Latin", note: "Not transcripts of the sermons that made him famous, but dense scriptural material written for other preachers to work from — which is why the popular image of Anthony (the gentle finder of lost keys) sits oddly beside the demanding theologian on the page.", translation: "Paul Spilsbury, Sermons for Sundays and Festivals (4 vols.)", publisher: "Edizioni Messaggero Padova", free: "—", difficulty: "Difficult — heavily allegorical scriptural exegesis", order: 1 },
+  ],
+  writingsNotes: "His 1946 doctorate rests on these sermon writings rather than on any systematic treatise; Pius XII's title for him, 'Evangelical Doctor,' points at how saturated in Scripture they are.",
+  patronages: [
+    { of: "Lost things and lost people", why: "From the episode of the stolen psalter returned after his prayer — by far his most widespread invocation today" },
+    { of: "Portugal, Padua, Brazil; the poor; travellers; shipwreck survivors", why: "Birth and burial respectively; the 'St. Anthony's Bread' charity for the poor grew from his cult; the shipwreck patronage from the storm that diverted him to Italy" },
+  ],
+  invokedAgainst: ["Losing things", "Barrenness", "Shipwreck"],
+  attributes: ["The Child Jesus held in his arms (from a reported vision late in his life)", "A lily", "A book", "A flame or burning heart", "Franciscan brown habit"],
+  relics: "Basilica of Saint Anthony, Padua ('il Santo') — the incorrupt tongue and vocal apparatus are kept in the Chapel of the Treasury, distinct from his tomb.",
+  incorrupt: true,
+  shrines: ["Basilica of Saint Anthony, Padua — one of the most-visited pilgrimage churches in the world"],
+  related: ["francis-of-assisi", "bonaventure", "anthony-the-great", "clare-of-assisi"],
+  cards: [
+    { q: "St. Anthony of Padua — feast day, dates, and where was he actually from?", a: "13 June; born c. 1195 in Lisbon, Portugal (birth name Fernando Martins de Bulhões), died 13 June 1231 near Padua aged about 35 — Portuguese by birth, 'of Padua' by where he died and is buried" },
+    { q: "How was Anthony's gift for preaching discovered?", a: "By accident, at an ordination at Forlì in 1222: no one had prepared a homily, he was told to say whatever came to him, and the friars who had taken him for an unlettered kitchen helper found he was a trained theologian and orator" },
+    { q: "Why is St. Anthony the patron of lost things?", a: "A departing novice took his annotated psalter — costly and laborious to replace before printing. Anthony prayed for its return and, by the traditional account, the novice brought it back and rejoined the order" },
+    { q: "What was found when Anthony's tomb was opened in 1263?", a: "His body had decayed to dust and bones, but his tongue was intact and lifelike. St. Bonaventure, then Minister General, took it into his hands; it is still venerated in Padua" },
+    { q: "How quickly was Anthony canonised, and when was he made a Doctor of the Church?", a: "Canonised 30 May 1232, under a year after his death — among the fastest ever. Made a Doctor of the Church only in 1946, by Pius XII, with the title 'Doctor Evangelicus'" },
+  ],
+  note: "Not to be confused with St. Anthony the Great, the 3rd–4th century Egyptian Desert Father also in this database — a different man by some nine centuries, though this Anthony took his religious name from him.",
+}),
+
+// Added 13 August — St. Bruno of Cologne, "to get to know."
+core({
+  slug: "bruno-of-cologne", listTier: "toKnow",
+  name: "St. Bruno of Cologne", sortName: "Bruno of Cologne",
+  note: "There is a second St. Bruno — Bruno of Querfurt, an 11th-century missionary bishop and martyr in Prussia (feast 9 March). This entry is Bruno of Cologne, the Carthusian founder, who is what 'St. Bruno' almost always means.",
+  religiousName: "—", titles: ["Priest", "Founder of the Carthusian Order", "Teacher"],
+  rank: "Optional Memorial (6 October)",
+  feast: "10-06", feastLabel: "6 October",
+  born: "c. 1030", bornPlace: "Cologne, Holy Roman Empire (modern Germany)",
+  died: "6 October 1101", diedPlace: "Serra San Bruno, Calabria, southern Italy", ageAtDeath: "c. 71",
+  canonized: {
+    date: "Equipollent (equivalent) canonisation granted 1514 by Leo X; cult extended to the universal Church 17 February 1623",
+    by: "Pope Gregory XV",
+    note: "Never canonised by the ordinary process — the Carthusians never petitioned for it, since their Rule commits them to hiddenness and the avoidance of publicity. Rome recognised the cult on papal authority alone instead. Same mechanism later used for Hildegard of Bingen, also in this database.",
+  },
+  nationality: "German", order: "Founder of the Carthusians (O.Cart.)", state: "Priest, teacher, hermit",
+  summary: "A distinguished scholar who taught at the cathedral school of Reims for roughly two decades and rose to be its chancellor — among his students was the future Pope Urban II. Rather than accept the archbishopric he was in line for, he walked away from an ecclesiastical career entirely and in 1084, with six companions, settled in a remote alpine valley near Grenoble: the Grande Chartreuse, and the beginning of the Carthusians. Urban II then summoned him to Rome as an advisor; Bruno went out of obedience, hated it, refused the archbishopric of Reggio, and got permission to withdraw again — this time to the mountains of Calabria, where he founded a second hermitage and died. He left no rule and almost nothing in writing.",
+  charism: "Contemplative solitude taken to its furthest practical form — a life structured so completely around silence and hiddenness that its founder deliberately left no writings, no rule, and no monument to himself.",
+  anecdotes: [
+    { title: "Walking away at the top", text: "Bruno had spent about eighteen years teaching at Reims and was its chancellor, positioned for a bishopric. He resigned the whole trajectory and left for the mountains — the founding act of the Carthusians was a refusal of promotion rather than a plan to found anything.", source: "Standard historical accounts", legend: false },
+    { title: "Summoned by his own former student", text: "Odo of Châtillon, who had studied under Bruno at Reims, became Pope Urban II and called his old teacher to Rome as a papal advisor. Bruno obeyed, but disliked curial life intensely, declined the archbishopric of Reggio he was offered, and obtained leave to return to solitude — settling in Calabria rather than going back to the Chartreuse.", source: "Standard historical accounts", legend: false },
+    { title: "A founder who wrote no rule", text: "Bruno left the Carthusians no written rule at all. Their way of life was only codified some decades later, by Guigo I, the fifth prior of the Grande Chartreuse, who wrote down the existing customs as the 'Consuetudines' — meaning the order's constitution is essentially a transcription of what Bruno's community had already been quietly doing.", source: "Carthusian historical sources", legend: false },
+  ],
+  writings: [
+    { title: "Two surviving letters", original: "Epistolae", genre: "Letters", year: "c. 1096–1101", language: "Latin", note: "Almost his entire surviving output: one to his friend Raoul le Verd, describing the life of solitude and urging him to embrace it, and one to his community in the Chartreuse from Calabria. Commentaries on the Psalms and the Pauline epistles are also attributed to him, though the attribution is debated.", translation: "Available in Carthusian editions and anthologies of monastic sources", publisher: "—", free: "—", difficulty: "Accessible", order: 1 },
+  ],
+  writingsNotes: "The near-total absence of writings is itself characteristic — the Carthusian tradition has produced remarkably little public literature relative to its age, and its traditional motto, 'nunquam reformata quia nunquam deformata' ('never reformed, because never deformed'), makes a similar claim to having simply continued unchanged rather than needing renewal.",
+  patronages: [{ of: "Germany; the possessed; invoked against demonic influence", why: "Traditional" }],
+  attributes: ["Carthusian white habit", "A skull (memento mori)", "A finger to the lips, or a star above the head", "A book and crucifix"],
+  relics: "Serra San Bruno, Calabria, where he died and where the charterhouse he founded still stands.",
+  shrines: ["La Grande Chartreuse, near Grenoble, France — the mother house, still enclosed and closed to visitors", "Serra San Bruno, Calabria"],
+  related: ["benedict", "bernard-of-clairvaux", "hildegard-of-bingen"],
+  cards: [
+    { q: "St. Bruno of Cologne — feast day, and what did he found?", a: "6 October; founder of the Carthusian Order, begun in 1084 when he and six companions settled at the Grande Chartreuse near Grenoble" },
+    { q: "What did Bruno give up to found the Carthusians?", a: "A career at the top of the Church — about eighteen years teaching at Reims, its chancellorship, and a likely bishopric; he later also refused the archbishopric of Reggio" },
+    { q: "Why was Bruno never canonised by the normal process?", a: "The Carthusians never petitioned, because their Rule commits them to hiddenness and avoiding publicity. Rome instead granted an equipollent (equivalent) canonisation — Leo X in 1514, extended to the whole Church by Gregory XV in 1623" },
+    { q: "What did Bruno write as a rule for his order?", a: "Nothing — he left no rule at all. The Carthusian way of life was codified decades later by Guigo I, fifth prior of the Grande Chartreuse, who simply wrote down the customs already in practice" },
+  ],
+}),
+
 ];
 
 // ═══════════════════════════════════════════════════════════════════
