@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recollection</title>
+<meta name="theme-color" content="#0F1B2D">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Content gate: shown once per browser before anything else. This is a
+     personal Catholic devotional library published on a public URL, so
+     this sets expectations up front rather than dropping a stranger
+     straight into someone else's prayer life. Choice is remembered in
+     localStorage; it's a courtesy notice, not a security control. -->
+<div id="view-gate" class="active">
+  <div class="gate-box">
+    <span class="icn">✝</span>
+    <p class="gate-eyebrow">A personal devotional library</p>
+    <h1>Recollection</h1>
+    <p class="gate-body">This is my own collection of Catholic prayers,
+      hymns, litanies, saints, and Scripture — kept for my own use and
+      shared openly rather than hidden. The contents are explicitly
+      religious and specifically Catholic throughout.</p>
+    <p class="gate-body">You're very welcome here whoever you are. But if
+      that's not what you're looking for, no hard feelings — this one just
+      isn't for you.</p>
+    <div class="gate-actions">
+      <button id="btn-gate-enter" class="btn">Continue</button>
+      <a href="../" class="btn secondary">Back to portfolio</a>
+    </div>
+    <p class="gate-fineprint">Your choice is remembered on this device only.</p>
+  </div>
+</div>
+
+<div id="view-signin">
+  <div class="signin-box">
+    <span class="icn">✝</span>
+    <h1>Recollection</h1>
+    <p>Your private library of prayers, saints, and Scripture — and a
+      quiet place to write. Everything you write is saved to your own
+      Google Drive, visible only to you.</p>
+    <button id="btn-signin" class="btn">Sign in with Google</button>
+  </div>
+</div>
+
+<div id="app-shell">
+  <header class="topbar">
+    <div class="brand">Recollection</div>
+    <div class="tabs">
+      <button class="tab active" data-tab="library">Library</button>
+      <button class="tab" data-tab="journal">Journal</button>
+      <button class="tab" data-tab="saints">Saints</button>
+    </div>
+    <button id="btn-signout" class="btn ghost">Sign out</button>
+  </header>
+
+  <main class="content">
+    <div class="tabpanel active" data-tab="library">
+      <div class="toolbar">
+        <input id="library-search" class="search-input" type="search" placeholder="Search prayers, saints, quotes…">
+        <select id="library-sort" class="text-input sort-select">
+          <option value="recent">Recently added</option>
+          <option value="title">Title A–Z</option>
+          <option value="kind">By kind</option>
+        </select>
+        <button id="btn-open-filters" class="btn secondary">Filters<span id="filter-count-badge" class="filter-badge hidden"></span></button>
+        <button id="btn-new-library" class="btn">+ New</button>
+      </div>
+      <div class="result-row">
+        <span id="library-result-count" class="result-count"></span>
+        <button id="btn-clear-tag-filter" class="btn ghost hidden">Clear all filters</button>
+      </div>
+      <div id="active-filter-chips" class="chip-row active-filter-chips"></div>
+      <div id="library-list" class="entry-list"></div>
+    </div>
+
+    <div class="tabpanel" data-tab="journal">
+      <div class="toolbar">
+        <span style="flex:1"></span>
+        <button id="btn-new-journal" class="btn">+ New reflection</button>
+      </div>
+      <div id="journal-list" class="entry-list"></div>
+    </div>
+
+    <div class="tabpanel" data-tab="saints">
+      <div class="toolbar">
+        <input id="saints-search" class="search-input" type="search" placeholder="Search saints…">
+        <select id="saints-sort" class="text-input sort-select">
+          <option value="name">Name A–Z</option>
+          <option value="feast">Feast day (upcoming first)</option>
+          <option value="familiarity">Familiarity (least known first)</option>
+        </select>
+        <button id="btn-open-saints-filters" class="btn secondary">Filters<span id="saints-filter-count-badge" class="filter-badge hidden"></span></button>
+      </div>
+      <div class="result-row">
+        <span id="saints-result-count" class="result-count"></span>
+        <button id="btn-open-flashcards" class="btn ghost">Study due cards<span id="cards-due-badge" class="filter-badge hidden"></span></button>
+        <button id="btn-open-saints-calendar" class="btn ghost">Calendar</button>
+        <button id="btn-open-saints-atlas" class="btn ghost">Atlas</button>
+        <button id="btn-export-ics" class="btn ghost">Export calendar (.ics)</button>
+      </div>
+      <div id="saints-active-filter-chips" class="chip-row active-filter-chips"></div>
+      <div id="saints-today-banner" class="todays-saint-banner hidden"></div>
+      <div id="saints-list" class="entry-list"></div>
+    </div>
+  </main>
+</div>
+
+<div id="view-saints-filters">
+  <header class="topbar">
+    <button class="btn ghost" id="btn-saints-filters-done">← Back</button>
+    <span style="font-size:0.85rem;color:var(--muted)">Filters</span>
+    <button class="btn ghost" id="btn-saints-filters-clear-all">Clear all</button>
+  </header>
+  <main class="content">
+    <div class="filter-section">
+      <div class="filter-section-label">Your relationship</div>
+      <div class="chip-row" id="saints-filter-status-row">
+        <span class="chip status-chip active" data-status="all">All</span>
+        <span class="chip status-chip" data-status="friend">Friend</span>
+        <span class="chip status-chip" data-status="acquaintance">Acquaintance</span>
+        <span class="chip status-chip" data-status="tomeet">To meet</span>
+        <span class="chip status-chip" data-status="">Unset</span>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-label">Dossier depth</div>
+      <div class="chip-row" id="saints-filter-depth-row">
+        <span class="chip depth-chip active" data-depth="all">All</span>
+        <span class="chip depth-chip" data-depth="full">Full dossier</span>
+        <span class="chip depth-chip" data-depth="core">Core scaffold</span>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-label">Your original list</div>
+      <div class="chip-row" id="saints-filter-tier-row">
+        <span class="chip tier-chip active" data-tier="all">All</span>
+        <span class="chip tier-chip" data-tier="top">Top favourites</span>
+        <span class="chip tier-chip" data-tier="favourite">Favourites</span>
+        <span class="chip tier-chip" data-tier="toKnow">To get to know</span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="view-saints-calendar">
+  <header class="topbar">
+    <button class="btn ghost" id="btn-saints-calendar-back">← Back</button>
+    <div class="calendar-nav">
+      <button class="btn ghost" id="btn-calendar-prev">‹</button>
+      <span id="calendar-month-label" class="calendar-month-label"></span>
+      <button class="btn ghost" id="btn-calendar-next">›</button>
+    </div>
+    <button class="btn ghost" id="btn-calendar-today">Today</button>
+  </header>
+  <main class="content">
+    <div id="saints-calendar-grid" class="calendar-grid"></div>
+  </main>
+</div>
+
+<div id="view-saints-atlas">
+  <header class="topbar">
+    <button class="btn ghost" id="btn-saints-atlas-back">← Back</button>
+    <span style="font-size:0.85rem;color:var(--muted)">Atlas — every saint's birth &amp; death place</span>
+    <span></span>
+  </header>
+  <main class="content">
+    <div class="atlas-bar">
+      <button id="btn-atlas-panel" class="btn secondary">Analysis<span id="atlas-filter-badge" class="filter-badge hidden"></span></button>
+      <button id="btn-atlas-clear" class="btn ghost">Clear filters</button>
+      <span style="flex:1"></span>
+      <span id="atlas-headline" class="atlas-headline"></span>
+    </div>
+
+    <div id="atlas-panel" class="atlas-panel hidden">
+      <div class="filter-section">
+        <div class="filter-section-label">Your original list</div>
+        <div class="chip-row" id="atlas-filter-tier-row">
+          <span class="chip tier-chip active" data-tier="all">All</span>
+          <span class="chip tier-chip" data-tier="top">Top favourites</span>
+          <span class="chip tier-chip" data-tier="favourite">Favourites</span>
+          <span class="chip tier-chip" data-tier="toKnow">To get to know</span>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-section-label">Born in the years…</div>
+        <div class="year-range">
+          <label>From <input type="number" id="atlas-year-from" class="text-input year-input" step="10"></label>
+          <label>To <input type="number" id="atlas-year-to" class="text-input year-input" step="10"></label>
+          <button id="btn-atlas-year-reset" class="btn ghost">Full span</button>
+        </div>
+        <div class="chip-row" id="atlas-filter-century-row">
+          <span class="chip century-chip active" data-century="all">All</span>
+          <span class="chip century-chip" data-century="ancient">Before 500</span>
+          <span class="chip century-chip" data-century="medieval">500–1499</span>
+          <span class="chip century-chip" data-century="early-modern">1500–1799</span>
+          <span class="chip century-chip" data-century="modern">1800–present</span>
+        </div>
+        <div class="histogram-wrap">
+          <div class="histogram-title">Saints per century — click a bar to filter</div>
+          <div id="atlas-histogram"></div>
+          <div id="atlas-histogram-readout" class="histogram-readout"></div>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-section-label">What to plot</div>
+        <div class="chip-row" id="atlas-placemode-row">
+          <span class="chip place-chip active" data-place="both">Birth &amp; death</span>
+          <span class="chip place-chip" data-place="born">Birthplaces only</span>
+          <span class="chip place-chip" data-place="died">Death places only</span>
+        </div>
+        <label class="filter-toggle"><input type="checkbox" id="atlas-journeys"> Draw a line from each birthplace to its death place</label>
+        <label class="filter-toggle"><input type="checkbox" id="atlas-incorrupt"> Only saints whose body is recorded as incorrupt</label>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-section-label">Order / spiritual family</div>
+        <div class="chip-row" id="atlas-order-row"></div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-section-label">Your relationship</div>
+        <div class="chip-row" id="atlas-status-row">
+          <span class="chip status-chip active" data-status="all">All</span>
+          <span class="chip status-chip" data-status="friend">Friend</span>
+          <span class="chip status-chip" data-status="acquaintance">Acquaintance</span>
+          <span class="chip status-chip" data-status="tomeet">To meet</span>
+          <span class="chip status-chip" data-status="">Unset</span>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-section-label">Pick individual saints</div>
+        <input id="atlas-saint-search" class="search-input" type="search" placeholder="Search to narrow the list…">
+        <div class="saint-picker-actions">
+          <button id="btn-atlas-pick-none" class="btn ghost">Select none</button>
+          <button id="btn-atlas-pick-all" class="btn ghost">Select all</button>
+          <span id="atlas-pick-count" class="result-count"></span>
+        </div>
+        <div id="atlas-saint-picker" class="saint-picker"></div>
+      </div>
+    </div>
+
+    <div id="saints-atlas-map"></div>
+    <div id="saints-atlas-popover" class="atlas-popover hidden"></div>
+    <div id="atlas-stats" class="atlas-stats"></div>
+  </main>
+</div>
+
+<div id="view-saint-reader">
+  <header class="topbar">
+    <button class="btn ghost" id="btn-saint-reader-back">← Back</button>
+    <span></span>
+    <button class="btn ghost" id="btn-saint-study">Study cards</button>
+  </header>
+  <main class="content reader-content saint-reader-content" id="saint-reader-body">
+    <!-- rendered entirely by renderSaintReader() in app.js -->
+  </main>
+</div>
+
+<div id="view-flashcards">
+  <header class="topbar">
+    <button class="btn ghost" id="btn-flashcards-back">← Back</button>
+    <span class="writer-status" id="flashcards-progress"></span>
+    <span style="width:2.4rem"></span>
+  </header>
+  <main class="content flashcard-content">
+    <div id="flashcards-empty" class="empty-state hidden">Nothing due right now — come back later, or open a saint and add more cards.</div>
+    <div id="flashcard-card" class="flashcard hidden">
+      <div class="flashcard-source" id="flashcard-source"></div>
+      <div class="flashcard-face" id="flashcard-question"></div>
+      <div class="flashcard-face flashcard-answer hidden" id="flashcard-answer"></div>
+      <button class="btn secondary flashcard-flip" id="btn-flashcard-flip">Show answer</button>
+      <div class="flashcard-rate hidden" id="flashcard-rate">
+        <button class="btn danger" data-quality="again">Again</button>
+        <button class="btn secondary" data-quality="hard">Hard</button>
+        <button class="btn" data-quality="good">Good</button>
+        <button class="btn" data-quality="easy">Easy</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="view-library-filters">
+  <header class="topbar">
+    <button class="btn ghost" id="btn-filters-done">← Back</button>
+    <span style="font-size:0.85rem;color:var(--muted)">Filters</span>
+    <button class="btn ghost" id="btn-filters-clear-all">Clear all</button>
+  </header>
+  <main class="content">
+    <div class="filter-result-row" id="filter-result-row"></div>
+
+    <div class="filter-section">
+      <label class="filter-toggle"><input type="checkbox" id="filter-favorites-only"> Favourites only ★</label>
+      <label class="filter-toggle"><input type="checkbox" id="filter-bilingual-only"> Has original-language text</label>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-label">Kind</div>
+      <div class="chip-row" id="filter-kind-row">
+        <span class="chip kind-chip active" data-kind="all">All</span>
+        <span class="chip kind-chip" data-kind="prayer">Prayers</span>
+        <span class="chip kind-chip" data-kind="hymn">Hymns</span>
+        <span class="chip kind-chip" data-kind="litany">Litanies</span>
+        <span class="chip kind-chip" data-kind="saint">Saints</span>
+        <span class="chip kind-chip" data-kind="quote">Quotes</span>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-label">Origin / tradition</div>
+      <div class="chip-row" id="filter-origin-row"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-label">Liturgical season / use</div>
+      <div class="chip-row" id="filter-liturgical-row"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-label">Author</div>
+      <select id="filter-author-select" class="text-input">
+        <option value="">All authors</option>
+      </select>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-label">Tags (select multiple)</div>
+      <div class="chip-row" id="tag-chip-row"></div>
+    </div>
+  </main>
+</div>
+
+<div id="view-library-reader">
+  <header class="topbar">
+    <button class="btn ghost" id="btn-reader-back">← Back</button>
+    <span></span>
+    <button class="btn ghost" id="btn-reader-edit">Edit</button>
+  </header>
+  <main class="content reader-content">
+    <div class="reader-kind" id="reader-kind"></div>
+    <h1 class="reader-title" id="reader-title"></h1>
+    <div class="reader-attribution" id="reader-attribution"></div>
+    <div class="reader-meta" id="reader-meta"></div>
+    <div class="reader-rule"></div>
+    <div class="reader-text" id="reader-text"></div>
+    <div class="reader-background-wrap hidden" id="reader-background-wrap">
+      <div class="reader-background-label">Background</div>
+      <div class="reader-background" id="reader-background"></div>
+    </div>
+  </main>
+</div>
+
+<div id="view-library-editor">
+  <header class="topbar">
+    <button class="btn ghost" id="btn-library-cancel">← Back</button>
+    <span id="library-editor-title-heading" style="font-size:0.85rem;color:var(--muted)">New library entry</span>
+    <span></span>
+  </header>
+  <main class="content">
+    <form id="library-editor-form">
+      <div class="field">
+        <label for="lib-title">Title</label>
+        <input id="lib-title" class="text-input" type="text" required placeholder="e.g. Memorare, St. Thérèse of Lisieux, Phil 4:13">
+      </div>
+      <div class="field">
+        <label for="lib-kind">Kind</label>
+        <select id="lib-kind" class="text-input">
+          <option value="prayer">Prayer</option>
+          <option value="hymn">Hymn</option>
+          <option value="litany">Litany</option>
+          <option value="saint">Saint</option>
+          <option value="quote">Quote</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="lib-author">Author (clean name — used for filtering/grouping)</label>
+          <input id="lib-author" class="text-input" type="text" placeholder="e.g. St. Thérèse of Lisieux, Fr. François-Xavier Gautrelet, S.J.">
+        </div>
+        <div class="field">
+          <label for="lib-year">Year / period</label>
+          <input id="lib-year" class="text-input" type="text" placeholder="e.g. 1844, 13th century, c. 100 AD">
+        </div>
+      </div>
+      <div class="field">
+        <label for="lib-author-note">Author note (disputes, misattributions — keeps the byline clean)</label>
+        <input id="lib-author-note" class="text-input" type="text" placeholder="e.g. disputed — some scholars attribute this to St. John of the Cross instead">
+      </div>
+      <div class="field">
+        <label for="lib-origin">Origin / tradition</label>
+        <input id="lib-origin" class="text-input" type="text" placeholder="e.g. Carmelite, Ignatian, Apostleship of Prayer, Patristic">
+      </div>
+      <div class="field">
+        <label for="lib-liturgical">Liturgical season / use</label>
+        <input id="lib-liturgical" class="text-input" type="text" placeholder="e.g. Advent through Feb 2, Easter season, Compline">
+      </div>
+      <div class="field hidden" id="lib-feast-day-field">
+        <label for="lib-feast-day">Feast day</label>
+        <input id="lib-feast-day" class="text-input" type="text" placeholder="e.g. October 1">
+      </div>
+      <div class="field">
+        <label for="lib-source">Source / reference</label>
+        <input id="lib-source" class="text-input" type="text" placeholder="e.g. Philippians 4:13, Story of a Soul ch. 10">
+      </div>
+      <div class="field">
+        <label for="lib-tags">Tags (comma separated)</label>
+        <input id="lib-tags" class="text-input" type="text" placeholder="e.g. Marian, evening, consolation">
+      </div>
+      <div class="field">
+        <label><input id="lib-favorite" type="checkbox"> Favourite</label>
+      </div>
+      <div class="field-row">
+        <div class="field" style="flex:2">
+          <label for="lib-body-latin">Original-language text (optional — shown side by side with the text below)</label>
+          <textarea id="lib-body-latin" class="text-input" placeholder="Leave blank unless this has an original-language text you want displayed alongside the translation…"></textarea>
+        </div>
+        <div class="field" style="flex:1">
+          <label for="lib-original-language">Language</label>
+          <input id="lib-original-language" class="text-input" type="text" placeholder="Latin">
+        </div>
+      </div>
+      <div class="field">
+        <label for="lib-body">Text (English / translation)</label>
+        <textarea id="lib-body" class="text-input body-field" required placeholder="The full text…"></textarea>
+      </div>
+      <div class="field">
+        <label for="lib-background">Background — why (and when/where) it was written</label>
+        <textarea id="lib-background" class="text-input" placeholder="The story behind it — e.g. who it was written for, what prompted it, how it came to be prayed the way it's prayed today…"></textarea>
+      </div>
+      <div class="editor-actions">
+        <div class="left">
+          <button type="submit" id="btn-library-save" class="btn">Save</button>
+        </div>
+        <button type="button" id="btn-library-delete" class="btn danger hidden">Delete</button>
+      </div>
+    </form>
+  </main>
+</div>
+
+<div id="view-writer">
+  <div class="writer-topbar">
+    <button class="btn ghost" id="btn-writer-back">← Back</button>
+    <span class="writer-status" id="writer-status"></span>
+    <button class="btn ghost" id="btn-writer-delete">Delete</button>
+  </div>
+  <div class="writer-body-wrap">
+    <input id="writer-title" class="writer-title" type="text" placeholder="Untitled reflection">
+    <div class="writer-meta-row">
+      <input id="writer-date" type="date">
+      <input id="writer-tags" type="text" placeholder="tags, comma separated">
+      <select id="writer-link"></select>
+    </div>
+    <textarea id="writer-body" class="writer-textarea" placeholder="Begin writing…"></textarea>
+  </div>
+  <div class="writer-footer">
+    <span id="writer-wordcount">0 words</span>
+  </div>
+</div>
+
+<!-- LOCAL MODE (default for now): everything is saved in this browser's
+     localStorage only, like the wardrobe pages elsewhere in this repo —
+     no Google sign-in, no cross-device sync yet.
+     To switch to real Google Drive sync later (so content follows you to
+     your phone too — see SETUP.md): delete the two lines below, then
+     uncomment the four lines below that. -->
+<script>window.RECOLLECTION_LOCAL_MODE = true;</script>
+<script>window.RECOLLECTION_PUBLIC_MODE = true;</script>
+<script src="store-local.js"></script>
+<script src="saints-data.js"></script>
+<script src="saints-geo.js"></script>
+<!--
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="config.js"></script>
+<script src="auth.js"></script>
+<script src="drive.js"></script>
+-->
+<script src="app.js"></script>
+</body>
+</html>
