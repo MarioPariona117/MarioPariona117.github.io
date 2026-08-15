@@ -26,6 +26,7 @@ const state = {
   saintsFilterStatus: "all", // all | friend | acquaintance | tomeet | ""
   saintsFilterDepth: "all", // all | full | core
   saintsFilterTier: "all", // all | top | favourite | toKnow
+  saintsFilterCause: "all", // all | servant | venerable | blessed | saint
   readingSaintSlug: null,
   readingSaintTab: null, // which dossier tab is active; reset to the first tab whenever a *different* saint is opened
   flashcardQueue: [], // [{ slug, cardIndex, card: {q,a} }]
@@ -239,6 +240,7 @@ window.addEventListener("DOMContentLoaded", () => {
     state.saintsFilterStatus = "all";
     state.saintsFilterDepth = "all";
     state.saintsFilterTier = "all";
+    state.saintsFilterCause = "all";
     renderSaintsList();
   });
   $$(".status-chip", $("#saints-filter-status-row")).forEach((chip) =>
@@ -256,6 +258,12 @@ window.addEventListener("DOMContentLoaded", () => {
   $$(".tier-chip", $("#saints-filter-tier-row")).forEach((chip) =>
     chip.addEventListener("click", () => {
       state.saintsFilterTier = chip.dataset.tier;
+      renderSaintsList();
+    })
+  );
+  $$(".cause-chip", $("#saints-filter-cause-row")).forEach((chip) =>
+    chip.addEventListener("click", () => {
+      state.saintsFilterCause = chip.dataset.cause;
       renderSaintsList();
     })
   );
@@ -3254,6 +3262,11 @@ async function onDeleteJournalEntry() {
 
 const SAINT_STATUS_LABELS = { friend: "Friend", acquaintance: "Acquaintance", tomeet: "To meet", "": "Unset" };
 const SAINT_TIER_LABELS = { top: "Top favourite", favourite: "Favourite", toKnow: "To get to know" };
+// Where someone stands in the canonization process. Only shown when it's
+// NOT "saint" — everyone in this file defaults to "saint", so a badge on
+// every single card would be noise; the interesting cases are the handful
+// of open causes (e.g. Fulton Sheen, Clare Crockett).
+const CAUSE_STAGE_LABELS = { servant: "Servant of God", venerable: "Venerable", blessed: "Blessed", saint: "Saint" };
 const FAMILIARITY_SECTIONS = [
   { key: "life", label: "Life & history" },
   { key: "narrative", label: "Anecdotes & story" },
@@ -3305,13 +3318,15 @@ function syncSaintsFilterChipActiveState() {
   $$(".status-chip", $("#saints-filter-status-row")).forEach((c) => c.classList.toggle("active", c.dataset.status === state.saintsFilterStatus));
   $$(".depth-chip", $("#saints-filter-depth-row")).forEach((c) => c.classList.toggle("active", c.dataset.depth === state.saintsFilterDepth));
   $$(".tier-chip", $("#saints-filter-tier-row")).forEach((c) => c.classList.toggle("active", c.dataset.tier === state.saintsFilterTier));
+  $$(".cause-chip", $("#saints-filter-cause-row")).forEach((c) => c.classList.toggle("active", c.dataset.cause === state.saintsFilterCause));
 }
 
 function updateSaintsFilterBadge() {
   const count =
     (state.saintsFilterStatus !== "all" ? 1 : 0) +
     (state.saintsFilterDepth !== "all" ? 1 : 0) +
-    (state.saintsFilterTier !== "all" ? 1 : 0);
+    (state.saintsFilterTier !== "all" ? 1 : 0) +
+    (state.saintsFilterCause !== "all" ? 1 : 0);
   const badge = $("#saints-filter-count-badge");
   badge.textContent = String(count);
   badge.classList.toggle("hidden", count === 0);
@@ -3346,6 +3361,7 @@ function renderSaintsList() {
     if (state.saintsFilterStatus !== "all" && personal.status !== state.saintsFilterStatus) return false;
     if (state.saintsFilterDepth !== "all" && s.depth !== state.saintsFilterDepth) return false;
     if (state.saintsFilterTier !== "all" && s.listTier !== state.saintsFilterTier) return false;
+    if (state.saintsFilterCause !== "all" && (s.causeStage || "saint") !== state.saintsFilterCause) return false;
     if (!q) return true;
     return (
       s.name.toLowerCase().includes(q) ||
@@ -3378,6 +3394,7 @@ function renderSaintsList() {
       <div class="title">${escapeHtml(s.name)}</div>
       <div class="meta">
         <span class="badge-kind">${s.depth === "full" ? "Full dossier" : "Core"}</span>
+        ${s.causeStage && s.causeStage !== "saint" ? `<span class="tag-chip cause-tag cause-${s.causeStage}">${CAUSE_STAGE_LABELS[s.causeStage]}</span>` : ""}
         ${s.listTier ? `<span class="tag-chip tier-tag tier-${s.listTier}">${SAINT_TIER_LABELS[s.listTier]}</span>` : ""}
         ${s.dates.feastLabel ? `<span>${escapeHtml(s.dates.feastLabel)} (${feastNote})</span>` : `<span>${feastNote}</span>`}
         ${personal.status ? `<span class="tag-chip status-tag status-${personal.status}">${SAINT_STATUS_LABELS[personal.status]}</span>` : ""}
@@ -4626,7 +4643,7 @@ function renderSaintDossier(s) {
     .join(" · ");
 
   const header = `
-    <div class="reader-kind">${s.depth === "full" ? "Full dossier" : "Saint — core scaffold"}${s.listTier ? ` <span class="tag-chip tier-tag tier-${s.listTier}">${SAINT_TIER_LABELS[s.listTier]}</span>` : ""}</div>
+    <div class="reader-kind">${s.depth === "full" ? "Full dossier" : "Saint — core scaffold"}${s.causeStage && s.causeStage !== "saint" ? ` <span class="tag-chip cause-tag cause-${s.causeStage}">${CAUSE_STAGE_LABELS[s.causeStage]}</span>` : ""}${s.listTier ? ` <span class="tag-chip tier-tag tier-${s.listTier}">${SAINT_TIER_LABELS[s.listTier]}</span>` : ""}</div>
     <h1 class="reader-title">${escapeHtml(s.name)}</h1>
     <div class="reader-attribution">${escapeHtml([real(id.birthName), real(id.religiousName)].filter(Boolean).join(" · "))}</div>
     <div class="reader-meta">
