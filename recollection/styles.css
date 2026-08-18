@@ -1,13 +1,8 @@
+/* Colours are defined per-palette further down (search "Palettes"); this block
+   holds only what every palette shares. Keeping the old duplicate set here as
+   well meant two competing definitions of the same variables. */
 :root {
   color-scheme: dark;
-  --ground: #0f1b2d;
-  --card: #162641;
-  --card-hover: #1c2f52;
-  --gold: #d4a847;
-  --ivory: #f0e8d5;
-  --body: #c8d8e8;
-  --muted: #7a90aa;
-  --faint: #3a5570;
   --danger: #c96a5a;
 }
 
@@ -72,7 +67,7 @@ a { color: var(--gold); }
 .gate-box h1 {
   font-family: Palatino, "Palatino Linotype", Georgia, serif;
   font-size: clamp(1.8rem, 5vw, 2.3rem);
-  color: #fff;
+  color: var(--heading);
   margin: 0 0 1.2rem;
 }
 .gate-body {
@@ -98,7 +93,7 @@ a { color: var(--gold); }
 .signin-box h1 {
   font-family: Palatino, "Palatino Linotype", Georgia, serif;
   font-size: 1.6rem;
-  color: #fff;
+  color: var(--heading);
   margin: 0 0 0.5rem;
 }
 
@@ -153,13 +148,13 @@ header.topbar {
   align-items: center;
   justify-content: space-between;
   padding: 0.9rem 1.1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(var(--edge-rgb),0.06);
 }
 
 .topbar .brand {
   font-family: Palatino, "Palatino Linotype", Georgia, serif;
   font-size: 1.05rem;
-  color: #fff;
+  color: var(--heading);
 }
 .topbar .brand em { font-style: italic; color: var(--gold); }
 
@@ -177,7 +172,7 @@ header.topbar {
   border-radius: 6px;
   cursor: pointer;
 }
-.tab.active { color: #fff; background: var(--card); }
+.tab.active { color: var(--heading); background: var(--card); }
 
 main.content { flex: 1; max-width: 760px; width: 100%; margin: 0 auto; padding: 1.25rem 1.1rem 3rem; }
 
@@ -219,7 +214,7 @@ main.content { flex: 1; max-width: 760px; width: 100%; margin: 0 auto; padding: 
 
 .active-filter-chips:empty { margin: 0; }
 .active-filter-chips { margin-bottom: 0.6rem; }
-.active-filter-chips .chip { background: rgba(212,168,71,0.15); color: var(--gold); border-color: rgba(212,168,71,0.4); }
+.active-filter-chips .chip { background: rgba(var(--gold-rgb),0.15); color: var(--gold); border-color: rgba(var(--gold-rgb),0.4); }
 .active-filter-chips .chip .x { margin-left: 0.3rem; font-weight: 700; }
 
 .filter-result-row { font-size: 0.78rem; color: var(--muted); margin-bottom: 1.2rem; text-align: center; }
@@ -247,7 +242,7 @@ main.content { flex: 1; max-width: 760px; width: 100%; margin: 0 auto; padding: 
 
 .search-input, .text-input, select.text-input, textarea.text-input {
   background: var(--card);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(var(--edge-rgb),0.08);
   border-radius: 8px;
   padding: 0.55rem 0.75rem;
   font-size: 0.85rem;
@@ -259,7 +254,7 @@ main.content { flex: 1; max-width: 760px; width: 100%; margin: 0 auto; padding: 
 .chip-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
 .chip {
   background: var(--card);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(var(--edge-rgb),0.08);
   color: var(--muted);
   font-size: 0.72rem;
   font-weight: 600;
@@ -273,15 +268,15 @@ main.content { flex: 1; max-width: 760px; width: 100%; margin: 0 auto; padding: 
 
 .entry-card {
   background: var(--card);
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(var(--edge-rgb),0.06);
   border-radius: 10px;
   padding: 0.8rem 1rem;
   cursor: pointer;
   transition: border-color .15s;
 }
-.entry-card:hover { border-color: rgba(212,168,71,0.4); }
+.entry-card:hover { border-color: rgba(var(--gold-rgb),0.4); }
 
-.entry-card .title { font-weight: 600; color: #fff; font-size: 0.9rem; margin-bottom: 0.25rem; }
+.entry-card .title { font-weight: 600; color: var(--heading); font-size: 0.9rem; margin-bottom: 0.25rem; }
 .entry-card .byline {
   font-size: 0.74rem;
   color: var(--gold);
@@ -292,8 +287,8 @@ main.content { flex: 1; max-width: 760px; width: 100%; margin: 0 auto; padding: 
   padding: 0.02rem 0.25rem;
   margin-left: -0.25rem;
 }
-.entry-card .byline:hover { background: rgba(212,168,71,0.12); }
-.entry-card .byline.active { background: rgba(212,168,71,0.2); font-weight: 700; }
+.entry-card .byline:hover { background: rgba(var(--gold-rgb),0.12); }
+.entry-card .byline.active { background: rgba(var(--gold-rgb),0.2); font-weight: 700; }
 .entry-card .meta { font-size: 0.7rem; color: var(--muted); display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
 
 .tag-chip {
@@ -302,8 +297,8 @@ main.content { flex: 1; max-width: 760px; width: 100%; margin: 0 auto; padding: 
   border-radius: 4px;
   padding: 0.05rem 0.3rem;
 }
-.tag-chip:hover { color: var(--gold); background: rgba(212,168,71,0.12); }
-.tag-chip.active { color: var(--gold); background: rgba(212,168,71,0.15); font-weight: 700; }
+.tag-chip:hover { color: var(--gold); background: rgba(var(--gold-rgb),0.12); }
+.tag-chip.active { color: var(--gold); background: rgba(var(--gold-rgb),0.15); font-weight: 700; }
 
 .badge-kind {
   font-size: 0.6rem;
@@ -312,9 +307,9 @@ main.content { flex: 1; max-width: 760px; width: 100%; margin: 0 auto; padding: 
   letter-spacing: 0.05em;
   padding: 0.1rem 0.45rem;
   border-radius: 20px;
-  background: rgba(212,168,71,0.13);
+  background: rgba(var(--gold-rgb),0.13);
   color: var(--gold);
-  border: 1px solid rgba(212,168,71,0.35);
+  border: 1px solid rgba(var(--gold-rgb),0.35);
 }
 
 .empty-state { color: var(--muted); font-size: 0.82rem; text-align: center; padding: 2.5rem 1rem; }
@@ -361,7 +356,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   font-family: Palatino, "Palatino Linotype", Georgia, serif;
   font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 700;
-  color: #fff;
+  color: var(--heading);
   margin: 0 0 0.5rem;
   text-wrap: balance;
 }
@@ -369,7 +364,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 .reader-attribution { font-size: 0.82rem; color: var(--body); margin-bottom: 0.3rem; }
 .reader-attribution .dot { margin: 0 0.4rem; color: var(--faint); }
 .reader-author-link { cursor: pointer; border-radius: 4px; padding: 0.02rem 0.25rem; margin-left: -0.25rem; }
-.reader-author-link:hover { color: var(--gold); background: rgba(212,168,71,0.12); }
+.reader-author-link:hover { color: var(--gold); background: rgba(var(--gold-rgb),0.12); }
 .reader-author-note { color: var(--muted); font-style: italic; }
 
 .reader-meta { font-size: 0.75rem; color: var(--muted); }
@@ -378,7 +373,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 .reader-background-wrap {
   margin-top: 2.2rem;
   padding-top: 1.2rem;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid rgba(var(--edge-rgb),0.08);
   text-align: left;
 }
 .reader-background-label {
@@ -465,7 +460,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   border: none;
   font-family: Palatino, "Palatino Linotype", Georgia, serif;
   font-size: 1.7rem;
-  color: #fff;
+  color: var(--heading);
   margin-bottom: 0.9rem;
 }
 .writer-title:focus { outline: none; }
@@ -474,7 +469,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 .writer-meta-row { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 1.1rem; flex-wrap: wrap; }
 .writer-meta-row input, .writer-meta-row select {
   background: var(--card);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(var(--edge-rgb),0.08);
   border-radius: 6px;
   padding: 0.35rem 0.6rem;
   font-size: 0.72rem;
@@ -511,19 +506,19 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 /* --- Saints tab: list --- */
 
 .saint-card .status-tag { font-weight: 700; }
-.status-tag.status-friend { color: var(--gold); background: rgba(212,168,71,0.15); }
-.status-tag.status-acquaintance { color: var(--body); background: rgba(255,255,255,0.06); }
-.status-tag.status-tomeet { color: var(--muted); background: rgba(255,255,255,0.04); }
+.status-tag.status-friend { color: var(--gold); background: rgba(var(--gold-rgb),0.15); }
+.status-tag.status-acquaintance { color: var(--body); background: rgba(var(--edge-rgb),0.06); }
+.status-tag.status-tomeet { color: var(--muted); background: rgba(var(--edge-rgb),0.04); }
 
 .tier-tag { font-weight: 600; font-style: italic; }
 .tier-tag.tier-top { color: #1a1408; background: var(--gold); font-style: normal; font-weight: 700; }
-.tier-tag.tier-favourite { color: var(--gold); background: rgba(212,168,71,0.10); }
-.tier-tag.tier-toKnow { color: var(--muted); background: rgba(255,255,255,0.04); }
+.tier-tag.tier-favourite { color: var(--gold); background: rgba(var(--gold-rgb),0.10); }
+.tier-tag.tier-toKnow { color: var(--muted); background: rgba(var(--edge-rgb),0.04); }
 
 .cause-tag { font-weight: 700; text-transform: uppercase; font-size: 0.62rem; letter-spacing: 0.04em; }
-.cause-tag.cause-servant { color: var(--muted); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); }
+.cause-tag.cause-servant { color: var(--muted); background: rgba(var(--edge-rgb),0.06); border: 1px solid rgba(var(--edge-rgb),0.15); }
 .cause-tag.cause-venerable { color: var(--body); background: rgba(122,144,170,0.18); border: 1px solid rgba(122,144,170,0.4); }
-.cause-tag.cause-blessed { color: var(--gold); background: rgba(212,168,71,0.14); border: 1px solid rgba(212,168,71,0.4); }
+.cause-tag.cause-blessed { color: var(--gold); background: rgba(var(--gold-rgb),0.14); border: 1px solid rgba(var(--gold-rgb),0.4); }
 
 /* --- Saints filters view (reuses .filter-* from the library filters) --- */
 
@@ -574,13 +569,13 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   max-width: 620px;
   margin: 0.8rem auto 0;
   padding: 0 0 0.6rem;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(var(--edge-rgb),0.08);
   scrollbar-width: thin;
 }
 .saint-tab-btn {
   flex: 0 0 auto;
   background: none;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(var(--edge-rgb),0.12);
   border-radius: 999px;
   padding: 0.4rem 0.9rem;
   font-size: 0.72rem;
@@ -591,14 +586,14 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   white-space: nowrap;
   transition: color 0.15s, background 0.15s, border-color 0.15s;
 }
-.saint-tab-btn:hover { color: var(--body); border-color: rgba(255,255,255,0.25); }
+.saint-tab-btn:hover { color: var(--body); border-color: rgba(var(--edge-rgb),0.25); }
 .saint-tab-btn.active { color: #1a1408; background: var(--gold); border-color: var(--gold); }
 
 .saint-section {
   max-width: 620px;
   margin: 0 auto;
   padding: 1.4rem 0;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid rgba(var(--edge-rgb),0.08);
   text-align: left;
 }
 .saint-section:first-of-type { border-top: none; }
@@ -623,7 +618,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 .saint-story { font-size: 0.92rem; line-height: 1.7; color: var(--body); }
 
 .saint-field { font-size: 0.85rem; line-height: 1.6; color: var(--body); margin-bottom: 0.6rem; }
-.saint-for-you { background: rgba(212,168,71,0.08); border-left: 2px solid var(--gold); padding: 0.6rem 0.8rem; border-radius: 0 4px 4px 0; }
+.saint-for-you { background: rgba(var(--gold-rgb),0.08); border-left: 2px solid var(--gold); padding: 0.6rem 0.8rem; border-radius: 0 4px 4px 0; }
 .saint-field-label {
   display: block;
   font-size: 0.66rem;
@@ -648,9 +643,9 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   letter-spacing: 0.05em;
   padding: 0.05rem 0.4rem;
   border-radius: 20px;
-  background: rgba(212,168,71,0.13);
+  background: rgba(var(--gold-rgb),0.13);
   color: var(--gold);
-  border: 1px solid rgba(212,168,71,0.35);
+  border: 1px solid rgba(var(--gold-rgb),0.35);
 }
 .legend-flag.documented { background: rgba(122,144,170,0.15); color: var(--body); border-color: rgba(122,144,170,0.35); }
 
@@ -658,7 +653,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 .saint-about-group:last-child { margin-bottom: 0; }
 
 .related-saint-chip { cursor: pointer; }
-.related-saint-chip:hover { color: var(--gold); background: rgba(212,168,71,0.15); }
+.related-saint-chip:hover { color: var(--gold); background: rgba(var(--gold-rgb),0.15); }
 
 /* --- "Your layer" panel — the one editable part of a saint's page --- */
 
@@ -668,7 +663,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   padding: 1.2rem;
   border-radius: 12px;
   background: var(--card);
-  border: 1px solid rgba(212,168,71,0.2);
+  border: 1px solid rgba(var(--gold-rgb),0.2);
   text-align: left;
 }
 
@@ -718,7 +713,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   padding: 2rem 1.5rem;
   border-radius: 14px;
   background: var(--card);
-  border: 1px solid rgba(212,168,71,0.25);
+  border: 1px solid rgba(var(--gold-rgb),0.25);
   text-align: center;
 }
 
@@ -741,7 +736,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 .flashcard-answer {
   margin-top: 1.2rem;
   padding-top: 1.2rem;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(var(--edge-rgb),0.1);
   color: var(--body);
 }
 
@@ -764,7 +759,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   top: 6px;
   bottom: 6px;
   width: 2px;
-  background: linear-gradient(to bottom, rgba(212,168,71,0.5), rgba(212,168,71,0.15));
+  background: linear-gradient(to bottom, rgba(var(--gold-rgb),0.5), rgba(var(--gold-rgb),0.15));
 }
 
 .timeline-item { position: relative; padding-bottom: 1.1rem; }
@@ -808,7 +803,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   font-size: 0.8rem;
   color: var(--gold);
   text-decoration: none;
-  border-bottom: 1px solid rgba(212,168,71,0.35);
+  border-bottom: 1px solid rgba(var(--gold-rgb),0.35);
 }
 .saint-sources-list a:hover { border-bottom-color: var(--gold); }
 
@@ -819,8 +814,8 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   margin: 0 auto 0.8rem;
   padding: 0.6rem 0.9rem;
   border-radius: 8px;
-  background: rgba(212,168,71,0.10);
-  border: 1px solid rgba(212,168,71,0.35);
+  background: rgba(var(--gold-rgb),0.10);
+  border: 1px solid rgba(var(--gold-rgb),0.35);
   font-size: 0.82rem;
   line-height: 1.5;
   color: var(--body);
@@ -830,7 +825,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   color: var(--gold);
   font-weight: 700;
   cursor: pointer;
-  border-bottom: 1px solid rgba(212,168,71,0.4);
+  border-bottom: 1px solid rgba(var(--gold-rgb),0.4);
 }
 .todays-saint-name:hover { border-bottom-color: var(--gold); }
 
@@ -866,7 +861,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 .calendar-cell {
   min-height: 4.2rem;
   background: var(--card);
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(var(--edge-rgb),0.06);
   border-radius: 8px;
   padding: 0.3rem;
   display: flex;
@@ -874,7 +869,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   gap: 0.15rem;
 }
 .calendar-cell.empty { background: none; border: none; }
-.calendar-cell.today { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(212,168,71,0.4); }
+.calendar-cell.today { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(var(--gold-rgb),0.4); }
 .calendar-day-num { font-size: 0.68rem; color: var(--muted); font-weight: 700; }
 .calendar-cell.today .calendar-day-num { color: var(--gold); }
 
@@ -882,12 +877,12 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   font-size: 0.6rem;
   line-height: 1.3;
   color: var(--body);
-  background: rgba(255,255,255,0.05);
+  background: rgba(var(--edge-rgb),0.05);
   border-radius: 4px;
   padding: 0.05rem 0.3rem;
   cursor: pointer;
 }
-.calendar-saint-chip:hover { color: var(--gold); background: rgba(212,168,71,0.15); }
+.calendar-saint-chip:hover { color: var(--gold); background: rgba(var(--gold-rgb),0.15); }
 .calendar-saint-chip.tier-top { color: var(--gold); font-weight: 700; }
 
 @media (max-width: 520px) {
@@ -903,14 +898,14 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   margin: 0.6rem auto;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid rgba(212,168,71,0.2);
+  border: 1px solid rgba(var(--gold-rgb),0.2);
 }
 .world-map-svg { display: block; width: 100%; height: auto; background: var(--ground); touch-action: none; cursor: grab; }
 .world-map-svg:active { cursor: grabbing; }
 .world-map-bg { fill: var(--card); }
-.world-map-land { fill: rgba(255,255,255,0.055); stroke: rgba(255,255,255,0.15); stroke-width: 0.6; }
-.world-map-grid { stroke: rgba(255,255,255,0.07); stroke-width: 1; }
-.world-map-grid.equator, .world-map-grid.prime { stroke: rgba(255,255,255,0.13); }
+.world-map-land { fill: rgba(var(--edge-rgb),0.055); stroke: rgba(var(--edge-rgb),0.15); stroke-width: 0.6; }
+.world-map-grid { stroke: rgba(var(--edge-rgb),0.07); stroke-width: 1; }
+.world-map-grid.equator, .world-map-grid.prime { stroke: rgba(var(--edge-rgb),0.13); }
 .world-map-path { fill: none; stroke: var(--gold); stroke-width: 1.5; stroke-opacity: 0.6; }
 /* Legs brighten along the journey, so direction of travel is visible even
    where the path crosses itself. */
@@ -925,7 +920,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 }
 .world-map-pin.highlight { fill: var(--ivory); }
 .world-map-stop-num.highlight { fill: #1a1408; }
-.map-stop-row.highlight { background: rgba(212,168,71,0.12); border-radius: 6px; }
+.map-stop-row.highlight { background: rgba(var(--gold-rgb),0.12); border-radius: 6px; }
 .world-map-pin { fill: var(--gold); stroke: var(--ground); stroke-width: 1; cursor: pointer; }
 .world-map-pin:hover { fill: var(--ivory); }
 .world-map-pin.clustered { fill: var(--gold); stroke-width: 1.5; }
@@ -962,7 +957,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   height: 1.7rem;
   border-radius: 6px;
   background: rgba(15,27,45,0.8);
-  border: 1px solid rgba(212,168,71,0.35);
+  border: 1px solid rgba(var(--gold-rgb),0.35);
   color: var(--gold);
   font-size: 0.95rem;
   font-weight: 700;
@@ -973,7 +968,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   line-height: 1;
   padding: 0;
 }
-.world-map-zoom-btn:hover { background: rgba(212,168,71,0.18); }
+.world-map-zoom-btn:hover { background: rgba(var(--gold-rgb),0.18); }
 .world-map-reset-btn { width: auto; height: auto; padding: 0.2rem 0.4rem; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
 .world-map-tiles-btn { width: auto; height: auto; padding: 0.2rem 0.4rem; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
 .world-map-tiles-btn.on { background: var(--gold); color: #1a1408; border-color: var(--gold); }
@@ -996,7 +991,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   align-items: baseline;
   gap: 0.5rem;
   padding: 0.45rem 0;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(var(--edge-rgb),0.06);
   font-size: 0.82rem;
   color: var(--body);
 }
@@ -1006,7 +1001,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   width: 1.3rem;
   height: 1.3rem;
   border-radius: 50%;
-  background: rgba(212,168,71,0.15);
+  background: rgba(var(--gold-rgb),0.15);
   color: var(--gold);
   font-size: 0.66rem;
   font-weight: 700;
@@ -1050,7 +1045,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   padding: 0.8rem 1rem;
   border-radius: 10px;
   background: var(--card);
-  border: 1px solid rgba(212,168,71,0.3);
+  border: 1px solid rgba(var(--gold-rgb),0.3);
 }
 .atlas-popover-title {
   font-size: 0.68rem;
@@ -1064,7 +1059,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   font-size: 0.85rem;
   color: var(--body);
   padding: 0.35rem 0;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(var(--edge-rgb),0.06);
   cursor: pointer;
 }
 .atlas-popover-name:first-child { border-top: none; }
@@ -1078,7 +1073,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 
 .atlas-panel {
   background: var(--card);
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(var(--edge-rgb),0.07);
   border-radius: 12px;
   padding: 1.1rem 1.1rem 0.4rem;
   margin-bottom: 1rem;
@@ -1107,7 +1102,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 .saint-picker {
   max-height: 190px;
   overflow-y: auto;
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(var(--edge-rgb),0.07);
   border-radius: 8px;
   padding: 0.4rem 0.6rem;
 }
@@ -1122,7 +1117,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 0.5rem; }
 .stat-tile {
   background: var(--card);
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(var(--edge-rgb),0.06);
   border-radius: 10px;
   padding: 0.6rem 0.7rem;
   text-align: left;
@@ -1135,3 +1130,987 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 
 body.public-mode .tab[data-tab="journal"],
 body.public-mode .tabpanel[data-tab="journal"] { display: none !important; }
+
+/* --- Panel intro notes (Library, Saints) ---------------------------------
+   A short "why this exists" line at the top of a tab, in Mario's own voice.
+   Collapsing it (the ×) leaves a small gold link in its place rather than
+   removing it outright, so it can always be read again. State is remembered
+   per browser. */
+
+.panel-note {
+  position: relative;
+  max-width: 620px;
+  margin: 0 auto 1rem;
+  padding: 0.85rem 2.2rem 0.85rem 1rem;
+  border-radius: 8px;
+  background: rgba(var(--gold-rgb), 0.08);
+  border: 1px solid rgba(var(--gold-rgb), 0.28);
+  border-left: 3px solid var(--gold);
+}
+
+.panel-note p {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--body);
+  font-style: italic;
+}
+
+.note-dismiss {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.45rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.2rem 0.35rem;
+  border-radius: 5px;
+  color: var(--faint);
+}
+
+.note-dismiss:hover {
+  color: var(--gold);
+  background: rgba(var(--gold-rgb), 0.12);
+}
+
+/* Collapsed: the panel loses its box and becomes just the reopen link. */
+
+.panel-note.collapsed {
+  padding: 0;
+  margin-bottom: 0.6rem;
+  background: none;
+  border: none;
+  text-align: center;
+}
+
+.panel-note.collapsed p,
+.panel-note.collapsed .note-dismiss { display: none; }
+
+.note-reopen {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+  text-decoration: underline;
+  text-decoration-color: rgba(var(--gold-rgb), 0.4);
+  text-underline-offset: 3px;
+}
+
+.panel-note.collapsed .note-reopen { display: inline-block; }
+
+.note-reopen:hover {
+  color: var(--gold);
+  text-decoration-color: var(--gold);
+}
+
+/* --- Guided finder ("Find a prayer") -------------------------------------- */
+
+#view-finder {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: var(--ground);
+  overflow-y: auto;
+}
+#view-finder.active { display: flex; }
+
+.finder-cta {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+}
+.finder-cta:hover { background: rgba(var(--gold-rgb), 0.12); }
+
+.finder-crumbs {
+  max-width: 620px;
+  margin: 0 auto 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+}
+.finder-crumbs.hidden { display: none; }
+
+.finder-crumb {
+  background: rgba(var(--gold-rgb), 0.10);
+  border: 1px solid rgba(var(--gold-rgb), 0.30);
+  color: var(--gold);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  cursor: pointer;
+  font-size: 0.72rem;
+}
+.finder-crumb:hover { background: rgba(var(--gold-rgb), 0.20); }
+.finder-crumb-sep { color: var(--faint); }
+
+.finder-question {
+  max-width: 620px;
+  margin: 0 auto 1.2rem;
+  font-family: Palatino, "Palatino Linotype", Georgia, serif;
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
+  color: var(--heading);
+  text-align: center;
+}
+
+.finder-options {
+  max-width: 620px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.finder-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.85rem 3rem 0.85rem 1rem;
+  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid transparent;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+.finder-option:hover {
+  background: var(--card-hover);
+  border-left-color: var(--gold);
+  transform: translateX(2px);
+}
+.finder-option.catch-all { background: transparent; border: 1px dashed var(--faint); }
+.finder-option.catch-all:hover { border-color: var(--gold); border-style: dashed; }
+
+.finder-option-label { font-size: 0.95rem; color: var(--ivory); }
+.finder-option-hint { font-size: 0.74rem; color: var(--muted); }
+.finder-option-count {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  font-size: 0.72rem;
+  color: var(--faint);
+  background: rgba(0, 0, 0, 0.20);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+}
+
+.finder-foot {
+  max-width: 620px;
+  margin: 1.6rem auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.finder-count { font-size: 0.74rem; color: var(--muted); }
+.finder-foot .btn.hidden { display: none; }
+
+.finder-results-head {
+  max-width: 620px;
+  margin: 1.8rem auto 0.8rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+#finder-results { margin-top: 0.5rem; }
+
+/* --- Numbered-sequence reader (hourly prayers etc.) ----------------------- */
+
+.reader-parts-bar {
+  display: block;
+  max-width: 620px;
+  margin: 0 auto 1.8rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--faint);
+}
+.reader-parts-bar.hidden { display: none; }
+.reader-parts-bar .hidden { display: none !important; }
+
+/* Prev / here / next */
+
+.parts-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.part-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  min-width: 5.5rem;
+}
+.part-step-next { justify-content: flex-end; }
+.part-step:hover { color: var(--gold); background: rgba(var(--gold-rgb), 0.10); }
+.part-step-arrow { font-size: 1.05rem; line-height: 1; }
+.part-step-label { font-variant-numeric: tabular-nums; }
+
+.part-here { text-align: center; line-height: 1.2; }
+
+.part-here-main {
+  display: block;
+  font-family: Palatino, "Palatino Linotype", Georgia, serif;
+  font-size: 1.15rem;
+  color: var(--ivory);
+  font-variant-numeric: tabular-nums;
+}
+.part-here-main.is-now { color: var(--gold); }
+
+.part-here-sub {
+  display: block;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-top: 0.15rem;
+}
+
+/* The strip of every part in the set. */
+
+.part-strip {
+  position: relative; /* so descendant offset maths is measured from here */
+  display: flex;
+  gap: 0.3rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0.9rem 0.1rem 0.2rem;
+}
+.part-strip::-webkit-scrollbar { display: none; }
+
+.part-pip {
+  flex: 0 0 auto;
+  min-width: 2.9rem;
+  padding: 0.3rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: var(--card);
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.part-pip:hover { background: var(--card-hover); color: var(--ivory); }
+
+/* What you are reading. */
+.part-pip.selected {
+  background: var(--gold);
+  color: #1a1408;
+  font-weight: 700;
+  border-color: var(--gold);
+}
+
+/* What hour it actually is — a gold ring, shown even when you have navigated
+   elsewhere, so "now" is never lost. */
+.part-pip.now {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.part-pip.now::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+/* When they coincide, the filled state wins and the dot goes dark for contrast. */
+.part-pip.now.selected { color: #1a1408; }
+.part-pip.now.selected::after { background: #1a1408; }
+
+.parts-bar-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.7rem;
+}
+.part-now-btn { color: var(--gold); }
+
+
+
+/* One at a time: the number sits above the prayer, large and quiet. */
+.reader-part-single { text-align: center; padding: 1.5rem 0 0.5rem; }
+
+.reader-part-badge {
+  font-family: Palatino, "Palatino Linotype", Georgia, serif;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--gold);
+  opacity: 0.55;
+  margin-bottom: 1.4rem;
+}
+
+.reader-part-single .reader-para {
+  font-size: 1.3rem;
+  max-width: 30ch;
+  margin: 0 auto;
+}
+
+/* All of them: a numbered column. */
+.reader-part-row {
+  display: flex;
+  gap: 0.9rem;
+  align-items: baseline;
+  margin-bottom: 1.1em;
+}
+.reader-part-row .reader-para { margin: 0; }
+
+.reader-part-n {
+  flex: 0 0 1.8rem;
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--gold);
+  opacity: 0.7;
+}
+
+/* Structured parts: Latin, translation, and editorial note are three
+   different registers and must not look identical. */
+
+.part-heading {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.1rem;
+}
+
+.part-line {
+  display: block;
+  margin-bottom: 0.7rem;
+}
+
+.part-lang-label {
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 0.15rem;
+}
+
+.part-lang-text {
+  font-family: Palatino, "Palatino Linotype", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+
+/* The original stands out; the translation is the plainer, readable one. */
+.part-latin .part-lang-text { font-style: italic; color: var(--gold); }
+.part-english .part-lang-text { color: var(--ivory); }
+.part-greek .part-lang-text { font-style: italic; color: var(--gold); }
+
+/* Editorial commentary — deliberately not serif, so it reads as a note about
+   the prayer rather than as part of it. */
+.part-note {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 1rem 0 0;
+}
+
+.reader-part-single .part-heading,
+.reader-part-single .part-line,
+.reader-part-single .part-note { text-align: center; }
+.reader-part-single .part-note { max-width: 34ch; margin-left: auto; margin-right: auto; }
+
+.reader-part-content { flex: 1; }
+.reader-part-row .part-note { margin-top: 0.5rem; }
+
+/* This hour's prayer, above the library list. */
+
+.hour-banner {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.hour-banner:hover {
+  border-color: var(--gold);
+  background: rgba(var(--gold-rgb), 0.16);
+}
+
+.hour-banner-text {
+  font-family: Palatino, "Palatino Linotype", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--ivory);
+}
+
+.hour-banner-more {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+/* The line under the big part marker, saying what it means. */
+.reader-part-sublabel {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: -0.9rem 0 1.6rem;
+  text-align: center;
+}
+
+.reader-parts-caption {
+  max-width: 620px;
+  margin: 0 auto 1.4rem !important;
+  text-align: center;
+}
+
+/* Clock times need more room than a bare digit. */
+.reader-part-n { flex-basis: 3.4rem; white-space: nowrap; }
+
+/* =========================================================================
+   THEME REFINEMENT
+   -------------------------------------------------------------------------
+   The base styles were structurally fine but visually generic: every surface
+   was the same 10px rounded tile on flat navy, with hierarchy carried almost
+   entirely by font size. This layer does three things — gives the page depth
+   and warmth, restores a real typographic scale with serif for anything that
+   is prayed, and replaces uniform tiles with quieter manuscript-like leaves
+   marked by gold rather than by borders.
+
+   Self-contained: gradients only, no images, no webfonts, no network.
+   ========================================================================= */
+
+/* --- Palettes -------------------------------------------------------------
+   Every colour the theme uses lives here. A palette is just one of these
+   blocks; the picker sets data-palette on <html> and everything follows.
+   The attribute selectors outrank the bare :root default, so the first block
+   is what you get before any choice is made. */
+
+:root,
+:root[data-palette="midnight"] {
+  --ground: #0b1524;
+  --ground-deep: #091220;
+  --glow: #16273f;
+  --ground-lift: #101d31;
+  --rule-bg: #0d1a2c;
+  --card: #14223a;
+  --card-hover: #1a2b48;
+  --gold: #d4a847;
+  --gold-rgb: 212, 168, 71;
+  --gold-bright: #e6bd63;
+  --ivory: #f2ebda;
+  --body: #c3d2e4;
+  --muted: #7f94ac;
+  --faint: #38516c;
+  --heading: #ffffff;
+  --edge-rgb: 255, 255, 255;
+  --rule: rgba(var(--gold-rgb), 0.22);
+  --accent-soft: rgba(var(--gold-rgb), 0.10);
+  --accent-mid: rgba(var(--gold-rgb), 0.22);
+  --on-accent: #1a1408;
+}
+
+:root[data-palette="oxblood"] {
+  --ground: #1a0e11;
+  --ground-deep: #120a0c;
+  --glow: #2e171c;
+  --ground-lift: #23131700;
+  --rule-bg: #1e1114;
+  --card: #251418;
+  --card-hover: #301a20;
+  --gold: #c8956b;
+  --gold-rgb: 200, 149, 107;
+  --gold-bright: #ddae86;
+  --ivory: #f4ece1;
+  --body: #d8c4bb;
+  --muted: #a08279;
+  --faint: #5c3c3c;
+  --heading: #ffffff;
+  --edge-rgb: 255, 255, 255;
+  --rule: rgba(200, 149, 107, 0.24);
+  --accent-soft: rgba(200, 149, 107, 0.10);
+  --accent-mid: rgba(200, 149, 107, 0.24);
+  --on-accent: #1a0e11;
+}
+
+:root[data-palette="forest"] {
+  --ground: #0c1712;
+  --ground-deep: #08110d;
+  --glow: #13291f;
+  --ground-lift: #102019;
+  --rule-bg: #0e1a14;
+  --card: #13241c;
+  --card-hover: #1a3126;
+  --gold: #c2a33f;
+  --gold-rgb: 194, 163, 63;
+  --gold-bright: #d8bb5c;
+  --ivory: #f0ece0;
+  --body: #c2d2c4;
+  --muted: #7d9686;
+  --faint: #375145;
+  --heading: #ffffff;
+  --edge-rgb: 255, 255, 255;
+  --rule: rgba(194, 163, 63, 0.22);
+  --accent-soft: rgba(194, 163, 63, 0.10);
+  --accent-mid: rgba(194, 163, 63, 0.22);
+  --on-accent: #14180a;
+}
+
+/* Candlelight — the default. No blue anywhere: a candle throws amber, and
+   every surface it reaches goes warm. Two light sources, one low (the flame on
+   the table) and one faint overhead, with the corners falling away to almost
+   nothing. Cards are lit brown rather than tinted grey. */
+:root[data-palette="candlelight"] {
+  --ground: #0a0705;
+  --ground-deep: #050303;
+  --glow: #170e07;
+  --glow-low: #2b1a09;
+  --ground-lift: #130d08;
+  --rule-bg: #0c0806;
+  --card: #16100a;
+  --card-hover: #1f170e;
+  --gold: #e0a94a;
+  --gold-rgb: 224, 169, 74;
+  --gold-bright: #f5c672;
+  --ivory: #f6e8cd;
+  --body: #cbb897;
+  --muted: #93805f;
+  --faint: #4c3d2b;
+  --heading: #fff6e4;
+  --edge-rgb: 255, 235, 200;
+  --rule: rgba(224, 169, 74, 0.28);
+  --accent-soft: rgba(224, 169, 74, 0.09);
+  --accent-mid: rgba(224, 169, 74, 0.26);
+  --on-accent: #170e04;
+}
+
+/* Mario's preference: true black ground, real gold. */
+:root[data-palette="black"] {
+  --ground: #0c0c0c;
+  --ground-deep: #050505;
+  --glow: #1c1710;
+  --ground-lift: #131313;
+  --rule-bg: #0f0f0f;
+  --card: #161514;
+  --card-hover: #201e1a;
+  --gold: #d4a847;
+  --gold-rgb: 212, 168, 71;
+  --gold-bright: #ecc367;
+  --ivory: #f3ecdc;
+  --body: #cdc7bb;
+  --muted: #8f887c;
+  --faint: #4a4338;
+  --heading: #ffffff;
+  --edge-rgb: 255, 255, 255;
+  --rule: rgba(212, 168, 71, 0.26);
+  --accent-soft: rgba(212, 168, 71, 0.10);
+  --accent-mid: rgba(212, 168, 71, 0.26);
+  --on-accent: #14100a;
+}
+
+/* The light counterpart — a missal page rather than an inverted app. */
+:root[data-palette="parchment"] {
+  color-scheme: light;
+  --ground: #f5efe1;
+  --ground-deep: #ece4d2;
+  --glow: #fffaf0;
+  --ground-lift: #fbf6ea;
+  --rule-bg: #f5efe1;
+  --card: #fffbf2;
+  --card-hover: #fff8e8;
+  --gold: #9a7420;
+  --gold-rgb: 154, 116, 32;
+  --gold-bright: #b98c2c;
+  --ivory: #2b2419;
+  --body: #4a4133;
+  --muted: #7a6e5c;
+  --faint: #b3a68e;
+  --heading: #1c160d;
+  --edge-rgb: 40, 30, 10;
+  --rule: rgba(154, 116, 32, 0.30);
+  --accent-soft: rgba(154, 116, 32, 0.10);
+  --accent-mid: rgba(154, 116, 32, 0.26);
+  --on-accent: #fffbf2;
+}
+
+/* Depth: a warm pool of light at the top, falling away to near-black at the
+   foot of the page. Flat navy was the single biggest reason it felt generic. */
+
+/* --- Type ---------------------------------------------------------------- */
+
+.reader-title,
+.saint-reader-title,
+.gate-box h1,
+.signin-box h1 {
+  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+
+/* Anything prayed is set in serif at a readable measure; anything *about* the
+   prayer stays in sans, so the two never blur. */
+.reader-text {
+  font-size: 1.22rem;
+  line-height: 1.85;
+  max-width: 34em;
+  margin-left: auto;
+  margin-right: auto;
+}
+.reader-para { margin-bottom: 1.5em; }
+
+.reader-kind {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* --- Ornamented rule ----------------------------------------------------- */
+
+.reader-rule {
+  position: relative;
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, transparent, var(--rule) 20%, var(--rule) 80%, transparent);
+  margin: 2rem auto 2.4rem;
+  max-width: 22rem;
+  overflow: visible;
+}
+.reader-rule::after {
+  content: "✝";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--rule-bg);
+  padding: 0 0.7rem;
+  color: var(--gold);
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+/* --- Topbar -------------------------------------------------------------- */
+
+.topbar {
+  background: color-mix(in srgb, var(--ground-deep) 82%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(var(--gold-rgb), 0.14);
+}
+
+.topbar .brand {
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+}
+.topbar .brand::before {
+  content: "✝";
+  color: var(--gold);
+  font-size: 0.75em;
+  margin-right: 0.5rem;
+  vertical-align: 0.08em;
+  opacity: 0.9;
+}
+
+.tab {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  padding: 0.45rem 0.7rem;
+}
+.tab.active {
+  background: none;
+  color: var(--ivory);
+  border-bottom-color: var(--gold);
+}
+
+/* --- Entry cards: leaves, not tiles -------------------------------------- */
+
+.entry-card {
+  background: var(--card);
+  border: 1px solid rgba(var(--edge-rgb), 0.05);
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  padding: 1rem 1.15rem;
+  transition: border-color .2s, background .2s, transform .2s;
+}
+.entry-card:hover {
+  border-left-color: var(--gold);
+  background: var(--card-hover);
+  transform: translateX(2px);
+}
+.entry-card .title {
+  font-family: Palatino, "Palatino Linotype", Georgia, serif;
+  font-size: 1.08rem;
+  color: var(--ivory);
+}
+
+/* --- Buttons ------------------------------------------------------------- */
+
+.btn { border-radius: 6px; letter-spacing: 0.01em; }
+.btn:hover { background: var(--gold-bright); }
+.btn.secondary, .btn.ghost { letter-spacing: 0.04em; }
+.btn.ghost:hover { color: var(--gold); background: var(--accent-soft); }
+
+/* The two calls to action that should stand out from the toolbar clutter. */
+.study-cta, .filters-apply {
+  background: var(--gold);
+  color: var(--on-accent);
+  font-weight: 700;
+  box-shadow: 0 2px 12px var(--accent-mid);
+}
+.study-cta:hover, .filters-apply:hover {
+  background: var(--gold-bright);
+  box-shadow: 0 4px 18px rgba(var(--gold-rgb), 0.38);
+}
+.study-cta .filter-badge {
+  background: var(--on-accent);
+  color: var(--gold);
+}
+.filters-apply { margin-left: auto; }
+
+/* Authoring is done in the seed data, not here. */
+.authoring-only { display: none !important; }
+
+/* --- Panel notes & banners ---------------------------------------------- */
+
+.panel-note {
+  background: linear-gradient(90deg, var(--accent-soft), transparent);
+  border-color: var(--accent-mid);
+}
+
+.todays-saint-banner {
+  background: linear-gradient(90deg, var(--accent-soft), transparent);
+  border-radius: 4px;
+  border-left: 2px solid var(--gold);
+}
+.todays-saint-label {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+}
+
+/* --- Gate: the first thing anyone sees ----------------------------------- */
+
+.gate-box .icn, .signin-box .icn { opacity: 0.9; }
+.gate-box h1 { font-size: clamp(2.1rem, 6vw, 3rem); }
+.gate-box h1::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 1px;
+  background: var(--gold);
+  margin: 1.1rem auto 0;
+  opacity: 0.7;
+}
+
+
+/* The overlay views scroll, and their topbar carries the only way out —
+   Back, Clear all, and the "Show N entries" button. Pin it so it can never
+   scroll out of reach on a long filter list. */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+/* --- Palette picker ------------------------------------------------------ */
+
+.topbar-right { display: flex; align-items: center; gap: 0.5rem; }
+
+.palette-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--edge-rgb), 0.15);
+  background: none;
+  cursor: pointer;
+}
+.palette-btn:hover { border-color: var(--gold); }
+
+/* A half-and-half disc: the ground and the accent of the palette in use. */
+.palette-dot {
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ground) 0 50%, var(--gold) 50% 100%);
+  border: 1px solid rgba(var(--edge-rgb), 0.2);
+}
+
+.palette-menu {
+  position: absolute;
+  top: 3.2rem;
+  right: 1rem;
+  z-index: 60;
+  min-width: 13.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: var(--ground-lift);
+  border: 1px solid rgba(var(--edge-rgb), 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+.palette-menu.hidden { display: none; }
+
+.palette-menu-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+  padding: 0.3rem 0.5rem 0.45rem;
+}
+.palette-menu-label-2 {
+  border-top: 1px solid rgba(var(--edge-rgb), 0.08);
+  margin-top: 0.35rem;
+  padding-top: 0.55rem;
+}
+
+.palette-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.45rem 0.5rem;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--body);
+  font-size: 0.8rem;
+  text-align: left;
+  cursor: pointer;
+}
+.palette-option:hover { background: var(--accent-soft); color: var(--ivory); }
+.palette-option.active { color: var(--gold); font-weight: 700; }
+.palette-option.active::after { content: "✓"; margin-left: auto; font-size: 0.75rem; }
+
+.palette-swatch {
+  flex: 0 0 auto;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--a) 0 50%, var(--b) 50% 100%);
+  border: 1px solid rgba(var(--edge-rgb), 0.18);
+}
+
+/* Parchment is a light page — the heavy shadows built for dark surfaces read
+   as smudges on it, so they are softened rather than inherited. */
+:root[data-palette="parchment"] .entry-card,
+:root[data-palette="parchment"] .palette-menu {
+  box-shadow: 0 1px 3px rgba(60, 45, 15, 0.10);
+}
+:root[data-palette="parchment"] .topbar {
+  border-bottom-color: rgba(154, 116, 32, 0.25);
+}
+:root[data-palette="parchment"] .part-pip.selected,
+:root[data-palette="parchment"] .btn {
+  color: var(--on-accent);
+}
+
+/* --- Stacking fix --------------------------------------------------------
+   Making .topbar sticky gave it z-index 20. #app-shell sets no position or
+   z-index, so it creates no stacking context — which put the app-shell topbar
+   into direct competition with the full-screen overlay views at z-index 10,
+   and 20 wins. The reader opened *underneath* the shell's header, so its own
+   "← Back" was covered and there was no way out of an entry.
+   The overlays must sit above the shell chrome. */
+#view-library-reader,
+#view-library-editor,
+#view-library-filters,
+#view-writer,
+#view-saints-filters,
+#view-saint-reader,
+#view-flashcards,
+#view-saints-calendar,
+#view-saints-atlas,
+#view-finder {
+  z-index: 40;
+}
+
+/* --- Candlelight, dialled back up ---------------------------------------
+   The de-mudding overshot and put the flame out. The fix for "muddy" was
+   never a fainter glow — it was to stop tinting the *surfaces* brown. So the
+   ground and cards stay near-black, and the light comes back up: a clear warm
+   halo low in the view, with a fainter one above. */
+:root[data-palette="candlelight"] {
+  --glow: #2a1a0b;
+  --glow-low: #4d2f12;
+}
+
+/* --- The lit room --------------------------------------------------------
+   The glow used to be painted on <body> only, while the full-screen overlays
+   (reader, finder, filters, saint dossier…) painted a flat var(--ground) over
+   the top. So the candlelight simply stopped the moment you opened an entry.
+
+   One definition, applied to the page and to every overlay, all of them
+   background-attachment: fixed — so the light belongs to the room rather than
+   to the document, stays put while content scrolls through it, and is
+   continuous when a view opens on top. */
+
+:root {
+  --page-bg:
+    radial-gradient(62% 40% at 50% 106%, var(--glow-low, transparent) 0%, transparent 72%),
+    radial-gradient(80% 44% at 50% -8%, var(--glow) 0%, transparent 72%),
+    linear-gradient(180deg, var(--ground) 0%, var(--ground-deep) 100%);
+}
+
+html,
+body,
+#view-library-reader,
+#view-library-editor,
+#view-library-filters,
+#view-writer,
+#view-saints-filters,
+#view-saint-reader,
+#view-flashcards,
+#view-saints-calendar,
+#view-saints-atlas,
+#view-finder,
+#view-gate,
+#view-signin {
+  /* Split deliberately: with the `background` shorthand, one bad variable
+     makes the whole declaration invalid and the surface goes TRANSPARENT —
+     which on a full-screen overlay means the view underneath shows through
+     and the app looks broken. As background-color + background-image, an
+     unresolvable gradient costs you the glow and nothing else. */
+  background-color: var(--ground);
+  background-image: var(--page-bg);
+  background-attachment: fixed;
+}

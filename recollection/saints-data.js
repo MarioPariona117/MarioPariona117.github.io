@@ -5549,6 +5549,73 @@ core({
   ],
 }),
 
+// Added 16 August — St. Jerome, "favourite."
+core({
+  slug: "jerome", listTier: "favourite", name: "St. Jerome", sortName: "Jerome",
+  birthName: "Eusebius Sophronius Hieronymus", religiousName: "—",
+  titles: ["Priest", "Doctor of the Church"],
+  doctorTitle: "One of the four original great Doctors of the Latin Church, with Ambrose, Augustine, and Gregory the Great", doctorDeclared: "1298, by Pope Boniface VIII (with the other three)",
+  rank: "Memorial (30 September)", feast: "09-30", feastLabel: "30 September",
+  born: "c. 342/347", bornPlace: "Stridon, on the border of Dalmatia and Pannonia (modern Croatia/Slovenia region)",
+  died: "30 September 420", diedPlace: "Bethlehem", ageAtDeath: "c. 73–78",
+  canonized: { date: "Pre-congregation cult; ancient", by: "—" },
+  nationality: "Roman (Dalmatian)", order: "None formally — lived as a hermit and later founded a monastery at Bethlehem which he directed", state: "Priest, scholar, hermit",
+  summary: "A brilliant, combative Roman classical scholar who became the greatest biblical translator in Church history, producing the Vulgate — the Latin Bible translated directly from Hebrew and Greek sources — which remained the Church's standard biblical text for over a thousand years. After years as a desert hermit and secretary to Pope Damasus I in Rome, he settled in Bethlehem, where he founded a monastery and spent his final decades translating and writing biblical commentary, alongside a large body of famously sharp, witty, and often ferociously combative correspondence with friends, rivals, and fellow scholars including Augustine.",
+  charism: "Total, disciplined devotion to the biblical text itself — 'ignorance of Scripture is ignorance of Christ' — pursued with a scholar's rigor and a notoriously sharp tongue toward anyone he thought got it wrong.",
+  anecdotes: [
+    { title: "\"You are a Ciceronian, not a Christian\"", text: "Jerome reported a dream in which he was scourged before the judgment seat of God and accused of loving pagan classical literature more than Scripture — 'you are not a Christian but a Ciceronian; for where your treasure is, there is your heart also' — after which he vowed to give up secular literature, though his own later writing continued to draw heavily on his classical education.", source: "Jerome's own account, Letter 22 (to Eustochium)", legend: false },
+    { title: "The lion of Bethlehem", text: "A widely repeated legend holds that Jerome removed a thorn from a lion's paw at his monastery in Bethlehem, and that the grateful lion stayed on as his tame companion — the origin of his most common iconographic attribute, though the story is a later medieval addition, not part of any ancient source about him.", source: "Medieval hagiographical legend, popularized in art; absent from ancient sources", legend: true },
+    { title: "The quarrel with Rufinus", text: "Jerome and Rufinus of Aquileia were close friends in youth, but fell into a bitter, very public literary war later in life over the orthodoxy of Origen's theology, trading increasingly sharp polemical writings against each other for years — one of the more painful and well-documented personal feuds of the early Church.", source: "Jerome's own polemical works (Apology Against Rufinus) and standard patristic scholarship", legend: false },
+    { title: "Sharp words with Augustine", text: "Jerome and Augustine carried on a real, if ultimately respectful, correspondence marked by genuine friction — notably a disagreement over how to read Paul's public rebuke of Peter at Antioch in Galatians 2 — with Jerome's replies at times notably impatient with the younger, less classically trained African bishop.", source: "The Jerome–Augustine correspondence, preserved among both men's letters", legend: false },
+  ],
+  writings: [
+    { title: "The Vulgate", original: "Vulgata", genre: "Bible translation", year: "c. 382–405", language: "Latin (translated from Hebrew and Greek)", note: "The Latin Bible translation that became the Church's standard text for over a thousand years, later confirmed as authoritative by the Council of Trent", translation: "The Vulgate itself is the translation; widely available in Latin-English parallel editions", free: "Public domain", difficulty: "Reference text, not typically read cover to cover", order: 1 },
+    { title: "Letters", original: "Epistulae", genre: "Correspondence", year: "c. 370s–420", language: "Latin", note: "A large surviving body of letters, prized for their wit, learning, and often ferocious polemical energy", translation: "Selected editions widely available, e.g. in the Nicene and Post-Nicene Fathers series", free: "Public domain", difficulty: "Easy to moderate", order: 2 },
+    { title: "Life of Paul of Thebes", original: "Vita Pauli primi eremitae", genre: "Hagiography", year: "c. 375–376", language: "Latin", note: "A biography of the traditionally 'first hermit,' written during Jerome's own desert years — likely embellished, but hugely influential on later monastic literature", translation: "Widely available in patristic anthologies", free: "Public domain", difficulty: "Easy", order: 3 },
+  ],
+  patronages: [{ of: "Librarians, translators, biblical scholars, and students", why: "His life's work translating and expounding Scripture" }],
+  attributes: ["A cardinal's red hat (anachronistic, since the office didn't exist in his lifetime)", "A lion", "A skull (memento mori)", "Books, and a scholar's study"],
+  relics: "Basilica di Santa Maria Maggiore, Rome (traditionally)",
+  related: ["augustine", "ambrose"],
+  cards: [
+    { q: "St. Jerome — feast day, dates?", a: "30 September; born c. 342/347 near the Dalmatia-Pannonia border, died 30 September 420 in Bethlehem" },
+    { q: "What is Jerome's greatest achievement?", a: "The Vulgate — his translation of the Bible into Latin directly from Hebrew and Greek, the Church's standard biblical text for over a thousand years" },
+    { q: "What did Jerome's dream of the 'Ciceronian' accuse him of?", a: "Loving pagan classical literature (Cicero) more than Scripture — 'where your treasure is, there is your heart also'" },
+    { q: "Why is Jerome so often shown with a lion in art?", a: "A popular medieval legend (not from any ancient source) about him removing a thorn from a lion's paw at his Bethlehem monastery" },
+  ],
+}),
+
+core({
+  slug: "cecilia", listTier: "toKnow", name: "St. Cecilia", sortName: "Cecilia",
+  titles: ["Virgin", "Martyr"], epithets: ["Patroness of music and musicians"],
+  rank: "Memorial (22 November)",
+  feast: "11-22", feastLabel: "22 November",
+  born: "unknown — 2nd or 3rd century", bornPlace: "Rome (traditionally)",
+  died: "c. 230 (date disputed; some traditions place her under Marcus Aurelius, c. 177)",
+  diedPlace: "Rome", deathManner: "Martyred — beheaded",
+  beatified: { date: "—", by: "Pre-Congregation" },
+  canonized: { date: "—", by: "Pre-Congregation" },
+  nationality: "Roman", era: "Early Church — Roman persecutions", state: "Laywoman, virgin and martyr",
+  family: "Traditionally of a patrician Roman family; married to Valerian, whom she converted along with his brother Tiburtius — both were martyred before her.",
+  summary: "A Roman virgin-martyr venerated since at least the 4th century and named in the Roman Canon of the Mass, though almost nothing about her life can be established historically — her Acts are a 5th-century composition, and even the century of her death is disputed. She is the patroness of music through a single line in those Acts: as the wedding musicians played, she 'sang in her heart to the Lord alone'. Her body was found apparently incorrupt in 1599, and Stefano Maderno carved the figure that still lies beneath her altar in Trastevere from what he said he saw.",
+  charism: "Interior song — the heart singing to God in the middle of a world arranged for other purposes.",
+  patronages: [
+    { of: "Musicians, composers, singers, instrument makers, poets", why: "From the line 'cantantibus organis, Caecilia Domino decantabat' in her Acts — read for centuries as her singing at her own wedding" },
+  ],
+  attributes: ["An organ or other instrument", "A palm of martyrdom", "Roses", "A wound to the neck"],
+  anecdotes: [
+    "The executioner is said to have struck three times and failed to sever her head; Roman law forbade a fourth attempt, and she lived some three days, giving away her goods to the poor before dying.",
+    "When her tomb in the catacomb of St. Callixtus was opened in 1599 the body appeared uncorrupted. The sculptor Stefano Maderno was present, and his marble figure — lying on her side, face turned away, three cuts marked on the neck — is a record of the position in which she was found.",
+  ],
+  related: ["agnes", "lucy", "agatha", "valerian"],
+  cards: [
+    { q: "St. Cecilia — feast day?", a: "22 November" },
+    { q: "Why is St. Cecilia the patroness of musicians?", a: "From a line in her (legendary, 5th-century) Acts: as the wedding instruments played, she sang in her heart to God alone — 'cantantibus organis, Caecilia Domino decantabat'" },
+    { q: "How reliable is what we know about St. Cecilia's life?", a: "Very little is historically established — her cult is ancient and she is named in the Roman Canon, but her Acts are a late composition and even the century of her martyrdom is disputed" },
+    { q: "What is the Maderno statue in Santa Cecilia in Trastevere?", a: "Stefano Maderno's 1600 marble of her body as it was found when the tomb was opened in 1599 — lying on her side, face turned away, three sword marks on the neck" },
+  ],
+}),
+
 ];
 
 // ═══════════════════════════════════════════════════════════════════

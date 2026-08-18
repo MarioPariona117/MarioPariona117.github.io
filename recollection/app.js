@@ -134,7 +134,50 @@ function startApp() {
   }
 }
 
+// Panel intro notes (Library, Saints) — a short line of context at the top of
+// a tab. Collapsing one leaves a small link in its place rather than removing
+// it, so it is always recoverable. State is remembered per browser.
+const NOTE_COLLAPSED_KEY = "recollection.notesCollapsed.v1";
+
+function initPanelNotes() {
+  let collapsed = [];
+  try {
+    collapsed = JSON.parse(localStorage.getItem(NOTE_COLLAPSED_KEY) || "[]");
+  } catch {
+    collapsed = [];
+  }
+
+  const persist = () => {
+    try {
+      localStorage.setItem(NOTE_COLLAPSED_KEY, JSON.stringify(collapsed));
+    } catch {
+      /* storage blocked — the note simply reopens next visit */
+    }
+  };
+
+  document.querySelectorAll(".panel-note").forEach((note) => {
+    if (collapsed.includes(note.dataset.note)) note.classList.add("collapsed");
+  });
+
+  document.querySelectorAll("[data-toggle-note]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const name = btn.dataset.toggleNote;
+      const note = document.querySelector(`.panel-note[data-note="${name}"]`);
+      if (!note) return;
+
+      const nowCollapsed = !note.classList.contains("collapsed");
+      note.classList.toggle("collapsed", nowCollapsed);
+
+      collapsed = collapsed.filter((n) => n !== name);
+      if (nowCollapsed) collapsed.push(name);
+      persist();
+    });
+  });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
+  initPalette();
+  initPanelNotes();
   let gateAccepted = false;
   try {
     gateAccepted = localStorage.getItem(GATE_ACCEPTED_KEY) === "true";
@@ -195,7 +238,16 @@ window.addEventListener("DOMContentLoaded", () => {
     })
   );
   $("#btn-open-filters").addEventListener("click", () => setView("library-filters"));
+  $("#btn-open-finder").addEventListener("click", openFinder);
+  $("#btn-finder-back").addEventListener("click", () => setView("library"));
+  $("#btn-finder-restart").addEventListener("click", openFinder);
+  $("#btn-finder-showall").addEventListener("click", () => {
+    finderState.showingAll = true;
+    renderFinder();
+  });
   $("#btn-filters-done").addEventListener("click", () => setView("library"));
+  $("#btn-filters-show").addEventListener("click", () => setView("library"));
+  $("#btn-saints-filters-show").addEventListener("click", () => setView("saints"));
   $("#filter-favorites-only").addEventListener("change", (e) => {
     state.filterFavoritesOnly = e.target.checked;
     renderLibraryList();
@@ -217,8 +269,32 @@ window.addEventListener("DOMContentLoaded", () => {
   });
   $("#btn-library-delete").addEventListener("click", onDeleteLibraryEntry);
 
-  $("#btn-reader-back").addEventListener("click", () => setView("library"));
+  $("#btn-reader-back").addEventListener("click", () => {
+    if (state.readerCameFromFinder) {
+      state.readerCameFromFinder = false;
+      setView("finder");
+      renderFinder();
+    } else {
+      setView("library");
+    }
+  });
   $("#btn-reader-edit").addEventListener("click", () => openLibraryEditor(state.readingLibraryId));
+  $("#btn-part-prev").addEventListener("click", () => stepReaderPart(-1));
+  $("#btn-part-next").addEventListener("click", () => stepReaderPart(1));
+  $("#btn-part-toggle").addEventListener("click", () => {
+    readerParts.showAll = !readerParts.showAll;
+    renderReaderParts();
+  });
+  $("#btn-part-now").addEventListener("click", () => {
+    readerParts.index = new Date().getHours();
+    renderReaderParts();
+  });
+  // Arrow keys move through a numbered sequence when one is open.
+  document.addEventListener("keydown", (e) => {
+    if (state.view !== "library-reader" || readerParts.showAll || !readerParts.list.length) return;
+    if (e.key === "ArrowLeft") stepReaderPart(-1);
+    if (e.key === "ArrowRight") stepReaderPart(1);
+  });
 
   $("#btn-writer-back").addEventListener("click", () => setView("journal"));
   $("#btn-writer-delete").addEventListener("click", onDeleteJournalEntry);
@@ -382,6 +458,7 @@ async function onSignedIn() {
   $("#view-signin").classList.remove("active");
   $("#app-shell").classList.add("active");
   await seedDefaultsIfEmpty();
+  await pruneRetiredSeeds();
   await dedupeLibraryByTitle();
   await Promise.all([refreshLibrary(), refreshJournal(), refreshSaints()]);
   setView("library");
@@ -392,6 +469,376 @@ async function onSignedIn() {
 // an earlier version of this app missing the newer fields — so re-running
 // this is always safe, never duplicates.
 const SEED_LIBRARY_ENTRIES = [
+  {
+    title: "When We Pray, When We Read",
+    kind: "quote",
+    tags: ["contemplation", "Scripture", "reading", "biblical", "Patristic"],
+    source: "St. Alphonsus Liguori's paraphrase of St. Jerome, Letter 22 (to Eustochium), 25",
+    author: "St. Jerome",
+    authorNote: "this familiar wording is St. Alphonsus Liguori's paraphrase — Jerome's own is in the background",
+    year: "384 (Jerome) / 18th century (this wording)",
+    origin: "Patristic",
+    liturgical: "",
+    feastDay: "30 September — St. Jerome",
+    originalLanguage: "",
+    favorite: false,
+    body: "When we pray, we speak to God; but when we read, God speaks to us.",
+    background:
+      "Almost always seen over Jerome's name, and the thought is genuinely " +
+      "his — but the sentence is not. What Jerome wrote to Eustochium in 384 " +
+      "was terser and more intimate: 'Oras: loqueris ad sponsum; legis: ille " +
+      "tibi loquitur' — 'You pray: you speak to the Bridegroom. You read: he " +
+      "speaks to you.' The smoothed-out version everyone quotes comes from " +
+      "St. Alphonsus Liguori, who paraphrased it in his treatise on spiritual " +
+      "reading; from there it passed into common use with Jerome's name still " +
+      "attached.\n\n" +
+      "Worth keeping both. Liguori's is the more quotable, but Jerome's says " +
+      "something the paraphrase loses: the one you are reading is not a " +
+      "distant God issuing instructions, but the Bridegroom — and reading is " +
+      "not study, it is being spoken to by someone who loves you.",
+  },
+  {
+    title: "The Devil Can Imitate Everything",
+    kind: "quote",
+    tags: ["humility", "spiritual combat", "fasting", "desert fathers", "Patristic", "charity"],
+    source: "Apophthegmata Patrum, Systematic Collection 17.32 (trans. John Wortley)",
+    author: "The Desert Fathers",
+    authorNote: "circulates widely under St. Moses the Black's name; that attribution is modern and unsupported",
+    year: "4th–5th century",
+    origin: "Patristic",
+    liturgical: "",
+    feastDay: "28 August — St. Moses the Black",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "The devil can imitate everything. As for fasting, he never ate; as for " +
+      "watching, he never slept. But humble-mindedness and love he cannot imitate.",
+    background:
+      "The version doing the rounds online reads: 'You fast, but Satan does " +
+      "not eat. You labour fervently, but Satan never sleeps. The only " +
+      "dimension with which you can outperform Satan is by acquiring " +
+      "humility, for Satan has no humility' — always over St. Moses the " +
+      "Black's name. The saying is authentic desert material; the attribution " +
+      "is not. It sits in the Systematic Collection of the Sayings of the " +
+      "Desert Fathers under 'the fathers' collectively, with Coptic sources " +
+      "giving it to St. Macarius the Great. Nothing links it to Moses.\n\n" +
+      "The argument is bracing and holds either way. Every ascetic feat you " +
+      "can manage, the devil already outdoes without effort — he has never " +
+      "once eaten or slept. So austerity proves nothing by itself. Only two " +
+      "things are beyond him, and the older text names both: humility and " +
+      "love. The popular rewrite drops love, which is a real loss.\n\n" +
+      "St. Moses the Black is worth knowing regardless — an Ethiopian slave " +
+      "turned bandit leader turned monk of Scetis, who when called to judge a " +
+      "brother's fault arrived carrying a leaking basket of sand and said, " +
+      "'My sins run out behind me and I do not see them, and today I come to " +
+      "judge another.' That story is his.",
+  },
+  {
+    // Seven parts, one per member — the numbered body drives the reader's
+    // one-at-a-time navigation, same mechanism as the hourly prayers.
+    title: "Rhythmica Oratio — the Members of the Crucified Christ",
+    kind: "prayer",
+    tags: ["contemplation", "Passion", "Lent", "Cistercian", "suffering", "love"],
+    source: "Salve mundi salutare — a seven-part meditation, one on each member of the crucified Christ",
+    author: "Arnulf of Leuven, O.Cist.",
+    authorNote: "long attributed to St. Bernard of Clairvaux; the attribution does not hold — see background",
+    year: "c. 1250",
+    origin: "Cistercian",
+    liturgical: "Lent and Holy Week; Fridays",
+    feastDay: "",
+    originalLanguage: "Latin",
+    favorite: false,
+    body:
+      "1. To the feet\n" +
+      "Latin: Ad pedes — Salve mundi salutare\n" +
+      "English: To the feet — Hail, salvation of the world\n" +
+      "The meditation begins at the lowest point, at the nailed feet — the " +
+      "place of a penitent, where Magdalene knelt.\n\n" +
+      "2. To the knees\n" +
+      "Latin: Ad genua — Salve, salve rex sanctorum\n" +
+      "English: To the knees — Hail, hail, King of saints\n" +
+      "The knees that buckled under the cross, addressed as a king's.\n\n" +
+      "3. To the hands\n" +
+      "Latin: Ad manus — Salve, salve Iesu bone\n" +
+      "English: To the hands — Hail, hail, good Jesus\n" +
+      "The hands that healed and blessed, now fixed open.\n\n" +
+      "4. To the side\n" +
+      "Latin: Ad latus — Salve, salve summe bonus\n" +
+      "English: To the side — Hail, hail, highest good\n" +
+      "The opened side, from which came blood and water.\n\n" +
+      "5. To the breast\n" +
+      "Latin: Ad pectus — Salve mea salus Deus\n" +
+      "English: To the breast — Hail, my salvation, O God\n" +
+      "The breast John leaned on at the Supper.\n\n" +
+      "6. To the heart\n" +
+      "Latin: Ad cor — Salve regis cor aveto\n" +
+      "English: To the heart — Hail, heart of the King, I greet you\n" +
+      "The heart itself — the section that most shaped later devotion to the " +
+      "Sacred Heart.\n\n" +
+      "7. To the face\n" +
+      "Latin: Ad faciem — Salve caput cruentatum\n" +
+      "English: To the face — Hail, bleeding head\n" +
+      "The last and best known: through Paul Gerhardt's German version this " +
+      "became the hymn “O Sacred Head, Now Wounded”.",
+    background:
+      "What you have above is the structure and the opening line of each of " +
+      "the seven parts, not the whole poem — the Rhythmica oratio runs to " +
+      "roughly 350 lines, seven hymns of ten-line stanzas, and would swamp " +
+      "this library. Each part addresses one member of the crucified body in " +
+      "turn, working upward from the feet to the face, so that the prayer is " +
+      "a slow approach rather than a single act of attention.\n\n" +
+      "It is very widely printed as St. Bernard's, and that is almost " +
+      "certainly wrong. The author was Arnulf of Leuven, a Cistercian who was " +
+      "abbot of Villers in Brabant and died around 1250 — a century after " +
+      "Bernard. The oldest manuscript naming Arnulf dates to 1320; the " +
+      "attribution to Bernard appears only from the late 14th century, some " +
+      "two hundred years after his death, and seems to have arisen because " +
+      "the poem's affective, bridal register sounds so much like Bernard's " +
+      "sermons on the Song of Songs. Same school, different man.\n\n" +
+      "Dieterich Buxtehude set all seven parts as the cantata cycle Membra " +
+      "Jesu Nostri in 1680, which is how most people meet it now.",
+  },
+  {
+    title: "Prayer to St. Michael the Archangel",
+    kind: "prayer",
+    tags: ["protection", "exorcism", "guardian angel", "courage"],
+    source: "Composed by Pope Leo XIII; long said at the end of Low Mass",
+    author: "Pope Leo XIII",
+    year: "1886",
+    origin: "Papal",
+    liturgical: "Formerly among the Leonine Prayers after Low Mass",
+    feastDay: "29 September — Ss. Michael, Gabriel and Raphael",
+    favorite: false,
+    originalLanguage: "Latin",
+    latinBody:
+      "Sancte Michael Archangele,\n" +
+      "defende nos in proelio;\n" +
+      "contra nequitiam et insidias diaboli esto praesidium.\n" +
+      "Imperet illi Deus, supplices deprecamur:\n" +
+      "tuque, Princeps militiae caelestis,\n" +
+      "Satanam aliosque spiritus malignos,\n" +
+      "qui ad perditionem animarum pervagantur in mundo,\n" +
+      "divina virtute in infernum detrude. Amen.",
+    body:
+      "Saint Michael the Archangel,\n" +
+      "defend us in battle.\n" +
+      "Be our protection against the wickedness and snares of the devil.\n" +
+      "May God rebuke him, we humbly pray;\n" +
+      "and do thou, O Prince of the heavenly host,\n" +
+      "by the power of God,\n" +
+      "cast into hell Satan and all the evil spirits\n" +
+      "who prowl about the world seeking the ruin of souls.\n\n" +
+      "Amen.",
+    background:
+      "Composed by Pope Leo XIII and published in 1886, as part of a set of " +
+      "prayers he ordered said after every Low Mass — the Leonine Prayers. A " +
+      "much-repeated story has Leo writing it after a terrifying vision " +
+      "following Mass; the story is late and not documented in his lifetime, " +
+      "so treat it as pious legend rather than history. The prayer itself is " +
+      "not legendary: it is a short, sober plea for protection, and it names " +
+      "the enemy plainly. The Leonine Prayers were discontinued in 1964, but " +
+      "the prayer never fell out of use, and it has been widely revived — " +
+      "St. John Paul II encouraged it again in 1994.",
+  },
+  {
+    // The body is a numbered sequence; the reader detects that and offers
+    // one-at-a-time navigation over it. See splitNumberedParts().
+    title: "Hourly Prayers of St. John Chrysostom",
+    kind: "prayer",
+    tags: ["hourly", "contemplation", "daily", "arrow prayers", "Patristic", "repentance"],
+    source: "Twenty-four short prayers, one for each hour of the day",
+    author: "Attributed to St. John Chrysostom",
+    authorNote: "traditional attribution; the collection is later than his lifetime",
+    year: "traditional",
+    origin: "Patristic",
+    liturgical: "One for each hour, day and night",
+    feastDay: "13 September — St. John Chrysostom",
+    favorite: false,
+    body:
+      "1. O Lord, of Thy heavenly bounties, deprive me not.\n\n" +
+      "2. O Lord, deliver me from the eternal torments.\n\n" +
+      "3. O Lord, forgive me if I have sinned in my mind or my thought, whether in word or in deed.\n\n" +
+      "4. O Lord, free me from all ignorance and forgetfulness, from despondency and stony insensibility.\n\n" +
+      "5. O Lord, deliver me from every temptation.\n\n" +
+      "6. O Lord, enlighten my heart which evil desires have darkened.\n\n" +
+      "7. O Lord, as a man have I sinned, have Thou mercy on me, as the God full of compassion, seeing the feebleness of my soul.\n\n" +
+      "8. O Lord, send down Thy grace to help me, that I may glorify Thy name.\n\n" +
+      "9. O Lord Jesus Christ, write me down in the book of life and grant unto me a good end.\n\n" +
+      "10. O Lord my God, even if I had not done anything good before Thee, do Thou help me, in Thy grace, to make a good beginning.\n\n" +
+      "11. O Lord, sprinkle into my heart the dew of Thy grace.\n\n" +
+      "12. O Lord of heaven and earth, remember me, Thy sinful servant, full of shame and impurity, in Thy kingdom. Amen.\n\n" +
+      "13. O Lord, receive me in penitence.\n\n" +
+      "14. O Lord, forsake me not.\n\n" +
+      "15. O Lord, lead me not into misfortune.\n\n" +
+      "16. O Lord, quicken in me a good thought.\n\n" +
+      "17. O Lord, give me tears and remembrance of death, and contrition.\n\n" +
+      "18. O Lord, make me solicitous of confessing my sins.\n\n" +
+      "19. O Lord, give me humility, chastity, and obedience.\n\n" +
+      "20. O Lord, give me patience, magnanimity, and meekness.\n\n" +
+      "21. O Lord, implant in me the root of all good — Thy fear in my heart.\n\n" +
+      "22. O Lord, vouchsafe that I may love Thee with all my soul and mind, and in everything do Thy will.\n\n" +
+      "23. O Lord, shelter me from certain men, from demons and passions, and from any other unbecoming thing.\n\n" +
+      "24. O Lord, Thou knowest that Thou dost as Thou wilt, let then Thy will be done in me, a sinner, for blessed art Thou unto the ages. Amen.",
+    background:
+      "Twenty-four deliberately tiny prayers, one for each hour — the classic " +
+      "form of what the Fathers called the arrow prayer: short enough to be " +
+      "remembered without a book, and short enough to be meant whole-" +
+      "heartedly rather than merely recited. They fall into two sets of " +
+      "twelve, for the hours of the day and the hours of the night.\n\n" +
+      "A note on the clock: this app pairs prayer 1 with midnight and runs " +
+      "through to prayer 24 at 11 pm, and shows you whichever one the hour " +
+      "belongs to. That pairing is this app's convention, not the " +
+      "tradition's — the sources number the prayers and say they cover the " +
+      "hours, but do not fix them to particular clock times. Read them in " +
+      "whatever order the day actually gives you.\n\n" +
+      "The attribution to St. John Chrysostom is traditional rather than " +
+      "established — the collection as we have it is later than his lifetime, " +
+      "and the English text circulates in several translations, so wording " +
+      "varies between sources. What is genuinely his is the underlying " +
+      "conviction, which he preached often: that prayer does not require a " +
+      "church, a posture, or a long stretch of free time, and that a line shot " +
+      "up in the middle of ordinary work is real prayer.",
+  },
+  {
+    // Kept as one entry rather than two: they are a single practice, and you
+    // want the closing prayer already in front of you when the half-hour ends.
+    title: "Preces for Mental Prayer",
+    kind: "prayer",
+    tags: [
+      "contemplation", "preparation", "thanksgiving", "Opus Dei",
+      "before prayer", "after prayer",
+    ],
+    source: "Said at the start and close of the daily half-hour of mental prayer",
+    author: "Traditional — Opus Dei",
+    year: "20th century",
+    origin: "Opus Dei",
+    liturgical: "Before and after mental prayer",
+    feastDay: "",
+    favorite: false,
+    body:
+      "— Before —\n\n" +
+      "My Lord and my God,\n" +
+      "I firmly believe that you are here,\n" +
+      "that you see me,\n" +
+      "that you hear me.\n\n" +
+      "I adore you with profound reverence.\n" +
+      "I ask your pardon for my sins\n" +
+      "and grace to make this time of prayer fruitful.\n\n" +
+      "My Immaculate Mother,\n" +
+      "Saint Joseph, my father and lord,\n" +
+      "my guardian angel,\n" +
+      "intercede for me.\n\n" +
+      "— After —\n\n" +
+      "I thank you, my God,\n" +
+      "for the good resolutions, affections and inspirations\n" +
+      "that you have communicated to me during this meditation.\n\n" +
+      "I ask your help to put them into effect.\n\n" +
+      "My Immaculate Mother,\n" +
+      "Saint Joseph, my father and lord,\n" +
+      "my guardian angel,\n" +
+      "intercede for me.",
+    background:
+      "The two short prayers that open and close the daily half-hour of mental " +
+      "prayer in Opus Dei. The first answers the question you actually face " +
+      "when you sit down — not what to say, but who you are speaking to. It " +
+      "settles that first (you are here, you see me, you hear me) and only " +
+      "then asks pardon and fruitfulness. The second assumes the meditation " +
+      "gave you something, and that it was communicated rather than produced, " +
+      "which is why its first word is thanks; the harder request follows, not " +
+      "for more light but for help to act on the light already given. Both end " +
+      "with the same three intercessors — Our Lady, St. Joseph, the guardian " +
+      "angel — so the half-hour opens and shuts in the same company.",
+  },
+  {
+    title: "Nicene Creed",
+    kind: "prayer",
+    tags: ["creed", "foundational", "Trinity", "Mass"],
+    source: "The Profession of Faith of the Mass on Sundays and solemnities",
+    author: "First Council of Nicaea (325) and First Council of Constantinople (381)",
+    year: "325 / 381",
+    origin: "Conciliar",
+    liturgical: "Sundays and solemnities, after the homily",
+    feastDay: "",
+    favorite: false,
+    originalLanguage: "Latin",
+    latinBody:
+      "Credo in unum Deum,\n" +
+      "Patrem omnipoténtem,\n" +
+      "factórem cæli et terræ,\n" +
+      "visibílium ómnium et invisibílium.\n\n" +
+      "Et in unum Dóminum Iesum Christum,\n" +
+      "Fílium Dei unigénitum,\n" +
+      "et ex Patre natum ante ómnia sǽcula.\n" +
+      "Deum de Deo, lumen de lúmine,\n" +
+      "Deum verum de Deo vero,\n" +
+      "génitum, non factum, consubstantiálem Patri:\n" +
+      "per quem ómnia facta sunt.\n" +
+      "Qui propter nos hómines et propter nostram salútem\n" +
+      "descéndit de cælis.\n" +
+      "Et incarnátus est de Spíritu Sancto\n" +
+      "ex María Vírgine, et homo factus est.\n" +
+      "Crucifíxus étiam pro nobis sub Póntio Piláto;\n" +
+      "passus et sepúltus est,\n" +
+      "et resurréxit tértia die, secúndum Scriptúras,\n" +
+      "et ascéndit in cælum,\n" +
+      "sedet ad déxteram Patris.\n" +
+      "Et íterum ventúrus est cum glória,\n" +
+      "iudicáre vivos et mórtuos,\n" +
+      "cuius regni non erit finis.\n\n" +
+      "Et in Spíritum Sanctum, Dóminum et vivificántem:\n" +
+      "qui ex Patre Filióque procédit.\n" +
+      "Qui cum Patre et Fílio simul adorátur et conglorificátur:\n" +
+      "qui locútus est per prophétas.\n\n" +
+      "Et unam, sanctam, cathólicam et apostólicam Ecclésiam.\n" +
+      "Confíteor unum baptísma in remissiónem peccatórum.\n" +
+      "Et exspécto resurrectiónem mortuórum,\n" +
+      "et vitam ventúri sǽculi. Amen.",
+    body:
+      "I believe in one God,\n" +
+      "the Father almighty,\n" +
+      "maker of heaven and earth,\n" +
+      "of all things visible and invisible.\n\n" +
+      "I believe in one Lord Jesus Christ,\n" +
+      "the Only Begotten Son of God,\n" +
+      "born of the Father before all ages.\n" +
+      "God from God, Light from Light,\n" +
+      "true God from true God,\n" +
+      "begotten, not made, consubstantial with the Father;\n" +
+      "through him all things were made.\n" +
+      "For us men and for our salvation\n" +
+      "he came down from heaven,\n" +
+      "and by the Holy Spirit was incarnate of the Virgin Mary,\n" +
+      "and became man.\n" +
+      "For our sake he was crucified under Pontius Pilate,\n" +
+      "he suffered death and was buried,\n" +
+      "and rose again on the third day\n" +
+      "in accordance with the Scriptures.\n" +
+      "He ascended into heaven\n" +
+      "and is seated at the right hand of the Father.\n" +
+      "He will come again in glory\n" +
+      "to judge the living and the dead\n" +
+      "and his kingdom will have no end.\n\n" +
+      "I believe in the Holy Spirit,\n" +
+      "the Lord, the giver of life,\n" +
+      "who proceeds from the Father and the Son,\n" +
+      "who with the Father and the Son is adored and glorified,\n" +
+      "who has spoken through the prophets.\n\n" +
+      "I believe in one, holy, catholic and apostolic Church.\n" +
+      "I confess one Baptism for the forgiveness of sins\n" +
+      "and I look forward to the resurrection of the dead\n" +
+      "and the life of the world to come. Amen.",
+    background:
+      "Properly the Niceno-Constantinopolitan Creed: drafted at Nicaea in 325 " +
+      "against Arius, who held that the Son was the greatest of creatures " +
+      "rather than God, and completed at Constantinople in 381, which filled " +
+      "out the clause on the Holy Spirit. The decisive word is " +
+      "'consubstantial' (homooúsios) — of the same substance as the Father — " +
+      "chosen precisely because no one could read it in a merely honorific " +
+      "sense. The Filioque ('and the Son') is a later Western addition and " +
+      "remains a point of division with the Orthodox East. This is the creed " +
+      "professed at Mass on Sundays and solemnities; the shorter Apostles' " +
+      "Creed may be used in its place.",
+  },
   {
     title: "Morning Offering",
     kind: "prayer",
@@ -2660,6 +3107,27 @@ async function seedDefaultsIfEmpty() {
 // bug above could have already created (e.g. one "quote" copy and one
 // "prayer" copy of the same entry, from a kind correction made before the
 // fix). Keeps whichever copy matches the current seed definition's kind.
+// Seed entries that were shipped once and have since been renamed, merged, or
+// withdrawn. Removing one from SEED_LIBRARY_ENTRIES is not enough: seeding
+// only ever adds or backfills, so a copy saved to a browser on an earlier
+// visit stays there forever. Listing its old title here prunes it on next
+// load.
+//
+// Only ever put a title here that this app itself seeded — the match is by
+// exact title, so a hand-written entry sharing the name would also go.
+const RETIRED_SEED_TITLES = [
+  // Merged into the single "Preces for Mental Prayer" entry, Aug 2026.
+  "Preces Before Mental Prayer",
+  "Preces After Mental Prayer",
+];
+
+async function pruneRetiredSeeds() {
+  const entries = await listLibrary();
+  for (const e of entries) {
+    if (RETIRED_SEED_TITLES.includes(e.title)) await deleteLibraryEntry(e.id);
+  }
+}
+
 async function dedupeLibraryByTitle() {
   const entries = await listLibrary();
   const byTitle = new Map();
@@ -2691,6 +3159,7 @@ function setView(view) {
   $("#view-flashcards").classList.remove("active");
   $("#view-saints-calendar").classList.remove("active");
   $("#view-saints-atlas").classList.remove("active");
+  $("#view-finder").classList.remove("active");
   if (view === "library" || view === "journal" || view === "saints") {
     switchTab(view);
   } else if (view === "library-editor") {
@@ -2711,6 +3180,8 @@ function setView(view) {
     $("#view-saints-calendar").classList.add("active");
   } else if (view === "saints-atlas") {
     $("#view-saints-atlas").classList.add("active");
+  } else if (view === "finder") {
+    $("#view-finder").classList.add("active");
   }
 }
 
@@ -2944,8 +3415,12 @@ function renderLibraryList() {
   const countText = `${entries.length} of ${state.libraryEntries.length} entries`;
   $("#library-result-count").textContent = countText;
   $("#filter-result-row").textContent = countText;
+  $("#btn-filters-show").textContent =
+    entries.length === 1 ? "Show 1 entry" : `Show ${entries.length} entries`;
   renderActiveFilterChips();
   updateFilterBadge();
+
+  renderHourBanner(); // async, fire-and-forget — it manages its own visibility
 
   const list = $("#library-list");
   if (entries.length === 0) {
@@ -3037,11 +3512,248 @@ async function openLibraryReader(id) {
   setView("library-reader");
 
   const { body, background, latinBody } = await getLibraryEntryText(id);
-  $("#reader-text").innerHTML = latinBody ? renderBilingualBlock(latinBody, body, entry.originalLanguage) : renderTextBlock(body);
+
+  // An entry whose body is a numbered sequence (the hourly prayers, a set of
+  // meditations) can be read one at a time instead of as one long column.
+  // Bilingual entries keep the side-by-side view — the two don't combine.
+  const parts = latinBody ? [] : splitNumberedParts(body);
+  readerParts.list = parts;
+  readerParts.showAll = false;
+  // First paint of a newly opened entry positions the strip instantly; only
+  // later navigation animates, so opening doesn't start with a slide.
+  readerParts.firstPaint = true;
+  // 24 parts + the "hourly" tag means each part belongs to a clock hour, and
+  // the reader labels them as times rather than bare numbers.
+  readerParts.hourly =
+    parts.length === 24 && entry.tags.some((t) => t.toLowerCase() === "hourly");
+  // For an hourly set, open on the prayer for the hour it actually is.
+  // An explicit request (tapping the hour banner) wins; otherwise an hourly
+  // set opens on the prayer for the hour it actually is.
+  if (state.pendingReaderPart != null && parts.length) {
+    readerParts.index = Math.min(state.pendingReaderPart, parts.length - 1);
+    state.pendingReaderPart = null;
+  } else {
+    readerParts.index =
+      parts.length === 24 && entry.tags.some((t) => t.toLowerCase() === "hourly")
+        ? new Date().getHours()
+        : 0;
+  }
+
+  $("#reader-parts-bar").classList.toggle("hidden", parts.length < 4);
+  if (parts.length >= 4) renderReaderParts();
+  else $("#reader-text").innerHTML = latinBody
+    ? renderBilingualBlock(latinBody, body, entry.originalLanguage)
+    : renderTextBlock(body);
+
   if (background) {
     $("#reader-background").innerHTML = renderTextBlock(background);
     $("#reader-background-wrap").classList.remove("hidden");
   }
+}
+
+// --- Numbered-sequence reader ---------------------------------------------
+//
+// Deliberately derived from the body text rather than stored as its own field:
+// the Drive backend packs an entry into one file plus size-limited metadata
+// properties, so a 24-element array has nowhere to live there. Keeping the
+// sequence in the body means it works identically in both backends, stays
+// searchable and editable, and any entry written as a numbered list gets this
+// navigation for free.
+
+const readerParts = { list: [], index: 0, showAll: false };
+
+function splitNumberedParts(text) {
+  const paras = (text || "").split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+  const parts = [];
+  for (const para of paras) {
+    const m = para.match(/^(\d+)[.)]\s+([\s\S]+)$/);
+    // Must be strictly 1, 2, 3… — otherwise it isn't a sequence, it's prose
+    // that happens to start with a digit.
+    if (!m || Number(m[1]) !== parts.length + 1) return [];
+    parts.push({ n: Number(m[1]), text: m[2] });
+  }
+  return parts;
+}
+
+// A part may be plain text (the hourly prayers — one line, nothing to label)
+// or structured, where lines are tagged "Latin:" / "English:". Without the
+// labels the three registers — original, translation, and editorial note —
+// all rendered in the same serif and were impossible to tell apart.
+function renderPartBody(text) {
+  const lines = (text || "").split("\n").map((l) => l.trim()).filter(Boolean);
+  const labelled = /^(Latin|English|Greek):\s*/i;
+
+  if (!lines.some((l) => labelled.test(l))) {
+    // Plain part — unchanged.
+    return `<p class="reader-para">${escapeHtml(text).replace(/\n/g, "<br>")}</p>`;
+  }
+
+  return lines
+    .map((line, i) => {
+      const m = line.match(labelled);
+      if (m) {
+        const lang = m[1].toLowerCase();
+        const rest = line.slice(m[0].length);
+        return (
+          `<div class="part-line part-${lang}">` +
+          `<span class="part-lang-label">${escapeHtml(m[1])}</span>` +
+          `<span class="part-lang-text">${escapeHtml(rest)}</span></div>`
+        );
+      }
+      // First unlabelled line is the part's heading; the rest is commentary.
+      return i === 0
+        ? `<div class="part-heading">${escapeHtml(line)}</div>`
+        : `<p class="part-note">${escapeHtml(line)}</p>`;
+    })
+    .join("");
+}
+
+// A bare number is ambiguous — on an hourly set "24" could be read as the
+// 24th prayer or as hour 24. So the big marker always says what it is: a
+// clock time for an hourly set, "Part n" otherwise, with the position within
+// the set spelled out underneath either way.
+function partMarker(index) {
+  if (readerParts.hourly) {
+    const clock = `${String(index).padStart(2, "0")}:00`;
+    return {
+      big: clock,
+      sub: `Prayer ${index + 1} of ${readerParts.list.length} · for the hour beginning ${clock}`,
+      short: clock,
+    };
+  }
+  return {
+    big: String(readerParts.list[index].n),
+    sub: `Part ${index + 1} of ${readerParts.list.length}`,
+    short: String(readerParts.list[index].n),
+  };
+}
+
+// The strip of every part in the set. Two distinct states, which is the whole
+// point: `selected` is what you are reading, `now` is the hour it actually is.
+// They are usually the same, and when they aren't you can see how far you've
+// wandered and get back in one tap.
+function renderPartStrip(nowIndex) {
+  const strip = $("#part-strip");
+  strip.innerHTML = readerParts.list
+    .map((p, i) => {
+      const cls = [
+        "part-pip",
+        i === readerParts.index ? "selected" : "",
+        i === nowIndex ? "now" : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+      const label = partMarker(i).short;
+      const title = i === nowIndex ? `${label} — this hour` : label;
+      return `<button class="${cls}" data-i="${i}" title="${escapeHtml(title)}" aria-current="${
+        i === readerParts.index ? "true" : "false"
+      }">${escapeHtml(label)}</button>`;
+    })
+    .join("");
+
+  $$(".part-pip", strip).forEach((pip) =>
+    pip.addEventListener("click", () => {
+      readerParts.index = Number(pip.dataset.i);
+      renderReaderParts();
+    })
+  );
+
+  // Keep the selected pip visible, but move as little as possible.
+  //
+  // The previous version centred it on every render using `sel.offsetLeft`,
+  // which is measured from the nearest *positioned* ancestor — not the strip,
+  // which isn't positioned — so the scroll distance was wrong and it jumped
+  // to the wrong place. Now: measure with rects, and only scroll when the pip
+  // is actually out of view, just far enough to bring it in.
+  const sel = $(".part-pip.selected", strip);
+  if (!sel || strip.scrollWidth <= strip.clientWidth) return;
+
+  const stripBox = strip.getBoundingClientRect();
+  const pipBox = sel.getBoundingClientRect();
+  const margin = 8; // let a sliver of the neighbouring pip show
+
+  let delta = 0;
+  if (pipBox.left < stripBox.left + margin) {
+    delta = pipBox.left - stripBox.left - margin;
+  } else if (pipBox.right > stripBox.right - margin) {
+    delta = pipBox.right - stripBox.right + margin;
+  }
+  if (delta !== 0) {
+    strip.scrollBy({ left: delta, behavior: readerParts.firstPaint ? "auto" : "smooth" });
+  }
+  readerParts.firstPaint = false;
+}
+
+function renderReaderParts() {
+  const { list, index, showAll } = readerParts;
+  if (!list.length) return;
+
+  const nowIndex = readerParts.hourly ? new Date().getHours() : -1;
+  const wrap = (i) => (i + list.length) % list.length;
+
+  $("#btn-part-toggle").textContent = showAll
+    ? "One at a time"
+    : readerParts.hourly
+    ? "Show all 24 hours"
+    : `Show all ${list.length}`;
+
+  // The whole selector collapses in "show all" mode — there is no single
+  // current part to navigate.
+  $(".parts-nav").classList.toggle("hidden", showAll);
+  $("#part-strip").classList.toggle("hidden", showAll);
+  $("#btn-part-now").classList.toggle(
+    "hidden",
+    showAll || nowIndex < 0 || nowIndex === index
+  );
+
+  if (!showAll) {
+    $("#part-prev-label").textContent = partMarker(wrap(index - 1)).short;
+    $("#part-next-label").textContent = partMarker(wrap(index + 1)).short;
+    const marker = partMarker(index);
+    $("#reader-part-count").textContent = marker.short;
+    $("#reader-part-sub").textContent =
+      nowIndex === index
+        ? readerParts.hourly
+          ? "this hour"
+          : `${index + 1} of ${list.length}`
+        : `${index + 1} of ${list.length}`;
+    $("#reader-part-count").classList.toggle("is-now", nowIndex === index);
+
+    renderPartStrip(nowIndex);
+  }
+
+  if (showAll) {
+    const caption = readerParts.hourly
+      ? `<p class="part-note reader-parts-caption">One prayer for each hour, from midnight through 11 pm.</p>`
+      : "";
+    $("#reader-text").innerHTML =
+      caption +
+      list
+        .map(
+          (p, i) =>
+            `<div class="reader-part-row"><span class="reader-part-n">${escapeHtml(
+              partMarker(i).short
+            )}</span>` +
+            `<div class="reader-part-content">${renderPartBody(p.text)}</div></div>`
+        )
+        .join("");
+    return;
+  }
+
+  const marker = partMarker(index);
+  $("#reader-text").innerHTML =
+    `<div class="reader-part-single">` +
+    `<div class="reader-part-badge">${escapeHtml(marker.big)}</div>` +
+    `<div class="reader-part-sublabel">${escapeHtml(marker.sub)}</div>` +
+    renderPartBody(list[index].text) +
+    `</div>`;
+}
+
+function stepReaderPart(delta) {
+  const n = readerParts.list.length;
+  if (!n) return;
+  readerParts.index = (readerParts.index + delta + n) % n; // wraps at both ends
+  renderReaderParts();
 }
 
 async function openLibraryEditor(id) {
@@ -3373,6 +4085,8 @@ function renderSaintsList() {
   saints = sortSaintsList(saints);
 
   $("#saints-result-count").textContent = `${saints.length} of ${window.SAINTS.length} saints`;
+  $("#btn-saints-filters-show").textContent =
+    saints.length === 1 ? "Show 1 saint" : `Show ${saints.length} saints`;
 
   const dueCount = collectDueCards(null).length;
   const dueBadge = $("#cards-due-badge");
@@ -5097,3 +5811,490 @@ function exportSaintsICS() {
 window.addEventListener("beforeunload", () => {
   if (writerDirty) autosaveJournalEntry();
 });
+
+// ---------------------------------------------------------------------------
+//  Guided finder — "Find a prayer, hymn or quote"
+//
+//  A few narrowing questions instead of scrolling the whole library. The one
+//  hard requirement is COVERAGE: every entry must stay reachable, no matter
+//  how the collection grows.
+//
+//  That is guaranteed structurally rather than by hand-checking the buckets:
+//
+//    * At each step the visible options are computed from the entries actually
+//      still in play, and any option that would match nothing is dropped.
+//    * An entry goes into every option it matches, not just the first — the
+//      Hail Mary is both a Marian prayer and one of the basics, and either
+//      route should reach it. Option counts therefore sum to more than the
+//      total, which is expected, not a bug.
+//    * Whatever matches none of the named options is swept into an explicit
+//      "Something else" option. So the union of the options always contains
+//      the whole candidate set — nothing can fall between them.
+//    * The last steps are generated from the entries' own tags, so newly added
+//      prayers get their own routes without anyone editing this file.
+//    * "Show these now" is available at every step, and the results list
+//      appears automatically once the set is small.
+//
+//  Adding a prayer with unfamiliar tags therefore cannot orphan it: worst case
+//  it arrives via "Something else".
+// ---------------------------------------------------------------------------
+
+const FINDER_RESULT_THRESHOLD = 8; // stop asking once the set is this small
+const FINDER_MAX_TAG_STEPS = 3;
+
+const finderState = {
+  answers: [], // [{ stepLabel, optionLabel, ids }]
+  showingAll: false,
+};
+
+const hasTag = (entry, names) =>
+  entry.tags.some((t) => names.includes(t.toLowerCase()));
+
+// Matches against the free-text fields too, so entries that carry their
+// occasion in `liturgical`/`origin` rather than a tag are still routed.
+const mentions = (entry, words) => {
+  const hay = `${entry.liturgical || ""} ${entry.origin || ""} ${entry.source || ""}`.toLowerCase();
+  return words.some((w) => hay.includes(w));
+};
+
+// Fixed opening steps. Each option is {label, hint, match}. Order matters:
+// an entry lands in the first option it matches.
+const FINDER_STEPS = [
+  {
+    label: "Kind",
+    question: "What are you looking for?",
+    options: [
+      { label: "A prayer", hint: "Something to pray", match: (e) => e.kind === "prayer" },
+      { label: "A litany", hint: "Call and response", match: (e) => e.kind === "litany" },
+      { label: "A hymn", hint: "Something sung", match: (e) => e.kind === "hymn" },
+      { label: "Words to sit with", hint: "A quote to dwell on", match: (e) => e.kind === "quote" },
+      // No "saint" option: saints live in their own tab, and the Library has
+      // never held one. If a legacy entry does, the catch-all still routes it.
+    ],
+  },
+  {
+    label: "Occasion",
+    question: "What is it for?",
+    options: [
+      {
+        label: "To aid with prayer",
+        hint: "Beginning, settling, giving thanks at the end",
+        match: (e) =>
+          hasTag(e, [
+            "before prayer", "after prayer", "preparation", "thanksgiving",
+            "contemplation", "opus dei",
+          ]) || mentions(e, ["before mental prayer", "after mental prayer", "before prayer"]),
+      },
+      {
+        label: "Contemplative",
+        hint: "Short, quiet, meant to be dwelt on",
+        match: (e) =>
+          hasTag(e, [
+            "contemplation", "holy spirit", "adoration", "surrender",
+            "self-offering", "poem", "silence", "trust",
+          ]),
+      },
+      {
+        // "Everyone knows" has to be literally true or the label lies. The
+        // Acts of Faith, Hope and Charity are tagged foundational and are
+        // genuinely basic, but they're catechism prayers rather than ones
+        // learned by heart in childhood — so they're excluded here and get
+        // their own option below.
+        label: "The prayers everyone knows",
+        hint: "The basic ones, learned by heart",
+        match: (e) =>
+          hasTag(e, ["foundational", "creed", "doxology"]) && !hasTag(e, ["catechetical"]),
+      },
+      {
+        label: "Acts of faith, hope and love",
+        hint: "The three theological virtues, said as acts",
+        match: (e) => hasTag(e, ["catechetical"]) && /^Act of /i.test(e.title || ""),
+      },
+      {
+        // Ahead of "the hours of the day" on purpose: the four seasonal
+        // antiphons belong to Our Lady first, even though they are sung at
+        // Compline. The hours option no longer claims them.
+        label: "To Our Lady",
+        hint: "Marian prayers and the seasonal antiphons",
+        match: (e) => hasTag(e, ["marian", "antiphon"]) || mentions(e, ["marian"]),
+      },
+      {
+        label: "Mass and Communion",
+        hint: "Before, during, after — and Adoration",
+        match: (e) =>
+          hasTag(e, ["mass", "eucharist", "communion", "adoration", "benediction", "corpus christi"]) ||
+          mentions(e, ["mass", "communion", "adoration", "benediction", "blessed sacrament"]),
+      },
+      {
+        label: "The hours of the day",
+        hint: "Morning, evening, night prayer",
+        // Deliberately does NOT match "antiphon"/"Compline" — see above.
+        match: (e) => hasTag(e, ["morning", "noon", "evening", "daily", "night"]),
+      },
+      {
+        label: "Confession and repentance",
+        hint: "Examining conscience, sorrow, conversion",
+        match: (e) =>
+          hasTag(e, ["confession", "penance", "repentance", "self-examination", "conversion", "fasting"]) ||
+          mentions(e, ["confession", "conscience", "reconciliation", "penance"]),
+      },
+      {
+        label: "A season of the year",
+        hint: "Advent, Christmas, Lent, Easter",
+        match: (e) =>
+          hasTag(e, ["advent", "christmas", "nativity", "lent", "easter", "incarnation"]) ||
+          mentions(e, ["advent", "christmas", "lent", "easter", "pentecost", "candlemas", "holy week"]),
+      },
+      {
+        label: "When things are hard",
+        hint: "Anxiety, suffering, fear, protection",
+        match: (e) =>
+          hasTag(e, [
+            "anxiety", "suffering", "death", "courage", "protection", "exorcism",
+            "peace", "hope", "trust", "perseverance", "guardian angel",
+          ]),
+      },
+      {
+        label: "To grow in virtue",
+        hint: "Humility, charity, purity, surrender",
+        match: (e) =>
+          hasTag(e, [
+            "humility", "charity", "love", "purity", "chastity", "zeal", "joy",
+            "faithfulness", "surrender", "self-offering", "little way", "work",
+          ]),
+      },
+      {
+        label: "The faith itself",
+        hint: "Creeds, doctrine, the Trinity",
+        match: (e) =>
+          hasTag(e, ["creed", "catechetical", "trinity", "faith", "doxology", "biblical", "holy spirit"]),
+      },
+    ],
+  },
+];
+
+// Later steps are generated from whatever tags the remaining entries carry, so
+// the tree deepens on its own as the collection grows.
+function dynamicTagStep(candidates, usedTags) {
+  const counts = new Map();
+  candidates.forEach((e) =>
+    e.tags.forEach((t) => {
+      const key = t.toLowerCase();
+      if (usedTags.has(key)) return;
+      counts.set(key, (counts.get(key) || 0) + 1);
+    })
+  );
+
+  // A tag only makes a useful question if it splits the set — it must not
+  // cover everything, and must cover more than one entry.
+  const useful = [...counts.entries()]
+    .filter(([, n]) => n > 1 && n < candidates.length)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6);
+
+  if (useful.length < 2) return null;
+
+  return {
+    label: "Theme",
+    question: "Anything more particular?",
+    options: useful.map(([tag]) => ({
+      label: tag.charAt(0).toUpperCase() + tag.slice(1),
+      hint: "",
+      match: (e) => e.tags.some((t) => t.toLowerCase() === tag),
+      tag,
+    })),
+  };
+}
+
+// Builds the step to show for the current candidate set, with the coverage
+// sweep applied. Returns null when there is nothing useful left to ask.
+function buildFinderStep(candidates) {
+  const depth = finderState.answers.length;
+  const usedTags = new Set(
+    finderState.answers.flatMap((a) => (a.tag ? [a.tag] : []))
+  );
+
+  let step =
+    depth < FINDER_STEPS.length
+      ? FINDER_STEPS[depth]
+      : depth < FINDER_STEPS.length + FINDER_MAX_TAG_STEPS
+      ? dynamicTagStep(candidates, usedTags)
+      : null;
+
+  if (!step) return null;
+
+  // A candidate goes into EVERY option it matches, not just the first. The
+  // Hail Mary is both a Marian prayer and one of the basics; someone looking
+  // for either should find it. So several routes can lead to the same entry,
+  // and the option counts deliberately sum to more than the total.
+  const buckets = step.options.map((opt) => ({ ...opt, ids: [] }));
+  const leftovers = [];
+
+  candidates.forEach((e) => {
+    let matched = false;
+    buckets.forEach((b) => {
+      if (b.match(e)) {
+        b.ids.push(e.id);
+        matched = true;
+      }
+    });
+    if (!matched) leftovers.push(e.id);
+  });
+
+  const shown = buckets.filter((b) => b.ids.length > 0);
+
+  // The sweep: anything matching no option at all still gets a door. This is
+  // what makes coverage total — union(options) always contains every
+  // candidate, even though the options now overlap.
+  if (leftovers.length > 0) {
+    shown.push({
+      label: "Something else",
+      hint: "Everything not covered above",
+      ids: leftovers,
+      isCatchAll: true,
+    });
+  }
+
+  // A question with one answer isn't a question — skip to the next one.
+  if (shown.length < 2) return null;
+
+  return { ...step, options: shown };
+}
+
+function finderCandidates() {
+  const last = finderState.answers[finderState.answers.length - 1];
+  if (!last) return state.libraryEntries.slice();
+  const ids = new Set(last.ids);
+  return state.libraryEntries.filter((e) => ids.has(e.id));
+}
+
+function openFinder() {
+  finderState.answers = [];
+  finderState.showingAll = false;
+  setView("finder");
+  renderFinder();
+}
+
+function renderFinder() {
+  const candidates = finderCandidates();
+
+  // Breadcrumbs — each is clickable to rewind to that point.
+  const crumbs = $("#finder-crumbs");
+  crumbs.innerHTML = finderState.answers
+    .map(
+      (a, i) =>
+        `<button class="finder-crumb" data-step="${i}">${escapeHtml(a.optionLabel)}</button>`
+    )
+    .join(`<span class="finder-crumb-sep">›</span>`);
+  crumbs.classList.toggle("hidden", finderState.answers.length === 0);
+  $$(".finder-crumb", crumbs).forEach((btn) => {
+    btn.addEventListener("click", () => {
+      finderState.answers = finderState.answers.slice(0, Number(btn.dataset.step));
+      finderState.showingAll = false;
+      renderFinder();
+    });
+  });
+
+  const step = finderState.showingAll ? null : buildFinderStep(candidates);
+  const done = !step || candidates.length <= FINDER_RESULT_THRESHOLD;
+
+  $("#finder-question-block").classList.toggle("hidden", done);
+  $("#finder-count").textContent =
+    candidates.length === 1 ? "1 entry" : `${candidates.length} entries`;
+  $("#btn-finder-showall").classList.toggle("hidden", done);
+
+  if (!done) {
+    $("#finder-question").textContent = step.question;
+    $("#finder-options").innerHTML = step.options
+      .map(
+        (opt, i) => `
+        <button class="finder-option${opt.isCatchAll ? " catch-all" : ""}" data-opt="${i}">
+          <span class="finder-option-label">${escapeHtml(opt.label)}</span>
+          ${opt.hint ? `<span class="finder-option-hint">${escapeHtml(opt.hint)}</span>` : ""}
+          <span class="finder-option-count">${opt.ids.length}</span>
+        </button>`
+      )
+      .join("");
+    $$(".finder-option", $("#finder-options")).forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const opt = step.options[Number(btn.dataset.opt)];
+        finderState.answers.push({
+          stepLabel: step.label,
+          optionLabel: opt.label,
+          ids: opt.ids,
+          tag: opt.tag,
+        });
+        renderFinder();
+      });
+    });
+    $("#finder-results").innerHTML = "";
+    return;
+  }
+
+  // Results.
+  const results = $("#finder-results");
+  if (candidates.length === 0) {
+    results.innerHTML = `<div class="empty-state">Nothing here — step back and try another answer.</div>`;
+    return;
+  }
+  results.innerHTML =
+    `<p class="finder-results-head">${
+      candidates.length === 1 ? "This one:" : "Any of these:"
+    }</p>` +
+    sortLibraryEntries(candidates)
+      .map(
+        (e) => `
+      <div class="entry-card" data-id="${e.id}">
+        <div class="title">${escapeHtml(e.title)}${e.favorite ? " ★" : ""}</div>
+        ${e.author ? `<div class="byline">— ${escapeHtml(e.author)}</div>` : ""}
+        <div class="meta">
+          <span class="badge-kind">${e.kind}</span>
+          ${e.source ? `<span>${escapeHtml(e.source)}</span>` : ""}
+        </div>
+      </div>`
+      )
+      .join("");
+  $$(".entry-card", results).forEach((card) => {
+    card.addEventListener("click", () => {
+      state.readerCameFromFinder = true;
+      openLibraryReader(card.dataset.id);
+    });
+  });
+}
+
+// --- This hour's prayer, at the top of the Library --------------------------
+//
+// The 24 hourly prayers are only useful if the right one meets you without
+// being looked up. This surfaces the current one above the library list — the
+// same idea as the Saints tab's "today is the feast of" banner — and tapping
+// it opens the full entry already on that hour.
+
+function currentHourlyPrayer() {
+  const entry = state.libraryEntries.find(
+    (e) => e.tags && e.tags.some((t) => t.toLowerCase() === "hourly")
+  );
+  if (!entry) return null;
+  const cached = state.libraryBodyFull && state.libraryBodyFull[entry.id];
+  const parts = splitNumberedParts(cached || "");
+  if (parts.length !== 24) return null;
+  const hour = new Date().getHours();
+  return { entry, part: parts[hour], hour };
+}
+
+async function renderHourBanner() {
+  const banner = $("#library-hour-banner");
+  if (!banner) return;
+
+  const entry = state.libraryEntries.find(
+    (e) => e.tags && e.tags.some((t) => t.toLowerCase() === "hourly")
+  );
+  if (!entry) {
+    banner.classList.add("hidden");
+    return;
+  }
+
+  // The list view only holds metadata, so fetch the body once and cache it.
+  state.libraryBodyFull = state.libraryBodyFull || {};
+  if (!state.libraryBodyFull[entry.id]) {
+    const { body } = await getLibraryEntryText(entry.id);
+    state.libraryBodyFull[entry.id] = body;
+  }
+
+  const current = currentHourlyPrayer();
+  if (!current) {
+    banner.classList.add("hidden");
+    return;
+  }
+
+  const clock = `${String(current.hour).padStart(2, "0")}:00`;
+  banner.innerHTML =
+    `<span class="todays-saint-label">This hour · ${clock}</span>` +
+    `<span class="hour-banner-text">${escapeHtml(current.part.text)}</span>` +
+    `<span class="hour-banner-more">${escapeHtml(entry.title)} — ${current.part.n} of 24 ›</span>`;
+  banner.classList.remove("hidden");
+
+  banner.onclick = () => {
+    state.pendingReaderPart = current.hour;
+    openLibraryReader(entry.id);
+  };
+}
+
+// Re-render on the hour so the banner never shows a stale prayer.
+setInterval(() => {
+  if (state.view === "library") renderHourBanner();
+}, 60 * 1000);
+
+// --- Palette picker --------------------------------------------------------
+//
+// Colours are entirely CSS custom properties (see "Palettes" in styles.css),
+// so switching is one attribute on <html>. The choice is remembered per
+// browser, and index.html applies it before first paint so the default never
+// flashes first.
+
+const PALETTE_KEY = "recollection.palette.v1";
+const DEFAULT_PALETTE = "candlelight";
+
+function currentPalette() {
+  return document.documentElement.getAttribute("data-palette") || DEFAULT_PALETTE;
+}
+
+function applyPalette(name) {
+  document.documentElement.setAttribute("data-palette", name);
+  try {
+    localStorage.setItem(PALETTE_KEY, name);
+  } catch {
+    /* storage blocked — the choice just won't survive the session */
+  }
+  // Keep the browser/PWA chrome in step with the page it sits above.
+  const ground = getComputedStyle(document.documentElement)
+    .getPropertyValue("--ground")
+    .trim();
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta && ground) meta.setAttribute("content", ground);
+  markPaletteChoice();
+}
+
+function markPaletteChoice() {
+  const active = currentPalette();
+  document.querySelectorAll(".palette-option").forEach((btn) => {
+    const on = btn.dataset.palette === active;
+    btn.classList.toggle("active", on);
+    btn.setAttribute("aria-checked", on ? "true" : "false");
+  });
+}
+
+function initPalette() {
+  // No stored choice yet — settle on the default explicitly so the attribute
+  // is always present and the picker has something to highlight.
+  if (!document.documentElement.getAttribute("data-palette")) {
+    document.documentElement.setAttribute("data-palette", DEFAULT_PALETTE);
+  }
+  markPaletteChoice();
+
+  const menu = $("#palette-menu");
+  const btn = $("#btn-palette");
+  const close = () => {
+    menu.classList.add("hidden");
+    btn.setAttribute("aria-expanded", "false");
+  };
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = menu.classList.toggle("hidden");
+    btn.setAttribute("aria-expanded", open ? "false" : "true");
+  });
+
+  document.querySelectorAll(".palette-option").forEach((opt) =>
+    opt.addEventListener("click", () => {
+      applyPalette(opt.dataset.palette);
+      close();
+    })
+  );
+
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target) && e.target !== btn) close();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") close();
+  });
+}

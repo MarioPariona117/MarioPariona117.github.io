@@ -4,10 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Recollection</title>
-<meta name="theme-color" content="#0F1B2D">
+<meta name="theme-color" content="#0a0705">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="stylesheet" href="styles.css">
+<script>
+  // Before first paint, so a chosen palette never flashes the default first.
+  try {
+    var p = localStorage.getItem("recollection.palette.v1");
+    if (p) document.documentElement.setAttribute("data-palette", p);
+  } catch (e) {}
+</script>
 </head>
 <body>
 
@@ -55,11 +62,56 @@
       <button class="tab" data-tab="journal">Journal</button>
       <button class="tab" data-tab="saints">Saints</button>
     </div>
-    <button id="btn-signout" class="btn ghost">Sign out</button>
+    <div class="topbar-right">
+      <button id="btn-palette" class="palette-btn" aria-haspopup="true" aria-expanded="false" title="Change the colours">
+        <span class="palette-dot"></span>
+      </button>
+      <button id="btn-signout" class="btn ghost">Sign out</button>
+    </div>
+
+    <div id="palette-menu" class="palette-menu hidden" role="menu">
+      <div class="palette-menu-label">Colours</div>
+      <button class="palette-option" data-palette="candlelight" role="menuitemradio">
+        <span class="palette-swatch" style="--a:#0a0705;--b:#e0a94a"></span>
+        <span class="palette-name">Candlelight</span>
+      </button>
+      <button class="palette-option" data-palette="black" role="menuitemradio">
+        <span class="palette-swatch" style="--a:#0c0c0c;--b:#d4a847"></span>
+        <span class="palette-name">Black &amp; Gold</span>
+      </button>
+      <button class="palette-option" data-palette="midnight" role="menuitemradio">
+        <span class="palette-swatch" style="--a:#0b1524;--b:#d4a847"></span>
+        <span class="palette-name">Midnight &amp; Gold</span>
+      </button>
+      <button class="palette-option" data-palette="oxblood" role="menuitemradio">
+        <span class="palette-swatch" style="--a:#1a0e11;--b:#c8956b"></span>
+        <span class="palette-name">Oxblood &amp; Cream</span>
+      </button>
+      <button class="palette-option" data-palette="forest" role="menuitemradio">
+        <span class="palette-swatch" style="--a:#0c1712;--b:#c2a33f"></span>
+        <span class="palette-name">Forest &amp; Brass</span>
+      </button>
+      <div class="palette-menu-label palette-menu-label-2">Light</div>
+      <button class="palette-option" data-palette="parchment" role="menuitemradio">
+        <span class="palette-swatch" style="--a:#f5efe1;--b:#9a7420"></span>
+        <span class="palette-name">Parchment</span>
+      </button>
+    </div>
   </header>
 
   <main class="content">
     <div class="tabpanel active" data-tab="library">
+      <!-- Why this collection exists. Collapsible rather than dismissible —
+           it's for someone arriving for the first time, but closing it leaves
+           a small link behind so it can always be read again. -->
+      <div class="panel-note" id="library-note" data-note="library">
+        <p>In an attempt to glorify God, many beautiful prayers have been humbly
+          collected here for my personal use. These are not at all to show off,
+          nor to be gathered merely for the sake of it, but rather to serve as an
+          ordinary means to grow in Love for God and my neighbour.</p>
+        <button class="note-dismiss" data-toggle-note="library" aria-label="Hide this note">×</button>
+        <button class="note-reopen" data-toggle-note="library">Why this collection exists</button>
+      </div>
       <div class="toolbar">
         <input id="library-search" class="search-input" type="search" placeholder="Search prayers, saints, quotes…">
         <select id="library-sort" class="text-input sort-select">
@@ -67,26 +119,39 @@
           <option value="title">Title A–Z</option>
           <option value="kind">By kind</option>
         </select>
+        <button id="btn-open-finder" class="btn finder-cta">Find a prayer, hymn or quote</button>
         <button id="btn-open-filters" class="btn secondary">Filters<span id="filter-count-badge" class="filter-badge hidden"></span></button>
-        <button id="btn-new-library" class="btn">+ New</button>
+        <button id="btn-new-library" class="btn secondary authoring-only">+ New</button>
       </div>
       <div class="result-row">
         <span id="library-result-count" class="result-count"></span>
         <button id="btn-clear-tag-filter" class="btn ghost hidden">Clear all filters</button>
       </div>
       <div id="active-filter-chips" class="chip-row active-filter-chips"></div>
+      <!-- This hour's arrow prayer, surfaced at the top of the Library the
+           same way the Saints tab surfaces today's feast. -->
+      <div id="library-hour-banner" class="todays-saint-banner hour-banner hidden"></div>
       <div id="library-list" class="entry-list"></div>
     </div>
 
     <div class="tabpanel" data-tab="journal">
       <div class="toolbar">
         <span style="flex:1"></span>
-        <button id="btn-new-journal" class="btn">+ New reflection</button>
+        <button id="btn-new-journal" class="btn authoring-only">+ New reflection</button>
       </div>
       <div id="journal-list" class="entry-list"></div>
     </div>
 
     <div class="tabpanel" data-tab="saints">
+      <div class="panel-note" id="saints-note" data-note="saints">
+        <p>The understanding that I should intentionally include the Saints in
+          my life, as friends in Heaven, has been with me since 2025. The
+          inspiration to learn about them more deeply then came to me in August
+          2026, and since then I have been making a personal database to help me
+          do so.</p>
+        <button class="note-dismiss" data-toggle-note="saints" aria-label="Hide this note">×</button>
+        <button class="note-reopen" data-toggle-note="saints">Why these Saints are here</button>
+      </div>
       <div class="toolbar">
         <input id="saints-search" class="search-input" type="search" placeholder="Search saints…">
         <select id="saints-sort" class="text-input sort-select">
@@ -98,7 +163,7 @@
       </div>
       <div class="result-row">
         <span id="saints-result-count" class="result-count"></span>
-        <button id="btn-open-flashcards" class="btn ghost">Study due cards<span id="cards-due-badge" class="filter-badge hidden"></span></button>
+        <button id="btn-open-flashcards" class="btn study-cta">Study due cards<span id="cards-due-badge" class="filter-badge hidden"></span></button>
         <button id="btn-open-saints-calendar" class="btn ghost">Calendar</button>
         <button id="btn-open-saints-atlas" class="btn ghost">Atlas</button>
         <button id="btn-export-ics" class="btn ghost">Export calendar (.ics)</button>
@@ -115,6 +180,7 @@
     <button class="btn ghost" id="btn-saints-filters-done">← Back</button>
     <span style="font-size:0.85rem;color:var(--muted)">Filters</span>
     <button class="btn ghost" id="btn-saints-filters-clear-all">Clear all</button>
+    <button class="btn filters-apply" id="btn-saints-filters-show">Show results</button>
   </header>
   <main class="content">
     <div class="filter-section">
@@ -297,11 +363,38 @@
   </main>
 </div>
 
+<!-- Guided finder: a few narrowing questions instead of scanning the whole
+     library. Every entry stays reachable — see buildFinderStep() in app.js for
+     the coverage rule. -->
+<div id="view-finder">
+  <header class="topbar">
+    <button class="btn ghost" id="btn-finder-back">← Back</button>
+    <span style="font-size:0.85rem;color:var(--muted)">Find a prayer, hymn or quote</span>
+    <button class="btn ghost" id="btn-finder-restart">Start over</button>
+  </header>
+  <main class="content">
+    <div class="finder-crumbs" id="finder-crumbs"></div>
+
+    <div id="finder-question-block">
+      <p class="finder-question" id="finder-question"></p>
+      <div class="finder-options" id="finder-options"></div>
+    </div>
+
+    <div class="finder-foot">
+      <span class="finder-count" id="finder-count"></span>
+      <button class="btn ghost" id="btn-finder-showall">Show these now</button>
+    </div>
+
+    <div id="finder-results" class="entry-list"></div>
+  </main>
+</div>
+
 <div id="view-library-filters">
   <header class="topbar">
     <button class="btn ghost" id="btn-filters-done">← Back</button>
     <span style="font-size:0.85rem;color:var(--muted)">Filters</span>
     <button class="btn ghost" id="btn-filters-clear-all">Clear all</button>
+    <button class="btn filters-apply" id="btn-filters-show">Show results</button>
   </header>
   <main class="content">
     <div class="filter-result-row" id="filter-result-row"></div>
@@ -318,7 +411,6 @@
         <span class="chip kind-chip" data-kind="prayer">Prayers</span>
         <span class="chip kind-chip" data-kind="hymn">Hymns</span>
         <span class="chip kind-chip" data-kind="litany">Litanies</span>
-        <span class="chip kind-chip" data-kind="saint">Saints</span>
         <span class="chip kind-chip" data-kind="quote">Quotes</span>
       </div>
     </div>
@@ -351,7 +443,7 @@
   <header class="topbar">
     <button class="btn ghost" id="btn-reader-back">← Back</button>
     <span></span>
-    <button class="btn ghost" id="btn-reader-edit">Edit</button>
+    <button class="btn ghost authoring-only" id="btn-reader-edit">Edit</button>
   </header>
   <main class="content reader-content">
     <div class="reader-kind" id="reader-kind"></div>
@@ -359,6 +451,37 @@
     <div class="reader-attribution" id="reader-attribution"></div>
     <div class="reader-meta" id="reader-meta"></div>
     <div class="reader-rule"></div>
+
+    <!-- Shown only for entries whose body is a numbered sequence (the hourly
+         prayers, for instance). Lets you take them one at a time or read the
+         whole set at once. -->
+    <div class="reader-parts-bar hidden" id="reader-parts-bar">
+      <!-- Prev / next name where they go, rather than being bare arrows, and
+           the strip below shows the whole set at a glance: which one you're
+           reading, and — for an hourly set — which one it actually is now. -->
+      <div class="parts-nav">
+        <button class="part-step" id="btn-part-prev">
+          <span class="part-step-arrow">‹</span>
+          <span class="part-step-label" id="part-prev-label"></span>
+        </button>
+        <div class="part-here">
+          <span class="part-here-main" id="reader-part-count"></span>
+          <span class="part-here-sub" id="reader-part-sub"></span>
+        </div>
+        <button class="part-step part-step-next" id="btn-part-next">
+          <span class="part-step-label" id="part-next-label"></span>
+          <span class="part-step-arrow">›</span>
+        </button>
+      </div>
+
+      <div class="part-strip" id="part-strip"></div>
+
+      <div class="parts-bar-foot">
+        <button class="btn ghost part-now-btn hidden" id="btn-part-now">Back to this hour</button>
+        <button class="btn ghost reader-part-toggle" id="btn-part-toggle">Show all</button>
+      </div>
+    </div>
+
     <div class="reader-text" id="reader-text"></div>
     <div class="reader-background-wrap hidden" id="reader-background-wrap">
       <div class="reader-background-label">Background</div>
@@ -385,7 +508,6 @@
           <option value="prayer">Prayer</option>
           <option value="hymn">Hymn</option>
           <option value="litany">Litany</option>
-          <option value="saint">Saint</option>
           <option value="quote">Quote</option>
         </select>
       </div>
@@ -474,22 +596,15 @@
   </div>
 </div>
 
-<!-- LOCAL MODE (default for now): everything is saved in this browser's
-     localStorage only, like the wardrobe pages elsewhere in this repo —
-     no Google sign-in, no cross-device sync yet.
-     To switch to real Google Drive sync later (so content follows you to
-     your phone too — see SETUP.md): delete the two lines below, then
-     uncomment the four lines below that. -->
-<script>window.RECOLLECTION_LOCAL_MODE = true;</script>
+<!-- PUBLIC BUILD — generated by the portfolio's scripts/sync-recollection.mjs.
+     Do not edit here; edit the source app and re-run the script.
+     Everything runs in the visitor's own browser: content is seeded from
+     saints-data.js and app.js, and anything they change stays in their
+     localStorage. No sign-in, no backend, no outbound request. -->
+<script>window.RECOLLECTION_LOCAL_MODE = true; window.RECOLLECTION_PUBLIC_MODE = true;</script>
 <script src="store-local.js"></script>
 <script src="saints-data.js"></script>
 <script src="saints-geo.js"></script>
-<!--
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="config.js"></script>
-<script src="auth.js"></script>
-<script src="drive.js"></script>
--->
 <script src="app.js"></script>
 </body>
 </html>
