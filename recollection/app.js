@@ -71,12 +71,28 @@ function escapeHtml(str) {
 // Renders plain text as real paragraphs: a blank line (\n\n) is a genuine
 // break between stanzas/paragraphs, a single \n is a line break within one
 // (a poem-style line), so wrapped sentences don't get mistaken for breaks.
+// Minimal inline emphasis. Backgrounds cite titles of works — the Confessions,
+// the Moralia, Story of a Soul — and occasionally stress a word, and both are
+// written with asterisks. Without this they rendered as literal *asterisks*.
+// Titles of works take italics, not bold: bold would shout them.
+//
+// Applied AFTER escapeHtml, so the input is already inert and this can only
+// ever introduce <em>/<strong>. Order matters: ** before *, or the double
+// markers get eaten by the single-marker rule.
+function renderInline(escaped) {
+  // The marker must hug its text — no space just inside either asterisk — so
+  // that "2 * 3 * 4" and other stray asterisks are left alone.
+  return escaped
+    .replace(/\*\*(?!\s)([^*\n]*[^*\s])\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(?!\s)([^*\n]*[^*\s])\*/g, "<em>$1</em>");
+}
+
 function renderTextBlock(text) {
   return (text || "")
     .split(/\n\s*\n/)
     .map((para) => para.trim())
     .filter(Boolean)
-    .map((para) => `<p class="reader-para">${escapeHtml(para).replace(/\n/g, "<br>")}</p>`)
+    .map((para) => `<p class="reader-para">${renderInline(escapeHtml(para)).replace(/\n/g, "<br>")}</p>`)
     .join("");
 }
 
@@ -464,13 +480,1585 @@ async function onSignedIn() {
   setView("library");
 }
 
+// AUTHOR FIELD CONVENTION
+// ------------------------
+// `author` holds who wrote it, and nothing else — caveats about the
+// attribution go in `authorNote`, never welded onto the name (a name of the
+// form "Attributed to X" also stops the dossier link from resolving).
+//
+// Where no person can be named, exactly two values are used:
+//
+//   "Traditional"  the text has been in devotional or liturgical use for
+//                  centuries with no individual author ever claimed —
+//                  the Memorare, Anima Christi, the Acts, the Angelus.
+//   "Unknown"      a specific composition by a specific person we cannot
+//                  identify — usually modern, usually circulating under a
+//                  saint's borrowed name. The Peace Prayer (1912) and the
+//                  "use words if necessary" line are both this, not
+//                  traditional.
+//
+// Collective bodies keep their own name ("The Desert Fathers", a council).
+// Do not add "Anonymous" — it was a third label for these same two ideas.
+//
 // Real starter entries so the Library isn't empty on first launch. Each is
 // matched by title+kind and backfilled in place if it was already saved by
 // an earlier version of this app missing the newer fields — so re-running
 // this is always safe, never duplicates.
 const SEED_LIBRARY_ENTRIES = [
   {
+    title: "All the Way to Heaven Is Heaven",
+    occasion:
+      "From her letters, written to popes, mercenaries, prisoners and her own family — generally to tell someone that the situation they were trying to get past was the place they were being met.",
+    kind: "quote", tags: ["hope", "perseverance", "Dominican", "trust", "daily"],
+    source: "Letters", author: "St. Catherine of Siena", year: "14th century",
+    origin: "Dominican", liturgical: "", feastDay: "29 April", favorite: false,
+    body:
+      "All the way to heaven is heaven,\n" +
+      "because He said: I am the way.",
+    background:
+      "The argument is a piece of logic, not a sentiment, and it turns on a " +
+      "single scriptural verse. If Christ is the road and not only the " +
+      "destination, then travelling and arriving are not two different kinds " +
+      "of thing — you are already in contact with what you are going toward.\n\n" +
+      "That has a practical consequence Catherine drew constantly in her " +
+      "letters: it removes the idea of a waiting period. There is no stretch " +
+      "of life that is merely the corridor before the real thing begins. She " +
+      "wrote to popes, mercenaries, prisoners and her own family in the same " +
+      "terms, generally to tell someone that the situation they were trying " +
+      "to get past was the place they were being met.",
+  },
+  // ── Saint quotes, batch 4: Fathers, Doctors, martyrs, moderns ──────────
+  {
+    title: "Gaze, Consider, Contemplate",
+    occasion:
+      "Written in 1235 to Agnes of Prague, a Bohemian princess who had refused an imperial marriage to found a poor monastery, and had asked Clare how one becomes like Christ.",
+    kind: "quote", tags: ["contemplation", "Franciscan", "adoration", "love"],
+    source: "Second Letter to Blessed Agnes of Prague",
+    author: "St. Clare of Assisi", year: "1235", origin: "Poor Clares",
+    liturgical: "", feastDay: "11 August", favorite: false,
+    body:
+      "Gaze upon Him, consider Him, contemplate Him,\n" +
+      "as you desire to imitate Him.",
+    background:
+      "Four verbs in deliberate order, and the order is the method. Gaze is " +
+      "simply looking; consider is thinking about what you see; contemplate " +
+      "is resting in it; imitate is the last, not the first. Clare is " +
+      "answering a young woman — Agnes, a Bohemian princess who had refused " +
+      "an imperial marriage to found a poor monastery — who wanted to know " +
+      "how to become like Christ.\n\n" +
+      "The answer is that you do not begin with imitation. You begin by " +
+      "looking, long enough and often enough that likeness follows. Clare " +
+      "had by then spent over twenty years enclosed at San Damiano, much of " +
+      "it fighting successive popes for the right to remain poor.",
+  },
+  {
+    title: "Love That Cannot Suffer",
+    occasion:
+      "Attributed within the Poor Clare tradition; the particular occasion is not recorded.",
+    kind: "quote", tags: ["love", "suffering", "Franciscan", "charity"],
+    source: "Attributed in Poor Clare tradition",
+    author: "St. Clare of Assisi", authorNote: "attributed; not pinned to a surviving letter",
+    year: "13th century", origin: "Poor Clares", liturgical: "", feastDay: "11 August", favorite: false,
+    body: "Love that cannot suffer is not worthy of that name.",
+    background:
+      "A definition by exclusion, and a hard one. It does not say love " +
+      "*will* suffer, as a regrettable side-effect; it says a love " +
+      "constitutionally unable to is misnamed — the word has been borrowed " +
+      "for something else, probably preference or enjoyment.\n\n" +
+      "The test is uncomfortable to apply, and it is meant to be applied to " +
+      "oneself rather than to others. It asks what your affection has ever " +
+      "actually cost you, and treats the answer as the measurement.",
+  },
+  {
+    title: "Each of Your Saints Reflects a Virtue",
+    occasion:
+      "Written in her Diary in the 1930s, as she worked out which of Christ's qualities she was placed to show — the reasoning that became the Divine Mercy devotion.",
+    kind: "quote", tags: ["charity", "Divine Mercy", "contemplation", "little way"],
+    source: "Diary, 1242", author: "St. Faustina Kowalska", year: "1930s",
+    origin: "Divine Mercy devotion", liturgical: "", feastDay: "5 October", favorite: false,
+    body:
+      "O my Jesus, each of Your saints reflects one of Your virtues;\n" +
+      "I desire to reflect Your compassionate heart,\n" +
+      "full of mercy; I want to glorify it.",
+    background:
+      "A choice, made deliberately, out of a range of options. Faustina is " +
+      "not claiming mercy is the greatest virtue; she is observing that " +
+      "saints specialise — that no one reflects everything, and that picking " +
+      "one is how it is actually done.\n\n" +
+      "That is a useful corrective to the idea that holiness means being " +
+      "uniformly excellent. The *Diary* entry continues into what became the " +
+      "Divine Mercy devotion, but the reasoning underneath it is available " +
+      "to anyone: work out which of Christ's qualities you are placed to " +
+      "show, and show that one.",
+  },
+  {
+    title: "The Spirit of Faith With Which It Is Undertaken",
+    occasion:
+      "Written from the Indies in the 1540s to Jesuits in Europe who felt their teaching work was trivial beside his missionary journeys. His answer removes the glamour from his own position deliberately.",
+    kind: "quote", tags: ["work", "Ignatian", "zeal", "daily"],
+    source: "Letters, from the Indies", author: "St. Francis Xavier",
+    year: "1540s", origin: "Ignatian", liturgical: "", feastDay: "3 December", favorite: false,
+    body:
+      "It is not the actual physical exertion that counts towards a man's progress,\n" +
+      "nor the nature of the task,\n" +
+      "but the spirit of faith with which it is undertaken.",
+    background:
+      "Written by a man doing enormous amounts of physical exertion. Xavier " +
+      "covered India, the Moluccas and Japan in ten years, largely on foot " +
+      "and by open boat, and died on an island off China waiting for a " +
+      "passage he never got. He of all people could have made the exertion " +
+      "the point.\n\n" +
+      "He is instead heading off a comparison his correspondents in Europe " +
+      "were making — that missionaries in the Indies were doing the real " +
+      "work while they taught school in Rome. His answer takes the glamour " +
+      "out of his own position deliberately.",
+  },
+  {
+    title: "First Learn to Suffer",
+    occasion:
+      "Written in letters by a young woman with spinal tuberculosis who had lost both parents by nineteen and been refused entry to the convent she wanted because of her health. She died at twenty-five.",
+    kind: "quote", tags: ["suffering", "love", "Passion", "contemplation"],
+    source: "Letters and Diary", author: "St. Gemma Galgani", year: "c. 1900",
+    origin: "Passionist", liturgical: "", feastDay: "11 April", favorite: false,
+    body:
+      "If you really want to love Jesus,\n" +
+      "first learn to suffer,\n" +
+      "because suffering teaches you to love.",
+    background:
+      "She was not recommending a course she had not taken.\n\n" +
+      "The claim is causal and worth stating precisely: not that suffering " +
+      "is good, nor that it should be sought, but that it *teaches* — that " +
+      "it is the school in which a certain kind of love becomes possible, " +
+      "because it removes the option of loving only when it is pleasant. " +
+      "Gemma is one of the saints most easily made unbearable by " +
+      "sentimentality; the sentence is tougher than the pictures of her.",
+  },
+  {
+    title: "When in Rome",
+    occasion:
+      "Ambrose's answer to St. Monica, newly arrived in Milan and troubled that the local fasting customs differed from those in Africa. Augustine recorded it in Letter 54 to Januarius.",
+    kind: "quote", tags: ["Patristic", "humility", "charity", "catechetical"],
+    source: "Advice to St. Monica, reported by Augustine — Letter 54, to Januarius",
+    author: "St. Ambrose of Milan",
+    authorNote: "the proverb is a much later compression of his actual advice",
+    year: "4th century", origin: "Patristic", liturgical: "", feastDay: "7 December", favorite: false,
+    body:
+      "When I am here, I do not fast on Saturday;\n" +
+      "when I am at Rome, I do fast on Saturday.\n" +
+      "Follow the custom of whatever church you attend,\n" +
+      "if you do not want to give or receive scandal.",
+    background:
+      "The origin of the proverb, and much better than the proverb. Monica " +
+      "had moved to Milan and was worried: the fasting customs differed from " +
+      "Africa's, and she wanted to know which was right. Ambrose's answer " +
+      "declines the question — neither is right, both are customs, and the " +
+      "thing that actually matters is not making trouble over it.\n\n" +
+      "'When in Rome, do as the Romans do' has drifted into advice about " +
+      "blending in. What Ambrose said was narrower and more interesting: on " +
+      "matters where the Church has not decided, treat local practice as " +
+      "binding on you, precisely so that no one has to argue about it.",
+  },
+  {
+    title: "We Hear Him When We Read",
+    occasion:
+      "From De Officiis Ministrorum, written in the 380s as instruction for his clergy in Milan. The Catechism quotes it at paragraph 2653, in the section on lectio divina.",
+    kind: "quote", tags: ["Scripture", "reading", "Patristic", "contemplation"],
+    source: "De Officiis Ministrorum I.20.88 — quoted in CCC 2653",
+    author: "St. Ambrose of Milan", year: "4th century", origin: "Patristic",
+    liturgical: "", feastDay: "7 December", favorite: false,
+    body:
+      "We speak to Him when we pray;\n" +
+      "we hear Him when we read the divine sayings.",
+    background:
+      "Read this beside the Jerome entry in this library and the Isidore one. " +
+      "Three Fathers arrive at almost the same sentence independently, which " +
+      "is why the attribution of the famous modern version is such a mess — " +
+      "there was never one original to misattribute.\n\n" +
+      "Ambrose's version is the one the Catechism quotes, at paragraph 2653, " +
+      "in the section on lectio divina. His verb is *hear*, which assumes " +
+      "something the others leave implicit: that reading Scripture is a " +
+      "listening posture, and that the awkwardness of not being able to " +
+      "interrupt is part of the exercise.",
+  },
+  {
+    title: "The Wheat of God",
+    occasion:
+      "Written under guard around the year 107, in transit to Rome and the arena, to a Christian community that was preparing to use its influence to have him released. The letter asks them to stop.",
+    kind: "quote", tags: ["death", "eucharist", "courage", "Patristic"],
+    source: "Letter to the Romans, 4 — written on the way to his execution",
+    author: "St. Ignatius of Antioch", year: "c. 107", origin: "Patristic",
+    liturgical: "", feastDay: "17 October", favorite: false,
+    body:
+      "I am the wheat of God,\n" +
+      "and I am ground by the teeth of the wild beasts,\n" +
+      "that I may be found the pure bread of Christ.",
+    background:
+      "The letter is, extraordinarily, a request that his friends stop trying to " +
+      "save him.\n\n" +
+      "The image is Eucharistic and entirely deliberate: he is about to be " +
+      "eaten, and he reads that as being made into bread. This is one of the " +
+      "earliest Christian texts outside the New Testament, from a bishop who " +
+      "may have known the apostles, and it is startling how developed the " +
+      "sacramental thinking already is. Elsewhere in the same letters he " +
+      "gives us the first surviving use of the phrase 'the Catholic Church'.",
+  },
+  {
+    title: "Eighty and Six Years",
+    occasion:
+      "Said around the year 155 to the proconsul at Smyrna, who had offered him an easy way out: swear by Caesar's fortune, curse Christ, and go home. He was an old man and the crowd would have accepted it.",
+    kind: "quote", tags: ["faithfulness", "courage", "death", "Patristic"],
+    source: "Martyrdom of Polycarp, 9", author: "St. Polycarp of Smyrna",
+    year: "c. 155", origin: "Patristic", liturgical: "", feastDay: "23 February", favorite: false,
+    body:
+      "Eighty and six years have I served Him,\n" +
+      "and He has done me no wrong.\n" +
+      "How then can I blaspheme my King and my Saviour?",
+    background:
+      "What makes the answer land is that it is not defiance but arithmetic.\n\n" +
+      "What makes the answer land is that it is not defiance but arithmetic. " +
+      "He does not argue about Caesar or about doctrine; he adds up eighty-six " +
+      "years of a relationship and observes that nothing in the ledger would " +
+      "justify walking out now. It is the reasoning of loyalty rather than " +
+      "of courage, which is perhaps why it has lasted. He was burned, and the " +
+      "account of it is the earliest surviving record of a Christian martyrdom " +
+      "outside Scripture.",
+  },
+  {
+    title: "Man Fully Alive",
+    occasion:
+      "Written c. 180 against Gnostics who held that matter and bodies were a mistake to escape from — which is why the glory of God is located in a living human being, flesh included.",
+    kind: "quote", tags: ["Patristic", "hope", "identity", "contemplation"],
+    source: "Against Heresies IV.20.7", author: "St. Irenaeus of Lyon",
+    year: "c. 180", origin: "Patristic", liturgical: "", feastDay: "28 June", favorite: false,
+    body:
+      "The glory of God is man fully alive;\n" +
+      "and the life of man is the vision of God.",
+    background:
+      "Almost always quoted as the first line only, which turns it into a " +
+      "slogan about human flourishing. The second line is what keeps it " +
+      "Christian: what a fully alive human being consists of is the sight of " +
+      "God. Take that away and the first half will happily mean whatever the " +
+      "reader already wanted it to mean.\n\n" +
+      "Irenaeus was arguing against Gnostics who held that matter and bodies " +
+      "were a mistake to escape from. His reply is that God is glorified " +
+      "precisely in a living human being — flesh included — which is why the " +
+      "line has such force against every spirituality that treats being " +
+      "human as the problem.",
+  },
+  {
+    title: "The Bread You Do Not Use",
+    occasion:
+      "Preached during a famine in Cappadocia in the late 360s, while Basil was selling his inheritance, running soup kitchens and building a hospital complex outside Caesarea large enough to be called a new city.",
+    kind: "quote", tags: ["charity", "justice", "Patristic", "poverty"],
+    source: "Homily on Luke 12:18 — 'I will pull down my barns'",
+    author: "St. Basil the Great", year: "c. 368", origin: "Patristic",
+    liturgical: "", feastDay: "2 January", favorite: false,
+    body:
+      "The bread which you do not use is the bread of the hungry;\n" +
+      "the garment hanging in your wardrobe is the garment of him who is naked;\n" +
+      "the shoes you do not wear are the shoes of the one who is barefoot;\n" +
+      "the money you keep locked away is the money of the poor.",
+    background:
+      "The sermon is not theoretical, and its author was not asking anything he " +
+      "had not already done.\n\n" +
+      "Note the grammar, which is the whole argument: he does not say you " +
+      "*ought to give* the bread to the hungry. He says it *is* theirs — a " +
+      "claim about ownership, not generosity. The surplus was never yours to " +
+      "be commended for handing over. This is among the strongest statements " +
+      "in the Fathers of what later teaching calls the universal destination " +
+      "of goods.",
+  },
+  {
+    title: "What Has Not Been Assumed",
+    occasion:
+      "Written c. 382 in Letter 101 to Cledonius, to settle the teaching of Apollinarius, who held that in Christ the divine Word replaced the human mind.",
+    kind: "quote", tags: ["Incarnation", "Patristic", "Trinity", "catechetical"],
+    source: "Letter 101, to Cledonius", author: "St. Gregory Nazianzen",
+    year: "c. 382", origin: "Patristic", liturgical: "", feastDay: "2 January", favorite: false,
+    body:
+      "What has not been assumed has not been healed;\n" +
+      "but what is united to God is also saved.",
+    background:
+      "One sentence that settles an argument. Apollinarius had taught that " +
+      "in Christ the divine Word replaced the human mind — a tidy solution " +
+      "that kept him from having a human will to go wrong. Gregory's reply " +
+      "runs: if he did not take a human mind, then human minds are not " +
+      "healed, and the mind is exactly the part of us most in need of it.\n\n" +
+      "It remains the sharpest tool in Christian anthropology, because it " +
+      "works in every direction. Whatever you think Christ did not really " +
+      "take on — a body, fear, exhaustion, a death — is by that much left " +
+      "outside the rescue. It is also why the Incarnation cannot be softened " +
+      "into a sort of divine costume.",
+  },
+  {
+    title: "Scripture Grows With the Reader",
+    occasion:
+      "From the Moralia in Job, begun as informal talks to his brethren and completed while governing a Rome collapsing under plague and Lombard invasion.",
+    kind: "quote", tags: ["Scripture", "reading", "contemplation", "Patristic"],
+    source: "Moralia in Job, XX.1", author: "St. Gregory the Great",
+    year: "c. 590", origin: "Papal", liturgical: "", feastDay: "3 September", favorite: false,
+    body:
+      "Divine Scripture grows with the one who reads it.",
+    background:
+      "An observation from a man who spent decades on the book of Job, and " +
+      "an explanation of why a text you have read many times is not used up. " +
+      "The book does not change; the reader does, and a larger reader finds " +
+      "more in it — which means the experience of a passage suddenly opening " +
+      "is evidence of growth rather than of having missed something before.\n\n" +
+      "Gregory was a reluctant pope, a former prefect of Rome who wanted to " +
+      "be a monk, and governed a city collapsing under plague and Lombard " +
+      "invasion. The *Moralia* were begun as informal talks to his brethren " +
+      "and are one of the most influential books of the Middle Ages.",
+  },
+  {
+    title: "You Are Not Like Us",
+    occasion:
+      "Recorded among the sayings of Abba Antony in the Egyptian desert in the fourth century, in a collection otherwise relentless about self-deception and about not judging one's neighbour.",
+    kind: "quote", tags: ["desert fathers", "courage", "faithfulness", "Patristic"],
+    source: "Apophthegmata Patrum — sayings of Abba Antony",
+    author: "St. Anthony the Great", year: "4th century", origin: "Patristic",
+    liturgical: "", feastDay: "17 January", favorite: false,
+    body:
+      "A time is coming when men will go mad,\n" +
+      "and when they see someone who is not mad,\n" +
+      "they will attack him, saying:\n" +
+      "'You are mad; you are not like us.'",
+    background:
+      "Easy to enjoy for the wrong reasons, and worth handling carefully. It " +
+      "is a favourite of anyone convinced their own unpopular opinions prove " +
+      "their sanity — which is precisely the use the desert tradition would " +
+      "have warned against, since the same collection is relentless about " +
+      "self-deception and about not judging one's neighbour.\n\n" +
+      "Antony's point sits in a context of ascetic realism, not culture war. " +
+      "He is describing a condition in which a shared madness becomes the " +
+      "standard of sanity — and the mark of it is not that you hold unusual " +
+      "views but that you are *attacked for not being like us*. The " +
+      "difference between the two readings is whether you are the one " +
+      "keeping quiet or the one shouting.",
+  },
+  {
+    title: "Ask Grace, Not Learning",
+    occasion:
+      "The closing instruction of The Journey of the Mind to God, written in 1259 on Mount La Verna, where Francis had received the stigmata thirty-five years earlier. Bonaventure went there to think about what had happened to a man who was not a scholar.",
+    kind: "quote", tags: ["contemplation", "humility", "Franciscan", "prayer"],
+    source: "The Journey of the Mind to God, ch. VII", author: "St. Bonaventure",
+    year: "1259", origin: "Franciscan", liturgical: "", feastDay: "15 July", favorite: false,
+    body:
+      "Ask grace, not learning;\n" +
+      "desire, not understanding;\n" +
+      "the groaning of prayer, not diligence in reading.",
+    background:
+      "The closing instruction of a rigorous scholastic treatise, which is " +
+      "what makes it credible rather than anti-intellectual. Bonaventure was " +
+      "a master at Paris and general of the Franciscans; the six chapters " +
+      "before this one are a demanding philosophical ascent. Having built the " +
+      "ladder with great care, he tells you at the top that the last step is " +
+      "not taken by climbing.\n\n" +
+      "It was written on Mount La Verna, where Francis had received the " +
+      "stigmata thirty-five years earlier — Bonaventure went there to think " +
+      "about what had happened to a man who was not a scholar at all.",
+  },
+  {
+    title: "Prayer Purifies, Reading Instructs",
+    occasion:
+      "From the Sentences, written c. 620 by the last of the Latin Fathers, who spent his life trying to preserve learning in a Spain that had stopped producing it.",
+    kind: "quote", tags: ["Scripture", "reading", "prayer", "contemplation"],
+    source: "Sentences III.8", author: "St. Isidore of Seville",
+    year: "c. 620", origin: "Patristic", liturgical: "", feastDay: "4 April", favorite: false,
+    body:
+      "Prayer purifies us, reading instructs us.\n" +
+      "Both are good when both are possible.\n" +
+      "When we pray, we speak to God;\n" +
+      "when we read, God speaks to us.",
+    background:
+      "This is where the famous sentence actually comes from. The version " +
+      "everyone quotes travels under Jerome's name via Alphonsus Liguori's " +
+      "paraphrase — but Isidore wrote it, in these words, in the *Sentences*, " +
+      "and Ambrose had said something very close two centuries earlier.\n\n" +
+      "Isidore's version has a clause the others lack, and it is the humane " +
+      "one: 'both are good when both are possible'. He is not ranking the " +
+      "two, and he is allowing that sometimes only one of them is available " +
+      "to you. He was the last of the Latin Fathers, and spent his life " +
+      "trying to preserve learning in a Spain that had stopped producing it.",
+  },
+  {
+    title: "A Feather on the Breath of God",
+    occasion:
+      "How she described herself when asked by what authority a woman was preaching, composing, prescribing medicine and writing to popes and emperors.",
+    kind: "quote", tags: ["trust", "humility", "surrender", "contemplation"],
+    source: "Letters", author: "St. Hildegard of Bingen", year: "12th century",
+    origin: "Benedictine", liturgical: "", feastDay: "17 September", favorite: false,
+    body: "I am a feather on the breath of God.",
+    background:
+      "It reads as humility and functions as something else: a feather has no weight of its own, so nothing it does can be " +
+      "attributed to it — which is an unanswerable defence.\n\n" +
+      "Hildegard was an abbess, composer, natural scientist and visionary who " +
+      "went on preaching tours in her sixties and once placed her whole " +
+      "convent under interdict rather than exhume a body she believed had " +
+      "died reconciled. Whatever the image suggests, it is not passivity.",
+  },
+  {
+    title: "Let Your Actions Speak",
+    occasion:
+      "From his sermons. Anthony was the Franciscans' first theology lecturer, appointed by Francis himself with a note approving it provided study did not extinguish prayer.",
+    kind: "quote", tags: ["preaching", "Franciscan", "charity", "work"],
+    source: "Sermons", author: "St. Anthony of Padua", year: "13th century",
+    origin: "Franciscan", liturgical: "", feastDay: "13 June", favorite: false,
+    body:
+      "Actions speak louder than words;\n" +
+      "let your words teach and your actions speak.",
+    background:
+      "The both-and that the 'preach without words' misattribution turns " +
+      "into an either-or — and this one is genuinely from a Franciscan " +
+      "preacher. Anthony does not put words and deeds in competition. He " +
+      "assigns them different jobs: words *teach*, which is a task nothing " +
+      "else can do, and actions *speak*, which is a different register of " +
+      "communication entirely.\n\n" +
+      "He was the order's first theology lecturer, appointed by Francis " +
+      "himself with a note approving of it provided study did not extinguish " +
+      "prayer. He preached to crowds too large for churches, and is a Doctor " +
+      "of the Church.",
+  },
+  {
+    title: "Excuses for Sins",
+    occasion:
+      "Attributed within the Dominican tradition; no particular occasion is recorded. Albert taught Aquinas and wrote on logic, botany, zoology, minerals and astronomy — he knew how readily intelligence supplies whatever it is asked for.",
+    kind: "quote", tags: ["self-examination", "repentance", "Dominican", "humility"],
+    source: "Attributed in Dominican tradition", author: "St. Albert the Great",
+    authorNote: "attributed; not pinned to a specific work", year: "13th century",
+    origin: "Dominican", liturgical: "", feastDay: "15 November", favorite: false,
+    body:
+      "Do not be surprised if those who make excuses for their sins\n" +
+      "find plenty of them.",
+    background:
+      "A dry observation about supply and demand. Reasons are not scarce; " +
+      "anyone looking for one will succeed, and the success proves nothing " +
+      "except that they were looking.\n\n" +
+      "Albert was the encyclopaedic mind of the thirteenth century — he " +
+      "wrote on logic, botany, zoology, minerals, astronomy and theology, " +
+      "and taught Aquinas — so he understood better than most how easily " +
+      "intelligence supplies whatever it is asked for. That is the sting " +
+      "here: the cleverer you are, the better your excuses will be, and the " +
+      "less that fact means.",
+  },
+  {
+    title: "The King's Good Servant, But God's First",
+    occasion:
+      "Said on the scaffold at Tower Hill on 6 July 1535, by a former Lord Chancellor convicted on perjured evidence about a private conversation, after years of refusing to attack the king's marriage or to swear to it.",
+    kind: "quote", tags: ["courage", "faithfulness", "death", "justice"],
+    source: "Scaffold on Tower Hill, 6 July 1535",
+    author: "St. Thomas More", year: "1535", origin: "Lay martyr",
+    liturgical: "", feastDay: "22 June", favorite: false,
+    body:
+      "I die the King's good servant,\n" +
+      "and God's first.",
+    background:
+      "The last public sentence of a man who had been Lord Chancellor of " +
+      "England, and it concedes as much as it refuses. He does not deny that " +
+      "he owes Henry service, or claim the king has no authority; he insists " +
+      "only on an order of precedence.\n\n" +
+      "That is why the case has outlived its century. More had kept silent " +
+      "for years rather than attack the marriage or the supremacy — his " +
+      "defence was that silence implies consent in law — and he was convicted " +
+      "on perjured testimony about a private conversation. What he would not " +
+      "do was swear. The distinction between not attacking and not swearing " +
+      "is the whole of his position.",
+  },
+  {
+    title: "For the Faith of Christ's Church",
+    occasion:
+      "Said on the scaffold at Tower Hill on 22 June 1535 by the only English bishop who refused the oath — 65 years old, imprisoned fourteen months, and so weak he had to be carried part of the way.",
+    kind: "quote", tags: ["courage", "faithfulness", "death", "faith"],
+    source: "Scaffold on Tower Hill, 22 June 1535",
+    author: "St. John Fisher", year: "1535", origin: "Bishop and martyr",
+    liturgical: "", feastDay: "22 June", favorite: false,
+    body:
+      "I am come hither to die for the faith of Christ's Catholic Church,\n" +
+      "and I thank God hitherto my courage hath served me well thereto.",
+    background:
+      "Fisher was the only English bishop who refused the oath — every other " +
+      "member of the hierarchy submitted. He was 65, Bishop of Rochester, " +
+      "Chancellor of Cambridge, and had been Henry's grandmother's confessor.\n\n" +
+      "The second clause is the honest one and is usually dropped. He thanks " +
+      "God that his courage has served him *hitherto* — up to now — with no " +
+      "assumption that it will hold for the next quarter of an hour. He had " +
+      "been in the Tower fourteen months and was so weak he had to be carried " +
+      "part of the way. The Pope had made him a cardinal while he was " +
+      "imprisoned; Henry said he would send the head to Rome for the hat.",
+  },
+  {
+    title: "We Lepers",
+    occasion:
+      "The opening of a sermon at Kalaupapa in 1885. For eleven years he had begun 'my brethren' or 'you lepers'; that Sunday he said 'we', because he had contracted the disease. The congregation understood at once.",
+    kind: "quote", tags: ["charity", "suffering", "solidarity", "poverty"],
+    source: "Molokai, 1885 — the day he began preaching so",
+    author: "St. Damian of Molokai", year: "1885", origin: "Congregation of the Sacred Hearts",
+    liturgical: "", feastDay: "10 May", favorite: false,
+    body: "We lepers…",
+    background:
+      "The whole of his life is in that change of pronoun. For " +
+      "eleven years on the leper settlement at Kalaupapa he had begun his " +
+      "sermons 'my brethren' or 'you lepers'. One Sunday in 1885 he opened " +
+      "with 'we', because he had contracted the disease.\n\n" +
+      "The congregation understood immediately what had been announced. He " +
+      "had gone to Molokai as a volunteer for a colony the Hawaiian kingdom " +
+      "had effectively abandoned, built coffins, dressed wounds and dug " +
+      "graves, and had been criticised in his lifetime — including by a " +
+      "Protestant minister after his death, which provoked one of Robert " +
+      "Louis Stevenson's most ferocious essays in his defence. He died there " +
+      "at 49.",
+  },
+  {
+    title: "Choose the Child",
+    occasion:
+      "Said to her surgeons in 1962, in the second month of her fourth pregnancy, when a fibroma was found on her uterus. Gianna was a paediatrician and understood the options and the odds as well as they did.",
+    kind: "quote", tags: ["family", "courage", "suffering", "charity"],
+    source: "To her doctors during her fourth pregnancy, 1962",
+    author: "St. Gianna Beretta Molla", year: "1962", origin: "Modern lay",
+    liturgical: "", feastDay: "28 April", favorite: false,
+    body:
+      "If you must decide between me and the child,\n" +
+      "do not hesitate: choose the child.\n" +
+      "I insist on it. Save the baby.",
+    background:
+      "Said by a doctor about her own case, which is what gives it weight. " +
+      "Gianna was a paediatrician; a fibroma was found on her uterus in the " +
+      "second month of her fourth pregnancy, and she understood the options " +
+      "and the odds as well as her surgeons did. She chose the operation " +
+      "that preserved the pregnancy over the two that did not.\n\n" +
+      "She delivered a healthy daughter and died of septic peritonitis a week " +
+      "later, aged 39, leaving three other children. Her husband Pietro and " +
+      "that daughter — herself now a doctor — were present at the " +
+      "canonisation in 2004, which is thought to be the first time a husband " +
+      "attended his wife's.",
+  },
+  {
+    title: "What They Wrongly Believe",
+    occasion:
+      "Written in 1938 as the preface to a book of answers to objections, telling Catholics to stop treating opposition as malice.",
+    kind: "quote", tags: ["catechetical", "faith", "charity", "conversion"],
+    source: "Radio Replies, vol. 1 — preface", author: "Ven. Fulton J. Sheen",
+    year: "1938", origin: "Modern papal teaching", liturgical: "", feastDay: "", favorite: false,
+    body:
+      "There are not more than a hundred people in the world\n" +
+      "who truly hate the Catholic Church,\n" +
+      "but there are millions who hate what they wrongly believe\n" +
+      "the Catholic Church to be.",
+    background:
+      "The sentence is doing a specific job: it tells Catholics to stop treating " +
+      "opposition as malice. If the number of genuine haters is that small, " +
+      "then almost everyone arguing with you is arguing with a caricature — " +
+      "and the appropriate response is explanation rather than defence.\n\n" +
+      "It also, quietly, puts the burden on the Church's own side, since " +
+      "somebody let the caricature stand. Sheen spent thirty years on radio " +
+      "and television doing exactly that work, at one point outdrawing Milton " +
+      "Berle in the same slot.",
+  },
+  {
+    title: "Not of Obligation, But of Love",
+    occasion:
+      "From his 1980 autobiography, describing the daily hour before the Blessed Sacrament he kept for over sixty years from his ordination in 1919. He was found dead in his private chapel.",
+    kind: "quote", tags: ["adoration", "eucharist", "prayer", "daily"],
+    source: "Treasure in Clay: The Autobiography of Fulton J. Sheen",
+    author: "Ven. Fulton J. Sheen", year: "1980", origin: "Modern papal teaching",
+    liturgical: "Before the Blessed Sacrament", feastDay: "", favorite: false,
+    body:
+      "The Holy Hour.\n" +
+      "Not a Holy Hour of obligation,\n" +
+      "but a Holy Hour of love.",
+    background:
+      "He kept one every day for over sixty years, from his ordination in " +
+      "1919 until his death, and attributed everything he did to it. The " +
+      "distinction he draws is the entire argument: the moment it becomes a " +
+      "duty performed, it has stopped being the thing he is describing.\n\n" +
+      "He was found dead in his private chapel, before the Blessed Sacrament. " +
+      "Asked once what he would want said of him, he said he hoped it would " +
+      "be that he had made the Holy Hour — not that he had preached well.",
+  },
+  {
+    title: "All or Nothing",
+    occasion:
+      "How a Derry teenager who had begun getting television work talked about vocation, and about the half-measures she thought were the real danger. She was killed at 33 in the 2016 Ecuador earthquake, teaching guitar to children.",
+    kind: "quote", tags: ["vocation", "surrender", "youth", "zeal"],
+    source: "Her own repeated phrase, in community sources and the documentary of the same name",
+    author: "Servant of God Clare Crockett",
+    authorNote: "her habitual phrase; cause of canonisation open",
+    year: "2000s", origin: "Servant Sisters of the Home of the Mother",
+    liturgical: "", feastDay: "", favorite: false,
+    body: "All or nothing.",
+    background:
+      "She went on the retreat that changed everything mainly because she " +
+      "thought it was a free holiday. Those who knew her describe someone " +
+      "funny and loud who did not become quiet on entering.\n\n" +
+      "The phrase was how she talked about vocation and about the half-" +
+      "measures she thought were the real danger — not scandal, but a life " +
+      "given at ninety per cent. She was killed at 33 in the 2016 Ecuador " +
+      "earthquake, teaching guitar to children, when the school building " +
+      "collapsed. Her cause was opened in 2024.",
+  },
+  // ── Saint quotes, batch 3 ──────────────────────────────────────────────
+  {
+    title: "My Highway to Heaven",
+    occasion:
+      "Said by a Milanese schoolboy who had built a website cataloguing reported Eucharistic miracles, and who went to Mass daily. He died of leukaemia at fifteen in 2006.",
+    kind: "quote", tags: ["eucharist", "adoration", "communion", "youth"],
+    source: "Widely reported by his family and in beatification material",
+    author: "St. Carlo Acutis", authorNote: "universally reported; no single primary document located",
+    year: "c. 2000s", origin: "Modern devotional", liturgical: "", feastDay: "12 October", favorite: false,
+    body: "The Eucharist is my highway to heaven.",
+    background:
+      "The metaphor is his and it is of its time — a highway is the fast route, " +
+      "the one you take when you are not interested in the scenic " +
+      "alternative.\n\n" +
+      "Resist the urge to make him quaint. He was an ordinary " +
+      "Milanese teenager who played football and PlayStation and taught " +
+      "himself to code. What is unusual is not the vocabulary but the " +
+      "assumption underneath: that the shortest route somewhere is a thing " +
+      "worth knowing, and that he had found it.",
+  },
+  {
+    title: "Originals and Photocopies",
+    occasion:
+      "An adolescent's observation about the conformity he watched around him at school in Milan, from someone who limited himself to an hour of video games a week as a decision made in advance.",
+    kind: "quote", tags: ["identity", "youth", "vocation", "conversion"],
+    source: "Widely attributed; his best-known saying",
+    author: "St. Carlo Acutis", authorNote: "attributed; reported by family and friends",
+    year: "c. 2000s", origin: "Modern devotional", liturgical: "", feastDay: "12 October", favorite: false,
+    body:
+      "All people are born as originals,\n" +
+      "but many die as photocopies.",
+    background:
+      "The video-game rule was not because games were wicked, but a decision " +
+      "made in advance so that the default would not decide for him.\n\n" +
+      "The image dates itself and that is part of its charm; a photocopy was " +
+      "a familiar object in 2005 and is becoming a strange one. The point " +
+      "survives the technology. Sanctity, in this reading, is not a mould you " +
+      "are pressed into but the refusal of one.",
+  },
+  {
+    title: "Verso l'Alto",
+    occasion:
+      "Written on the back of a photograph of himself climbing in the Alps, a few weeks before he died of polio in July 1925, aged 24 — probably caught from one of the poor of Turin he visited secretly.",
+    kind: "quote", tags: ["courage", "perseverance", "youth", "Dominican"],
+    source: "Written on the back of his last photograph, taken while climbing, 1925",
+    author: "St. Pier Giorgio Frassati", year: "1925", origin: "Lay Dominican",
+    liturgical: "", feastDay: "4 July", favorite: false,
+    originalLanguage: "Italian",
+    latinBody: "Verso l'alto.",
+    body: "To the heights.",
+    background:
+      "He was dead within six days of catching polio — so quickly that his " +
+      "own family, absorbed in his grandmother's simultaneous death, barely " +
+      "noticed how ill he was.\n\n" +
+      "The phrase works because he meant it about an actual mountain. " +
+      "Frassati was a serious mountaineer, and the spiritual reading is the " +
+      "second one, not a substitute for the first. His funeral filled the " +
+      "streets of Turin with the city's poor, to the astonishment of a family " +
+      "who had not known what he did with his time.",
+  },
+  {
+    title: "Not Living, But Existing",
+    occasion:
+      "Written in letters to friends in Mussolini's Italy, where his Catholic student activism had become dangerous. He was once beaten by Blackshirts and refused to give his father's name to be released.",
+    kind: "quote", tags: ["faith", "courage", "youth", "zeal"],
+    source: "Letters", author: "St. Pier Giorgio Frassati", year: "1920s",
+    origin: "Lay Dominican", liturgical: "", feastDay: "4 July", favorite: false,
+    body:
+      "To live without faith, without a heritage to defend,\n" +
+      "without a steady struggle for truth —\n" +
+      "that is not living, but existing.",
+    background:
+      "The author was a young man in Mussolini's Italy who was beaten by " +
+      "Blackshirts at a demonstration and refused to give his father's name " +
+      "to get himself released — his father owned and edited *La Stampa* and " +
+      "the name would have worked.\n\n" +
+      "'A heritage to defend' has a political edge that is easy to sand off. " +
+      "He was an activist in the Catholic student movement at a moment when " +
+      "that was becoming dangerous, and the struggle he means was a public " +
+      "one with costs attached. The distinction between living and existing " +
+      "is not about intensity of feeling; it is about whether anything you " +
+      "hold would cost you something.",
+  },
+  {
+    title: "May God Put Me There",
+    occasion:
+      "Answered under interrogation at Rouen on 24 February 1431. Her judges had asked whether she knew she was in God's grace — a question with no safe answer, since yes was presumption and no a confession against her voices. She was nineteen and could not read.",
+    kind: "quote", tags: ["humility", "courage", "trust", "spiritual combat"],
+    source: "Trial of Condemnation, Rouen, 24 February 1431 — court record",
+    author: "St. Joan of Arc", year: "1431", origin: "Trial record",
+    liturgical: "", feastDay: "30 May", favorite: false,
+    body:
+      "If I am not in God's grace, may God put me there;\n" +
+      "and if I am, may God so keep me.",
+    background:
+      "This is the finest moment in the transcript, and it is a trap sprung " +
+      "backwards. Her judges asked whether she knew she was in God's grace — " +
+      "a question with no safe answer. Yes was presumption, the heresy they " +
+      "were building a case for; no was a confession that her voices came " +
+      "from elsewhere. One of the assessors afterwards said those present " +
+      "were stupefied.\n\n" +
+      "She was nineteen, could not read, and had no counsel. The answer is " +
+      "not clever evasion; it is the only theologically exact reply " +
+      "available, and she found it under interrogation by men who had spent " +
+      "their lives in universities. She was burned three months later, and " +
+      "the verdict annulled twenty-five years after that.",
+  },
+  {
+    title: "I Was Born to Do This",
+    occasion:
+      "None — Joan's trial is one of the best-recorded events of the fifteenth century and this sentence is nowhere in it. It is a modern compression, popular in film.",
+    kind: "quote", tags: ["courage", "misattribution", "vocation"],
+    source: "Circulates as St. Joan of Arc; not in the trial record",
+    author: "Unknown", authorNote: "attributed to Joan of Arc; absent from the primary sources",
+    year: "modern", origin: "Modern devotional", liturgical: "", feastDay: "", favorite: false,
+    body:
+      "I am not afraid;\n" +
+      "I was born to do this.",
+    background:
+      "Kept as a labelled specimen. Joan's trial is one of the best-recorded " +
+      "events of the fifteenth century — hundreds of pages of her own words " +
+      "under oath — and this sentence is not among them. It is a modern " +
+      "compression, popular in films and on posters.\n\n" +
+      "It is also out of character in a specific way. The record shows " +
+      "someone who repeatedly admitted fear: of fire, of being handed to the " +
+      "English, of what she could not answer. Her courage in the transcript " +
+      "is not the absence of fear but the refusal to let it dictate her " +
+      "answers. The invented line replaces something harder with something " +
+      "easier.",
+  },
+  {
+    title: "Nothing Is Far From God",
+    occasion:
+      "Said at Ostia in 387, when her sons were anxious that she would die away from home and not be buried beside her husband in North Africa.",
+    kind: "quote", tags: ["trust", "death", "hope", "family"],
+    source: "Her last days at Ostia — Confessions IX.11",
+    author: "St. Monica", year: "387", origin: "Patristic",
+    liturgical: "", feastDay: "27 August", favorite: false,
+    body: "Nothing is far from God.",
+    background:
+      "It is a correction, gently delivered, of a real and reasonable fear about " +
+      "geography.\n\n" +
+      "Augustine records it because of how completely it reversed her. She " +
+      "had spent years caring intensely about exactly such things; the woman " +
+      "who followed her adult son across the Mediterranean to badger him " +
+      "toward baptism had never been detached. She was let go of the last of " +
+      "it a fortnight before she died.",
+  },
+  {
+    title: "Remember Me at the Altar",
+    occasion:
+      "Her last request, made at Ostia a fortnight before she died in 387, discarding the burial place she had already prepared for herself in Africa.",
+    kind: "quote", tags: ["death", "eucharist", "intercession", "family"],
+    source: "Confessions IX.11", author: "St. Monica", year: "387",
+    origin: "Patristic", liturgical: "", feastDay: "27 August", favorite: false,
+    body:
+      "Lay this body anywhere;\n" +
+      "let not the care of it trouble you at all.\n" +
+      "This only I ask:\n" +
+      "that you will remember me at the altar of the Lord,\n" +
+      "wherever you be.",
+    background:
+      "It is the earliest well-known statement of what Catholics do at a funeral " +
+      "and afterwards: not tend a grave, but offer the Mass.\n\n" +
+      "The force is in what she gives up. A Roman of her class cared a great " +
+      "deal about burial and had already prepared a place; she is discarding " +
+      "the one arrangement she had made for herself. And the request that " +
+      "replaces it is portable — 'wherever you be' — which is exactly what " +
+      "her son, who would never return to live in Africa, could actually " +
+      "give her.",
+  },
+  {
+    title: "Even Sweeping",
+    occasion:
+      "From the Dominican accounts of his life in Lima. Barred by the law of the time from full membership of the order because of his birth, Martin entered as a lay helper and did the kitchen, laundry and infirmary work for decades — the list in the sentence is his own timetable.",
+    kind: "quote", tags: ["work", "humility", "Dominican", "charity", "daily"],
+    source: "Attributed; from Dominican accounts of his life",
+    author: "St. Martin de Porres", authorNote: "attributed; wording varies between sources",
+    year: "17th century", origin: "Dominican", liturgical: "", feastDay: "3 November", favorite: false,
+    body:
+      "Everything, even sweeping, scraping vegetables,\n" +
+      "weeding a garden and waiting on the sick,\n" +
+      "could be a prayer, if it were offered to God.",
+    background:
+      "Martin swept for a living. The illegitimate son of a Spanish nobleman " +
+      "and a freed Black woman in Lima, he was barred by the law of the time " +
+      "from full membership of the Dominicans and entered as a lay helper, " +
+      "calling himself the mulatto dog; he did the kitchen work, the " +
+      "laundry, and the infirmary for decades.\n\n" +
+      "That is why the list in the sentence is so specific and so " +
+      "unglamorous — these are not illustrations he thought up, they are his " +
+      "own timetable. The claim is not that humble work is a nice metaphor " +
+      "for prayer, but that offering makes it prayer in fact, which is the " +
+      "only reading that would have been any use to him.",
+  },
+  {
+    title: "Some Definite Service",
+    occasion:
+      "Written privately in 1848, three years after a conversion that cost him Oxford, his fellowship, most of his friends and his standing in English public life — and while the Catholic authorities he had joined still regarded him with suspicion.",
+    kind: "quote", tags: ["vocation", "trust", "identity", "hope"],
+    source: "Meditations and Devotions — 'Meditations on Christian Doctrine'",
+    author: "St. John Henry Newman", year: "1848", origin: "Oratorian",
+    liturgical: "", feastDay: "9 October", favorite: true,
+    body:
+      "God has created me to do Him some definite service.\n" +
+      "He has committed some work to me which He has not committed to another.\n" +
+      "I have my mission.\n\n" +
+      "I am a link in a chain, a bond of connexion between persons.\n" +
+      "He has not created me for naught. I shall do good — I shall do His work.\n\n" +
+      "Therefore I will trust Him.\n" +
+      "Whatever, wherever I am, I can never be thrown away.",
+    background:
+      "Written privately, not for publication, by a man who had lost almost " +
+      "everything visible. Newman's conversion in 1845 cost him Oxford, his " +
+      "fellowship, most of his friends and his standing in English public " +
+      "life; the Catholic authorities he had come over to were suspicious of " +
+      "him for another twenty years.\n\n" +
+      "'I can never be thrown away' is therefore not a comfortable sentence. " +
+      "It is written by someone who had been, in every worldly sense, thrown " +
+      "away, and who is arguing himself — not his reader — into believing " +
+      "that the mission survives the wreckage of the career. The passage " +
+      "continues by saying that if he is in sickness, perplexity or sorrow, " +
+      "those too may be the service.",
+  },
+  {
+    title: "To Live Is to Change",
+    occasion:
+      "From the Essay on the Development of Christian Doctrine, written in 1845 while he was becoming a Catholic. He stopped mid-revision to be received into the Church.",
+    kind: "quote", tags: ["conversion", "perseverance", "faith"],
+    source: "An Essay on the Development of Christian Doctrine, ch. 1",
+    author: "St. John Henry Newman", year: "1845", origin: "Oratorian",
+    liturgical: "", feastDay: "9 October", favorite: false,
+    body:
+      "In a higher world it is otherwise,\n" +
+      "but here below to live is to change,\n" +
+      "and to be perfect is to have changed often.",
+    background:
+      "The most quoted sentence Newman wrote, and almost always quoted " +
+      "without its first clause — which changes it. He is not celebrating " +
+      "change as such. He says that in a higher world it is *otherwise*: " +
+      "changelessness is the perfection, and constant change is the mark of " +
+      "creatures who are not there yet.\n\n" +
+      "The book it comes from was written while he was becoming a Catholic, " +
+      "and it is an argument that doctrine develops without being corrupted " +
+      "— that a living thing keeps its identity precisely by changing, as an " +
+      "adult is the same person as the child. He finished it, and stopped " +
+      "mid-revision, to be received into the Church.",
+  },
+  {
+    title: "Lead, Kindly Light",
+    occasion:
+      "Written in June 1833 in a becalmed orange boat between Palermo and Marseilles, after a near-fatal illness in Sicily. Newman was 32 and twelve years from becoming a Catholic; by his own account he did not know what he was being led toward.",
+    kind: "hymn", tags: ["trust", "hope", "perseverance", "conversion"],
+    source: "Written at sea off Sardinia, June 1833; set to Dykes's 'Lux Benigna'",
+    author: "St. John Henry Newman", year: "1833", origin: "Oratorian",
+    liturgical: "Sung widely; often at funerals", feastDay: "9 October", favorite: false,
+    body:
+      "Lead, kindly Light, amid the encircling gloom,\n" +
+      "Lead Thou me on!\n" +
+      "The night is dark, and I am far from home,\n" +
+      "Lead Thou me on!\n" +
+      "Keep Thou my feet; I do not ask to see\n" +
+      "The distant scene; one step enough for me.\n\n" +
+      "I was not ever thus, nor prayed that Thou\n" +
+      "Shouldst lead me on;\n" +
+      "I loved to choose and see my path; but now\n" +
+      "Lead Thou me on!\n" +
+      "I loved the garish day, and, spite of fears,\n" +
+      "Pride ruled my will: remember not past years.\n\n" +
+      "So long Thy power hath blest me, sure it still\n" +
+      "Will lead me on\n" +
+      "O'er moor and fen, o'er crag and torrent, till\n" +
+      "The night is gone;\n" +
+      "And with the morn those angel faces smile\n" +
+      "Which I have loved long since, and lost awhile.",
+    background:
+      "Not knowing where he was being led is the whole argument of the second " +
+      "verse: he had always preferred to see the route, and says so.\n\n" +
+      "'One step enough for me' is the line people take away, and it is worth " +
+      "noticing that he did not find it consoling at the time; he wrote it as " +
+      "a surrender, not a comfort. Asked decades later what the angel faces " +
+      "meant, he refused to explain, saying a poem has its own life and the " +
+      "author is not its interpreter.",
+  },
+  {
+    title: "Whoever Seeks Truth Seeks God",
+    occasion:
+      "Written in a letter of 1928 by a former atheist who had been Husserl's assistant, and who had read Teresa of Avila's autobiography in a single night and said at dawn: this is the truth.",
+    kind: "quote", tags: ["faith", "Carmelite", "conversion", "contemplation"],
+    source: "Letter to Sr. Adelgundis Jaegerschmid, 1928",
+    author: "St. Teresa Benedicta of the Cross (Edith Stein)", year: "1928",
+    origin: "Carmelite", liturgical: "", feastDay: "9 August", favorite: false,
+    body:
+      "Whoever seeks truth seeks God,\n" +
+      "whether consciously or unconsciously.",
+    background:
+      "Written by someone with the standing to say it. Stein was a Jewish " +
+      "philosopher, an atheist through her twenties, and Husserl's assistant " +
+      "— she had done rigorous secular philosophy for years before reading " +
+      "Teresa of Ávila's autobiography in a single night and saying, at dawn, " +
+      "'this is the truth'.\n\n" +
+      "The line therefore is not a claim that unbelievers are secretly " +
+      "religious. It is a description of her own route: she did not abandon " +
+      "the search for truth and take up faith instead: the search was " +
+      "continuous, and she considered the destination to have been implied " +
+      "in it from the start.",
+  },
+  {
+    title: "We Are Going for Our People",
+    occasion:
+      "Said to her sister Rosa as the SS took them from the Carmel at Echt on 2 August 1942, in reprisal for the Dutch bishops' public protest against the deportation of Jews. Both were gassed at Auschwitz within the week.",
+    kind: "quote", tags: ["suffering", "death", "courage", "Carmelite"],
+    source: "To her sister Rosa, as the SS took them from Echt, 2 August 1942",
+    author: "St. Teresa Benedicta of the Cross (Edith Stein)", year: "1942",
+    origin: "Carmelite", liturgical: "", feastDay: "9 August", favorite: false,
+    body: "Come, Rosa. We are going for our people.",
+    background:
+      "Said as she was arrested. The Dutch bishops had just read a public " +
+      "protest against the deportation of Jews from the pulpit; the reprisal " +
+      "was to seize Catholics of Jewish descent, who had until then been " +
+      "exempt. She and her sister were taken from the Carmel at Echt and " +
+      "gassed at Auschwitz within the week.\n\n" +
+      "Everything is in 'our people'. She had been a Catholic for twenty " +
+      "years and a Carmelite for nine, and was being arrested precisely " +
+      "because the Church had spoken; she could have said 'their people' or " +
+      "said nothing. She claims the Jewish people as hers on the way to " +
+      "dying with them, and had written years earlier that she understood " +
+      "her vocation as bearing the cross on their behalf.",
+  },
+  {
+    title: "God Does Not Want It",
+    occasion:
+      "Said during an attempted rape at Nettuno on 5 July 1902, by an eleven-year-old girl to a twenty-year-old neighbour, who then stabbed her fourteen times.",
+    kind: "quote", tags: ["purity", "chastity", "courage", "suffering"],
+    source: "Reported at the canonisation process; Nettuno, 5 July 1902",
+    author: "St. Maria Goretti", year: "1902", origin: "Modern devotional",
+    liturgical: "", feastDay: "6 July", favorite: false,
+    body:
+      "No! It is a sin!\n" +
+      "God does not want it!",
+    background:
+      "It matters what she is reported to have been resisting *for*.\n\n" +
+      "It matters what she is reported to have been resisting *for*, because " +
+      "the story is often told as though her own purity were the only thing " +
+      "at stake. Witnesses record her saying it was a sin and that Alessandro " +
+      "would go to hell — she was, in the moment, arguing about his soul. " +
+      "That is a strange and specific thing for a frightened child to say, " +
+      "and it is the reason the second half of the story was possible at all.",
+  },
+  {
+    title: "I Want Him With Me in Heaven",
+    occasion:
+      "Said on her deathbed on 6 July 1902, before her attacker had shown any repentance. He remained unrepentant through his trial and for years in prison; he later confessed, and was present at her canonisation in 1950.",
+    kind: "quote", tags: ["confession", "charity", "conversion", "repentance"],
+    source: "Deathbed, 6 July 1902 — recorded in the canonisation process",
+    author: "St. Maria Goretti", year: "1902", origin: "Modern devotional",
+    liturgical: "", feastDay: "6 July", favorite: false,
+    body:
+      "I forgive Alessandro Serenelli,\n" +
+      "and I want him with me in heaven for ever.",
+    background:
+      "Forgiveness offered before it was asked for, by a dying child, to a " +
+      "man who at that point felt nothing. Alessandro was unrepentant " +
+      "through his trial and for years in prison.\n\n" +
+      "What followed is the part that keeps the story from being merely " +
+      "affecting. He reported a dream in which she handed him lilies; he " +
+      "confessed, served twenty-seven years, and on release went first to " +
+      "her mother Assunta to beg forgiveness. Assunta said that if her " +
+      "daughter had forgiven him she could not do otherwise, and the two of " +
+      "them received communion side by side at midnight Mass. He lived out " +
+      "his life as a lay brother in a Capuchin friary and was present, an old " +
+      "man, at her canonisation in 1950.",
+  },
+  {
+    title: "Death Rather Than Sin",
+    occasion:
+      "Chosen as one of four written resolutions by a boy of seven on the day of his first communion, and recorded by Don Bosco, who knew him. He died at fourteen.",
+    kind: "quote", tags: ["purity", "youth", "Salesian", "courage"],
+    source: "His motto, recorded by St. John Bosco in his life of the boy",
+    author: "St. Dominic Savio", year: "c. 1855", origin: "Salesian spirituality",
+    liturgical: "", feastDay: "6 May", favorite: false,
+    body: "Death rather than sin.",
+    background:
+      "The motto is severe; the life it produced was mostly ordinary, which is " +
+      "the argument.\n\n" +
+      "Bosco, who knew him and wrote his life, is careful to record what " +
+      "Savio's holiness actually consisted of, because the phrase invites " +
+      "the wrong picture. He was not gloomy or extravagant; Bosco repeatedly " +
+      "stopped him from excessive penances and told him that for a " +
+      "schoolboy, sanctity meant cheerfulness and doing his duties well. The " +
+      "motto is severe. The life it produced was mostly ordinary, which is " +
+      "the argument.",
+  },
+  // ── Saint quotes, batch 2 ──────────────────────────────────────────────
+  {
+    title: "The Soul That Walks in Love",
+    occasion:
+      "From the Sayings of Light and Love, short maxims John wrote for the direction of individual souls in his care, c. 1585.",
+    kind: "quote", tags: ["love", "perseverance", "Carmelite", "contemplation"],
+    source: "Sayings of Light and Love", author: "St. John of the Cross",
+    year: "c. 1585", origin: "Carmelite", liturgical: "", feastDay: "14 December", favorite: false,
+    body: "The soul that walks in love neither rests nor grows tired.",
+    background:
+      "A claim about stamina, and a test you can apply to yourself. John is " +
+      "distinguishing love from enthusiasm. Enthusiasm rests when it is tired " +
+      "and stops when it is bored; love keeps moving without being exhausted " +
+      "by the movement, because the moving is not a cost it is paying but the " +
+      "thing it wants.\n\n" +
+      "The practical use is diagnostic. If devotion has become something you " +
+      "recover from, John's line suggests it is running on something other " +
+      "than love — will, guilt, or the wish to be the sort of person who " +
+      "prays.",
+  },
+  {
+    title: "Then the Impossible",
+    occasion:
+      "None — no medieval source carries it, and its three-step build is the shape of modern motivational writing rather than thirteenth-century Italian spirituality.",
+    kind: "quote", tags: ["perseverance", "misattribution", "Franciscan", "work"],
+    source: "Circulates as St. Francis of Assisi; no early source",
+    author: "Unknown", authorNote: "attributed to Francis; almost certainly modern",
+    year: "20th century (probable)", origin: "Modern devotional",
+    liturgical: "", feastDay: "", favorite: false,
+    body:
+      "Start by doing what is necessary,\n" +
+      "then what is possible,\n" +
+      "and suddenly you are doing the impossible.",
+    background:
+      "The register gives it away as much as the missing sources do.\n\n" +
+      "Included because the advice is sound even though the label is wrong, " +
+      "and because it is worth being able to tell the difference. It " +
+      "describes how difficult things actually get done, and it is close " +
+      "enough to Francis's practice — he began by repairing one small ruined " +
+      "chapel with his hands — that the misattribution is understandable. " +
+      "Understandable is not the same as true.",
+  },
+  {
+    title: "Idleness Is the Enemy of the Soul",
+    occasion:
+      "The opening words of chapter 48 of the Rule, c. 530, introducing the hours of daily manual labour — Benedict's answer to the question of how a monk's day should be shaped.",
+    kind: "quote", tags: ["work", "Benedictine", "daily", "perseverance"],
+    source: "Rule of St. Benedict, ch. 48", author: "St. Benedict of Nursia",
+    year: "c. 530", origin: "Benedictine", liturgical: "", feastDay: "11 July", favorite: false,
+    body: "Idleness is the enemy of the soul.",
+    background:
+      "This is the reason a monastery has a timetable at all. Benedict is not " +
+      "preaching productivity; the sentence continues 'and therefore the brethren " +
+      "ought to be occupied at stated hours in manual labour, and again at " +
+      "other hours in sacred reading.' The remedy for idleness is a *shape*, " +
+      "not more effort.\n\n" +
+      "What he means by idleness is closer to formlessness than to rest — the " +
+      "same chapter is careful to build in sleep, meals and reading, and " +
+      "elsewhere he insists the strong should not be crushed. A day with no " +
+      "structure is the thing he considers dangerous, because it leaves you " +
+      "at the mercy of whatever turns up.",
+  },
+  {
+    title: "The Key to God's Heart",
+    occasion:
+      "Reported across compilations of his spiritual direction. Padre Pio spent much of his life hearing confessions, sometimes sixteen hours a day, which is the setting in which he thought about both resistance and an unlocked door at once.",
+    kind: "quote", tags: ["prayer", "Capuchin", "spiritual combat"],
+    source: "Widely reported across compilations of his sayings",
+    author: "St. Padre Pio of Pietrelcina",
+    authorNote: "consistently attributed; no single letter pinned",
+    year: "20th century", origin: "Capuchin Franciscan", liturgical: "", feastDay: "23 September", favorite: false,
+    body:
+      "Prayer is the best weapon we have;\n" +
+      "it is the key that opens the heart of God.",
+    background:
+      "Two metaphors that do not obviously belong together — a weapon and a " +
+      "key — and the join is the point. Padre Pio took spiritual combat with " +
+      "complete literalness, and would have meant 'weapon' without softening " +
+      "it. But he immediately turns the image: what the weapon opens is not a " +
+      "breach in an enemy but a heart that was already inclined to open.\n\n" +
+      "He spent much of his life hearing confessions, sometimes for sixteen " +
+      "hours a day, which is the context in which he thought about both " +
+      "images at once: real resistance, and a door that is not actually " +
+      "locked against you.",
+  },
+  {
+    title: "Say the Rosary",
+    occasion:
+      "Said to the boys of the Oratory in Turin — many of them illiterate, most without families — which is why it is built as three questions with one answer a boy could remember without a book.",
+    kind: "quote", tags: ["Marian", "rosary", "Salesian", "intercession"],
+    source: "Widely reported in Salesian sources",
+    author: "St. John Bosco", authorNote: "consistently attributed across Salesian tradition",
+    year: "19th century", origin: "Salesian spirituality", liturgical: "", feastDay: "31 January", favorite: false,
+    body:
+      "Do you want Our Lady to help you? Say the Rosary.\n" +
+      "Do you want Our Lady to love you? Say the Rosary.\n" +
+      "Do you want Our Lady to protect you? Say the Rosary.",
+    background:
+      "Bosco spent his life among boys who had come off the streets of " +
+      "industrial Turin — many illiterate, most with no family — and his " +
+      "teaching is shaped by that audience: repetitive on purpose, and " +
+      "always answerable with something you can do tonight. The rhetorical " +
+      "shape here is deliberate, three questions with one answer, so that a " +
+      "boy who remembers nothing else remembers the answer.\n\n" +
+      "It is easy to mistake this for simplistic. It is better read as the " +
+      "opposite of clericalism: a practice that needs no education, no money " +
+      "and no permission, given to people who had none of the three.",
+  },
+  {
+    title: "Cheerfulness Strengthens the Heart",
+    occasion:
+      "From the maxims collected by his Oratorian companions in sixteenth-century Rome, where Philip's insistence on cheerfulness in the middle of the Counter-Reformation struck many as unserious.",
+    kind: "quote", tags: ["joy", "perseverance", "Oratorian"],
+    source: "Maxims and Sayings", author: "St. Philip Neri",
+    authorNote: "from the collected maxims", year: "16th century",
+    origin: "Oratorian", liturgical: "", feastDay: "26 May", favorite: false,
+    body:
+      "Cheerfulness strengthens the heart\n" +
+      "and makes us persevere in a good life.",
+    background:
+      "Philip Neri built an entire spirituality on this and was mocked for " +
+      "it. He broke up excessive piety with jokes, sent the self-important on " +
+      "absurd errands, and once received a distinguished visitor while having " +
+      "half his beard shaved off. The sixteenth century, in the middle of the " +
+      "Counter-Reformation, did not expect holiness to look like that.\n\n" +
+      "The argument in the sentence is about *perseverance*, which is what " +
+      "makes it more than temperament. Gloom is not merely unpleasant, in his " +
+      "reading — it is unsustainable, and people quit. Cheerfulness is " +
+      "presented as load-bearing.",
+  },
+  {
+    title: "A Joyful Heart",
+    occasion:
+      "From the same collected maxims. Philip spent his life deliberately producing cheerfulness in others — breaking up excessive piety with jokes and absurd errands — rather than demanding it of them.",
+    kind: "quote", tags: ["joy", "Oratorian", "perseverance"],
+    source: "Maxims and Sayings", author: "St. Philip Neri", year: "16th century",
+    origin: "Oratorian", liturgical: "", feastDay: "26 May", favorite: false,
+    body:
+      "A joyful heart is more easily made perfect\n" +
+      "than a downcast one.",
+    background:
+      "Note that he does not say the joyful heart is already better. He says " +
+      "it is easier to work with — the material is more workable, not the job " +
+      "already done.\n\n" +
+      "This matters for anyone who has treated their own sadness as a moral " +
+      "failure. Philip is not adding that charge. He is making a claim about " +
+      "what grace has an easier time getting hold of, which is why he spent " +
+      "so much effort producing cheerfulness in others rather than demanding " +
+      "it from them.",
+  },
+  {
+    title: "Small Things With Great Love",
+    occasion:
+      "Said repeatedly, in varying words, to people who told her they admired her work and wished they could do something comparable. It is a refusal of the premise as much as an encouragement.",
+    kind: "quote", tags: ["charity", "little way", "humility", "work"],
+    source: "Widely attributed; her own phrasing varied across talks",
+    author: "St. Teresa of Calcutta (Mother Teresa)",
+    authorNote: "ubiquitous; she said versions of it often, no fixed text",
+    year: "20th century", origin: "Missionaries of Charity",
+    liturgical: "", feastDay: "5 September", favorite: false,
+    body:
+      "Not all of us can do great things.\n" +
+      "But we can do small things with great love.",
+    background:
+      "Usually quoted as encouragement, and it is; it is also a refusal. She " +
+      "declines the premise that what she did was great and what her hearer " +
+      "does is small.\n\n" +
+      "Her own work was almost entirely small things — washing, feeding, " +
+      "sitting with the dying. What made it visible was volume and " +
+      "consistency, not scale. The line describes her method rather than " +
+      "consoling people for not having one.",
+  },
+  {
+    title: "No Time to Love Them",
+    occasion:
+      "Said in talks and interviews to audiences who came expecting a message about charity and got an argument about where their attention was going.",
+    kind: "quote", tags: ["charity", "humility", "love"],
+    source: "Widely attributed", author: "St. Teresa of Calcutta (Mother Teresa)",
+    authorNote: "very widely reported; no single primary text", year: "20th century",
+    origin: "Missionaries of Charity", liturgical: "", feastDay: "5 September", favorite: false,
+    body:
+      "If you judge people,\n" +
+      "you have no time to love them.",
+    background:
+      "The argument is from scarcity, not from niceness, and that is what " +
+      "gives it teeth. She does not say judging is unkind or that you have no " +
+      "right to. She says it consumes the hours — that assessment and love " +
+      "draw on the same limited attention, and whichever you spend it on is " +
+      "the one you will have done.\n\n" +
+      "Put that way it is checkable. Anyone can look back on a day and see " +
+      "which of the two they actually spent it on.",
+  },
+  {
+    title: "Straw Scattered Here and There",
+    occasion:
+      "Preached to the people of Ars, a village that had largely stopped coming to church, arguing for prayer in common. Vianney was a farmer's son and nearly all his images come from things his parishioners handled daily.",
+    kind: "quote", tags: ["prayer", "communion", "perseverance"],
+    source: "Attributed in collections of his catechetical instructions",
+    author: "St. John Vianney", authorNote: "widely attributed; wording varies by source",
+    year: "19th century", origin: "Diocesan priest — patron of parish priests",
+    liturgical: "", feastDay: "4 August", favorite: false,
+    body:
+      "Private prayer is like straw scattered here and there:\n" +
+      "if you set it on fire it makes a lot of little flames.\n" +
+      "But gather those straws into a bundle and light them,\n" +
+      "and you get a mighty fire.",
+    background:
+      "An image from a man who had actually watched straw burn — Vianney was " +
+      "a farmer's son, and nearly all his teaching runs on things his " +
+      "parishioners handled daily. The point is about prayer in common, and " +
+      "it is made without disparaging the alternative: scattered straw does " +
+      "catch, and the little flames are real.\n\n" +
+      "The claim is about concentration rather than quantity. The same amount " +
+      "of material, bundled, behaves differently. He was arguing for people " +
+      "coming to church together in a village that had largely stopped.",
+  },
+  {
+    title: "He Who Prays Is Saved",
+    occasion:
+      "The thesis of The Great Means of Salvation (1759), written against Jansenism — which taught a God stingy with grace and salvation for the few. The severity is aimed at that, not at the reader.",
+    kind: "quote", tags: ["prayer", "perseverance", "Redemptorist", "salvation"],
+    source: "The Great Means of Salvation and of Perfection",
+    author: "St. Alphonsus Liguori", year: "1759", origin: "Redemptorist",
+    liturgical: "", feastDay: "1 August", favorite: false,
+    body:
+      "He who prays is certainly saved;\n" +
+      "he who does not is certainly damned.",
+    background:
+      "The starkest sentence in this library, and Alphonsus meant it as " +
+      "written — it is the thesis of an entire book, whose argument is that " +
+      "prayer is not one devotional option among several but the ordinary " +
+      "channel through which grace is asked for and given.\n\n" +
+      "It should be read alongside what he was reacting to. Alphonsus spent " +
+      "his life against Jansenism, which had taught a God stingy with grace " +
+      "and a salvation for the few. His reply is that the door is open to " +
+      "anyone who will ask — and that the only people outside it are those " +
+      "who never asked. Severe in form, the sentence is arguing for a wider " +
+      "mercy than the position it opposes, not a narrower one.",
+  },
+  {
+    title: "A Resting Place",
+    occasion:
+      "From the Sermons on the Song of Songs, eighty-six talks given to his own monks at Clairvaux on the first two chapters of a love poem.",
+    kind: "quote", tags: ["love", "friendship", "Cistercian", "charity"],
+    source: "Sermons on the Song of Songs", author: "St. Bernard of Clairvaux",
+    year: "12th century", origin: "Cistercian", liturgical: "", feastDay: "20 August", favorite: false,
+    body:
+      "We find rest in those we love,\n" +
+      "and we provide a resting place in ourselves\n" +
+      "for those who love us.",
+    background:
+      "Bernard's sermons on the Song of Songs run to eighty-six pieces on " +
+      "the first two chapters of a love poem, and they are the reason the " +
+      "affective, bridal language of later Western spirituality sounds the " +
+      "way it does.\n\n" +
+      "The second half is the demanding one. Being loved is usually thought " +
+      "of as something that happens to you; Bernard makes it a task — you " +
+      "have to *provide* the resting place, and it has to be somewhere " +
+      "another person can actually put their weight down. That is a different " +
+      "and harder thing than being fond of them.",
+  },
+  {
+    title: "Good Intentions",
+    occasion:
+      "Unknown — the proverb circulated independently in the Middle Ages and cannot be located in any passage of Bernard's, though it travels under his name.",
+    kind: "quote", tags: ["misattribution", "perseverance", "self-examination"],
+    source: "Proverbial; attached to Bernard but older and anonymous",
+    author: "Traditional",
+    authorNote: "commonly credited to St. Bernard of Clairvaux; the proverb predates the attribution",
+    year: "medieval", origin: "Proverbial", liturgical: "", feastDay: "", favorite: false,
+    body: "Hell is full of good intentions or desires.",
+    background:
+      "Better known in its later form — the road to hell is paved with good " +
+      "intentions — and routinely credited to Bernard, though the proverb " +
+      "circulated independently and cannot be pinned to any passage of his.\n\n" +
+      "Kept because the sharper original says something the paved-road " +
+      "version has lost. 'Paved with' suggests good intentions are the " +
+      "surface you travel on. 'Full of' says they are what is *there when " +
+      "you arrive* — that intending well, indefinitely, is itself the " +
+      "condition being described. It is the same disease Augustine names in " +
+      "'but not yet'.",
+  },
+  {
+    title: "I Want to Take His Place",
+    occasion:
+      "Said at Auschwitz in late July 1941. Ten men had been selected to die by starvation after an escape from Block 14; one of them, Franciszek Gajowniczek, cried out about his wife and children. Kolbe stepped out of the ranks to offer himself instead, and the commandant accepted.",
+    kind: "quote", tags: ["charity", "suffering", "death", "Franciscan", "courage"],
+    source: "Auschwitz, late July 1941 — reported by surviving prisoners",
+    author: "St. Maximilian Kolbe", year: "1941", origin: "Conventual Franciscan",
+    liturgical: "", feastDay: "14 August", favorite: false,
+    body:
+      "I am a Catholic priest.\n" +
+      "I am old.\n" +
+      "I want to take his place, because he has a wife and children.",
+    background:
+      "Stepping out of the ranks was itself a capital offence.\n\n" +
+      "The reasoning is not romantic, and that is what makes it credible. He gives " +
+      "three plain facts and one inference: he is a priest, he is old, the " +
+      "other man is needed. He was 47. He survived two weeks in the " +
+      "starvation bunker and was killed by injection on 14 August. " +
+      "Gajowniczek lived to 93 and was present at the canonisation in 1982.",
+  },
+  {
+    title: "No One Can Change Truth",
+    occasion:
+      "From his years running the largest Catholic publishing operation in Poland — a monastery-city at Niepokalanow with its own presses and a daily paper. The Gestapo shut it in 1941.",
+    kind: "quote", tags: ["faith", "courage", "Franciscan", "spiritual combat"],
+    source: "Attributed; widely circulated in Kolbe collections",
+    author: "St. Maximilian Kolbe", authorNote: "attributed; primary source not pinned",
+    year: "20th century", origin: "Conventual Franciscan", liturgical: "", feastDay: "14 August", favorite: false,
+    body:
+      "No one in the world can change Truth.\n" +
+      "What we can do and should do is to seek truth and to serve it when we have found it.",
+    background:
+      "Kolbe ran the largest Catholic publishing operation in Poland before " +
+      "the war — a monastery-city at Niepokalanów with its own printing " +
+      "presses and a daily paper — so a sentence about seeking and serving " +
+      "truth was, for him, a description of a working day rather than an " +
+      "abstraction.\n\n" +
+      "The second half is the operative one, and it is unfashionable: he does " +
+      "not say seek truth and hold an opinion about it, but *serve* it, as " +
+      "one serves something with a claim on you. The Gestapo shut the presses " +
+      "in 1941.",
+  },
+  // ── Saint quotes, batch 1: top favourites ──────────────────────────────
+  {
+    title: "No Hands But Yours",
+    occasion:
+      "Nobody knows — which is the point. It cannot be placed in Teresa's life because it is not hers; the earliest traces are English and modern.",
+    kind: "quote", tags: ["charity", "misattribution", "service"],
+    source: "Circulates as St. Teresa of Ávila; not found in her works",
+    author: "Unknown",
+    authorNote: "universally printed as Teresa of Ávila — the attribution does not survive checking",
+    year: "20th century (probable)", origin: "Modern devotional", liturgical: "", feastDay: "", favorite: false,
+    body:
+      "Christ has no body now but yours.\n" +
+      "No hands, no feet on earth but yours.\n" +
+      "Yours are the eyes through which He looks\n" +
+      "with compassion on this world.",
+    background:
+      "Kept here deliberately as a specimen, because it is one of the most " +
+      "quoted things Teresa never said. It appears in no edition of her works, " +
+      "in no Spanish manuscript, and in nothing written in the three centuries " +
+      "after her death; the earliest traces are English and modern, and one " +
+      "line of descent runs through a Methodist hymnal rather than a Carmelite " +
+      "convent.\n\n" +
+      "That does not make it false. The thought is thoroughly scriptural — it " +
+      "is St. Paul's body-of-Christ argument in 1 Corinthians 12, put warmly. " +
+      "But there is a difference between a good line and a saint's authority, " +
+      "and the borrowed name is doing work the words could do on their own. " +
+      "Quote it if you love it; just do not tell anyone Teresa wrote it.",
+  },
+  {
+    title: "Not to Think Much But to Love Much",
+    occasion:
+      "Written c. 1577 for the nuns of her own reform, who were anxious that their distracted prayer meant they were failing at it. Teresa had herself found prayer dry and difficult for nearly twenty years before this.",
+    kind: "quote", tags: ["contemplation", "love", "Carmelite", "little way"],
+    source: "Interior Castle, Fourth Mansions, ch. 1",
+    author: "St. Teresa of Ávila", year: "1577", origin: "Carmelite",
+    liturgical: "", feastDay: "15 October", favorite: false,
+    body:
+      "The important thing is not to think much but to love much;\n" +
+      "and so do that which best stirs you to love.",
+    background:
+      "Her point is practical to the edge of bluntness: prayer is not an exam in " +
+      "concentration. If your mind wanders through the whole half-hour and you " +
+      "come away loving God more, the half-hour worked.\n\n" +
+      "The sting is in the last clause — 'do that which best stirs you to " +
+      "love'. It hands the responsibility back. She will not tell you which " +
+      "method to use, because the test is not whether the method is " +
+      "impressive but whether it moves you, and only you can see that.",
+  },
+  {
+    title: "Judged on Love Alone",
+    occasion:
+      "Written for the friars and nuns of the Discalced reform, who had given up everything measurable — property, family, reputation — and needed telling what would actually be counted. John had recently been imprisoned by his own brothers in religion for pursuing that reform.",
+    kind: "quote", tags: ["love", "death", "Carmelite", "contemplation"],
+    source: "Sayings of Light and Love, 57",
+    author: "St. John of the Cross", year: "c. 1585", origin: "Carmelite",
+    liturgical: "", feastDay: "14 December", favorite: false,
+    body: "In the evening of life, we will be judged on love alone.",
+    background:
+      "Often read as consoling, and it is — but notice what it removes as " +
+      "well as what it promises. John is writing to people who had given up " +
+      "everything measurable: property, family, comfort, reputation. The line " +
+      "tells them none of that will be counted. Not the austerity, not the " +
+      "years, not the visions he himself was famous for.\n\n" +
+      "He wrote it as a man who had been imprisoned by his own brothers in " +
+      "religion, in a cell too small to stand up in, for trying to reform " +
+      "them. 'Love alone' from someone in comfortable circumstances is a " +
+      "pleasant sentiment. From him it is a verdict he had already accepted " +
+      "about his own jailers.",
+  },
+  {
+    title: "Where There Is No Love, Put Love",
+    occasion:
+      "Written on 6 July 1591 to Madre María de la Encarnación, who was distressed that John had just been stripped of office and might be expelled from the order he helped found. This is his instruction on how to treat the men doing it. He died five months later.",
+    kind: "quote", tags: ["love", "charity", "Carmelite", "conversion"],
+    source: "Letter to Madre María de la Encarnación, 6 July 1591",
+    author: "St. John of the Cross", year: "1591", origin: "Carmelite",
+    liturgical: "", feastDay: "14 December", favorite: false,
+    body:
+      "Where there is no love, put love —\n" +
+      "and you will draw out love.",
+    background:
+      "Advice given in a specific and unpleasant situation. John had just " +
+      "been stripped of office by the order he had helped found, and there " +
+      "was talk of expelling him altogether; the nun he was writing to was " +
+      "distressed on his behalf. This is his answer about how to treat the " +
+      "men doing it.\n\n" +
+      "The verb matters. He does not say *find* love, or *feel* it — he says " +
+      "*put* it, as you would put a thing into an empty place. It is an " +
+      "instruction for exactly the case where the love is not there and will " +
+      "not arrive by waiting. He died five months later, in a monastery whose " +
+      "prior disliked him.",
+  },
+  {
+    title: "My Vocation Is Love",
+    occasion:
+      "Written in September 1896 for her sister Marie, who had asked her to put down her 'little doctrine'. Thérèse was 23, already ill, and had been tormented by wanting to be missionary, priest, martyr and doctor at once while knowing she would be none of them.",
+    kind: "quote", tags: ["love", "little way", "vocation", "Carmelite"],
+    source: "Story of a Soul, Manuscript B — written for her sister Marie",
+    author: "St. Thérèse of Lisieux", year: "1896", origin: "Carmelite",
+    liturgical: "", feastDay: "1 October", favorite: true,
+    body:
+      "In the heart of the Church, my Mother,\n" +
+      "I will be love.\n" +
+      "Then I shall be all things.",
+    background:
+      "The end of a search, not a slogan. Thérèse had been tormented by " +
+      "wanting to be everything at once — missionary, priest, martyr, doctor " +
+      "of the Church — and knowing a Carmelite in a small French town would " +
+      "be none of them. Reading 1 Corinthians 12 and 13 she saw the way out: " +
+      "the body has many members, but love is what animates all of them, so " +
+      "to be love is to be present in every vocation at once.\n\n" +
+      "She was twenty-three and had roughly a year to live. Every one of the " +
+      "things she wanted was later granted to her posthumously — patroness of " +
+      "the missions, Doctor of the Church — which is either a very large " +
+      "coincidence or the point.",
+  },
+  {
+    title: "All I Have Written Seems as Straw",
+    occasion:
+      "Said in December 1273 to his secretary Br. Reginald of Piperno, who had pressed him for weeks to explain why he had stopped writing mid-sentence. Something had happened at Mass on 6 December that Thomas would not describe. He died three months later.",
+    kind: "quote", tags: ["humility", "contemplation", "Dominican", "adoration"],
+    source: "To Br. Reginald of Piperno, Naples, December 1273",
+    author: "St. Thomas Aquinas, O.P.", year: "1273", origin: "Dominican",
+    liturgical: "", feastDay: "28 January", favorite: false,
+    body:
+      "Such things have been revealed to me\n" +
+      "that all I have written seems to me as so much straw.",
+    background:
+      "The most learned man of the Middle Ages stopped writing mid-sentence " +
+      "and never wrote again. On 6 December 1273, while saying Mass at Naples, " +
+      "something happened that he would not describe. His secretary Reginald, " +
+      "who had worked with him for years and now had an unfinished *Summa* on " +
+      "his hands, pressed him for weeks. This was the only answer he got.\n\n" +
+      "Read carefully, it is not a repudiation. Straw is not worthless — it " +
+      "is what you use to get through winter, and it is what was in the manger. " +
+      "It is simply not the harvest. Aquinas had spent his life arguing that " +
+      "reason genuinely reaches God; he seems to have been given, briefly, the " +
+      "thing his arguments pointed at, and found the proportion between them " +
+      "was not what he had assumed. He died three months later, aged 49.",
+  },
+  {
+    title: "No Explanation Is Necessary",
+    occasion:
+      "No occasion — it is not his. Its earliest appearance is as an epigraph in Franz Werfel's 1941 novel The Song of Bernadette, in the novelist's own voice.",
+    kind: "quote", tags: ["faith", "misattribution", "catechetical"],
+    source: "Circulates as Aquinas; not located in his works",
+    author: "Unknown",
+    authorNote: "printed everywhere as Thomas Aquinas; almost certainly 20th-century",
+    year: "20th century (probable)", origin: "Modern devotional",
+    liturgical: "", feastDay: "", favorite: false,
+    body:
+      "To one who has faith, no explanation is necessary.\n" +
+      "To one without faith, no explanation is possible.",
+    background:
+      "Neat, memorable, and not his. It appears in no work of Aquinas and in " +
+      "no medieval source; its earliest traces are 20th-century, and the " +
+      "usual route into circulation is Franz Werfel's 1941 novel *The Song of " +
+      "Bernadette*, which opens with almost exactly this sentence as an " +
+      "epigraph in the author's own voice.\n\n" +
+      "It also, awkwardly, contradicts him. Aquinas spent his " +
+      "working life writing explanations *for* people who did not accept his " +
+      "premises — the whole method of the *Summa* is to state the strongest " +
+      "objection first and answer it. A man who thought explanation was " +
+      "impossible would not have written four million words of it. Kept here " +
+      "as a labelled specimen, because it is repeated in good faith constantly.",
+  },
+  {
+    title: "But Not Yet",
+    occasion:
+      "A prayer Augustine had actually prayed as a young man in Carthage, recorded against himself some fifteen years later in the Confessions (c. 397-400) as an example of a will divided against itself.",
+    kind: "quote", tags: ["conversion", "chastity", "self-examination", "repentance"],
+    source: "Confessions VIII.7",
+    author: "St. Augustine of Hippo", year: "c. 397–400", origin: "Patristic",
+    liturgical: "", feastDay: "28 August", favorite: false,
+    body:
+      "Grant me chastity and continence,\n" +
+      "but not yet.",
+    background:
+      "This is not advice, and it is not a joke Augustine is making at " +
+      "anyone else's expense. It is a confession, written down years later " +
+      "against himself, of a prayer he had actually prayed as a young man in " +
+      "Carthage — and he records it precisely because it is contemptible. He " +
+      "adds immediately: 'I was afraid you would hear me too soon, and heal " +
+      "me too soon of the disease of lust, which I wished to have satisfied " +
+      "rather than extinguished.'\n\n" +
+      "Quoted on its own it becomes a wink — the saint who liked sin, isn't " +
+      "that relatable. In place it is something far more uncomfortable and " +
+      "far more useful: an exact description of a will that is genuinely " +
+      "divided, that wants the good and schedules it for later, and that " +
+      "knows the scheduling is the evasion. Anyone who has ever meant to " +
+      "change on Monday has prayed this prayer. Augustine's contribution is " +
+      "to have written it down instead of pretending otherwise.",
+  },
+  {
+    title: "Use Words If Necessary",
+    occasion:
+      "None — it is not his. Francis preached in the open air in up to five towns a day and walked into a Sultan's camp to preach; the saying first appears in print in the 1990s.",
+    kind: "quote", tags: ["misattribution", "preaching", "Franciscan", "charity"],
+    source: "Circulates as St. Francis of Assisi; absent from every early source",
+    author: "Unknown",
+    authorNote: "not in Francis's writings or any early biography — see background",
+    year: "20th century", origin: "Modern devotional",
+    liturgical: "", feastDay: "", favorite: false,
+    body:
+      "Preach the Gospel at all times;\n" +
+      "when necessary, use words.",
+    background:
+      "Absent from Francis's own writings, from Celano, from Bonaventure, " +
+      "from the *Fioretti* — from everything before the twentieth century. " +
+      "The earliest printed versions appear in the 1990s.\n\n" +
+      "The reason to keep it here is that it is not merely unsourced but " +
+      "backwards. Francis preached constantly, in the open air, in up to five " +
+      "towns a day; he walked into a Sultan's camp during a crusade in order " +
+      "to preach; his Rule legislates for preaching. The one thing he cannot " +
+      "be made into is a man who thought words optional. What the saying " +
+      "actually smuggles in is a modern discomfort with saying anything out " +
+      "loud — dressed in the habit of the most talkative saint in the " +
+      "calendar. It flatters the reticence it should be curing.",
+  },
+  {
+    title: "That You Are and Nothing More",
+    occasion:
+      "Written in the 1220s for his own friars, in a short chapter of the Admonitions aimed at the servant of God who is praised and begins to believe it.",
+    kind: "quote", tags: ["humility", "Franciscan", "self-examination", "identity"],
+    source: "Admonitions, XIX",
+    author: "St. Francis of Assisi", year: "c. 1220s", origin: "Franciscan",
+    liturgical: "", feastDay: "4 October", favorite: false,
+    body:
+      "What a man is before God,\n" +
+      "that he is and nothing more.",
+    background:
+      "Authentic, and much harder than the famous line he did not write. " +
+      "The *Admonitions* are short chapters given to his own friars, and this " +
+      "one is aimed at the servant of God who is praised and starts to believe " +
+      "it — Francis's next sentence is that such a man 'sets a value on " +
+      "himself greater than the value God sets'.\n\n" +
+      "It cuts in both directions, which is why it lasts. It removes the " +
+      "inflation of being admired, and it removes just as firmly the deflation " +
+      "of being despised or of despising yourself. Your reputation, including " +
+      "the one you hold privately about yourself, is not the measurement. " +
+      "Someone else has already taken it.",
+  },
+  {
     title: "When We Pray, When We Read",
+    occasion:
+      "Jerome wrote to Eustochium in 384, urging a young Roman noblewoman toward the ascetic life — 'You pray: you speak to the Bridegroom. You read: he speaks to you.' The smoothed wording everyone quotes is St. Alphonsus Liguori's paraphrase, made some fourteen centuries later.",
     kind: "quote",
     tags: ["contemplation", "Scripture", "reading", "biblical", "Patristic"],
     source: "St. Alphonsus Liguori's paraphrase of St. Jerome, Letter 22 (to Eustochium), 25",
@@ -499,6 +2087,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Devil Can Imitate Everything",
+    occasion:
+      "Recorded among the sayings of the Egyptian desert monks, attributed to 'the fathers' collectively rather than to any one of them. It circulates widely under St. Moses the Black's name; that attribution is modern and unsupported.",
     kind: "quote",
     tags: ["humility", "spiritual combat", "fasting", "desert fathers", "Patristic", "charity"],
     source: "Apophthegmata Patrum, Systematic Collection 17.32 (trans. John Wortley)",
@@ -581,7 +2171,7 @@ const SEED_LIBRARY_ENTRIES = [
       "The last and best known: through Paul Gerhardt's German version this " +
       "became the hymn “O Sacred Head, Now Wounded”.",
     background:
-      "What you have above is the structure and the opening line of each of " +
+      "This entry gives the structure and the opening line of each of " +
       "the seven parts, not the whole poem — the Rhythmica oratio runs to " +
       "roughly 350 lines, seven hymns of ten-line stanzas, and would swamp " +
       "this library. Each part addresses one member of the crucified body in " +
@@ -647,7 +2237,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["hourly", "contemplation", "daily", "arrow prayers", "Patristic", "repentance"],
     source: "Twenty-four short prayers, one for each hour of the day",
-    author: "Attributed to St. John Chrysostom",
+    author: "St. John Chrysostom",
     authorNote: "traditional attribution; the collection is later than his lifetime",
     year: "traditional",
     origin: "Patristic",
@@ -986,7 +2576,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["Incarnation", "Marian", "morning", "noon", "evening"],
     source: "Traditional Catholic prayer, prayed at 6am, noon, and 6pm",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     authorNote: "developed communally, evening recitation formalized 1318–1327 under Pope John XXII",
     year: "developed 11th–18th century (evening recitation formalized 1318–1327 under Pope John XXII)",
     origin: "Monastic — memorial of the Incarnation",
@@ -1117,7 +2707,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["eucharist", "Ignatian", "communion"],
     source: "Traditional; placed at the opening of St. Ignatius of Loyola's Spiritual Exercises (1548)",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     authorNote: "long misattributed to St. Ignatius of Loyola, who merely placed it at the start of his Spiritual Exercises",
     year: "early 14th century",
     origin: "Ignatian",
@@ -1175,7 +2765,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["protection", "Benedictine", "exorcism"],
     source: "Inscriptions of the Saint Benedict Medal (Jubilee Medal, struck 1880)",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     authorNote: "text traced to a 1415 manuscript at Metten Abbey, Bavaria",
     year: "medieval formula; medal's modern form struck 1880",
     origin: "Benedictine",
@@ -1297,7 +2887,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["Marian", "Compline", "antiphon", "Lent"],
     source: "One of the four seasonal Marian antiphons sung/recited at the close of Compline",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     year: "12th century",
     origin: "Marian antiphon — Compline / Night Prayer",
     liturgical: "February 3 (day after Candlemas) through Wednesday of Holy Week",
@@ -1335,7 +2925,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["Marian", "Compline", "antiphon", "Easter"],
     source: "One of the four seasonal Marian antiphons; also replaces the Angelus during the Easter season",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     year: "12th–13th century",
     origin: "Marian antiphon — Compline / Night Prayer",
     liturgical: "Easter Sunday through Pentecost",
@@ -1459,7 +3049,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["doxology", "foundational"],
     source: "Traditional doxology, said after each decade of the Rosary and at the end of psalms",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     authorNote: "the doxology form itself dates to the early Church",
     year: "Trinitarian wording shaped by 4th-century controversies over Arianism",
     origin: "Liturgical doxology",
@@ -1490,7 +3080,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["creed", "foundational"],
     source: "Symbolum Apostolorum — the baptismal creed of the Western Church",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     authorNote: "developed communally over centuries, no single author",
     year: "Roots to the 2nd century; present form attested by the 8th century (Caesarius of Arles, d. 542)",
     origin: "Baptismal creed",
@@ -1552,7 +3142,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["confession", "penance"],
     source: "Traditional catechetical prayer, said in or after Confession",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     authorNote: "standardized through catechisms, no single documented author",
     year: "Current common wording widespread by the 19th–20th century",
     origin: "Sacrament of Reconciliation",
@@ -1584,7 +3174,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["foundational", "catechetical"],
     source: "Traditional catechetical prayer, one of the four Acts (with Hope, Charity, and Contrition)",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     authorNote: "standardized through catechisms, no single documented author",
     year: "Common wording widespread by the 19th–20th century",
     origin: "Catechetical",
@@ -1613,7 +3203,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["foundational", "catechetical"],
     source: "Traditional catechetical prayer, one of the four Acts (with Faith, Charity, and Contrition)",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     authorNote: "standardized through catechisms, no single documented author",
     year: "Common wording widespread by the 19th–20th century",
     origin: "Catechetical",
@@ -1640,7 +3230,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["foundational", "catechetical"],
     source: "Traditional catechetical prayer, one of the four Acts (with Faith, Hope, and Contrition)",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     authorNote: "standardized through catechisms, no single documented author",
     year: "Common wording widespread by the 19th–20th century",
     origin: "Catechetical",
@@ -1669,7 +3259,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["guardian angel", "children", "catechetical"],
     source: "Traditional catechetical prayer",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     authorNote: "popularized through catechisms",
     year: "Common English wording widespread by the 19th century",
     origin: "Devotion to the Guardian Angels",
@@ -1950,7 +3540,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["peace"],
     source: "First published anonymously in 1912 in La Clochette, a French Catholic magazine",
-    author: "Traditional / Anonymous",
+    author: "Unknown",
     authorNote: "falsely attributed to St. Francis of Assisi starting in 1927",
     year: "First published 1912; attributed to Francis from 1927 onward",
     origin: "Modern devotional, later attached to the Franciscan tradition",
@@ -1991,7 +3581,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "prayer",
     tags: ["Marian", "intercession"],
     source: "Manuscript tradition traces to Nicolas Salicetus's Antidotarius animae (1489)",
-    author: "Traditional / Anonymous",
+    author: "Traditional",
     authorNote: "long misattributed to St. Bernard of Clairvaux",
     year: "Traceable to the 15th century as part of a longer prayer; popularized in its short form in the 17th century",
     origin: "Marian devotional prayer",
@@ -2025,6 +3615,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Pray, Hope, and Don't Worry",
+    occasion:
+      "His standard reply in spiritual direction, given in letters and in the confessional to people who came to San Giovanni Rotondo in distress.",
     kind: "quote",
     tags: ["trust", "anxiety"],
     source: "Widely and consistently documented across compilations of his sayings and letters",
@@ -2045,6 +3637,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Same Father Who Cares for You Today",
+    occasion:
+      "From his letters of spiritual direction, written for lay people — merchants, wives, courtiers — who had asked how to live devoutly without leaving their ordinary state of life.",
     kind: "quote",
     tags: ["trust", "anxiety"],
     source: "From his letters of spiritual direction",
@@ -2068,6 +3662,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Jesus, I Trust in You",
+    occasion:
+      "The words she reported being told to inscribe on the image of Divine Mercy, in a vision at Plock in February 1931.",
     kind: "quote",
     tags: ["trust", "Divine Mercy"],
     source: "Diariusz — Divine Mercy in My Soul (her Diary)",
@@ -2088,6 +3684,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Begin by Descending",
+    occasion:
+      "Preached to his congregation at Hippo, where Augustine was working through the ambition of people who wanted spiritual progress the way they wanted advancement.",
     kind: "quote",
     tags: ["humility"],
     source: "Traditionally cited to a sermon of St. Augustine (commonly Sermon 117 or nearby)",
@@ -2110,6 +3708,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Humility Is Nothing But Truth",
+    occasion:
+      "From his conferences to the Daughters of Charity, the community he founded with St. Louise de Marillac to serve the sick poor of Paris.",
     kind: "quote",
     tags: ["humility"],
     source: "His conferences to the Daughters of Charity",
@@ -2131,6 +3731,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Most Powerful Weapon",
+    occasion:
+      "From the same conferences to the Daughters of Charity — spoken to women doing unglamorous work among the poor, for whom pride was the live temptation.",
     kind: "quote",
     tags: ["humility"],
     source: "His conferences to the Daughters of Charity",
@@ -2145,13 +3747,15 @@ const SEED_LIBRARY_ENTRIES = [
       "The most powerful weapon to conquer the devil is humility. For, as he does not know at all " +
       "how to employ it, neither does he know how to defend himself from it.",
     background:
-      "From the same body of conferences as 'Humility Is Nothing But Truth,' above. The logic here is " +
+      "From the same conferences to the Daughters of Charity as his other sayings on humility. The logic here is " +
       "specifically about pride as the devil's own native weapon — since humility is the one thing pride " +
       "cannot counterfeit or turn to its own use, Vincent treats it as uniquely disarming rather than " +
       "merely virtuous.",
   },
   {
     title: "Suffering Accepted Produces a Good Crop",
+    occasion:
+      "Written in Story of a Soul, her autobiography, composed under obedience in the last years of a life spent largely in illness.",
     kind: "quote",
     tags: ["suffering"],
     source: "Story of a Soul",
@@ -2174,6 +3778,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "No Other Ladder",
+    occasion:
+      "From the sayings of a young woman in colonial Lima who imposed severe penances on herself and cared for the sick and the indigenous poor in her family's house. She died at 31.",
     kind: "quote",
     tags: ["suffering"],
     source: "Traditionally attributed in her hagiography",
@@ -2195,6 +3801,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "To Unleash Love in the Human Person",
+    occasion:
+      "From his teaching on the Good Samaritan, developed at length in the 1984 apostolic letter Salvifici Doloris on the Christian meaning of suffering.",
     kind: "quote",
     tags: ["suffering"],
     source: "Salvifici Doloris (apostolic letter on the Christian meaning of human suffering), §29",
@@ -2219,6 +3827,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Don't Let Your Life Be Sterile",
+    occasion:
+      "From The Way, a book of short points published in 1939 and written for young lay people in Spain, aimed at ordinary work and study rather than religious life.",
     kind: "quote",
     tags: ["perseverance"],
     source: "The Way",
@@ -2241,6 +3851,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Patience Is the Companion of Wisdom",
+    occasion:
+      "From Augustine's writing on patience — a short treatise arguing that endurance is not passive but a form of understanding.",
     kind: "quote",
     tags: ["perseverance"],
     source: "Consistent with the themes of his treatise De Patientia (On Patience)",
@@ -2261,6 +3873,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "On Terms of Friendship With God",
+    occasion:
+      "From her Life, written under obedience for her confessors, describing what mental prayer had actually been for her over some twenty difficult years.",
     kind: "quote",
     tags: ["prayer"],
     source: "The Book of Her Life (her autobiography), chapter 8",
@@ -2281,6 +3895,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "A Sea of Love",
+    occasion:
+      "From his catechetical instructions to the people of Ars, a village he found largely indifferent and spent forty years re-converting.",
     kind: "quote",
     tags: ["prayer"],
     source: "Consistent with his recorded catechetical instructions",
@@ -2301,6 +3917,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Our Heart Is Restless",
+    occasion:
+      "The opening paragraph of the Confessions, written c. 397-400 — the first thing Augustine says to God after a life spent looking elsewhere.",
     kind: "quote",
     tags: ["love"],
     source: "Confessions, Book I",
@@ -2321,6 +3939,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Love Proves Itself By Deeds",
+    occasion:
+      "Written in Story of a Soul, as she worked out how a cloistered Carmelite with no great works available to her could love in any way that counted.",
     kind: "quote",
     tags: ["love", "little way"],
     source: "Story of a Soul",
@@ -2343,6 +3963,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Be Not Afraid",
+    occasion:
+      "Said at the Mass inaugurating his pontificate in St. Peter's Square on 22 October 1978 — the first Polish pope, elected from behind the Iron Curtain, addressing a Church and a continent that had reason to be afraid.",
     kind: "quote",
     tags: ["courage"],
     source: "First homily as Pope, St. Peter's Square, 22 October 1978",
@@ -2363,6 +3985,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Have Courage",
+    occasion:
+      "From his letters of spiritual direction to people who wrote to him about temptation and spiritual dryness.",
     kind: "quote",
     tags: ["courage"],
     source: "From his correspondence, as documented in secondary compilations",
@@ -2384,6 +4008,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Gloomy Saints",
+    occasion:
+      "Teresa's remark, of a piece with her practical distrust of piety that made people miserable — she was founding houses across Spain against considerable opposition at the time.",
     kind: "quote",
     tags: ["joy"],
     source: "Widely attributed; exact original page not traced",
@@ -2404,6 +4030,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Not to Become a Saint",
+    occasion:
+      "The closing line of Leon Bloy's 1912 novel The Woman Who Was Poor. Bloy was a layman and a novelist, not a saint — included here because the sentence is one of the sharpest in modern Catholic writing.",
     kind: "quote",
     tags: ["joy"],
     source: "La Femme pauvre (The Woman Who Was Poor)",
@@ -2425,6 +4053,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Miss No Single Opportunity",
+    occasion:
+      "Written in Story of a Soul, describing the 'little way' she had worked out for a life in which no large sacrifices were on offer.",
     kind: "quote",
     tags: ["little way"],
     source: "Story of a Soul",
@@ -2446,6 +4076,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Little Duty of Each Moment",
+    occasion:
+      "From The Way (1939), addressed to students and young professionals who assumed sanctity required a different life from the one they had.",
     kind: "quote",
     tags: ["little way"],
     source: "The Way, no. 815",
@@ -2467,6 +4099,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "I Will Spend My Heaven Doing Good on Earth",
+    occasion:
+      "Said in the last months of her life, in 1897, to the sisters attending her as she was dying of tuberculosis at 24.",
     kind: "quote",
     tags: ["death", "little way"],
     source: "Widely cited in the official biographical supplements to Story of a Soul",
@@ -2487,6 +4121,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Go and Set the World Aflame",
+    occasion:
+      "His parting words to Francis Xavier, sending him to the Indies in 1541 — a journey from which Xavier never returned.",
     kind: "quote",
     tags: ["death", "Ignatian"],
     source: "Old Jesuit oral tradition; no primary manuscript citation confirmed",
@@ -2508,6 +4144,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Set Fire to All Italy",
+    occasion:
+      "Written in Letter 368 to Stefano Maconi, a young Sienese nobleman she was urging toward monastic life. The famous universal version is a later paraphrase.",
     kind: "quote",
     tags: ["zeal"],
     source: "Letter 368, to Stefano di Corrado Maconi",
@@ -2528,6 +4166,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Be Who God Meant You to Be",
+    occasion:
+      "Said by John Paul II at World Youth Day in Rome in 2000, as his own rendering of St. Catherine of Siena's letter to Stefano Maconi. The official text notes it as a paraphrase.",
     kind: "quote",
     tags: ["zeal"],
     source: "Address at World Youth Day, Rome, 2000 — explicitly given there as a paraphrase of St. Catherine of Siena",
@@ -2551,6 +4191,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "To Speak Well, Love Well",
+    occasion:
+      "From his letters and instruction on preaching — de Sales held that persuasion was a function of affection rather than of technique.",
     kind: "quote",
     tags: ["communication", "love"],
     source: "Cited by Pope Francis in his 2023 World Communications Day message, released on de Sales's feast day",
@@ -2571,6 +4213,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Love Until It Hurts",
+    occasion:
+      "Said in talks and interviews, usually to audiences who had told her they found her work admirable but extreme.",
     kind: "quote",
     tags: ["love", "suffering"],
     source: "One Heart Full of Love, ed. José Luis González-Balado",
@@ -2591,6 +4235,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer Is the Oxygen of the Soul",
+    occasion:
+      "From his spiritual direction; the image recurs across his letters rather than belonging to one of them.",
     kind: "quote",
     tags: ["prayer"],
     source: "Widely attributed across compilations of his sayings; no primary source pinned",
@@ -2610,6 +4256,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Humbled to Be an Example",
+    occasion:
+      "From his letters of direction, addressed to people struggling with the humiliations of ordinary life rather than chosen penances.",
     kind: "quote",
     tags: ["humility"],
     source: "Consistent with the themes of Introduction to the Devout Life; exact page not pinned",
@@ -2631,6 +4279,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "To Know That You Died for Him",
+    occasion:
+      "From the Confessions, in the long meditation on what it means to be sought by God before one has begun looking.",
     kind: "quote",
     tags: ["love", "conversion"],
     source: "Commonly attributed; exact citation in his works not verified",
@@ -2651,6 +4301,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Goodwill Compensates for the Lack of Success",
+    occasion:
+      "Written to his companions from Somasca, where Jerome Emiliani ran orphanages and hospitals for children left destitute by war, plague and famine in northern Italy. He died in 1537 of a disease caught from the sick he was nursing.",
     kind: "quote",
     tags: ["perseverance", "work"],
     source: "Letter 5, §4",
@@ -2673,6 +4325,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Do Your Best and Leave the Rest",
+    occasion:
+      "From his letters of spiritual direction, written for lay people prone to scrupulosity about their own efforts.",
     kind: "quote",
     tags: ["trust", "perseverance"],
     source: "Consistent with Introduction to the Devout Life; exact phrase not found verbatim",
@@ -2694,6 +4348,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Work as if Everything Depended on You",
+    occasion:
+      "The wording comes from Gabriel Hevenesi's Scintillae Ignatianae (1705), a collection summarising Ignatian principles some 150 years after Ignatius died. The ordering is often reversed in circulation.",
     kind: "quote",
     tags: ["work", "trust"],
     source: "Cited in the Catechism of the Catholic Church, §2834, referencing Joseph de Guibert's The Jesuits",
@@ -2718,6 +4374,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "God Does Not Require Us to Succeed",
+    occasion:
+      "Said to co-workers and volunteers discouraged by the scale of what they were facing in Calcutta.",
     kind: "quote",
     tags: ["perseverance", "faithfulness"],
     source: "The Joy in Loving: A Guide to Daily Living (compiled from her sayings)",
@@ -2737,6 +4395,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Every Saint Became a Saint Through Mental Prayer",
+    occasion:
+      "From his writing on prayer, of a piece with the argument of The Great Means of Salvation that mental prayer is the ordinary channel of grace rather than an advanced option.",
     kind: "quote",
     tags: ["prayer"],
     source: "The Great Means of Salvation and of Perfection",
@@ -2785,6 +4445,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Fasting Cleanses the Soul",
+    occasion:
+      "From Augustine's preaching on fasting to his congregation at Hippo, most of whom were doing it as a matter of course in Lent.",
     kind: "quote",
     tags: ["fasting"],
     source: "A sermon of St. Augustine (De orat. et Jejun.), quoted at length by St. Thomas Aquinas, Summa Theologiae II-II, Q.147",
@@ -2809,6 +4471,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Late Have I Loved You",
+    occasion:
+      "From Book X of the Confessions, looking back on the years in which he had searched for God everywhere except where God already was.",
     kind: "quote",
     tags: ["love", "conversion"],
     source: "Confessions, Book X, Chapter 27",
@@ -2932,6 +4596,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Measure of Love",
+    occasion:
+      "From On Loving God, written for Haimeric, chancellor of the Roman Church, who had asked Bernard why and how God should be loved.",
     kind: "quote",
     tags: ["love"],
     source: "Popular paraphrase of a line from On Loving God (De Diligendo Deo), ch. 1, c. 1132–1135",
@@ -2958,6 +4624,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "A Visit of the Holy Spirit",
+    occasion:
+      "From his catechetical instructions at Ars, teaching villagers to recognise grace in ordinary interior movements rather than in extraordinary events.",
     kind: "quote",
     tags: ["Holy Spirit", "prayer"],
     source: "Widely attested in compilations of his catechetical sermons; no primary manuscript pinned",
@@ -2979,6 +4647,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Intrepid Eagle",
+    occasion:
+      "From his catechetical instructions at Ars — an image drawn, like most of his, from birds and animals his farming parishioners saw every day.",
     kind: "quote",
     tags: ["prayer"],
     source: "On the Joys of the Interior Life (devotional compilation); no primary manuscript pinned",
@@ -2999,6 +4669,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The First Moment of the Day",
+    occasion:
+      "From his instructions at Ars on how the day should begin, given to people whose work started before dawn.",
     kind: "quote",
     tags: ["morning", "prayer"],
     source: "Widely attested in compilations of his sayings; no primary manuscript pinned",
@@ -3088,6 +4760,34 @@ const SEED_LIBRARY_ENTRIES = [
       "suggests — most of it dwells on the sacrifice of a King choosing utter poverty and cold, not just " +
       "the scene of the manger — and what's given here is its well-known, most commonly sung opening, not " +
       "the complete text.",
+  },
+  {
+    title: "Christ in the Beggar",
+    kind: "quote",
+    tags: ["charity", "eucharist", "justice", "the poor"],
+    source: "Widely attributed; the same argument is documented in his Homily 50 on Matthew, 3–4 (PG 58, 508–509)",
+    author: "St. John Chrysostom",
+    authorNote: "this exact wording is not traceable to a specific homily — see background",
+    year: "4th century",
+    origin: "Patristic",
+    liturgical: "",
+    feastDay: "September 13",
+    originalLanguage: "",
+    favorite: true,
+    body: "If you cannot find Christ in the beggar at the church door, you will not find Him in the chalice.",
+    background:
+      "The wording everyone quotes cannot be pinned to a particular homily, so treat it as a compressed " +
+      "version of Chrysostom rather than a verbatim line — but unlike several other famous 'quotes' in " +
+      "this library, this one is not a misattribution: the argument is unmistakably his, and he makes it " +
+      "at length, with the same chalice image, in his Homily 50 on Matthew. There he asks: 'Of what use " +
+      "is it to weigh down Christ's table with golden cups, when he himself is dying of hunger? First, " +
+      "fill him when he is hungry; then use the means you have left to adorn his table' — adding that God " +
+      "wants not golden chalices but golden souls, and that your brother in distress 'is more properly a " +
+      "temple' than the building you are decorating. The logic is that the Christ of Matthew 25 ('you saw " +
+      "me hungry') and the Christ of the altar are the same person, so honouring one while stepping over " +
+      "the other is not devotion but a contradiction. He preached this in Antioch and Constantinople to " +
+      "congregations wealthy enough for it to sting, which is a fair part of why he ended up twice exiled " +
+      "and died on a forced march.",
   },
 ];
 
@@ -3373,6 +5073,24 @@ function updateFilterBadge() {
   badge.classList.toggle("hidden", count === 0);
 }
 
+
+// One byline, two controls — the name goes to the person, the chip filters the
+// list. Same rule as the reader, so "the author's name" never means two
+// different things depending on where you clicked it. The dossier half is
+// omitted entirely for authors who have no dossier, and the filter chip
+// doubles as the way to clear a filter it set.
+function renderByline(e) {
+  const slug = saintSlugForAuthor(e.author);
+  const active = state.filterAuthor === e.author;
+  const name = slug
+    ? `<span class="byline-name has-dossier" data-slug="${escapeHtml(slug)}" title="Read the dossier for ${escapeHtml(e.author)}">${escapeHtml(e.author)}<span class="author-go" aria-hidden="true">✝</span></span>`
+    : `<span class="byline-name">${escapeHtml(e.author)}</span>`;
+  const chip = `<button class="byline-filter${active ? " active" : ""}" data-author="${escapeHtml(e.author)}" title="${
+    active ? "Clear this filter" : "Show only entries by " + escapeHtml(e.author)
+  }">${active ? "clear" : "filter"}</button>`;
+  return `<div class="byline${active ? " active" : ""}">— ${name}${chip}</div>`;
+}
+
 function renderLibraryList() {
   const q = state.searchQuery.trim().toLowerCase();
 
@@ -3436,9 +5154,7 @@ function renderLibraryList() {
     <div class="entry-card" data-id="${e.id}">
       <div class="title">${escapeHtml(e.title)}${e.favorite ? " ★" : ""}</div>
       ${
-        e.author
-          ? `<div class="byline${state.filterAuthor === e.author ? " active" : ""}" data-author="${escapeHtml(e.author)}">— ${escapeHtml(e.author)}</div>`
-          : ""
+        e.author ? renderByline(e) : ""
       }
       <div class="meta">
         <span class="badge-kind">${e.kind}</span>
@@ -3462,18 +5178,71 @@ function renderLibraryList() {
       toggleTagFilter(chip.dataset.tag);
     });
   });
-  $$(".byline", list).forEach((byline) => {
-    byline.addEventListener("click", (e) => {
+  $$(".byline-name.has-dossier", list).forEach((el) =>
+    el.addEventListener("click", (e) => {
       e.stopPropagation();
-      toggleAuthorFilter(byline.dataset.author);
-    });
-  });
+      switchTab("saints");
+      openSaintReader(el.dataset.slug);
+    })
+  );
+  $$(".byline-filter", list).forEach((el) =>
+    el.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleAuthorFilter(el.dataset.author);
+    })
+  );
 }
 
 const KIND_LABELS = { prayer: "Prayer", hymn: "Hymn", litany: "Litany", saint: "Saint", quote: "Quote" };
 
 function updateFeastDayVisibility() {
   $("#lib-feast-day-field").classList.toggle("hidden", $("#lib-kind").value !== "saint");
+}
+
+
+// --- Author → saint dossier -----------------------------------------------
+//
+// Clicking an author used to do one thing (filter the library), which left no
+// way to reach the person's dossier — and guessing which the reader wanted, or
+// asking, would both be worse than the actual fix: show two controls, each
+// labelled with what it does. The name opens the dossier; a separate chip
+// filters. Nothing is ambiguous, and nothing has to be explained.
+//
+// The link only appears when the author actually has a dossier, so the 19
+// authors who are Anonymous, biblical, or simply not in the saints data never
+// show a dead control.
+
+let _saintSlugIndex = null;
+
+function normaliseName(t) {
+  return (t || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/^(st|ss|bl|ven|servant of god|pope|fr|sr|cardinal)\.?\s+/, "")
+    .replace(/[^a-z ]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function saintSlugForAuthor(author) {
+  if (!author || !window.SAINTS) return null;
+  if (!_saintSlugIndex) {
+    _saintSlugIndex = new Map();
+    for (const s of window.SAINTS) {
+      _saintSlugIndex.set(normaliseName(s.name), s.slug);
+      if (s.sortName) _saintSlugIndex.set(normaliseName(s.sortName), s.slug);
+    }
+  }
+  const n = normaliseName(author.replace(/,.*$/, "").replace(/ \(.*\)/, ""));
+  if (!n) return null;
+  if (_saintSlugIndex.has(n)) return _saintSlugIndex.get(n);
+  // Fall back to containment, guarded by a length floor so short names
+  // ("Monica") cannot swallow unrelated ones.
+  for (const [k, v] of _saintSlugIndex) {
+    if (k && (k.includes(n) || n.includes(k)) && Math.min(k.length, n.length) > 6) return v;
+  }
+  return null;
 }
 
 async function openLibraryReader(id) {
@@ -3485,8 +5254,19 @@ async function openLibraryReader(id) {
 
   const attrParts = [];
   if (entry.author) {
-    let authorHtml = `<span class="reader-author-link" data-author="${escapeHtml(entry.author)}">${escapeHtml(entry.author)}</span>`;
+    // Two separate, self-describing controls — see saintSlugForAuthor().
+    const slug = saintSlugForAuthor(entry.author);
+    const sameAuthor = state.libraryEntries.filter(
+      (e) => e.author === entry.author && e.id !== entry.id
+    ).length;
+
+    let authorHtml = slug
+      ? `<span class="reader-author-link has-dossier" data-slug="${escapeHtml(slug)}" title="Read the dossier for ${escapeHtml(entry.author)}">${escapeHtml(entry.author)}<span class="author-go" aria-hidden="true">✝</span></span>`
+      : `<span class="reader-author-plain">${escapeHtml(entry.author)}</span>`;
     if (entry.authorNote) authorHtml += `<span class="reader-author-note"> (${escapeHtml(entry.authorNote)})</span>`;
+    if (sameAuthor > 0) {
+      authorHtml += `<button class="author-more" data-author="${escapeHtml(entry.author)}" title="Show everything in the library by this author">${sameAuthor} more here</button>`;
+    }
     attrParts.push(authorHtml);
   }
   if (entry.year) attrParts.push(escapeHtml(entry.year));
@@ -3494,10 +5274,18 @@ async function openLibraryReader(id) {
   if (entry.feastDay) attrParts.push("Feast: " + escapeHtml(entry.feastDay));
   if (entry.liturgical) attrParts.push("Used: " + escapeHtml(entry.liturgical));
   $("#reader-attribution").innerHTML = attrParts.join('<span class="dot">·</span>');
-  const authorLink = $(".reader-author-link", $("#reader-attribution"));
-  if (authorLink) {
-    authorLink.addEventListener("click", () => {
-      toggleAuthorFilter(entry.author);
+  const dossierLink = $(".reader-author-link", $("#reader-attribution"));
+  if (dossierLink) {
+    dossierLink.addEventListener("click", () => {
+      switchTab("saints");
+      openSaintReader(dossierLink.dataset.slug);
+    });
+  }
+  const moreBtn = $(".author-more", $("#reader-attribution"));
+  if (moreBtn) {
+    moreBtn.addEventListener("click", () => {
+      state.filterAuthor = entry.author; // set, not toggle — the label promises a result
+      renderLibraryList();
       setView("library");
     });
   }
@@ -3508,6 +5296,8 @@ async function openLibraryReader(id) {
   $("#reader-meta").innerHTML = metaParts.join('<span class="dot">·</span>');
 
   $("#reader-text").textContent = "Loading…";
+  $("#reader-occasion-wrap").classList.toggle("hidden", !entry.occasion);
+  if (entry.occasion) $("#reader-occasion").innerHTML = renderInline(escapeHtml(entry.occasion));
   $("#reader-background-wrap").classList.add("hidden");
   setView("library-reader");
 
@@ -3585,7 +5375,7 @@ function renderPartBody(text) {
 
   if (!lines.some((l) => labelled.test(l))) {
     // Plain part — unchanged.
-    return `<p class="reader-para">${escapeHtml(text).replace(/\n/g, "<br>")}</p>`;
+    return `<p class="reader-para">${renderInline(escapeHtml(text)).replace(/\n/g, "<br>")}</p>`;
   }
 
   return lines

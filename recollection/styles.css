@@ -287,8 +287,8 @@ main.content { flex: 1; max-width: 760px; width: 100%; margin: 0 auto; padding: 
   padding: 0.02rem 0.25rem;
   margin-left: -0.25rem;
 }
-.entry-card .byline:hover { background: rgba(var(--gold-rgb),0.12); }
-.entry-card .byline.active { background: rgba(var(--gold-rgb),0.2); font-weight: 700; }
+
+
 .entry-card .meta { font-size: 0.7rem; color: var(--muted); display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
 
 .tag-chip {
@@ -2114,3 +2114,134 @@ body,
   background-image: var(--page-bg);
   background-attachment: fixed;
 }
+
+/* The occasion — the circumstance a saying was actually said in. Set apart
+   from the background essay so it is always findable in the same place. */
+.reader-occasion-wrap {
+  max-width: 620px;
+  margin: 2rem auto 0;
+  padding: 0.9rem 1.1rem;
+  border-left: 2px solid var(--gold);
+  background: var(--accent-soft);
+  border-radius: 0 6px 6px 0;
+}
+.reader-occasion-wrap.hidden { display: none; }
+.reader-occasion {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--body);
+}
+
+/* --- Author: two controls, not one ---------------------------------------
+   The name opens the person's dossier; the chip beside it filters the
+   library. Each says what it does, so the reader never has to guess which
+   one a single click would have done. */
+
+.reader-author-link.has-dossier {
+  cursor: pointer;
+  border-bottom: 1px solid rgba(var(--gold-rgb), 0.35);
+  padding-bottom: 1px;
+}
+.reader-author-link.has-dossier:hover {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  background: none;
+}
+.author-go {
+  font-size: 0.7em;
+  margin-left: 0.3em;
+  color: var(--gold);
+  opacity: 0.75;
+}
+.reader-author-link.has-dossier:hover .author-go { opacity: 1; }
+
+/* Authors with no dossier are plain text — no dead control. */
+.reader-author-plain { color: inherit; }
+
+.author-more {
+  margin-left: 0.5rem;
+  padding: 0.08rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--gold-rgb), 0.3);
+  background: none;
+  color: var(--muted);
+  font-size: 0.68rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.author-more:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: var(--accent-soft);
+}
+
+/* --- List byline: name + filter chip -------------------------------------- */
+
+.entry-card .byline {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  background: none;
+  cursor: default;
+}
+
+.byline-name.has-dossier {
+  cursor: pointer;
+  border-bottom: 1px solid rgba(var(--gold-rgb), 0.3);
+}
+.byline-name.has-dossier:hover {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+/* Deliberately says "filter" rather than using a glyph — the whole point is
+   that neither control needs explaining. */
+.byline-filter {
+  padding: 0.02rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--edge-rgb), 0.12);
+  background: none;
+  color: var(--faint);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, border-color 0.15s;
+}
+/* Stays out of the way until the card is under the pointer — the list is for
+   reading titles, not for administering filters. */
+.entry-card:hover .byline-filter,
+.byline-filter:focus-visible,
+.byline-filter.active { opacity: 1; }
+
+.byline-filter:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: var(--accent-soft);
+}
+.byline-filter.active {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: var(--accent-soft);
+}
+
+/* Touch devices have no hover — never hide the control there. */
+@media (hover: none) {
+  .byline-filter { opacity: 1; }
+}
+
+/* Titles of works and stressed words inside prose. Italic, never bold —
+   a cited title should not shout across the paragraph. */
+.reader-background em,
+.reader-occasion em,
+.part-note em { font-style: italic; }
+
+.reader-background strong,
+.reader-occasion strong,
+.part-note strong { font-weight: 600; }
+
+/* In the prayer text itself, emphasis is set in the accent colour rather than
+   sloped — the serif italic is already doing work there. */
+.reader-text em { font-style: italic; color: var(--ivory); }
