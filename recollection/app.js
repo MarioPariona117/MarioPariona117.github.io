@@ -3487,6 +3487,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["chastity", "purity", "identity"],
     source: "Echo Community (echocommunity.us) — Theology of the Body ministry; litanyofchastity.com",
     author: "Adam Fuselier",
+    related: ["You — What Have You Done?"],
     year: "21st century; exact composition date not documented — grew out of his personal prayer",
     origin: "Theology of the Body",
     liturgical: "",
@@ -3849,7 +3850,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["perseverance"],
     source: "The Way",
     author: "St. Josemaría Escrivá",
-    related: ["The Little Duty of Each Moment"],
+    related: ["The Little Duty of Each Moment", "You — What Have You Done?"],
     year: "1930s (first published 1934/1939)",
     origin: "Opus Dei",
     liturgical: "",
@@ -4101,7 +4102,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["little way"],
     source: "The Way, no. 815",
     author: "St. Josemaría Escrivá",
-    related: ["Don't Let Your Life Be Sterile", "Miss No Single Opportunity"],
+    related: ["Don't Let Your Life Be Sterile", "Miss No Single Opportunity", "You — What Have You Done?"],
     year: "1930s (first published 1934/1939)",
     origin: "Opus Dei",
     liturgical: "",
@@ -4988,6 +4989,41 @@ const SEED_LIBRARY_ENTRIES = [
       "the original rhythm and works for the same reason.\n\n" +
       "For a version of this intention with actual provenance, the Litany of St. Joseph is also in this " +
       "library: formally approved in 1909, and the Church's own litany for those seeking a spouse.",
+  },
+  {
+    title: "You — What Have You Done?",
+    kind: "quote",
+    tags: ["chastity", "purity", "mortification", "examination"],
+    source: "The Way, no. 143 (chapter: Holy Purity)",
+    author: "St. Josemaría Escrivá",
+    related: ["Litany of Chastity", "The Little Duty of Each Moment", "Don't Let Your Life Be Sterile"],
+    year: "1930s (first published 1934/1939)",
+    origin: "Opus Dei",
+    liturgical: "",
+    feastDay: "June 26",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "To defend his purity, St. Francis of Assisi rolled in the snow, St. Benedict threw himself into a " +
+      "thorn bush, St. Bernard plunged into an icy pond… You — what have you done?",
+    background:
+      "From the 'Holy Purity' chapter of The Way, Escrivá's collection of short numbered maxims — the " +
+      "same book as the two other Escrivá entries in this library, though this one works very " +
+      "differently from them. It is built entirely to land on its last four words: three saints, three " +
+      "violent acts, and then the ellipsis turning on the reader. It is one of the more confronting " +
+      "points in the book, and deliberately so.\n\n" +
+      "The three stories are traditional hagiography, and worth knowing they are not equally " +
+      "documented. Benedict throwing himself into briars comes from Book II of St. Gregory the Great's " +
+      "Dialogues, which is essentially the sole source for anything known about Benedict's life at all. " +
+      "Francis rolling in the snow comes from the early Franciscan sources — in the fuller telling he " +
+      "also builds figures out of the snow and tells himself they are the family he would have had. " +
+      "Bernard plunging into a frozen pond comes from his early Lives. All three are the kind of story " +
+      "that accumulates around a saint rather than the kind independently attested, so read them as " +
+      "what the tradition holds up rather than as reportage.\n\n" +
+      "The point is not really the snow or the thorns. Escrivá's whole project was that holiness belongs " +
+      "in ordinary secular life rather than the cloister, so the implied answer is not that you should " +
+      "find a thorn bush — it is that the reader has probably not paid any comparable price, in any " +
+      "currency at all, for something he claims to value.",
   },
 ];
 
