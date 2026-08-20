@@ -5706,6 +5706,63 @@ core({
   ],
 }),
 
+// Added 17 August — St. Frances of Rome, "to get to know."
+core({
+  slug: "frances-of-rome", listTier: "toKnow", name: "St. Frances of Rome", sortName: "Frances of Rome",
+  birthName: "Francesca Bussa de' Leoni", religiousName: "Francesca Romana",
+  titles: ["Wife", "Mother", "Foundress", "Mystic"],
+  rank: "Optional Memorial (9 March)", feast: "03-09", feastLabel: "9 March",
+  born: "1384", bornPlace: "Rome, Italy",
+  died: "9 March 1440", diedPlace: "Rome, Italy", ageAtDeath: "c. 56",
+  canonized: { date: "9 May 1608", by: "Pope Paul V" },
+  nationality: "Italian (Roman)", order: "Founder of the Oblates of Tor de' Specchi (Benedictine oblates)", state: "Wife, mother, widow, then religious superior",
+  summary: "A Roman noblewoman married at about twelve to Lorenzo de' Ponziani, who spent decades as a devoted wife and mother while also caring for Rome's poor and sick, especially during the plague, famine, and civil war that repeatedly struck the city in her lifetime. In 1433 she gathered a group of Roman noblewomen into an association of oblates living without formal cloister, and after her husband's death in 1436 she formally joined the community she had founded — Tor de' Specchi — as its superior. She reported constant visionary experience throughout her adult life, most famously the lasting visible presence of her own guardian angel.",
+  charism: "Ordinary lay holiness — marriage, motherhood, and unglamorous care of the poor — held together with an intensely mystical inner life, rather than either replacing the other.",
+  anecdotes: [
+    { title: "The guardian angel who lit her way", text: "Frances reported a bodily vision of her guardian angel that reportedly remained with her for much of her adult life, and tradition holds that its light would guide her safely at night; this legend is the reason Pope Pius XI declared her patron of automobile drivers in 1925, and cars are still blessed near the Colosseum on her feast day.", source: "Traditional accounts from her canonization process and later devotional tradition", legend: true },
+    { title: "Founding Tor de' Specchi, then joining it as a widow", text: "In 1433 Frances gathered fellow Roman noblewomen into an association of oblates attached to a Benedictine monastery, living in community without solemn vows; only after her husband Lorenzo's death in 1436 did she herself formally seek admission to the community she had founded, out of humility asking to be received 'for charity's sake' rather than presuming a place, and was made its superior.", source: "Standard historical accounts of the founding of the Oblates of Tor de' Specchi", legend: false },
+  ],
+  writings: [],
+  patronages: [{ of: "Motorists and automobile drivers", why: "The guardian-angel legend, formally recognized by Pius XI in 1925" }, { of: "Widows, and Benedictine oblates", why: "Her own life as a widow and founder of an oblate community" }],
+  attributes: ["A guardian angel beside her, often carrying a light", "Benedictine oblate habit", "A book"],
+  relics: "Santa Francesca Romana (Santa Maria Nova), Rome",
+  related: [],
+  cards: [
+    { q: "St. Frances of Rome — feast day, dates?", a: "9 March; born 1384 in Rome, died 9 March 1440 in Rome, aged about 56" },
+    { q: "Why is Frances of Rome the patron of drivers?", a: "A legend that her guardian angel's light guided her safely at night — Pius XI formally declared her patron of automobile drivers in 1925" },
+    { q: "What did Frances of Rome found, and when did she join it herself?", a: "The Oblates of Tor de' Specchi, founded 1433; she herself only formally joined as a widow after her husband's death in 1436, becoming its superior" },
+  ],
+}),
+
+// Added 17 August — Servant of God Pedro Ballester, "to get to know."
+core({
+  slug: "pedro-ballester", listTier: "toKnow", causeStage: "servant", name: "Servant of God Pedro Ballester", sortName: "Pedro Ballester",
+  birthName: "Pedro Ballester", religiousName: "—",
+  titles: ["Layman", "Numerary of Opus Dei"],
+  note: "Not yet canonized — currently a Servant of God, the first formal step in the process. His cause formally opened 13 May 2026 in the Diocese of Salford, England; update this entry once he is declared Venerable.",
+  rank: "Not yet beatified — no liturgical feast", feast: "",
+  born: "22 May 1996", bornPlace: "Manchester, England, to Spanish parents",
+  died: "13 January 2018", diedPlace: "Manchester, England", ageAtDeath: "21",
+  deathManner: "Pelvic cancer, diagnosed in 2014 already at an advanced stage and borne for three years, with a period of remission after proton therapy before it recurred and progressed",
+  nationality: "English (of Spanish parentage)", order: "Numerary member of Opus Dei (committed to celibacy, living in community)", state: "Layman, university student",
+  summary: "A young Manchester man of Spanish parentage who committed himself as a numerary of Opus Dei in his late teens and was admitted to Imperial College London to study chemical engineering in 2014, the same year he was diagnosed with advanced pelvic cancer. He underwent proton therapy in Germany with initial success, but the cancer recurred, and he lived with an aggressive, ultimately fatal illness for three years, borne — by his own admission including real struggles with pain and anger — with a faith that let him tell a visitor near the end that he had 'never been happier.' He died at twenty-one in January 2018, asking to remain at his Opus Dei residence rather than a hospital: 'I want to die at home.' His cause for beatification opened in May 2026.",
+  charism: "Ordinary daily life and vocation, particularly Opus Dei's own spirituality of sanctifying ordinary work, carried through terminal illness without either denying real suffering or being defeated by it.",
+  anecdotes: [
+    { title: "\"I have never been happier\"", text: "Despite three years of an aggressive, painful cancer and by his own account real struggles with anger and fear during the illness, Pedro told a visitor near the end of his life that he had never been happier — a statement friends and family have pointed to as characteristic of how he integrated suffering with genuine faith rather than simply enduring it.", source: "Recounted in coverage of his cause's opening, including Opus Dei's own account", legend: false },
+    { title: "\"I want to die at home\"", text: "As he neared death, Pedro asked to remain at Greygarth Hall, the Opus Dei university residence in Manchester where he lived, rather than in hospital, saying simply that he wanted to die at home; he died there on 13 January 2018.", source: "Recounted in coverage of his cause's opening", legend: false },
+  ],
+  writings: [],
+  patronages: [{ of: "None yet — patronages are formally assigned only after canonization", why: "—" }],
+  attributes: ["Ordinary lay/student dress"],
+  relics: "Southern Cemetery, Manchester — his grave has become a site of pilgrimage",
+  related: [],
+  cards: [
+    { q: "Servant of God Pedro Ballester — dates, and current status?", a: "Born 22 May 1996 in Manchester, died 13 January 2018 aged 21; currently a Servant of God, his cause having opened 13 May 2026 in the Diocese of Salford" },
+    { q: "What was Pedro Ballester's vocation?", a: "A numerary of Opus Dei, committed to celibacy and community life while studying chemical engineering at Imperial College London" },
+    { q: "What did Pedro say near the end of his three-year illness?", a: "'I have never been happier' — despite real struggles with pain and anger during his cancer, and, as he was dying, 'I want to die at home'" },
+  ],
+}),
+
 ];
 
 // ═══════════════════════════════════════════════════════════════════

@@ -3153,7 +3153,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["confession", "penance"],
     source: "Traditional catechetical prayer, said in or after Confession",
     author: "Traditional",
-    related: ["Act of Faith", "Act of Hope", "Act of Charity"],
+    related: ["Act of Faith", "Act of Hope", "Act of Charity", "The Miracle Prayer"],
     authorNote: "standardized through catechisms, no single documented author",
     year: "Current common wording widespread by the 19th–20th century",
     origin: "Sacrament of Reconciliation",
@@ -5059,6 +5059,48 @@ const SEED_LIBRARY_ENTRIES = [
       "humanity, you had to die as well!' This entry is the one about God's love for creation " +
       "specifically. Chapter numbering varies between editions and translations, so the closing prayer " +
       "is cited here by position rather than by a number that would only be right for one edition.",
+  },
+  {
+    title: "The Miracle Prayer",
+    kind: "prayer",
+    tags: ["healing", "repentance", "surrender", "conversion"],
+    source: "Text of the Miracle Prayer © 1993 Fr. Peter M. Rookey and Servite Fathers, O.S.M.",
+    author: "Fr. Peter Mary Rookey, O.S.M.",
+    authorNote: "not a saint — a 20th-century Servite priest (1916–2014); the text is under copyright, reproduced here with its notice",
+    related: ["Act of Contrition"],
+    year: "1993",
+    origin: "Servite (Order of the Servants of Mary)",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "Lord Jesus, I come before You, just as I am, I am sorry for my sins, I repent of my sins, please " +
+      "forgive me. In Your Name, I forgive all others for what they have done against me. I renounce " +
+      "satan, the evil spirits and all their works. I give You my entire self, Lord Jesus, now and " +
+      "forever. I invite You into my life, Jesus. I accept You as my Lord, God and Savior. Heal me, " +
+      "change me, strengthen me in body, soul, and spirit.\n\n" +
+      "Come Lord Jesus, cover me with Your Precious Blood, and fill me with Your Holy Spirit. I love You " +
+      "Lord Jesus. I praise You Jesus. I thank You Jesus. I shall follow You every day of my life. Amen.\n\n" +
+      "Mary, my Mother, Queen of Peace, St. Peregrine, the cancer saint, all the Angels and Saints, " +
+      "please help me. Amen.",
+    background:
+      "Composed in 1993 by Fr. Peter Mary Rookey, O.S.M. (1916–2014), an American Servite priest widely " +
+      "known for a public healing ministry he exercised from 1948 onward. It is unusual in this library " +
+      "on two counts: the author is a modern priest rather than a saint or an anonymous tradition, and " +
+      "the text carries an explicit copyright, kept here in the source line as every reputable " +
+      "reproduction of it does.\n\n" +
+      "The name oversells what the text actually is. Despite 'Miracle Prayer' and its association with a " +
+      "healing ministry, the prayer itself is not a request for a wonder and attaches no promise or " +
+      "condition — no counts, no novena arithmetic, nothing guaranteed in exchange. Structurally it is a " +
+      "straightforward act of conversion, and a well-ordered one: repentance first, then forgiving " +
+      "others before asking anything for oneself, then renunciation of evil, then self-surrender and " +
+      "invitation, and only at the end the petition for healing of body, soul and spirit. That ordering " +
+      "is the substance of it; read on the page it sits much closer to the Act of Contrition than to the " +
+      "genre its title suggests.\n\n" +
+      "The closing invocation reflects the author's own order. St. Peregrine Laziosi was a Servite friar " +
+      "whose reported cure of a cancerous leg made him the traditional patron of cancer patients, which " +
+      "is why a Servite prayer ends by naming him alongside Our Lady, Queen of Peace.",
   },
 ];
 
