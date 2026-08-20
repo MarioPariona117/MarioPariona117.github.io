@@ -5068,6 +5068,7 @@ const SEED_LIBRARY_ENTRIES = [
     author: "Fr. Peter Mary Rookey, O.S.M.",
     authorNote: "not a saint — a 20th-century Servite priest (1916–2014); the text is under copyright, reproduced here with its notice",
     related: ["Act of Contrition"],
+    relatedSaints: ["peregrine-laziosi"],
     year: "1993",
     origin: "Servite (Order of the Servants of Mary)",
     liturgical: "",
@@ -5664,22 +5665,43 @@ async function openLibraryReader(id) {
 function renderRelatedEntryChips(entry) {
   const wrap = $("#reader-related-wrap");
   const row = $("#reader-related");
+
   const titles = (entry.related || []).filter((t) => t !== entry.title);
   const found = titles
     .map((t) => state.libraryEntries.find((e) => e.title === t))
     .filter(Boolean);
 
-  wrap.classList.toggle("hidden", found.length === 0);
-  if (found.length === 0) return;
+  // Saints named *inside* an entry rather than being its author — e.g. the
+  // Miracle Prayer invokes St. Peregrine but was written by Fr. Rookey, so
+  // the author→dossier link in the attribution line can't reach him.
+  // Unresolved slugs are dropped, so a saint not yet in saints-data.js
+  // simply shows nothing instead of a dead chip.
+  const saints = (entry.relatedSaints || [])
+    .map((slug) => (window.SAINTS || []).find((s) => s.slug === slug))
+    .filter(Boolean);
 
-  row.innerHTML = found
-    .map(
-      (e) =>
-        `<span class="chip related-entry-chip" data-id="${e.id}">${escapeHtml(e.title)}<span class="related-kind">${escapeHtml(KIND_LABELS[e.kind] || e.kind)}</span></span>`
-    )
-    .join("");
+  wrap.classList.toggle("hidden", found.length === 0 && saints.length === 0);
+  if (found.length === 0 && saints.length === 0) return;
+
+  row.innerHTML =
+    found
+      .map(
+        (e) =>
+          `<span class="chip related-entry-chip" data-id="${e.id}">${escapeHtml(e.title)}<span class="related-kind">${escapeHtml(KIND_LABELS[e.kind] || e.kind)}</span></span>`
+      )
+      .join("") +
+    saints
+      .map(
+        (s) =>
+          `<span class="chip related-entry-chip related-saint-chip" data-slug="${escapeHtml(s.slug)}">${escapeHtml(s.name)}<span class="related-kind">Saint</span></span>`
+      )
+      .join("");
+
   $$(".related-entry-chip", row).forEach((chip) =>
-    chip.addEventListener("click", () => openLibraryReader(chip.dataset.id))
+    chip.addEventListener("click", () => {
+      if (chip.dataset.slug) openSaintReader(chip.dataset.slug);
+      else openLibraryReader(chip.dataset.id);
+    })
   );
 }
 
@@ -5937,11 +5959,14 @@ async function onSaveLibraryEntry(e) {
     const tags = $("#lib-tags").value.split(",").map((t) => t.trim()).filter(Boolean);
     // `related` has no editor field — carry the existing value through, or
     // saving from the UI would silently wipe an entry's "See also" links.
-    const existingRelated =
-      (state.libraryEntries.find((e) => e.id === state.editingLibraryId) || {}).related || [];
+    const existingEntry =
+      state.libraryEntries.find((e) => e.id === state.editingLibraryId) || {};
+    const existingRelated = existingEntry.related || [];
+    const existingRelatedSaints = existingEntry.relatedSaints || [];
     const savedId = await saveLibraryEntry({
       id: state.editingLibraryId,
       related: existingRelated,
+      relatedSaints: existingRelatedSaints,
       title: $("#lib-title").value.trim() || "Untitled",
       kind: $("#lib-kind").value,
       tags,

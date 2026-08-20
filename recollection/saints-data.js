@@ -5763,6 +5763,37 @@ core({
   ],
 }),
 
+// Added 17 August — St. Peregrine Laziosi, "favourite."
+core({
+  slug: "peregrine-laziosi", listTier: "favourite", name: "St. Peregrine Laziosi", sortName: "Peregrine Laziosi",
+  religiousName: "Fra Peregrino, O.S.M.",
+  titles: ["Priest", "Religious"],
+  epithets: ["The Cancer Saint", "The Wonder-Worker of Forlì"],
+  rank: "Optional Memorial (1 May)", feast: "05-01", feastLabel: "1 May",
+  born: "c. 1260", bornPlace: "Forlì, Italy",
+  died: "1 May 1345", diedPlace: "Forlì, Italy", ageAtDeath: "c. 85",
+  beatified: { date: "1609", by: "Pope Paul V" },
+  canonized: { date: "1726", by: "Pope Benedict XIII" },
+  nationality: "Italian", order: "Order of Servites (Servants of Mary, O.S.M.)", state: "Friar, priest",
+  summary: "A Forlì nobleman's son who, as a young man involved in a political faction hostile to the papacy, struck the Servite peacemaker Philip Benizi in the face during a riot — and was so moved by Benizi's calm forgiveness that he repented on the spot and eventually joined the Servite Order himself. Decades later, around age sixty, he developed what appeared to be an incurable cancer in his leg; the night before scheduled amputation, he prayed through the night before a crucifix and reported a vision of Christ descending from the cross to touch the diseased leg, which was found completely healed the next morning. He lived roughly another thirty years, dying at Forlì in 1345, and became, on the strength of that healing, the patron saint invoked by cancer patients.",
+  charism: "Conversion through being forgiven rather than punished, and decades of penitential service afterward — reportedly standing rather than sitting for thirty years out of penance for his youthful violence.",
+  anecdotes: [
+    { title: "Striking Philip Benizi, then converted by his forgiveness", text: "During civil unrest in Forlì, the young Peregrine struck the Servite friar Philip Benizi — sent by the pope as a peace envoy — in the face. Rather than retaliate, Benizi forgave him with a smile; Peregrine, undone by the response, threw himself at Benizi's feet asking forgiveness, and it became the turning point that led him eventually to join the Servite Order himself.", source: "Standard Servite biographical tradition", legend: true },
+    { title: "The night before the amputation", text: "Diagnosed with what appeared to be incurable cancer in his leg around age sixty, Peregrine spent the night before his scheduled amputation in prayer before a crucifix and reported falling into a vision in which Christ descended from the cross and touched the diseased leg; when he awoke, the leg was found completely healed, and the operation was cancelled.", source: "Standard Servite biographical and devotional tradition surrounding his cause", legend: true },
+    { title: "Thirty years without sitting", text: "In penance for the violence of his youth, Peregrine reportedly remained standing for some thirty years, sitting only when strictly necessary — a private, sustained austerity he kept up quietly alongside decades of active priestly and preaching service.", source: "Traditional Servite hagiography", legend: true },
+  ],
+  writings: [],
+  patronages: [{ of: "Cancer patients, and those with AIDS or other life-threatening illness", why: "His own reported miraculous healing from cancer" }],
+  attributes: ["Servite black habit", "A wounded or bandaged leg", "Sometimes shown with a crucifix"],
+  relics: "Basilica di San Pellegrino Laziosi, Forlì, Italy",
+  related: [],
+  cards: [
+    { q: "St. Peregrine Laziosi — feast day, dates?", a: "1 May; born c. 1260 in Forlì, died 1 May 1345 in Forlì, aged about 85" },
+    { q: "Why is Peregrine the patron saint of cancer patients?", a: "Around age sixty he was healed, the night before a scheduled leg amputation, after a vision of Christ descending from the cross to touch the diseased limb" },
+    { q: "How did Peregrine come to join the Servites?", a: "As a young man he struck the Servite friar Philip Benizi during civil unrest; Benizi's calm forgiveness converted him on the spot" },
+  ],
+}),
+
 ];
 
 // ═══════════════════════════════════════════════════════════════════
