@@ -4872,6 +4872,93 @@ const SEED_LIBRARY_ENTRIES = [
       "is not that Joseph was a warrior but that a quiet, obedient, chaste life is what the devil cannot " +
       "work with.",
   },
+  {
+    title: "Litany of the Undiscovered Spouse",
+    kind: "litany",
+    tags: ["spouse", "discernment", "singleness", "marriage", "waiting"],
+    source: "Circulates as a shared image; transcribed from a carousel posted by @juliannarvivas on Instagram",
+    author: "Traditional / Anonymous",
+    authorNote: "modern and unattributed — no author, no approval; see background before praying it",
+    year: "Contemporary (2020s); no earlier source traceable",
+    origin: "Modern devotional — private composition",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "Lord, have mercy.\n" +
+      "Christ, have mercy.\n" +
+      "Lord, have mercy.\n\n" +
+      "Jesus, hear us.\n" +
+      "Jesus, graciously hear us.\n\n" +
+      "From the belief that I have missed the moment, deliver me, Jesus.\n" +
+      "From discouragement in the waiting, deliver me, Jesus.\n" +
+      "From the lie that there is no one for me, deliver me, Jesus.\n" +
+      "From the temptation to settle for less than I am made for, deliver me, Jesus.\n" +
+      "From the temptation to orchestrate my own love story, deliver me, Jesus.\n" +
+      "From the lie that my desires will go unfulfilled, deliver me, Jesus.\n" +
+      "From the lie that I must change to be loved, deliver me, Jesus.\n" +
+      "From the lie that I can earn real love, deliver me, Jesus.\n" +
+      "From idolizing relationship and marriage, deliver me, Jesus.\n" +
+      "From neglecting the grace of my season of singleness, deliver me, Jesus.\n\n" +
+      "For the grace of our future together:\n\n" +
+      "That I may know in peace the call to another, we ask You, Jesus.\n" +
+      "That we may recognize one another when our paths meet, we ask You, Jesus.\n" +
+      "That we may be healed from past relationships and lingering \"what-ifs,\" we ask You, Jesus.\n" +
+      "That we may love one another well and in truth, we ask You, Jesus.\n" +
+      "That we may cherish one another with reverence and purity, we ask You, Jesus.\n" +
+      "That we may keep our gaze fixed on heaven, we ask You, Jesus.\n" +
+      "That we may remain united especially in suffering, we ask You, Jesus.\n" +
+      "That we may rest in the security of real love, we ask You, Jesus.\n" +
+      "That we may treasure and respect each other's whole person, we ask You, Jesus.\n" +
+      "That we may never forget You as the life of our relationship, we ask You, Jesus.\n\n" +
+      "For the formation of our hearts:\n\n" +
+      "For hearts steadfast in unwavering loyalty, we ask You, Jesus.\n" +
+      "For hearts willing to suffer for love, we ask You, Jesus.\n" +
+      "For hearts equally yoked and intentionally matched, we ask You, Jesus.\n" +
+      "For hearts that correct in gentleness and truth, we ask You, Jesus.\n" +
+      "For hearts that glorify Your love in union, we ask You, Jesus.\n\n" +
+      "Lamb of God, who takes away the sins of the world, spare us, O Lord.\n" +
+      "Lamb of God, who takes away the sins of the world, graciously hear us, O Lord.\n" +
+      "Lamb of God, who takes away the sins of the world, have mercy on us.\n\n" +
+      "Let us pray:\n" +
+      "Lord Jesus, Bridegroom of our souls, form my heart in trust, patience, and hope. Prepare both me " +
+      "and the spouse You desire for me in Your perfect time. Heal what is broken, strengthen what is " +
+      "weak, and purify what is wounded, so that our love may glorify You now and forever.\n\n" +
+      "Amen.",
+    background:
+      "Recorded here verbatim, exactly as it circulates — no line has been altered, including one that is " +
+      "theologically loose (see below). This is a transcription of an artefact, not an edited text.\n\n" +
+      "PROVENANCE. Unusually for anything in this library, it has essentially none. It spreads as a " +
+      "graphic — words baked into an image, which is why no amount of searching finds it as text — and " +
+      "the copy transcribed here comes from a carousel by the Instagram account @juliannarvivas, which " +
+      "presents it simply as 'an extra litany you can pray' alongside several novenas. No author, no " +
+      "imprimatur, no institutional source, and the phrase 'undiscovered spouse' appears nowhere in the " +
+      "Church's devotional vocabulary. Treat it as a recent private composition of unknown origin.\n\n" +
+      "SOUNDNESS. Better than the provenance suggests. Whoever wrote it knew the form: the Kyrie opening, " +
+      "'Jesus, hear us / graciously hear us,' a deliverance section, two petition sections, the threefold " +
+      "Agnus Dei with its correct responses, then 'Let us pray' and a collect — the same architecture as " +
+      "the Litany of Humility and the Litany of Trust. Nothing in it is heretical or superstitious, and " +
+      "crucially it makes no promises: none of the 'pray this and your spouse will appear' machinery that " +
+      "usually marks the genre. Two petitions are the ones this kind of prayer normally omits and are " +
+      "what keep it honest — 'From idolizing relationship and marriage' and 'From neglecting the grace of " +
+      "my season of singleness.' It clears the bar the Church actually sets for private devotion: free of " +
+      "error and superstition. It is not approved for public or liturgical use, and does not claim to be.\n\n" +
+      "TWO CAVEATS WORTH KNOWING. First, it presumes the vocation. Every petition assumes a spouse exists " +
+      "and will be found, which makes this a marriage-preparation prayer rather than a discernment " +
+      "prayer; if the question of marriage versus another path is genuinely still open, praying it daily " +
+      "quietly settles that question in advance. Second, the line 'From the lie that there is no one for " +
+      "me' leans on soulmate theology the Church does not teach — there is no predestined person, and for " +
+      "someone called to celibacy the statement is not a lie but simply true, so the petition asks " +
+      "deliverance from possibly believing something factual. Note that the litany's three other 'From " +
+      "the lie that...' petitions are precise, since those propositions really are false. If you want the " +
+      "line to hold, the fix is to move it off the question of whether a spouse exists and onto the real " +
+      "spiritual danger, which is despair of God's care: 'From the fear that I am forgotten, deliver me, " +
+      "Jesus' — true whichever way a vocation resolves. 'From the lie that I am beyond Your care' keeps " +
+      "the original rhythm and works for the same reason.\n\n" +
+      "For a version of this intention with actual provenance, the Litany of St. Joseph is also in this " +
+      "library: formally approved in 1909, and the Church's own litany for those seeking a spouse.",
+  },
 ];
 
 async function seedDefaultsIfEmpty() {
