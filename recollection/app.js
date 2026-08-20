@@ -4789,6 +4789,89 @@ const SEED_LIBRARY_ENTRIES = [
       "congregations wealthy enough for it to sting, which is a fair part of why he ended up twice exiled " +
       "and died on a forced march.",
   },
+  {
+    title: "Litany of St. Joseph",
+    kind: "litany",
+    tags: ["St. Joseph", "vocation", "work", "protection", "discernment"],
+    source: "Approved for public use by Pope St. Pius X, 1909; seven invocations added by Pope Francis, 1 May 2021",
+    author: "Traditional / Anonymous",
+    authorNote: "no single author — the invocations accumulated over centuries and were formally fixed in 1909",
+    year: "Approved 1909; current form since 2021",
+    origin: "Approved devotional litany",
+    liturgical: "St. Joseph's feasts (19 March, 1 May); traditionally prayed by those seeking a spouse or work",
+    feastDay: "March 19 (Solemnity); May 1 (St. Joseph the Worker)",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "Lord, have mercy.\n" +
+      "Christ, have mercy.\n" +
+      "Lord, have mercy.\n" +
+      "Christ, hear us.\n" +
+      "Christ, graciously hear us.\n\n" +
+      "God the Father of Heaven, have mercy on us.\n" +
+      "God the Son, Redeemer of the world, have mercy on us.\n" +
+      "God the Holy Spirit, have mercy on us.\n" +
+      "Holy Trinity, one God, have mercy on us.\n\n" +
+      "Holy Mary, pray for us.\n" +
+      "St. Joseph, pray for us.\n" +
+      "Renowned offspring of David, pray for us.\n" +
+      "Light of Patriarchs, pray for us.\n" +
+      "Spouse of the Mother of God, pray for us.\n" +
+      "Guardian of the Redeemer, pray for us.\n" +
+      "Chaste guardian of the Virgin, pray for us.\n" +
+      "Foster father of the Son of God, pray for us.\n" +
+      "Diligent protector of Christ, pray for us.\n" +
+      "Servant of Christ, pray for us.\n" +
+      "Minister of salvation, pray for us.\n" +
+      "Head of the Holy Family, pray for us.\n" +
+      "Joseph most just, pray for us.\n" +
+      "Joseph most chaste, pray for us.\n" +
+      "Joseph most prudent, pray for us.\n" +
+      "Joseph most strong, pray for us.\n" +
+      "Joseph most obedient, pray for us.\n" +
+      "Joseph most faithful, pray for us.\n" +
+      "Mirror of patience, pray for us.\n" +
+      "Lover of poverty, pray for us.\n" +
+      "Model of workers, pray for us.\n" +
+      "Glory of family life, pray for us.\n" +
+      "Guardian of virgins, pray for us.\n" +
+      "Pillar of families, pray for us.\n" +
+      "Support in difficulties, pray for us.\n" +
+      "Solace of the wretched, pray for us.\n" +
+      "Hope of the sick, pray for us.\n" +
+      "Patron of exiles, pray for us.\n" +
+      "Patron of the afflicted, pray for us.\n" +
+      "Patron of the poor, pray for us.\n" +
+      "Patron of the dying, pray for us.\n" +
+      "Terror of demons, pray for us.\n" +
+      "Protector of Holy Church, pray for us.\n\n" +
+      "Lamb of God, who takes away the sins of the world, spare us, O Lord.\n" +
+      "Lamb of God, who takes away the sins of the world, graciously hear us, O Lord.\n" +
+      "Lamb of God, who takes away the sins of the world, have mercy on us.\n\n" +
+      "V. He made him the lord of His household.\n" +
+      "R. And prince over all His possessions.\n\n" +
+      "Let us pray:\n" +
+      "O God, in Your ineffable providence You were pleased to choose Blessed Joseph to be the spouse of " +
+      "Your most holy Mother; grant, we beg You, that we may be worthy to have him for our intercessor in " +
+      "heaven whom on earth we venerate as our Protector: You who live and reign forever and ever. Amen.",
+    background:
+      "The oldest and only formally approved litany in this library — the other three here (Humility, " +
+      "Trust, Chastity) are all modern private compositions. Its invocations accumulated over centuries " +
+      "of devotion before Pope St. Pius X fixed the text and approved it for public use in 1909. It is " +
+      "the Church's actual litany for those seeking a spouse: Joseph is invoked under the titles 'Spouse " +
+      "of the Mother of God,' 'Head of the Holy Family' and 'Pillar of families,' and the closing collect " +
+      "asks precisely on the grounds that God chose him as husband to Mary. It is equally the litany for " +
+      "work and provision ('Model of workers'), which is why the second Josephite feast is 1 May.\n\n" +
+      "The text changed recently. On 1 May 2021, during the Year of St. Joseph, Pope Francis added seven " +
+      "new invocations, drawn mainly from modern papal writing on Joseph — including John Paul II's 1989 " +
+      "Redemptoris Custos, which supplies 'Guardian of the Redeemer.' The seven are: Guardian of the " +
+      "Redeemer, Servant of Christ, Minister of salvation, Support in difficulties, Patron of exiles, " +
+      "Patron of the afflicted, and Patron of the poor. The version here is the current post-2021 text, " +
+      "so older printed cards and books will be missing those lines.\n\n" +
+      "'Terror of demons' is the invocation people tend to stop at, and it is genuinely old — the logic " +
+      "is not that Joseph was a warrior but that a quiet, obedient, chaste life is what the devil cannot " +
+      "work with.",
+  },
 ];
 
 async function seedDefaultsIfEmpty() {
