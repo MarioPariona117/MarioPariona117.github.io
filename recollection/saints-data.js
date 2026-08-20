@@ -5755,7 +5755,7 @@ core({
   patronages: [{ of: "None yet — patronages are formally assigned only after canonization", why: "—" }],
   attributes: ["Ordinary lay/student dress"],
   relics: "Southern Cemetery, Manchester — his grave has become a site of pilgrimage",
-  related: [],
+  related: ["josemaria-escriva"],
   cards: [
     { q: "Servant of God Pedro Ballester — dates, and current status?", a: "Born 22 May 1996 in Manchester, died 13 January 2018 aged 21; currently a Servant of God, his cause having opened 13 May 2026 in the Diocese of Salford" },
     { q: "What was Pedro Ballester's vocation?", a: "A numerary of Opus Dei, committed to celibacy and community life while studying chemical engineering at Imperial College London" },
@@ -5791,6 +5791,38 @@ core({
     { q: "St. Peregrine Laziosi — feast day, dates?", a: "1 May; born c. 1260 in Forlì, died 1 May 1345 in Forlì, aged about 85" },
     { q: "Why is Peregrine the patron saint of cancer patients?", a: "Around age sixty he was healed, the night before a scheduled leg amputation, after a vision of Christ descending from the cross to touch the diseased limb" },
     { q: "How did Peregrine come to join the Servites?", a: "As a young man he struck the Servite friar Philip Benizi during civil unrest; Benizi's calm forgiveness converted him on the spot" },
+  ],
+}),
+
+// Added 17 August — St. Josemaría Escrivá, "favourite."
+core({
+  slug: "josemaria-escriva", listTier: "favourite", name: "St. Josemaría Escrivá", sortName: "Josemaria Escriva",
+  birthName: "José María Julián Mariano Escrivá de Balaguer y Albás", religiousName: "—",
+  titles: ["Priest", "Founder"],
+  rank: "Optional Memorial (26 June)", feast: "06-26", feastLabel: "26 June",
+  born: "9 January 1902", bornPlace: "Barbastro, Spain",
+  died: "26 June 1975", diedPlace: "Rome, Italy", ageAtDeath: "73",
+  beatified: { date: "17 May 1992", by: "Pope John Paul II" },
+  canonized: { date: "6 October 2002", by: "Pope John Paul II" },
+  nationality: "Spanish", order: "Founder of Opus Dei (The Work), established as a Personal Prelature in 1982", state: "Priest, founder",
+  summary: "A Spanish priest, ordained in 1925, who in 1928 founded Opus Dei on the conviction that ordinary work and everyday life — not only the convent or the priesthood — are themselves a real path to holiness, a teaching later given wide institutional force at the Second Vatican Council's universal call to holiness. He survived the Spanish Civil War's anti-clerical violence partly by crossing the Pyrenees on foot to reach safety, and spent the rest of his life developing and spreading Opus Dei internationally, alongside a huge body of widely read spiritual writing, above all The Way, a collection of 999 short maxims translated into dozens of languages.",
+  charism: "Sanctification of ordinary work and everyday circumstances — finding God in a job, a family, an unremarkable day — rather than treating secular life as merely tolerated alongside 'real' spiritual practice.",
+  anecdotes: [
+    { title: "Crossing the Pyrenees on foot", text: "During the Spanish Civil War, with clergy specifically targeted for violence in Republican-held Madrid, Escrivá spent long periods in hiding before eventually crossing the Pyrenees on foot in extremely dangerous winter conditions to reach Nationalist territory and continue his priestly ministry.", source: "Standard biographical accounts of his wartime years", legend: false },
+    { title: "999 points in The Way", text: "Escrivá's best-known book, The Way (Camino), is built not as continuous prose but as 999 short, aphoristic points of spiritual counsel — deliberately terse maxims meant to be read a few at a time and returned to repeatedly rather than read straight through once.", source: "The Way itself, and standard accounts of its composition and reception", legend: false },
+  ],
+  writings: [
+    { title: "The Way", original: "Camino", genre: "Spiritual maxims", year: "1934 (expanded 1939)", language: "Spanish", note: "999 short points of spiritual counsel; his best-known and most widely translated work", translation: "Widely available in English and dozens of other languages", free: "—", difficulty: "Easy", order: 1 },
+    { title: "Christ Is Passing By", original: "Es Cristo que pasa", genre: "Homilies", year: "1973", language: "Spanish", note: "A widely read collection of his homilies on ordinary Christian life", translation: "Widely available in English", free: "—", difficulty: "Easy", order: 2 },
+  ],
+  patronages: [{ of: "None widely established beyond Opus Dei itself", why: "—" }],
+  attributes: ["Priestly cassock", "Sometimes shown with a copy of The Way"],
+  relics: "Prelatic Church of Our Lady of Peace, Rome",
+  related: ["pedro-ballester"],
+  cards: [
+    { q: "St. Josemaría Escrivá — feast day, dates?", a: "26 June; born 9 January 1902 in Barbastro, Spain, died 26 June 1975 in Rome, aged 73" },
+    { q: "What did Josemaría Escrivá found, and when?", a: "Opus Dei, in 1928 — on the conviction that ordinary work and everyday life are themselves a genuine path to holiness" },
+    { q: "What is Escrivá's best-known book?", a: "The Way (Camino), a collection of 999 short spiritual maxims, translated into dozens of languages" },
   ],
 }),
 

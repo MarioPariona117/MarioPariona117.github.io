@@ -3990,6 +3990,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["courage"],
     source: "First homily as Pope, St. Peter's Square, 22 October 1978",
     author: "St. John Paul II",
+    related: ["I Cannot, I Must Not, I Will Not"],
     year: "1978",
     origin: "Modern papal teaching",
     liturgical: "",
@@ -5102,6 +5103,39 @@ const SEED_LIBRARY_ENTRIES = [
       "The closing invocation reflects the author's own order. St. Peregrine Laziosi was a Servite friar " +
       "whose reported cure of a cancerous leg made him the traditional patron of cancer patients, which " +
       "is why a Servite prayer ends by naming him alongside Our Lady, Queen of Peace.",
+  },
+  {
+    title: "I Cannot, I Must Not, I Will Not",
+    kind: "quote",
+    tags: ["conscience", "courage", "martyrdom", "obedience"],
+    source: "His reply to General Miollis, Rome, 1810, refusing the oath of allegiance to Napoleon",
+    author: "St. Gaspar del Bufalo",
+    relatedSaints: ["gaspar-del-bufalo"],
+    related: ["Be Not Afraid"],
+    year: "1810",
+    origin: "Missionaries of the Precious Blood (C.PP.S.)",
+    liturgical: "",
+    feastDay: "October 21",
+    originalLanguage: "Italian",
+    favorite: true,
+    latinBody: "Non posso, non debbo, non voglio.",
+    body: "I cannot, I must not, I will not.",
+    background:
+      "Spoken in Rome in 1810. Napoleon had annexed the Papal States and imprisoned Pius VII, and was " +
+      "requiring the Roman clergy to swear an oath of allegiance to himself; the Pope had forbidden it. " +
+      "Summoned before General Miollis, the French military governor, and worked on with both threats " +
+      "and inducements, Gaspar — then twenty-four and only four years ordained — gave this answer, and " +
+      "it is the sentence he is remembered by.\n\n" +
+      "The three verbs are doing distinct work, which is why the line survived: 'non posso' (I am not " +
+      "able), 'non debbo' (I ought not — the moral obligation), 'non voglio' (I do not will it — the " +
+      "personal act). Refusal at the level of capacity, of duty, and of will, closing off in turn every " +
+      "escape route a frightened man might reach for.\n\n" +
+      "It cost him four years. He was banished from Rome and then imprisoned in the dungeons of Imola " +
+      "and Rocca until Napoleon's fall in 1814. He is not a martyr — he survived, returned, and went on " +
+      "to found the Missionaries of the Precious Blood — which arguably makes the line more useful than " +
+      "a martyr's would be: he had to live afterwards with what refusing had cost him, and did.\n\n" +
+      "Longer English versions circulate, typically prefacing it with something like 'I would rather die " +
+      "or suffer evil than take such an oath.' What is actually documented is the Italian triple.",
   },
 ];
 
