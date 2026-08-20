@@ -376,6 +376,31 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
   border-top: 1px solid rgba(var(--edge-rgb),0.08);
   text-align: left;
 }
+
+/* "See also" — curated links between library entries. */
+.reader-related-wrap {
+  margin-top: 2.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(var(--edge-rgb),0.08);
+  text-align: left;
+}
+.reader-related-wrap .chip-row { margin-top: 0.6rem; }
+.related-entry-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.related-entry-chip:hover { color: var(--gold); border-color: rgba(212,168,71,0.45); }
+.related-entry-chip .related-kind {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
 .reader-background-label {
   font-size: 0.64rem;
   font-weight: 700;

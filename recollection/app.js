@@ -2435,6 +2435,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["morning", "daily"],
     source: "Traditional — Apostleship of Prayer",
     author: "Fr. François-Xavier Gautrelet, S.J.",
+    related: ["The First Moment of the Day", "Night Prayer"],
     year: "1844",
     origin: "Apostleship of Prayer / Sacred Heart devotion",
     feastDay: "",
@@ -2577,6 +2578,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["Incarnation", "Marian", "morning", "noon", "evening"],
     source: "Traditional Catholic prayer, prayed at 6am, noon, and 6pm",
     author: "Traditional",
+    related: ["Hail Mary", "Regina Caeli"],
     authorNote: "developed communally, evening recitation formalized 1318–1327 under Pope John XXII",
     year: "developed 11th–18th century (evening recitation formalized 1318–1327 under Pope John XXII)",
     origin: "Monastic — memorial of the Incarnation",
@@ -2618,6 +2620,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["eucharist", "benediction", "adoration"],
     source: "Last two verses of Pange Lingua Gloriosi Corporis Mysterium; English by Fr. Edward Caswall (19th c.)",
     author: "St. Thomas Aquinas, O.P.",
+    related: ["Panis Angelicus", "Prayer Before Mass"],
     year: "c. 1264",
     origin: "Dominican",
     liturgical: "Benediction / Adoration of the Blessed Sacrament",
@@ -2667,6 +2670,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["eucharist", "Corpus Christi"],
     source: "Penultimate stanza of Sacris Solemniis; famously set to music separately by César Franck (1872)",
     author: "St. Thomas Aquinas, O.P.",
+    related: ["Tantum Ergo", "Prayer Before Mass"],
     year: "c. 1264",
     origin: "Dominican",
     liturgical: "Corpus Christi; often sung at Eucharistic devotions and weddings",
@@ -2806,6 +2810,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["Marian", "Compline", "antiphon"],
     source: "One of the four seasonal Marian antiphons sung/recited at the close of Compline",
     author: "Bl. Hermann of Reichenau, O.S.B.",
+    related: ["Alma Redemptoris Mater", "Ave Regina Caelorum", "Regina Caeli"],
     authorNote: "disputed — most musicologists regard it as anonymous",
     year: "11th century (attribution disputed)",
     origin: "Marian antiphon — Compline / Night Prayer",
@@ -2852,6 +2857,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["Marian", "Compline", "antiphon", "Advent"],
     source: "One of the four seasonal Marian antiphons sung/recited at the close of Compline",
     author: "Bl. Hermann of Reichenau, O.S.B.",
+    related: ["Salve Regina", "Ave Regina Caelorum", "Regina Caeli"],
     year: "11th century (c. 1053)",
     origin: "Marian antiphon — Compline / Night Prayer",
     liturgical: "First Sunday of Advent through February 2 (the Presentation / Candlemas)",
@@ -2888,6 +2894,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["Marian", "Compline", "antiphon", "Lent"],
     source: "One of the four seasonal Marian antiphons sung/recited at the close of Compline",
     author: "Traditional",
+    related: ["Salve Regina", "Alma Redemptoris Mater", "Regina Caeli"],
     year: "12th century",
     origin: "Marian antiphon — Compline / Night Prayer",
     liturgical: "February 3 (day after Candlemas) through Wednesday of Holy Week",
@@ -2926,6 +2933,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["Marian", "Compline", "antiphon", "Easter"],
     source: "One of the four seasonal Marian antiphons; also replaces the Angelus during the Easter season",
     author: "Traditional",
+    related: ["The Angelus", "Salve Regina", "Alma Redemptoris Mater", "Ave Regina Caelorum"],
     year: "12th–13th century",
     origin: "Marian antiphon — Compline / Night Prayer",
     liturgical: "Easter Sunday through Pentecost",
@@ -3143,6 +3151,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["confession", "penance"],
     source: "Traditional catechetical prayer, said in or after Confession",
     author: "Traditional",
+    related: ["Act of Faith", "Act of Hope", "Act of Charity"],
     authorNote: "standardized through catechisms, no single documented author",
     year: "Current common wording widespread by the 19th–20th century",
     origin: "Sacrament of Reconciliation",
@@ -3175,6 +3184,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["foundational", "catechetical"],
     source: "Traditional catechetical prayer, one of the four Acts (with Hope, Charity, and Contrition)",
     author: "Traditional",
+    related: ["Act of Hope", "Act of Charity", "Act of Contrition"],
     authorNote: "standardized through catechisms, no single documented author",
     year: "Common wording widespread by the 19th–20th century",
     origin: "Catechetical",
@@ -3204,6 +3214,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["foundational", "catechetical"],
     source: "Traditional catechetical prayer, one of the four Acts (with Faith, Charity, and Contrition)",
     author: "Traditional",
+    related: ["Act of Faith", "Act of Charity", "Act of Contrition"],
     authorNote: "standardized through catechisms, no single documented author",
     year: "Common wording widespread by the 19th–20th century",
     origin: "Catechetical",
@@ -3231,6 +3242,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["foundational", "catechetical"],
     source: "Traditional catechetical prayer, one of the four Acts (with Faith, Hope, and Contrition)",
     author: "Traditional",
+    related: ["Act of Faith", "Act of Hope", "Act of Contrition"],
     authorNote: "standardized through catechisms, no single documented author",
     year: "Common wording widespread by the 19th–20th century",
     origin: "Catechetical",
@@ -3367,6 +3379,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["humility", "self-examination"],
     source: "Popularized by Cardinal Rafael Merry del Val, who said it daily after Mass",
     author: "Cardinal Rafael Merry del Val",
+    related: ["Litany of Trust"],
     authorNote: "a near-identical version predates him, already in print by 1880",
     year: "Published in its familiar form in the early 20th century, based on an 1880 original",
     origin: "Devotional",
@@ -3418,6 +3431,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["trust", "surrender", "anxiety"],
     source: "Sisters of Life (sistersoflife.org)",
     author: "Sr. Faustina Maria Pia, S.V.",
+    related: ["Litany of Humility", "Jesus, I Trust in You"],
     year: "Contemporary (2010s); exact year of composition not widely documented",
     origin: "Sisters of Life",
     liturgical: "",
@@ -3582,6 +3596,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["Marian", "intercession"],
     source: "Manuscript tradition traces to Nicolas Salicetus's Antidotarius animae (1489)",
     author: "Traditional",
+    related: ["The Measure of Love"],
     authorNote: "long misattributed to St. Bernard of Clairvaux",
     year: "Traceable to the 15th century as part of a longer prayer; popularized in its short form in the 17th century",
     origin: "Marian devotional prayer",
@@ -3668,6 +3683,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["trust", "Divine Mercy"],
     source: "Diariusz — Divine Mercy in My Soul (her Diary)",
     author: "St. Faustina Kowalska",
+    related: ["Litany of Trust"],
     year: "1930s",
     origin: "Divine Mercy devotion",
     liturgical: "",
@@ -3833,6 +3849,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["perseverance"],
     source: "The Way",
     author: "St. Josemaría Escrivá",
+    related: ["The Little Duty of Each Moment"],
     year: "1930s (first published 1934/1939)",
     origin: "Opus Dei",
     liturgical: "",
@@ -3945,6 +3962,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["love", "little way"],
     source: "Story of a Soul",
     author: "St. Thérèse of Lisieux",
+    related: ["Miss No Single Opportunity"],
     year: "1890s",
     origin: "Carmelite",
     liturgical: "",
@@ -4059,6 +4077,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["little way"],
     source: "Story of a Soul",
     author: "St. Thérèse of Lisieux",
+    related: ["Love Proves Itself By Deeds", "The Little Duty of Each Moment"],
     year: "1890s",
     origin: "Carmelite",
     liturgical: "",
@@ -4082,6 +4101,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["little way"],
     source: "The Way, no. 815",
     author: "St. Josemaría Escrivá",
+    related: ["Don't Let Your Life Be Sterile", "Miss No Single Opportunity"],
     year: "1930s (first published 1934/1939)",
     origin: "Opus Dei",
     liturgical: "",
@@ -4150,6 +4170,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["zeal"],
     source: "Letter 368, to Stefano di Corrado Maconi",
     author: "St. Catherine of Siena",
+    related: ["Be Who God Meant You to Be"],
     year: "14th century (c. 1378–1380)",
     origin: "Dominican",
     liturgical: "",
@@ -4172,6 +4193,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["zeal"],
     source: "Address at World Youth Day, Rome, 2000 — explicitly given there as a paraphrase of St. Catherine of Siena",
     author: "St. John Paul II",
+    related: ["Set Fire to All Italy"],
     authorNote: "paraphrasing St. Catherine of Siena — see her original line, also in this library",
     year: "2000",
     origin: "Modern papal teaching",
@@ -4401,6 +4423,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["prayer"],
     source: "The Great Means of Salvation and of Perfection",
     author: "St. Alphonsus Liguori",
+    related: ["Night Prayer"],
     year: "18th century",
     origin: "Redemptorist",
     liturgical: "",
@@ -4558,6 +4581,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["eucharist", "Mass", "preparation"],
     source: "The CTS New Sunday Missal; traditionally titled Oratio Sancti Thomae Aquinatis ante Missam",
     author: "St. Thomas Aquinas, O.P.",
+    related: ["Tantum Ergo", "Panis Angelicus"],
     authorNote: "English translations vary in wording slightly between missals",
     year: "13th century (c. 1264, contemporaneous with his other Eucharistic works)",
     origin: "Dominican",
@@ -4602,6 +4626,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["love"],
     source: "Popular paraphrase of a line from On Loving God (De Diligendo Deo), ch. 1, c. 1132–1135",
     author: "St. Bernard of Clairvaux",
+    related: ["Memorare"],
     authorNote: "sometimes also misattributed to St. Augustine, without a documented source",
     year: "12th century (treatise c. 1132–1135)",
     origin: "Cistercian",
@@ -4675,6 +4700,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["morning", "prayer"],
     source: "Widely attested in compilations of his sayings; no primary manuscript pinned",
     author: "St. John Vianney",
+    related: ["Morning Offering", "Night Prayer"],
     year: "19th century",
     origin: "Diocesan priest — patron of parish priests",
     liturgical: "",
@@ -4697,6 +4723,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["evening", "protection"],
     source: "Widely and consistently attributed across compilations of his prayers; no single manuscript pinned",
     author: "St. Alphonsus Liguori",
+    related: ["Morning Offering", "Every Saint Became a Saint Through Mental Prayer"],
     year: "18th century",
     origin: "Redemptorist",
     liturgical: "Night, before sleep",
@@ -4767,6 +4794,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["charity", "eucharist", "justice", "the poor"],
     source: "Widely attributed; the same argument is documented in his Homily 50 on Matthew, 3–4 (PG 58, 508–509)",
     author: "St. John Chrysostom",
+    related: ["Prayer Before Mass"],
     authorNote: "this exact wording is not traceable to a specific homily — see background",
     year: "4th century",
     origin: "Patristic",
@@ -4795,6 +4823,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["St. Joseph", "vocation", "work", "protection", "discernment"],
     source: "Approved for public use by Pope St. Pius X, 1909; seven invocations added by Pope Francis, 1 May 2021",
     author: "Traditional / Anonymous",
+    related: ["Litany of the Undiscovered Spouse"],
     authorNote: "no single author — the invocations accumulated over centuries and were formally fixed in 1909",
     year: "Approved 1909; current form since 2021",
     origin: "Approved devotional litany",
@@ -4878,6 +4907,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["spouse", "discernment", "singleness", "marriage", "waiting"],
     source: "Circulates as a shared image; transcribed from a carousel posted by @juliannarvivas on Instagram",
     author: "Traditional / Anonymous",
+    related: ["Litany of St. Joseph", "Litany of Humility", "Litany of Trust"],
     authorNote: "modern and unattributed — no author, no approval; see background before praying it",
     year: "Contemporary (2020s); no earlier source traceable",
     origin: "Modern devotional — private composition",
@@ -5509,6 +5539,35 @@ async function openLibraryReader(id) {
     $("#reader-background").innerHTML = renderTextBlock(background);
     $("#reader-background-wrap").classList.remove("hidden");
   }
+
+  renderRelatedEntryChips(entry);
+}
+
+// Renders an entry's `related` titles as chips that open those entries.
+// Related entries are keyed by TITLE, not id: ids are generated per-device
+// at seed time (and differ between localStorage and Drive), whereas titles
+// are unique across the library and stable in the source data. A title that
+// no longer resolves is dropped silently rather than rendering a dead chip.
+function renderRelatedEntryChips(entry) {
+  const wrap = $("#reader-related-wrap");
+  const row = $("#reader-related");
+  const titles = (entry.related || []).filter((t) => t !== entry.title);
+  const found = titles
+    .map((t) => state.libraryEntries.find((e) => e.title === t))
+    .filter(Boolean);
+
+  wrap.classList.toggle("hidden", found.length === 0);
+  if (found.length === 0) return;
+
+  row.innerHTML = found
+    .map(
+      (e) =>
+        `<span class="chip related-entry-chip" data-id="${e.id}">${escapeHtml(e.title)}<span class="related-kind">${escapeHtml(KIND_LABELS[e.kind] || e.kind)}</span></span>`
+    )
+    .join("");
+  $$(".related-entry-chip", row).forEach((chip) =>
+    chip.addEventListener("click", () => openLibraryReader(chip.dataset.id))
+  );
 }
 
 // --- Numbered-sequence reader ---------------------------------------------
@@ -5763,8 +5822,13 @@ async function onSaveLibraryEntry(e) {
   btn.textContent = "Saving…";
   try {
     const tags = $("#lib-tags").value.split(",").map((t) => t.trim()).filter(Boolean);
+    // `related` has no editor field — carry the existing value through, or
+    // saving from the UI would silently wipe an entry's "See also" links.
+    const existingRelated =
+      (state.libraryEntries.find((e) => e.id === state.editingLibraryId) || {}).related || [];
     const savedId = await saveLibraryEntry({
       id: state.editingLibraryId,
+      related: existingRelated,
       title: $("#lib-title").value.trim() || "Untitled",
       kind: $("#lib-kind").value,
       tags,
