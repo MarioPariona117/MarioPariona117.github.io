@@ -3290,6 +3290,7 @@ window.SAINTS = [
       { title: "Confronting Abelard", text: "At the Council of Sens in 1140 or 1141, Bernard confronted the philosopher and theologian Peter Abelard directly over propositions he considered dangerously rationalist; rather than debate point by point as Abelard had prepared to do, Bernard had a list of condemned propositions read out and secured a swift condemnation, a tactic some contemporaries and later historians have judged more political than purely theological.", source: "Documented in contemporary accounts of the Council of Sens, including Abelard's own later account in his Apologia", legend: false },
       { title: "Owning the crusade's failure", text: "After the catastrophic collapse of the Second Crusade, which Bernard had preached with enormous personal authority, he did not disown responsibility, instead grappling publicly and painfully in his own later writings (including a section of his treatise On Consideration) with why God had permitted such a disaster despite what he had believed was a righteous cause.", source: "Bernard's own treatise De Consideratione, addressed to his former monk Pope Eugene III", legend: false },
       { title: "A monk becomes pope", text: "One of Bernard's own monks at Clairvaux, Bernardo Pignatelli, was elected Pope Eugene III in 1145; Bernard, startled that his own former subject now outranked him in the Church, wrote him a famous, remarkably direct treatise of advice, On Consideration, urging the new pope not to be swallowed by the business of Roman curial administration at the expense of contemplation.", source: "Documented in the dedication and content of Bernard's De Consideratione", legend: false },
+      { title: "The icy pond", text: "As a young man, before entering religious life, Bernard is said to have found himself struck by the beauty of a woman he passed and, recognizing the stirring of temptation, thrown himself into a nearby pond of near-freezing water rather than let the thought take hold, staying in until it had passed. A companion story from the same period holds that a woman was once deliberately placed naked in his bed at an inn to test him, and that he simply got up and fled the room rather than confront the moment any other way.", source: "Early biographical tradition (the Vita Prima Bernardi and the hagiography built on it) — repeated across many later Lives, but not traceable to a single precise contemporary record", legend: true },
     ],
 
     phenomena: [],
@@ -3301,7 +3302,7 @@ window.SAINTS = [
 
   spirituality: {
     charism: "Ardent, honeyed devotion to Christ and to Mary, joined to fierce reforming energy in the wider affairs of the Church — contemplation and vigorous public action held together rather than opposed",
-    teachings: ["The four degrees of love, culminating in loving oneself only for God's sake", "Mystical union with Christ expounded through the allegory of the Song of Songs", "A sharp suspicion of untethered rationalism in theology, set against Peter Abelard's more dialectical method"],
+    teachings: ["The four degrees of love, culminating in loving oneself only for God's sake", "Mystical union with Christ expounded through the allegory of the Song of Songs", "A sharp suspicion of untethered rationalism in theology, set against Peter Abelard's more dialectical method", "Carnal love as the necessary starting point of all human love, not something to despise but to purify: 'since we are carnal, and born of the lust of the flesh, our desire and our love must have its beginning in the flesh — but, rightly guided by grace, it will have its consummation in the spirit' (On Loving God)"],
     method: "Extensive preaching, an enormous correspondence addressing both spiritual direction and ecclesiastical politics, and a major cycle of mystical sermons composed over nearly two decades",
     devotions: ["Deep Marian devotion, though the specific attribution of the 'Memorare' prayer to him is a later, unverified tradition", "Contemplative reading of the Song of Songs as an allegory of the soul's union with Christ"],
     school: "Cistercian mystical theology — monastic, affective, and rooted in Scripture rather than the emerging scholastic dialectical method he distrusted",
@@ -3322,7 +3323,7 @@ window.SAINTS = [
     forYou: "Two things worth taking from Bernard specifically: first, his sermons on the Song of Songs are the fruit of returning to the same text for eighteen years rather than always reading something new — there's a case for picking one book of Scripture and staying with it slowly rather than constantly moving on. Second, and just as important: he himself over-did asceticism as a young man, damaged his health, and later explicitly warned others not to repeat his mistake — a useful corrective if 'holier' starts to mean 'harsher on yourself' rather than more faithful.",
   },
   writings: [
-    { title: "Sermons on the Song of Songs", original: "Sermones super Cantica Canticorum", genre: "Mystical commentary / sermons", year: "1135–1153, unfinished (86 sermons)", language: "Latin", note: "His acknowledged masterwork — mystical union with Christ expounded through the Song of Songs, left unfinished at his death", translation: "Kilian Walsh, O.C.S.O. (Cistercian Publications), 4 vols.", free: "Public domain", difficulty: "Rich but accessible in short sections", order: 1 },
+    { title: "Sermons on the Song of Songs", original: "Sermones super Cantica Canticorum", genre: "Mystical commentary / sermons", year: "1135–1153, unfinished (86 sermons)", language: "Latin", note: "His acknowledged masterwork — mystical union with Christ expounded through the Song of Songs, left unfinished at his death. Also where his direct treatment of lust and carnal desire is most sustained: several sermons work through 'the prudence of the flesh,' the danger of voluptuousness, and a commendation of chastity and widowhood, reading the Song's erotic language as needing to be purified and redirected toward God rather than denied.", translation: "Kilian Walsh, O.C.S.O. (Cistercian Publications), 4 vols.", free: "Public domain", difficulty: "Rich but accessible in short sections", order: 1 },
     { title: "On Consideration", original: "De Consideratione", genre: "Treatise, addressed to Pope Eugene III", year: "c. 1148–1153", language: "Latin", note: "Remarkably direct advice to his own former monk, now pope, on not being consumed by curial business at the expense of contemplation", translation: "John D. Anderson & Elizabeth T. Kennan (Cistercian Publications)", free: "Public domain", difficulty: "Moderate", order: 2 },
     { title: "On Loving God", original: "De Diligendo Deo", genre: "Treatise", year: "c. 1126", language: "Latin", note: "Sets out the 'four degrees of love,' culminating in loving oneself only for God's sake", translation: "Various, including Cistercian Publications editions", free: "Public domain", difficulty: "Moderate", order: 3 },
     { title: "In Praise of the New Knighthood", original: "De Laude Novae Militiae", genre: "Treatise", year: "c. 1128–1136", language: "Latin", note: "Written in support of the newly founded Knights Templar, whose Rule Bernard himself helped draft", translation: "M. Conrad Greenia (Cistercian Publications)", free: "Public domain", difficulty: "Easy", order: 4 },
@@ -5613,6 +5614,95 @@ core({
     { q: "Why is St. Cecilia the patroness of musicians?", a: "From a line in her (legendary, 5th-century) Acts: as the wedding instruments played, she sang in her heart to God alone — 'cantantibus organis, Caecilia Domino decantabat'" },
     { q: "How reliable is what we know about St. Cecilia's life?", a: "Very little is historically established — her cult is ancient and she is named in the Roman Canon, but her Acts are a late composition and even the century of her martyrdom is disputed" },
     { q: "What is the Maderno statue in Santa Cecilia in Trastevere?", a: "Stefano Maderno's 1600 marble of her body as it was found when the tomb was opened in 1599 — lying on her side, face turned away, three sword marks on the neck" },
+  ],
+}),
+
+// Added 17 August — St. John Eudes, "favourite."
+core({
+  slug: "john-eudes", listTier: "favourite", name: "St. John Eudes", sortName: "John Eudes",
+  religiousName: "—", titles: ["Priest", "Founder"],
+  epithets: ["Father, Doctor, and Apostle of the liturgical worship of the Hearts of Jesus and Mary — Pius XI's own title for him at his canonization"],
+  rank: "Optional Memorial (19 August)", feast: "08-19", feastLabel: "19 August",
+  born: "14 November 1601", bornPlace: "Ri, Normandy, France",
+  died: "19 August 1680", diedPlace: "Caen, France", ageAtDeath: "78",
+  beatified: { date: "25 April 1909", by: "Pope Pius X" },
+  canonized: { date: "31 May 1925", by: "Pope Pius XI", note: "Canonized the same day as St. John Vianney, the two presented together as extraordinary examples of priestly holiness" },
+  nationality: "French (Norman)", order: "Founder of the Congregation of Jesus and Mary (Eudists) and the Order of Our Lady of Charity", state: "Priest, founder",
+  summary: "A French priest and tireless missionary preacher — he preached well over a hundred parish missions across France — who founded the Eudists to reform priestly formation through seminaries, and founded homes of refuge for women leaving prostitution. He is above all the founding figure of the liturgical devotion to the Sacred Heart of Jesus and the Immaculate Heart of Mary: he composed and celebrated the first Mass and Office in honour of the Immaculate Heart in 1648 and of the Sacred Heart in 1672, decades before St. Margaret Mary Alacoque's visions carried the devotion to much wider popular fame.",
+  charism: "The Hearts of Jesus and Mary as the proper centre of Christian devotion — love, not primarily fear, as the engine of conversion and priestly reform alike.",
+  anecdotes: [
+    { title: "The first Mass of the Sacred Heart", text: "In 1672, decades before St. Margaret Mary Alacoque's visions made devotion to the Sacred Heart widely known, John Eudes composed and celebrated the first ever Mass and Divine Office specifically in its honour — the liturgical origin point of a devotion later spread across the whole Church.", source: "Standard hagiographical and liturgical-historical accounts of the Sacred Heart devotion's origins", legend: false },
+    { title: "Refuge for women leaving prostitution", text: "In 1641 at Caen, Eudes founded a house of refuge for women wanting to leave prostitution, the Order of Our Lady of Charity — a practical, unglamorous work of mercy alongside his more famous liturgical and missionary activity, later reorganized by St. Mary Euphrasia Pelletier into the wider Good Shepherd Sisters.", source: "Standard biographical accounts and the congregation's own founding history", legend: false },
+  ],
+  writings: [
+    { title: "The Admirable Heart of Mary", original: "Le Cœur admirable de la très sainte Mère de Dieu", genre: "Devotional theology", year: "1681 (published posthumously)", language: "French", note: "His major work on devotion to the Immaculate Heart of Mary", translation: "Various English editions exist", free: "—", difficulty: "Moderate", order: 1 },
+    { title: "The Sacred Heart of Jesus", original: "Le Cœur admirable de Jésus", genre: "Devotional theology", year: "17th century", language: "French", note: "His major work on devotion to the Sacred Heart, laying much of the theological groundwork later devotional writers built on", translation: "Various English editions exist", free: "—", difficulty: "Moderate", order: 2 },
+  ],
+  patronages: [{ of: "None widely established beyond his own congregations", why: "—" }],
+  attributes: ["Priestly cassock", "Sometimes shown holding a flaming heart (Sacred Heart imagery)"],
+  related: ["john-vianney", "francis-de-sales"],
+  cards: [
+    { q: "St. John Eudes — feast day, dates?", a: "19 August; born 14 November 1601 in Normandy, died 19 August 1680 at Caen, aged 78" },
+    { q: "What is John Eudes' central importance to Catholic devotion?", a: "He is the founding figure of the liturgical Sacred Heart and Immaculate Heart devotions — composing the first Mass and Office for the Immaculate Heart in 1648 and the Sacred Heart in 1672, decades before Margaret Mary Alacoque's visions" },
+    { q: "What did John Eudes found in 1641?", a: "A house of refuge at Caen for women leaving prostitution — the Order of Our Lady of Charity, later reorganized into the wider Good Shepherd Sisters" },
+    { q: "Who was John Eudes canonized alongside?", a: "St. John Vianney, on 31 May 1925 by Pius XI — the two presented together as models of priestly holiness" },
+  ],
+}),
+
+// Added 17 August — St. Gaspar del Bufalo, "favourite."
+core({
+  slug: "gaspar-del-bufalo", listTier: "favourite", name: "St. Gaspar del Bufalo", sortName: "Gaspar del Bufalo",
+  religiousName: "—", titles: ["Priest", "Founder"],
+  rank: "Optional Memorial (21 October)", feast: "10-21", feastLabel: "21 October",
+  born: "6 January 1786", bornPlace: "Rome, Italy",
+  died: "28 December 1837", diedPlace: "Rome, Italy", ageAtDeath: "51",
+  beatified: { date: "18 December 1904", by: "Pope Pius X" },
+  canonized: { date: "12 June 1954", by: "Pope Pius XII" },
+  nationality: "Italian (Roman)", order: "Founder of the Missionaries of the Precious Blood (C.PP.S.)", state: "Priest, founder",
+  summary: "A Roman priest who refused, at real personal cost, to swear an oath of allegiance to Napoleon in 1810 and endured four years of exile and imprisonment for it, then, after Napoleon's fall, became a famous itinerant missionary preacher in the Italian countryside — most strikingly among the brigands hiding in the hills, many of whom laid down their weapons after hearing him preach. He founded the Missionaries of the Precious Blood in 1815, becoming the great modern apostle of devotion to the Precious Blood of Christ.",
+  charism: "Devotion to the Precious Blood of Christ as the sign of the price and totality of God's love; fearless preaching in physically dangerous settings — bandit hideouts, plague-ridden towns — that others avoided.",
+  anecdotes: [
+    { title: "\"I cannot, I must not, and I will not\"", text: "Ordered in 1810 to swear an oath of allegiance to Napoleon along with the Roman clergy, Gaspar refused outright — 'I cannot, I must not, and I will not' — knowing it would cost him his freedom; he was exiled and then imprisoned for four years, which he reportedly bore with notable serenity.", source: "Recorded in standard biographical accounts of his life", legend: false },
+    { title: "Bandits laying down their guns", text: "After his release, Gaspar preached missions directly into the mountain hideouts of brigands who had fled into the hills to avoid conscription and worse under Napoleon; crowds of them reportedly came down and laid their weapons at his feet after hearing him preach, to the considerable irritation of local officials who profited from the banditry's persistence.", source: "Recorded in standard biographical accounts of his post-exile missionary work", legend: false },
+  ],
+  writings: [],
+  patronages: [{ of: "None widely established beyond his own congregation", why: "—" }],
+  attributes: ["Priestly cassock", "Sometimes shown with a chalice or the Precious Blood imagery"],
+  related: [],
+  cards: [
+    { q: "St. Gaspar del Bufalo — feast day, dates?", a: "21 October; born 6 January 1786 in Rome, died 28 December 1837 in Rome, aged 51" },
+    { q: "Why was Gaspar del Bufalo exiled and imprisoned?", a: "He refused to swear an oath of allegiance to Napoleon in 1810, saying 'I cannot, I must not, and I will not' — costing him four years of exile and imprisonment" },
+    { q: "What is Gaspar del Bufalo most known for after his release?", a: "Preaching missions directly into the mountain hideouts of Italian brigands, many of whom laid down their weapons after hearing him" },
+    { q: "What did Gaspar del Bufalo found in 1815?", a: "The Missionaries of the Precious Blood, making him the great modern apostle of devotion to the Precious Blood of Christ" },
+  ],
+}),
+
+// Added 17 August — St. Joseph Freinademetz, "to get to know."
+core({
+  slug: "joseph-freinademetz", listTier: "toKnow", name: "St. Joseph Freinademetz", sortName: "Joseph Freinademetz",
+  religiousName: "Fr. Joseph Freinademetz, S.V.D.",
+  titles: ["Priest", "Missionary"],
+  rank: "Not on the General Roman Calendar; kept by the Divine Word Missionaries", feast: "01-29", feastLabel: "29 January",
+  born: "15 April 1852", bornPlace: "Oies, Badia, South Tyrol (then Austria-Hungary, now Italy)",
+  died: "28 January 1908", diedPlace: "Taikia (Daijiazhuang), Shandong, China", ageAtDeath: "55",
+  deathManner: "Typhus, contracted while ministering in southern Shandong",
+  beatified: { date: "19 October 1975", by: "Pope Paul VI" },
+  canonized: { date: "5 October 2003", by: "Pope John Paul II", note: "Canonized together with St. Arnold Janssen (founder of his own Society of the Divine Word) and St. Daniele Comboni" },
+  nationality: "South Tyrolean (Austro-Hungarian, now Italian)", order: "Society of the Divine Word (S.V.D.)", state: "Priest, missionary",
+  summary: "One of the first two missionaries sent by the newly founded Society of the Divine Word to China in 1879, who spent the rest of his life — nearly thirty years — in southern Shandong province, learning Chinese deeply, adopting Chinese dress and customs, translating catechetical texts, and enduring poverty, plague, and the violent instability of the period, including the years around the Boxer Rebellion. He became known for total, unreserved identification with the people he served, famously saying he wished to 'be Chinese in heaven.'",
+  charism: "Total cultural identification with the people served, rather than missionary work conducted at a cultural distance — inculturation before the word existed for it.",
+  anecdotes: [
+    { title: "\"I would like to be Chinese in heaven\"", text: "Freinademetz's most frequently repeated saying, reflecting a missionary approach built on total identification with the Chinese people he served rather than any sense of cultural distance or superiority — he adopted Chinese dress, ate Chinese food, and by his own account came to think of the Chinese as his own people.", source: "Widely attested in Divine Word Missionaries' own biographical tradition and cited in John Paul II's 2003 canonization homily", legend: false },
+    { title: "\"The greatest grace\"", text: "Pope John Paul II quoted Freinademetz's own words at his canonization: 'I do not consider missionary life as a sacrifice I offer to God, but as the greatest grace that God could ever have lavished upon me.'", source: "Pope John Paul II, homily at the canonization Mass, 5 October 2003", legend: false },
+  ],
+  writings: [],
+  patronages: [{ of: "None widely established", why: "—" }],
+  attributes: ["Missionary cassock, sometimes shown in Chinese dress"],
+  related: [],
+  cards: [
+    { q: "St. Joseph Freinademetz — feast day, dates?", a: "29 January; born 15 April 1852 in South Tyrol, died 28 January 1908 in Shandong, China, aged 55" },
+    { q: "What is Freinademetz's most famous saying?", a: "'I would like to be Chinese in heaven' — reflecting his total identification with the people he served" },
+    { q: "Who was Freinademetz canonized alongside?", a: "St. Arnold Janssen, founder of his own Society of the Divine Word, and St. Daniele Comboni, on 5 October 2003" },
   ],
 }),
 

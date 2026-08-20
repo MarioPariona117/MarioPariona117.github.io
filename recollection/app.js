@@ -2509,6 +2509,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["Holy Spirit", "Dominican"],
     source: "The Prayers of Catherine of Siena, trans. Suzanne Noffke, O.P. (1983)",
     author: "St. Catherine of Siena",
+    related: ["O Mad Lover"],
     year: "c. 1378–1380",
     origin: "Dominican",
     feastDay: "April 29",
@@ -2543,6 +2544,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["eucharist", "Trinity", "Dominican"],
     source: "The Prayers of Catherine of Siena, trans. Suzanne Noffke, O.P. (1983)",
     author: "St. Catherine of Siena",
+    related: ["O Mad Lover"],
     year: "c. 1378–1380",
     origin: "Dominican",
     feastDay: "April 29",
@@ -4171,7 +4173,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["zeal"],
     source: "Letter 368, to Stefano di Corrado Maconi",
     author: "St. Catherine of Siena",
-    related: ["Be Who God Meant You to Be"],
+    related: ["Be Who God Meant You to Be", "O Mad Lover"],
     year: "14th century (c. 1378–1380)",
     origin: "Dominican",
     liturgical: "",
@@ -5024,6 +5026,39 @@ const SEED_LIBRARY_ENTRIES = [
       "in ordinary secular life rather than the cloister, so the implied answer is not that you should " +
       "find a thorn bush — it is that the reader has probably not paid any comparable price, in any " +
       "currency at all, for something he claims to value.",
+  },
+  {
+    title: "O Mad Lover",
+    kind: "quote",
+    tags: ["love", "Dominican", "Trinity"],
+    source: "The Dialogue, from the closing prayer — trans. Suzanne Noffke, O.P.",
+    author: "St. Catherine of Siena",
+    related: ["Love Undefiled", "Prayer to the Holy Spirit", "Set Fire to All Italy"],
+    year: "The Dialogue dictated 1377–78",
+    origin: "Dominican",
+    liturgical: "",
+    feastDay: "April 29",
+    originalLanguage: "",
+    favorite: true,
+    body:
+      "O eternal, infinite Good! O mad lover! And have you need of your creature? It seems so to me… " +
+      "Why then are you so mad? Because you have fallen in love with what you have made!",
+    background:
+      "From the closing prayer of The Dialogue, Catherine's major work, dictated to secretaries in " +
+      "1377–78 — much of it, by the accounts of those present, while she was in ecstasy. The English " +
+      "here is Suzanne Noffke, O.P.'s translation, the same translator behind the two prayers of hers " +
+      "already in this library.\n\n" +
+      "The Italian behind 'mad lover' is 'pazzo d'amore' — literally crazed, out of one's mind, with " +
+      "love. It is not a decorative flourish: Catherine is pressing an argument to its uncomfortable " +
+      "end. God, being God, needs nothing. Yet He behaves — she says — exactly as though He could not " +
+      "live without a creature who owes Him her existence in the first place. She can find no cause for " +
+      "this proportionate to the effect, and the conclusion she lands on is not that He is generous or " +
+      "merciful but that He is out of His mind, having fallen in love with something He Himself made.\n\n" +
+      "Worth knowing when hunting the citation: 'O mad lover' recurs in The Dialogue and is not a single " +
+      "famous line — another passage runs 'O mad lover! It was not enough for you to take on our " +
+      "humanity, you had to die as well!' This entry is the one about God's love for creation " +
+      "specifically. Chapter numbering varies between editions and translations, so the closing prayer " +
+      "is cited here by position rather than by a number that would only be right for one edition.",
   },
 ];
 
