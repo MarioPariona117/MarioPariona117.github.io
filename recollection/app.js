@@ -4827,7 +4827,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["St. Joseph", "vocation", "work", "protection", "discernment"],
     source: "Approved for public use by Pope St. Pius X, 1909; seven invocations added by Pope Francis, 1 May 2021",
     author: "Traditional / Anonymous",
-    related: ["Litany of the Undiscovered Spouse"],
+    related: ["Litany of the Undiscovered Spouse", "Litany of the Most Precious Blood"],
     authorNote: "no single author — the invocations accumulated over centuries and were formally fixed in 1909",
     year: "Approved 1909; current form since 2021",
     origin: "Approved devotional litany",
@@ -5111,7 +5111,7 @@ const SEED_LIBRARY_ENTRIES = [
     source: "His reply to General Miollis, Rome, 1810, refusing the oath of allegiance to Napoleon",
     author: "St. Gaspar del Bufalo",
     relatedSaints: ["gaspar-del-bufalo"],
-    related: ["Be Not Afraid"],
+    related: ["Be Not Afraid", "Litany of the Most Precious Blood"],
     year: "1810",
     origin: "Missionaries of the Precious Blood (C.PP.S.)",
     liturgical: "",
@@ -5136,6 +5136,82 @@ const SEED_LIBRARY_ENTRIES = [
       "a martyr's would be: he had to live afterwards with what refusing had cost him, and did.\n\n" +
       "Longer English versions circulate, typically prefacing it with something like 'I would rather die " +
       "or suffer evil than take such an oath.' What is actually documented is the Italian triple.",
+  },
+  {
+    title: "Litany of the Most Precious Blood",
+    kind: "litany",
+    tags: ["Precious Blood", "redemption", "eucharist", "approved"],
+    source: "Drawn up by the Sacred Congregation of Rites; promulgated by Pope John XXIII, 24 February 1960",
+    author: "Traditional / Anonymous",
+    authorNote: "one of only six litanies approved for public liturgical use",
+    related: ["Litany of St. Joseph", "I Cannot, I Must Not, I Will Not"],
+    relatedSaints: ["gaspar-del-bufalo"],
+    year: "Promulgated 1960",
+    origin: "Approved devotional litany",
+    liturgical: "July — the month of the Precious Blood",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "Lord, have mercy.\n" +
+      "Christ, have mercy.\n" +
+      "Lord, have mercy.\n" +
+      "Christ, hear us.\n" +
+      "Christ, graciously hear us.\n\n" +
+      "God the Father of Heaven, have mercy on us.\n" +
+      "God the Son, Redeemer of the world, have mercy on us.\n" +
+      "God the Holy Spirit, have mercy on us.\n" +
+      "Holy Trinity, one God, have mercy on us.\n\n" +
+      "Blood of Christ, only-begotten Son of the Eternal Father, save us.\n" +
+      "Blood of Christ, Incarnate Word of God, save us.\n" +
+      "Blood of Christ, of the New and Eternal Testament, save us.\n" +
+      "Blood of Christ, falling upon the earth in the Agony, save us.\n" +
+      "Blood of Christ, shed profusely in the Scourging, save us.\n" +
+      "Blood of Christ, flowing forth in the Crowning with Thorns, save us.\n" +
+      "Blood of Christ, poured out on the Cross, save us.\n" +
+      "Blood of Christ, price of our salvation, save us.\n" +
+      "Blood of Christ, without which there is no forgiveness, save us.\n" +
+      "Blood of Christ, Eucharistic drink and refreshment of souls, save us.\n" +
+      "Blood of Christ, stream of mercy, save us.\n" +
+      "Blood of Christ, victor over demons, save us.\n" +
+      "Blood of Christ, courage of Martyrs, save us.\n" +
+      "Blood of Christ, strength of Confessors, save us.\n" +
+      "Blood of Christ, bringing forth Virgins, save us.\n" +
+      "Blood of Christ, help of those in peril, save us.\n" +
+      "Blood of Christ, relief of the burdened, save us.\n" +
+      "Blood of Christ, solace in sorrow, save us.\n" +
+      "Blood of Christ, hope of the penitent, save us.\n" +
+      "Blood of Christ, consolation of the dying, save us.\n" +
+      "Blood of Christ, peace and tenderness of hearts, save us.\n" +
+      "Blood of Christ, pledge of Eternal Life, save us.\n" +
+      "Blood of Christ, freeing souls from purgatory, save us.\n" +
+      "Blood of Christ, most worthy of all glory and honour, save us.\n\n" +
+      "Lamb of God, who takest away the sins of the world, spare us, O Lord.\n" +
+      "Lamb of God, who takest away the sins of the world, graciously hear us, O Lord.\n" +
+      "Lamb of God, who takest away the sins of the world, have mercy on us.\n\n" +
+      "V. Thou hast redeemed us, O Lord, in Thy Blood.\n" +
+      "R. And made us, for our God, a kingdom.\n\n" +
+      "Let us pray:\n" +
+      "Almighty and eternal God, Thou hast appointed Thine only-begotten Son the Redeemer of the world " +
+      "and willed to be appeased by His Blood. Grant, we beg of Thee, that we may worthily adore this " +
+      "price of our salvation and through its power be safeguarded from the evils of the present life so " +
+      "that we may rejoice in its fruits forever in heaven. Through the same Christ our Lord. Amen.",
+    background:
+      "The second formally approved litany in this library, alongside the Litany of St. Joseph — and one " +
+      "of only six the Church has ever approved for public liturgical use — the others being the Holy " +
+      "Name, the Sacred Heart, Loreto, St. Joseph and the Saints. It is the most recent of the six: drawn up by " +
+      "the Sacred Congregation of Rites and promulgated by Pope John XXIII on 24 February 1960, so where " +
+      "the others accumulated over centuries this one was composed deliberately, in living memory.\n\n" +
+      "Its structure is unlike the other litanies here. There are no petitions asking to be delivered " +
+      "from anything and no list of titles for a saint — instead twenty-four invocations that all name " +
+      "the same thing, the Blood, and simply say 'save us.' They move in order: through the Incarnation, " +
+      "then the Passion in sequence (the Agony, the Scourging, the Crowning with Thorns, the Cross), then " +
+      "what the Blood accomplishes (price, forgiveness, Eucharist, mercy), then who it reaches — martyrs, " +
+      "confessors, virgins, those in peril, the burdened, the sorrowing, the penitent, the dying, and " +
+      "finally the souls in purgatory. It is a single image held up and turned twenty-four times.\n\n" +
+      "July is traditionally the month of the Precious Blood. The devotion's great modern promoter was " +
+      "St. Gaspar del Bufalo, also in this library, who founded the Missionaries of the Precious Blood " +
+      "after the four years of exile and imprisonment he accepted rather than swear Napoleon's oath.",
   },
 ];
 
