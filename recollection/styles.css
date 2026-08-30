@@ -2270,3 +2270,31 @@ body,
 /* In the prayer text itself, emphasis is set in the accent colour rather than
    sloped — the serif italic is already doing work there. */
 .reader-text em { font-style: italic; color: var(--ivory); }
+
+/* --- Reader language bar: vernacular toggle + original-language switch --- */
+.reader-lang-bar {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 1.4rem;
+  flex-wrap: wrap;
+}
+.reader-lang-bar .lang-group { display: inline-flex; }
+.lang-btn {
+  background: var(--card);
+  border: 1px solid rgba(var(--edge-rgb),0.12);
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.lang-group .lang-btn:first-child { border-radius: 20px 0 0 20px; }
+.lang-group .lang-btn:last-child { border-radius: 0 20px 20px 0; margin-left: -1px; }
+.lang-btn:hover { color: var(--gold); }
+.lang-btn.active { color: #1a1408; background: var(--gold); border-color: var(--gold); }
+.lang-btn.orig-toggle { margin-left: 0.3rem; }

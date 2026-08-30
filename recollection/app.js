@@ -13,6 +13,8 @@ const state = {
   sortBy: "recent", // recent | title | kind
   libraryBodyIndex: {}, // id -> lowercased "body \n background \n latinBody", built lazily for full-text search
   readingLibraryId: null, // set while the library reader is open
+  readerLang: "en", // "en" | "es" — which vernacular the reader shows; Latin (when present) stays alongside
+  readerShowOriginal: true, // whether the original-language column is shown at all
   editingLibraryId: null, // set while the library editor is open; null id = new entry
   editingJournalId: null, // set while the writer is open; null id = new entry
 
@@ -2848,6 +2850,17 @@ const SEED_LIBRARY_ENTRIES = [
       "Et Jesum, benedictum fructum ventris tui,\n" +
       "nobis post hoc exsilium ostende.\n" +
       "O clemens, O pia, O dulcis Virgo Maria.",
+    spanishBody:
+      "Dios te salve, Reina y Madre de misericordia,\n" +
+      "vida, dulzura y esperanza nuestra; Dios te salve.\n" +
+      "A ti clamamos los desterrados hijos de Eva;\n" +
+      "a ti suspiramos, gimiendo y llorando,\n" +
+      "en este valle de l\u00e1grimas.\n\n" +
+      "Ea, pues, Se\u00f1ora, abogada nuestra,\n" +
+      "vuelve a nosotros esos tus ojos misericordiosos;\n" +
+      "y despu\u00e9s de este destierro,\n" +
+      "mu\u00e9stranos a Jes\u00fas, fruto bendito de tu vientre.\n" +
+      "\u00a1Oh clement\u00edsima, oh piadosa, oh dulce Virgen Mar\u00eda!",
     body:
       "Hail, holy Queen, mother of mercy;\n" +
       "our life, our sweetness, and our hope, hail.\n" +
@@ -3006,6 +3019,19 @@ const SEED_LIBRARY_ENTRIES = [
       "Et ne nos inducas in tentationem,\n" +
       "sed libera nos a malo.\n" +
       "Amen.",
+    spanishBody:
+      "Padre nuestro, que est\u00e1s en el cielo,\n" +
+      "santificado sea tu Nombre;\n" +
+      "venga a nosotros tu reino;\n" +
+      "h\u00e1gase tu voluntad\n" +
+      "en la tierra como en el cielo.\n" +
+      "Danos hoy nuestro pan de cada d\u00eda;\n" +
+      "perdona nuestras ofensas,\n" +
+      "como tambi\u00e9n nosotros perdonamos\n" +
+      "a los que nos ofenden;\n" +
+      "no nos dejes caer en la tentaci\u00f3n,\n" +
+      "y l\u00edbranos del mal.\n" +
+      "Am\u00e9n.",
     body:
       "Our Father, who art in heaven,\n" +
       "hallowed be thy name.\n" +
@@ -3051,6 +3077,16 @@ const SEED_LIBRARY_ENTRIES = [
       "ora pro nobis peccatoribus,\n" +
       "nunc et in hora mortis nostrae.\n" +
       "Amen.",
+    spanishBody:
+      "Dios te salve, Mar\u00eda,\n" +
+      "llena eres de gracia,\n" +
+      "el Se\u00f1or es contigo.\n" +
+      "Bendita t\u00fa eres entre todas las mujeres,\n" +
+      "y bendito es el fruto de tu vientre, Jes\u00fas.\n" +
+      "Santa Mar\u00eda, Madre de Dios,\n" +
+      "ruega por nosotros, pecadores,\n" +
+      "ahora y en la hora de nuestra muerte.\n" +
+      "Am\u00e9n.",
     body:
       "Hail Mary, full of grace,\n" +
       "the Lord is with thee.\n" +
@@ -3089,6 +3125,10 @@ const SEED_LIBRARY_ENTRIES = [
       "Gloria Patri, et Filio, et Spiritui Sancto.\n" +
       "Sicut erat in principio, et nunc, et semper,\n" +
       "et in saecula saeculorum. Amen.",
+    spanishBody:
+      "Gloria al Padre, y al Hijo, y al Esp\u00edritu Santo.\n" +
+      "Como era en el principio, ahora y siempre,\n" +
+      "por los siglos de los siglos. Am\u00e9n.",
     body:
       "Glory be to the Father, and to the Son, and to the Holy Spirit.\n" +
       "As it was in the beginning, is now, and ever shall be,\n" +
@@ -3135,6 +3175,25 @@ const SEED_LIBRARY_ENTRIES = [
       "remissionem peccatorum,\n" +
       "carnis resurrectionem,\n" +
       "et vitam aeternam. Amen.",
+    spanishBody:
+      "Creo en Dios, Padre todopoderoso,\n" +
+      "Creador del cielo y de la tierra.\n" +
+      "Creo en Jesucristo, su \u00fanico Hijo, nuestro Se\u00f1or,\n" +
+      "que fue concebido por obra y gracia del Esp\u00edritu Santo,\n" +
+      "naci\u00f3 de Santa Mar\u00eda Virgen,\n" +
+      "padeci\u00f3 bajo el poder de Poncio Pilato,\n" +
+      "fue crucificado, muerto y sepultado,\n" +
+      "descendi\u00f3 a los infiernos,\n" +
+      "al tercer d\u00eda resucit\u00f3 de entre los muertos,\n" +
+      "subi\u00f3 a los cielos\n" +
+      "y est\u00e1 sentado a la derecha de Dios, Padre todopoderoso.\n" +
+      "Desde all\u00ed ha de venir a juzgar a vivos y muertos.\n" +
+      "Creo en el Esp\u00edritu Santo,\n" +
+      "la santa Iglesia cat\u00f3lica,\n" +
+      "la comuni\u00f3n de los santos,\n" +
+      "el perd\u00f3n de los pecados,\n" +
+      "la resurrecci\u00f3n de la carne\n" +
+      "y la vida eterna. Am\u00e9n.",
     body:
       "I believe in God, the Father almighty,\n" +
       "Creator of heaven and earth.\n" +
@@ -3299,6 +3358,11 @@ const SEED_LIBRARY_ENTRIES = [
     feastDay: "October 2 (Feast of the Guardian Angels)",
     originalLanguage: "",
     favorite: false,
+    spanishBody:
+      "\u00c1ngel de la guarda, dulce compa\u00f1\u00eda,\n" +
+      "no me desampares ni de noche ni de d\u00eda.\n" +
+      "No me dejes solo, que me perder\u00eda.\n" +
+      "Am\u00e9n.",
     body:
       "Angel of God, my guardian dear,\n" +
       "to whom God's love commits me here,\n" +
@@ -6008,7 +6072,12 @@ async function openLibraryReader(id) {
   $("#reader-background-wrap").classList.add("hidden");
   setView("library-reader");
 
-  const { body, background, latinBody } = await getLibraryEntryText(id);
+  const { body, background, latinBody, spanishBody } = await getLibraryEntryText(id);
+  readerTexts.en = body;
+  readerTexts.es = spanishBody || "";
+  readerTexts.original = latinBody || "";
+  readerTexts.originalLanguage = entry.originalLanguage || "Latin";
+  if (!readerTexts.es) state.readerLang = "en"; // nothing to switch to
 
   // An entry whose body is a numbered sequence (the hourly prayers, a set of
   // meditations) can be read one at a time instead of as one long column.
@@ -6036,11 +6105,10 @@ async function openLibraryReader(id) {
         : 0;
   }
 
+  renderReaderLangBar();
   $("#reader-parts-bar").classList.toggle("hidden", parts.length < 4);
   if (parts.length >= 4) renderReaderParts();
-  else $("#reader-text").innerHTML = latinBody
-    ? renderBilingualBlock(latinBody, body, entry.originalLanguage)
-    : renderTextBlock(body);
+  else renderReaderBody();
 
   if (background) {
     $("#reader-background").innerHTML = renderTextBlock(background);
@@ -6055,6 +6123,57 @@ async function openLibraryReader(id) {
 // at seed time (and differ between localStorage and Drive), whereas titles
 // are unique across the library and stable in the source data. A title that
 // no longer resolves is dropped silently rather than rendering a dead chip.
+// Which texts the open entry has, so the language bar and the body render can
+// be redrawn on toggle without refetching. Populated in openLibraryReader().
+const readerTexts = { en: "", es: "", original: "", originalLanguage: "Latin" };
+
+// Language bar: Latin (or whatever the original is) stays visible whenever the
+// entry has one — the toggle only decides WHICH vernacular sits beside it.
+// A second control hides the original entirely, for praying in one language.
+function renderReaderLangBar() {
+  const bar = $("#reader-lang-bar");
+  const hasEs = !!readerTexts.es;
+  const hasOrig = !!readerTexts.original;
+  bar.classList.toggle("hidden", !hasEs && !hasOrig);
+  if (!hasEs && !hasOrig) return;
+
+  const langBtns = hasEs
+    ? `<span class="lang-group">
+         <button class="lang-btn${state.readerLang === "en" ? " active" : ""}" data-lang="en">English</button>
+         <button class="lang-btn${state.readerLang === "es" ? " active" : ""}" data-lang="es">Español</button>
+       </span>`
+    : "";
+  const origBtn = hasOrig
+    ? `<button class="lang-btn orig-toggle${state.readerShowOriginal ? " active" : ""}" data-orig="1">${escapeHtml(readerTexts.originalLanguage)}</button>`
+    : "";
+  bar.innerHTML = langBtns + origBtn;
+
+  $$(".lang-btn[data-lang]", bar).forEach((b) =>
+    b.addEventListener("click", () => {
+      state.readerLang = b.dataset.lang;
+      renderReaderLangBar();
+      renderReaderBody();
+    })
+  );
+  const ob = $(".orig-toggle", bar);
+  if (ob) {
+    ob.addEventListener("click", () => {
+      state.readerShowOriginal = !state.readerShowOriginal;
+      renderReaderLangBar();
+      renderReaderBody();
+    });
+  }
+}
+
+// Draws the body for the current language selection.
+function renderReaderBody() {
+  const vernacular = state.readerLang === "es" && readerTexts.es ? readerTexts.es : readerTexts.en;
+  const showOrig = readerTexts.original && state.readerShowOriginal;
+  $("#reader-text").innerHTML = showOrig
+    ? renderBilingualBlock(readerTexts.original, vernacular, readerTexts.originalLanguage)
+    : renderTextBlock(vernacular);
+}
+
 function renderRelatedEntryChips(entry) {
   const wrap = $("#reader-related-wrap");
   const row = $("#reader-related");
