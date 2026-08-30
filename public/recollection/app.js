@@ -5964,7 +5964,7 @@ const SEED_LIBRARY_ENTRIES = [
     kind: "quote",
     tags: ["Holy Spirit", "virtue", "catechetical"],
     source: "Isaiah 11:2-3, in the Septuagint and Vulgate enumeration",
-    author: "Biblical",
+    author: "Biblical — the prophet Isaiah",
     authorNote: "the sevenfold count follows the Greek and Latin; the Hebrew lists six",
     related: ["Come, Holy Spirit", "Veni Creator Spiritus", "Prayer to the Holy Spirit"],
     year: "Isaiah, 8th century BC",
@@ -6495,7 +6495,17 @@ async function openLibraryReader(id) {
     attrParts.push(authorHtml);
   }
   if (entry.year) attrParts.push(escapeHtml(entry.year));
-  if (entry.origin) attrParts.push(escapeHtml(entry.origin));
+  // Origin is dropped when it just restates the author — "Biblical · Biblical",
+  // "Traditional — Opus Dei · Opus Dei". The two fields legitimately coincide
+  // for anonymous and scriptural entries, so this is a display rule rather
+  // than something to fix per entry.
+  const originRedundant = (() => {
+    if (!entry.origin || !entry.author) return false;
+    const norm = (x) => x.toLowerCase().replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
+    const a = norm(entry.author), o = norm(entry.origin);
+    return a === o || a.includes(o) || o.includes(a);
+  })();
+  if (entry.origin && !originRedundant) attrParts.push(escapeHtml(entry.origin));
   if (entry.feastDay) attrParts.push("Feast: " + escapeHtml(entry.feastDay));
   if (entry.liturgical) attrParts.push("Used: " + escapeHtml(entry.liturgical));
   $("#reader-attribution").innerHTML = attrParts.join('<span class="dot">·</span>');
