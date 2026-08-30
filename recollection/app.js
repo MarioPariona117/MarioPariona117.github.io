@@ -5691,43 +5691,7 @@ const SEED_LIBRARY_ENTRIES = [
     originalLanguage: "",
     favorite: true,
     body:
-      "THE ROSARY\n\n" +
-      "1. Make the Sign of the Cross.\n" +
-      "2. Holding the crucifix, say the Apostles' Creed.\n" +
-      "3. On the first bead, say an Our Father.\n" +
-      "4. On the next three beads, say three Hail Marys — for faith, hope and charity.\n" +
-      "5. Say a Glory Be.\n" +
-      "6. Announce the first mystery, then say an Our Father.\n" +
-      "7. On each of the ten beads of the decade, say a Hail Mary while meditating on the mystery.\n" +
-      "8. Say a Glory Be, then the Fatima Prayer.\n" +
-      "9. Announce the next mystery and repeat, until all five decades are prayed.\n" +
-      "10. Conclude with the Hail Holy Queen and the closing prayer.\n\n" +
-      "THE FATIMA PRAYER\n" +
-      "O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those in most need of Thy mercy.\n\n" +
-      "THE JOYFUL MYSTERIES — Mondays and Saturdays\n" +
-      "1. The Annunciation\n" +
-      "2. The Visitation\n" +
-      "3. The Nativity\n" +
-      "4. The Presentation in the Temple\n" +
-      "5. The Finding of Jesus in the Temple\n\n" +
-      "THE LUMINOUS MYSTERIES — Thursdays\n" +
-      "1. The Baptism of Jesus in the Jordan\n" +
-      "2. The Wedding at Cana\n" +
-      "3. The Proclamation of the Kingdom\n" +
-      "4. The Transfiguration\n" +
-      "5. The Institution of the Eucharist\n\n" +
-      "THE SORROWFUL MYSTERIES — Tuesdays and Fridays\n" +
-      "1. The Agony in the Garden\n" +
-      "2. The Scourging at the Pillar\n" +
-      "3. The Crowning with Thorns\n" +
-      "4. The Carrying of the Cross\n" +
-      "5. The Crucifixion and Death of Our Lord\n\n" +
-      "THE GLORIOUS MYSTERIES — Wednesdays and Sundays\n" +
-      "1. The Resurrection\n" +
-      "2. The Ascension\n" +
-      "3. The Descent of the Holy Spirit\n" +
-      "4. The Assumption of Our Lady\n" +
-      "5. The Coronation of Our Lady as Queen of Heaven and Earth",
+      "HOW TO PRAY IT\n1. Make the Sign of the Cross.\n2. Holding the crucifix, say the Apostles' Creed.\n3. On the first bead, an Our Father.\n4. On the next three beads, three Hail Marys — for faith, hope and charity.\n5. A Glory Be.\n6. Announce the first mystery, then an Our Father.\n7. On each of the ten beads, a Hail Mary while holding the mystery in mind.\n8. A Glory Be, then the Fatima Prayer.\n9. Announce the next mystery and repeat, through all five decades.\n10. Close with the Hail Holy Queen and the closing prayer.\n\nTHE FATIMA PRAYER\nO my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those in most need of Thy mercy.\n\nTHE JOYFUL MYSTERIES — MONDAY AND SATURDAY\n1. The Annunciation — Luke 1:26–38\n2. The Visitation — Luke 1:39–56\n3. The Nativity — Luke 2:1–20\n4. The Presentation in the Temple — Luke 2:22–38\n5. The Finding of Jesus in the Temple — Luke 2:41–52\n\nTHE LUMINOUS MYSTERIES — THURSDAY\n1. The Baptism of Jesus in the Jordan — Matthew 3:13–17\n2. The Wedding at Cana — John 2:1–11\n3. The Proclamation of the Kingdom — Mark 1:14–15\n4. The Transfiguration — Luke 9:28–36\n5. The Institution of the Eucharist — Matthew 26:26–29\n\nTHE SORROWFUL MYSTERIES — TUESDAY AND FRIDAY\n1. The Agony in the Garden — Luke 22:39–46\n2. The Scourging at the Pillar — John 19:1\n3. The Crowning with Thorns — Matthew 27:27–31\n4. The Carrying of the Cross — Luke 23:26–32\n5. The Crucifixion and Death — Luke 23:33–46\n\nTHE GLORIOUS MYSTERIES — WEDNESDAY AND SUNDAY\n1. The Resurrection — Matthew 28:1–10\n2. The Ascension — Acts 1:6–11\n3. The Descent of the Holy Spirit — Acts 2:1–13\n4. The Assumption of Our Lady — Revelation 12:1; Judith 13:18–20\n5. The Coronation of Our Lady — Revelation 12:1",
     background:
       "The structure rather than the words — the individual prayers (Our Father, Hail Mary, Glory Be, " +
       "Apostles' Creed, Salve Regina) each have their own entry here, and this is the frame that holds " +
@@ -6641,6 +6605,9 @@ async function openLibraryReader(id) {
         : 0;
   }
 
+  readerSection.list = latinBody ? [] : splitSections(body);
+  readerSection.active = -1;
+  renderSectionBar();
   renderReaderLangBar();
   $("#reader-parts-bar").classList.toggle("hidden", parts.length < 4);
   if (parts.length >= 4) renderReaderParts();
@@ -6701,10 +6668,78 @@ function renderReaderLangBar() {
   }
 }
 
+// Some entries are one text with named sections rather than a flat sequence:
+// the Rosary's four mystery sets, the corporal and spiritual works of mercy,
+// the gifts and the fruits. An ALL-CAPS line acts as a section heading, and
+// the reader offers chips to read one at a time. Distinct from the numbered
+// -parts reader, which handles strict 1,2,3... sequences.
+function splitSections(text) {
+  const lines = (text || "").split("\n");
+  const sections = [];
+  let cur = null;
+  const isHeading = (l) => {
+    const t = l.trim();
+    if (t.length < 4 || t.length > 70) return false;
+    if (!/[A-Z]/.test(t)) return false;
+    return t === t.toUpperCase() && !/[a-z]/.test(t);
+  };
+  for (const line of lines) {
+    if (isHeading(line)) {
+      cur = { name: line.trim(), lines: [] };
+      sections.push(cur);
+    } else if (cur) {
+      cur.lines.push(line);
+    } else {
+      if (!sections.length) sections.push({ name: "", lines: [] });
+      sections[0].lines.push(line);
+    }
+  }
+  const built = sections
+    .map((x) => ({ name: x.name, text: x.lines.join("\n").trim() }))
+    .filter((x) => x.text);
+  // Two or more sections that actually have body text. Without this, a bare
+  // list of capitalised words (DEATH / JUDGMENT / HEAVEN / HELL) would be
+  // read as four empty sections.
+  if (built.filter((x) => x.name).length < 2) return [];
+  return built;
+}
+
+const readerSection = { list: [], active: -1 }; // -1 = show the whole thing
+
+// Headings are stored in caps for the plain view; shown in normal case on the
+// chips so the strip doesn't shout.
+function titleCaseSection(name) {
+  const t = name.toLowerCase().replace(/\b([a-z])/g, (m) => m.toUpperCase());
+  return t.replace(/\bThe\b/g, "the").replace(/^the /, "The ");
+}
+
+function renderSectionBar() {
+  const bar = $("#reader-section-bar");
+  const list = readerSection.list;
+  bar.classList.toggle("hidden", list.length < 2);
+  if (list.length < 2) return;
+  const chip = (label, i) =>
+    `<button class="chip section-chip${readerSection.active === i ? " active" : ""}" data-i="${i}">${escapeHtml(label)}</button>`;
+  bar.innerHTML = chip("All", -1) + list.map((x, i) => chip(titleCaseSection(x.name), i)).join("");
+  $$(".section-chip", bar).forEach((b) =>
+    b.addEventListener("click", () => {
+      readerSection.active = Number(b.dataset.i);
+      renderSectionBar();
+      renderReaderBody();
+    })
+  );
+}
+
 // Draws the body for the current language selection.
 function renderReaderBody() {
-  const vernacular = state.readerLang === "es" && readerTexts.es ? readerTexts.es : readerTexts.en;
+  let vernacular = state.readerLang === "es" && readerTexts.es ? readerTexts.es : readerTexts.en;
   const showOrig = readerTexts.original && state.readerShowOriginal;
+  // Section filtering applies only when there is no side-by-side original:
+  // the two columns must stay aligned paragraph for paragraph.
+  if (!showOrig && readerSection.active >= 0 && readerSection.list[readerSection.active]) {
+    const sec = readerSection.list[readerSection.active];
+    vernacular = sec.name + "\n\n" + sec.text;
+  }
   $("#reader-text").innerHTML = showOrig
     ? renderBilingualBlock(readerTexts.original, vernacular, readerTexts.originalLanguage)
     : renderTextBlock(vernacular);
@@ -9092,7 +9127,7 @@ const FINDER_STEPS = [
         match: (e) =>
           hasTag(e, [
             "before prayer", "after prayer", "preparation", "thanksgiving",
-            "contemplation", "opus dei",
+            "contemplation", "opus dei", "prayer", "mental prayer", "meditation",
           ]) || mentions(e, ["before mental prayer", "after mental prayer", "before prayer"]),
       },
       {
@@ -9136,6 +9171,18 @@ const FINDER_STEPS = [
           mentions(e, ["mass", "communion", "adoration", "benediction", "blessed sacrament"]),
       },
       {
+        // The collection had no way to ask for Passion devotions at all —
+        // the Seven Last Words, Five Wounds and Litany of the Sacred Heart
+        // were unreachable through this tree before this option existed.
+        label: "The Passion and the Cross",
+        hint: "The Cross, the Wounds, the Sacred Heart, Our Lady of Sorrows",
+        match: (e) =>
+          hasTag(e, [
+            "passion", "cross", "good friday", "sacred heart", "precious blood",
+            "sorrow", "reparation", "way of the cross", "holy week",
+          ]) || mentions(e, ["crucifix", "the cross", "calvary", "passion"]),
+      },
+      {
         label: "The hours of the day",
         hint: "Morning, evening, night prayer",
         // Deliberately does NOT match "antiphon"/"Compline" — see above.
@@ -9174,10 +9221,25 @@ const FINDER_STEPS = [
           ]),
       },
       {
+        // Nothing in the tree asked about state of life, so the spouse and
+        // discernment entries had no route to them.
+        label: "Vocation and state of life",
+        hint: "Discernment, marriage, singleness, work",
+        match: (e) =>
+          hasTag(e, [
+            "vocation", "discernment", "marriage", "spouse", "singleness",
+            "waiting", "work", "identity",
+          ]),
+      },
+      {
         label: "The faith itself",
         hint: "Creeds, doctrine, the Trinity",
         match: (e) =>
-          hasTag(e, ["creed", "catechetical", "trinity", "faith", "doxology", "biblical", "holy spirit"]),
+          hasTag(e, [
+            "creed", "catechetical", "trinity", "faith", "doxology", "biblical",
+            "holy spirit", "intercession", "communion of saints", "approved",
+            "holy name", "jesus", "messianic titles",
+          ]),
       },
     ],
   },

@@ -2298,3 +2298,8 @@ body,
 .lang-btn:hover { color: var(--gold); }
 .lang-btn.active { color: #1a1408; background: var(--gold); border-color: var(--gold); }
 .lang-btn.orig-toggle { margin-left: 0.3rem; }
+
+/* --- Section chips: read one part of a long entry at a time --- */
+.reader-section-bar { justify-content: center; margin: 0 0 1.4rem; }
+.section-chip { font-weight: 600; }
+.section-chip.active { color: #1a1408; background: var(--gold); border-color: var(--gold); }
