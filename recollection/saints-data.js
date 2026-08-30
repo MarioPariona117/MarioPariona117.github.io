@@ -6023,6 +6023,7 @@ core({
     canonized: { date: "15 January 1888", by: "Pope Leo XIII", note: "Canonized the same day as his own spiritual protégé, St. Peter Claver" },
     landmarks: [
       { date: "1544", event: "At twelve, prepared for First Communion by the visiting Jesuit Peter Faber, hosted by his family at Segovia" },
+      { date: "c. 1545", event: "Briefly sent to study at the Jesuit college at Alcalá, founded by Fr. Francisco de Villanueva, whose reputation as an unlearned but deeply holy Brother left a lasting impression" },
       { date: "c. 1557–1562", event: "Marries; his wife, mother, and young son all die within a few years of each other, alongside the collapse of his cloth business" },
       { date: "1568 (traditional)", event: "Rejected by the Jesuits at Segovia for lack of education and advanced age" },
       { date: "c. 1570", event: "At Valencia, narrowly escapes a deceptive 'hermit' who tries to draw him into a false eremitical vocation at the hermitage of San Mateo" },
@@ -6053,7 +6054,7 @@ core({
     timeline: [
       { year: "1532", event: "Born at Segovia, 25 July" },
       { year: "1544", event: "Prepared for First Communion by the visiting Jesuit Peter Faber, aged twelve" },
-      { year: "c. 1545–46", event: "Briefly studies at Alcalá; withdrawn within a year for the family business" },
+      { year: "c. 1545–46", event: "Briefly studies at Alcalá under the influence of Fr. Francisco de Villanueva; withdrawn within a year for the family business" },
       { year: "c. 1557", event: "Marries" },
       { year: "c. 1560s", event: "His wife, mother, and young son all die within a few years; his business fails" },
       { year: "1568 (traditional)", event: "Rejected by the Jesuits at Segovia" },
@@ -6069,6 +6070,7 @@ core({
     conversion: "No single conversion — a gradual dismantling of an ordinary merchant's life through successive family deaths and business failure, followed by a late, twice-obstructed religious vocation finally realized at nearly forty.",
 
     anecdotes: [
+      { title: "\"An unlearned Brother, in a university of letters\"", text: "As a boy briefly sent to study at the Jesuit college at Alcalá — one of Spain's great university towns — Alonso came under the influence of Fr. Francisco de Villanueva, the college's founder, a man contemporary chroniclers described as 'an unlearned Brother without letters, in a university of such great learning,' who nonetheless reached the hearts and minds of students and scholars alike through sheer personal holiness rather than intellectual brilliance. It was an early, formative model for Alonso of a very particular kind: sanctity that owed nothing to formal education, which decades later would matter enormously when the Jesuits twice weighed rejecting Alonso himself for exactly that same lack of learning.", source: "Ignasi Casanovas, S.J., The Life of Saint Alonso Rodríguez, God's Theologian (1932); Villanueva's own historical reputation for unlettered holiness is independently documented in the 1600 Historia del Colegio Complutense and modern scholarship on him (Alfredo Verdoy, 1996)", legend: false },
       { title: "The dove and the dark birds", text: "As a young man discerning his vocation, Alonso had a vision, interpreted by his confessor Fr. Martínez, of a flock of dark, ominous birds — devils — attacking a single dazzling white dove bearing on its breast a silver plate inscribed with the Holy Name of Jesus. The dove fought off the birds in three successive combats. Martínez told him this foretold three great struggles for his chastity within the Society he would enter; Alonso later recorded seven years of intense demonic assault on his purity, confirming the vision from bitter personal experience.", source: "Recorded in his own private notebooks, published in Henry Foley's 1873 Life of Blessed Alphonsus Rodriguez", legend: true },
       { title: "The false hermit of San Mateo", text: "At Valencia, a companion who affected great piety but never once received the sacraments in two years of friendship suddenly retired to a hermitage called San Mateo and summoned Alonso to join him. Alonso nearly did, but a scruple at not consulting his confessor first held him back; his confessor Fr. Santander warned him bluntly that he was heading toward 'your own ruin' by trusting his own judgment over his director's. That same night, before dawn, the 'hermit' appeared furiously at Alonso's window demanding his return — too soon for any natural messenger to have travelled the distance — confirming to Alonso that the whole episode had been a diabolical attempt to divert him from his true vocation.", source: "Foley's 1873 Life of Blessed Alphonsus Rodriguez, ch. 1–2", legend: true },
       { title: "\"Why do you weep?\"", text: "In a vision, Alonso found himself among a great company of saints, overcome with grief at the memory of a single venial sin. St. Francis of Assisi — 'one of his most signal protectors,' toward whom he had always a particular devotion — approached and asked the cause of his grief. 'A single venial sin would merit the tears of an entire life,' Alonso answered, 'and you ask me why I weep.' Christ, present in the vision, showed His approval of the reply.", source: "Recorded in his own notebooks, Foley's Life of Blessed Alphonsus Rodriguez", legend: true },
@@ -6128,8 +6130,8 @@ core({
   },
 
   connections: {
-    contemporaries: ["Fr. Anthony Cordeses, Provincial of Aragon, who examined and admitted him to the Jesuits", "Fr. Santander, his confessor at Valencia during the San Mateo episode", "Fr. Martínez, his confessor who interpreted his youthful dove vision"],
-    directors: ["Fr. Santander (Valencia)", "Fr. Martínez"],
+    contemporaries: ["Fr. Anthony Cordeses, Provincial of Aragon, who examined and admitted him to the Jesuits", "Fr. Santander, his confessor at Valencia during the San Mateo episode", "Fr. Martínez, his confessor who interpreted his youthful dove vision", "Fr. Francisco de Villanueva, founder of the Jesuit college at Alcalá, whose own reputation as an unlearned but deeply holy Brother influenced Alonso as a boy"],
+    directors: ["Fr. Santander (Valencia)", "Fr. Martínez", "Fr. Francisco de Villanueva (Alcalá, in his youth)"],
     disciples: ["St. Peter Claver, whom he personally mentored and urged toward the American missions"],
     family: "His wife, mother, and young son all died within a few years of each other, before his entry into religious life.",
     related: ["peter-faber", "ignatius-of-loyola", "francis-of-assisi", "peter-claver"],
