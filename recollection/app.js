@@ -2640,7 +2640,14 @@ const SEED_LIBRARY_ENTRIES = [
       "Salus, honor, virtus quoque\n" +
       "Sit et benedictio:\n" +
       "Procedenti ab utroque\n" +
-      "Compar sit laudatio.",
+      "Compar sit laudatio.\n\n" +
+      "V. Panem de caelo praestitisti eis.\n" +
+      "R. Omne delectamentum in se habentem.\n\n" +
+      "Oremus:\n" +
+      "Deus, qui nobis sub sacramento mirabili passionis tuae memoriam reliquisti: " +
+      "tribue, quaesumus, ita nos corporis et sanguinis tui sacra mysteria venerari, " +
+      "ut redemptionis tuae fructum in nobis iugiter sentiamus. Qui vivis et regnas " +
+      "in saecula saeculorum. Amen.",
     body:
       "Down in adoration falling,\n" +
       "Lo! the Sacred Host we hail,\n" +
@@ -2653,7 +2660,14 @@ const SEED_LIBRARY_ENTRIES = [
       "With the Holy Spirit proceeding\n" +
       "Forth from Each eternally,\n" +
       "Be salvation, honour, blessing,\n" +
-      "Might, and endless majesty.",
+      "Might, and endless majesty.\n\n" +
+      "V. Thou hast given them Bread from heaven.\n" +
+      "R. Having within it all sweetness.\n\n" +
+      "Let us pray:\n" +
+      "O God, who in this wonderful Sacrament hast left us a memorial of Thy Passion: " +
+      "grant us, we beseech Thee, so to venerate the sacred mysteries of Thy Body and " +
+      "Blood, that we may ever feel within us the fruit of Thy redemption. Who livest " +
+      "and reignest for ever and ever. Amen.",
     background:
       "The last two verses of Pange Lingua Gloriosi Corporis Mysterium, a longer " +
       "processional hymn St. Thomas Aquinas composed around 1264 for the newly " +
@@ -2663,8 +2677,12 @@ const SEED_LIBRARY_ENTRIES = [
       "incenses the Host, right before the blessing. The English here is Fr. " +
       "Edward Caswall's 19th-century translation, 'Down in Adoration Falling,' " +
       "the version most commonly sung in English-speaking parishes today. It's " +
-      "traditionally followed by a versicle, response, and closing collect, not " +
-      "included here.",
+      "The versicle, response and closing collect that follow it at Benediction are " +
+      "included here: the versicle quotes Wisdom 16:20 on the manna, and the collect " +
+      "is the same one used on Corpus Christi itself — asking not for a feeling of " +
+      "devotion but that the fruit of the redemption be continually felt (iugiter, " +
+      "'unceasingly'). In practice the priest incenses the Blessed Sacrament during " +
+      "the hymn, and the blessing with the monstrance follows the collect.",
   },
   {
     title: "Panis Angelicus",
