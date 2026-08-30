@@ -4845,7 +4845,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["St. Joseph", "vocation", "work", "protection", "discernment"],
     source: "Approved for public use by Pope St. Pius X, 1909; seven invocations added by Pope Francis, 1 May 2021",
     author: "Traditional / Anonymous",
-    related: ["Litany of the Undiscovered Spouse", "Litany of the Most Precious Blood", "Litany of Loreto"],
+    related: ["Litany of the Undiscovered Spouse", "Litany of the Most Precious Blood", "Litany of Loreto", "Litany of the Saints"],
     authorNote: "no single author — the invocations accumulated over centuries and were formally fixed in 1909",
     year: "Approved 1909; current form since 2021",
     origin: "Approved devotional litany",
@@ -5162,7 +5162,7 @@ const SEED_LIBRARY_ENTRIES = [
     source: "Drawn up by the Sacred Congregation of Rites; promulgated by Pope John XXIII, 24 February 1960",
     author: "Traditional / Anonymous",
     authorNote: "one of only six litanies approved for public liturgical use",
-    related: ["Litany of St. Joseph", "I Cannot, I Must Not, I Will Not", "Litany of Loreto"],
+    related: ["Litany of St. Joseph", "I Cannot, I Must Not, I Will Not", "Litany of Loreto", "Litany of the Saints"],
     relatedSaints: ["gaspar-del-bufalo"],
     year: "Promulgated 1960",
     origin: "Approved devotional litany",
@@ -5238,7 +5238,7 @@ const SEED_LIBRARY_ENTRIES = [
     source: "Litany of the Blessed Virgin Mary — text as published by the Holy See; approved for public use by Sixtus V, 1587",
     author: "Traditional / Anonymous",
     authorNote: "one of only six litanies approved for public liturgical use; invocations added by successive popes",
-    related: ["Litany of St. Joseph", "Litany of the Most Precious Blood", "Salve Regina", "The Angelus"],
+    related: ["Litany of St. Joseph", "Litany of the Most Precious Blood", "Salve Regina", "The Angelus", "Litany of the Saints"],
     year: "In use at Loreto by the 16th century; approved 1587; last additions 2020",
     origin: "Approved devotional litany",
     liturgical: "May and October; traditionally prayed after the Rosary",
@@ -5323,18 +5323,178 @@ const SEED_LIBRARY_ENTRIES = [
       "The Marian litany, named for the shrine at Loreto where it was in use by the 16th century and " +
       "approved for public use by Sixtus V in 1587. The third of the six approved litanies now in this " +
       "library, alongside St. Joseph and the Precious Blood.\n\n" +
-      "Its most striking feature is that it has kept growing, and the layers can be dated. Popes added " +
-      "invocations at moments that mattered to them: 'Queen conceived without original sin' after Pius " +
-      "IX defined the Immaculate Conception (1854); 'Queen of the most holy Rosary' under Leo XIII " +
-      "(1883); 'Queen of peace' under Benedict XV during the First World War (1917); 'Queen assumed " +
-      "into heaven' after Pius XII defined the Assumption (1950); 'Mother of the Church' and 'Queen of " +
-      "families' under John Paul II. Most recently Francis added three in June 2020 — 'Mother of Mercy,' " +
-      "'Mother of Hope' and 'Solace of Migrants' — all present in the text here. The litany is in effect " +
-      "a sedimentary record of what the Church has most needed to say about Mary in each age.\n\n" +
+      "Its most striking feature is that it has kept growing, and the layers can be dated — popes added " +
+      "invocations at moments that mattered to them:\n" +
+      "• 1854 — Queen conceived without original sin (Pius IX, on defining the Immaculate Conception)\n" +
+      "• 1883 — Queen of the most holy Rosary (Leo XIII)\n" +
+      "• 1903 — Mother of good counsel (Leo XIII)\n" +
+      "• 1917 — Queen of peace (Benedict XV, during the First World War)\n" +
+      "• 1950 — Queen assumed into heaven (Pius XII, on defining the Assumption)\n" +
+      "• 1980 — Mother of the Church (John Paul II)\n" +
+      "• 1995 — Queen of families (John Paul II)\n" +
+      "• 2020 — Mother of Mercy · Mother of Hope · Solace of Migrants (Francis)\n" +
+      "\n" +
+      "All of the above are present in the text here. The litany is in effect a sedimentary record of " +
+      "what the Church has most needed to say about Mary in each age.\n\n" +
       "Structurally it moves in blocks: Mother, then Virgin, then the biblical and symbolic images " +
       "(Mirror of justice, Tower of ivory, Ark of the covenant — mostly drawn from the Song of Songs, " +
       "Proverbs and the Psalms read Marianly), then those she helps, then Queen. Fifty-four invocations " +
       "in all.",
+  },
+  {
+    title: "Litany of the Saints",
+    kind: "litany",
+    tags: ["approved", "intercession", "communion of saints"],
+    source: "Traditional form, from the Roman Ritual — public domain. See the note on the modern liturgical text below",
+    author: "Traditional / Anonymous",
+    authorNote: "the oldest of the six approved litanies; its core dates to the early Church",
+    related: ["Litany of Loreto", "Litany of St. Joseph", "Litany of the Most Precious Blood"],
+    year: "Core in use by the 6th–7th century; this form from the Roman Ritual",
+    origin: "Approved devotional litany",
+    liturgical: "Easter Vigil, ordinations, religious profession, consecration of churches; Rogation Days",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "Lord, have mercy on us.\n" +
+      "Christ, have mercy on us.\n" +
+      "Lord, have mercy on us.\n" +
+      "Christ, hear us.\n" +
+      "Christ, graciously hear us.\n\n" +
+      "God the Father of heaven, have mercy on us.\n" +
+      "God the Son, Redeemer of the world, have mercy on us.\n" +
+      "God the Holy Ghost, have mercy on us.\n" +
+      "Holy Trinity, one God, have mercy on us.\n\n" +
+      "Holy Mary, pray for us.\n" +
+      "Holy Mother of God, pray for us.\n" +
+      "Holy Virgin of virgins, pray for us.\n" +
+      "St. Michael, pray for us.\n" +
+      "St. Gabriel, pray for us.\n" +
+      "St. Raphael, pray for us.\n" +
+      "All ye holy Angels and Archangels, pray for us.\n" +
+      "All ye holy orders of blessed Spirits, pray for us.\n" +
+      "St. John the Baptist, pray for us.\n" +
+      "St. Joseph, pray for us.\n" +
+      "All ye holy Patriarchs and Prophets, pray for us.\n" +
+      "St. Peter, pray for us.\n" +
+      "St. Paul, pray for us.\n" +
+      "St. Andrew, pray for us.\n" +
+      "St. James, pray for us.\n" +
+      "St. John, pray for us.\n" +
+      "St. Thomas, pray for us.\n" +
+      "St. James, pray for us.\n" +
+      "St. Philip, pray for us.\n" +
+      "St. Bartholomew, pray for us.\n" +
+      "St. Matthew, pray for us.\n" +
+      "St. Simon, pray for us.\n" +
+      "St. Thaddeus, pray for us.\n" +
+      "St. Matthias, pray for us.\n" +
+      "St. Barnabas, pray for us.\n" +
+      "St. Luke, pray for us.\n" +
+      "St. Mark, pray for us.\n" +
+      "All ye holy Apostles and Evangelists, pray for us.\n" +
+      "All ye holy Disciples of the Lord, pray for us.\n" +
+      "All ye holy Innocents, pray for us.\n" +
+      "St. Stephen, pray for us.\n" +
+      "St. Lawrence, pray for us.\n" +
+      "St. Vincent, pray for us.\n" +
+      "Ss. Fabian and Sebastian, pray for us.\n" +
+      "Ss. John and Paul, pray for us.\n" +
+      "Ss. Cosmas and Damian, pray for us.\n" +
+      "Ss. Gervase and Protase, pray for us.\n" +
+      "All ye holy Martyrs, pray for us.\n" +
+      "St. Sylvester, pray for us.\n" +
+      "St. Gregory, pray for us.\n" +
+      "St. Ambrose, pray for us.\n" +
+      "St. Augustine, pray for us.\n" +
+      "St. Jerome, pray for us.\n" +
+      "St. Martin, pray for us.\n" +
+      "St. Nicholas, pray for us.\n" +
+      "All ye holy Bishops and Confessors, pray for us.\n" +
+      "All ye holy Doctors, pray for us.\n" +
+      "St. Anthony, pray for us.\n" +
+      "St. Benedict, pray for us.\n" +
+      "St. Bernard, pray for us.\n" +
+      "St. Dominic, pray for us.\n" +
+      "St. Francis, pray for us.\n" +
+      "All ye holy Priests and Levites, pray for us.\n" +
+      "All ye holy Monks and Hermits, pray for us.\n" +
+      "St. Mary Magdalen, pray for us.\n" +
+      "St. Agatha, pray for us.\n" +
+      "St. Lucy, pray for us.\n" +
+      "St. Agnes, pray for us.\n" +
+      "St. Cecilia, pray for us.\n" +
+      "St. Catherine, pray for us.\n" +
+      "St. Anastasia, pray for us.\n" +
+      "All ye holy Virgins and Widows, pray for us.\n" +
+      "All ye Holy Saints of God, make intercession for us.\n\n" +
+      "Be merciful, spare us, O Lord.\n" +
+      "Be merciful, graciously hear us, O Lord.\n\n" +
+      "From all evil, O Lord deliver us.\n" +
+      "From all sin, O Lord deliver us.\n" +
+      "From Thy wrath, O Lord deliver us.\n" +
+      "From sudden and unprovided death, O Lord deliver us.\n" +
+      "From the snares of the devil, O Lord deliver us.\n" +
+      "From anger, hatred, and all ill will, O Lord deliver us.\n" +
+      "From the spirit of fornication, O Lord deliver us.\n" +
+      "From lightning and tempest, O Lord deliver us.\n" +
+      "From the scourge of earthquake, O Lord deliver us.\n" +
+      "From plague, famine, and war, O Lord deliver us.\n" +
+      "From everlasting death, O Lord deliver us.\n" +
+      "Through the mystery of Thy holy Incarnation, O Lord deliver us.\n" +
+      "Through Thy Coming, O Lord deliver us.\n" +
+      "Through Thy Nativity, O Lord deliver us.\n" +
+      "Through Thy Baptism and holy Fasting, O Lord deliver us.\n" +
+      "Through Thy Cross and Passion, O Lord deliver us.\n" +
+      "Through Thy Death and Burial, O Lord deliver us.\n" +
+      "Through Thy holy Resurrection, O Lord deliver us.\n" +
+      "Through Thine admirable Ascension, O Lord deliver us.\n" +
+      "Through the coming of the Holy Ghost, the Paraclete, O Lord deliver us.\n" +
+      "In the day of judgment, O Lord deliver us.\n" +
+      "\nWe sinners, we beseech Thee, hear us.\n" +
+      "That Thou wouldst spare us, we beseech Thee, hear us.\n" +
+      "That Thou wouldst pardon us, we beseech Thee, hear us.\n" +
+      "That Thou wouldst vouchsafe to bring us to true penance, we beseech Thee, hear us.\n" +
+      "That Thou wouldst vouchsafe to govern and preserve Thy holy Church, we beseech Thee, hear us.\n" +
+      "That Thou wouldst vouchsafe to preserve our Apostolic Prelate, and all ecclesiastical orders in holy religion, we beseech Thee, hear us.\n" +
+      "That Thou wouldst vouchsafe to humble the enemies of holy Church, we beseech Thee, hear us.\n" +
+      "That Thou wouldst vouchsafe to grant peace and unity to all Christian people, we beseech Thee, hear us.\n" +
+      "That Thou wouldst vouchsafe to bring back to the unity of the Church all those who have strayed, and to lead all unbelievers to the light of the Gospel, we beseech Thee, hear us.\n" +
+      "That Thou wouldst vouchsafe to confirm and preserve us in Thy holy service, we beseech Thee, hear us.\n" +
+      "That Thou wouldst lift up our minds to heavenly desires, we beseech Thee, hear us.\n" +
+      "That Thou wouldst render eternal blessings to all our benefactors, we beseech Thee, hear us.\n" +
+      "That Thou wouldst deliver our souls, and those of our brethren, relations, and benefactors, from eternal damnation, we beseech Thee, hear us.\n" +
+      "That Thou wouldst vouchsafe to give and preserve the fruits of the earth, we beseech Thee, hear us.\n" +
+      "That Thou wouldst vouchsafe to give eternal rest to all the faithful departed, we beseech Thee, hear us.\n" +
+      "That Thou wouldst vouchsafe graciously to hear us, we beseech Thee, hear us.\n" +
+      "Son of God, we beseech Thee, hear us.\n\n" +
+      "Lamb of God, who takest away the sins of the world, spare us, O Lord.\n" +
+      "Lamb of God, who takest away the sins of the world, graciously hear us, O Lord.\n" +
+      "Lamb of God, who takest away the sins of the world, have mercy on us.\n\n" +
+      "Christ, hear us.\n" +
+      "Christ, graciously hear us.\n\n" +
+      "Lord, have mercy on us.\n" +
+      "Lord, have mercy on us.",
+    background:
+      "The oldest of the six litanies approved for public use, and the model every other litany in this " +
+      "library imitates — the Kyrie opening, the ranked invocations, the Agnus Dei close all begin here. " +
+      "Its core was in use by the 6th–7th century, and it is the only litany the Church still uses at the " +
+      "great hinge moments of her life: the Easter Vigil, ordinations, religious profession, and the " +
+      "consecration of a church.\n\n" +
+      "One thing to know about the text. The version here is the TRADITIONAL form from the Roman Ritual, " +
+      "which is public domain. The form used in the current liturgy is differently ordered and somewhat " +
+      "shorter, and its official English translation is held under copyright by ICEL — which is why this " +
+      "entry uses the older text rather than reproducing the modern one on a publicly hosted page. The " +
+      "substance is the same; the wording and the saint list differ.\n\n" +
+      "The saint list is deliberately extensible. In liturgical use, local and national saints are " +
+      "inserted at the appropriate rank, and the patron of the church or the person being ordained is " +
+      "added — so an England and Wales celebration will name Alban, Augustine of Canterbury, Bede, " +
+      "George, David and the Martyrs alongside these. That adaptability is the point: the litany is a " +
+      "roll-call of the household, and every household adds its own.\n\n" +
+      "Note also its structure, which is unlike the later litanies. It is in four movements — the saints " +
+      "are asked to pray; then God is asked to deliver, first from evils and then BY the mysteries of " +
+      "Christ's life (an unusual move: pleading the Incarnation, Cross and Resurrection as grounds); " +
+      "then a long list of petitions for the Church and the world; then the Agnus Dei.",
   },
 ];
 
