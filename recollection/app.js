@@ -2580,7 +2580,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["Incarnation", "Marian", "morning", "noon", "evening"],
     source: "Traditional Catholic prayer, prayed at 6am, noon, and 6pm",
     author: "Traditional",
-    related: ["Hail Mary", "Regina Caeli"],
+    related: ["Hail Mary", "Regina Caeli", "Litany of Loreto"],
     authorNote: "developed communally, evening recitation formalized 1318–1327 under Pope John XXII",
     year: "developed 11th–18th century (evening recitation formalized 1318–1327 under Pope John XXII)",
     origin: "Monastic — memorial of the Incarnation",
@@ -2830,7 +2830,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["Marian", "Compline", "antiphon"],
     source: "One of the four seasonal Marian antiphons sung/recited at the close of Compline",
     author: "Bl. Hermann of Reichenau, O.S.B.",
-    related: ["Alma Redemptoris Mater", "Ave Regina Caelorum", "Regina Caeli"],
+    related: ["Alma Redemptoris Mater", "Ave Regina Caelorum", "Regina Caeli", "Litany of Loreto"],
     authorNote: "disputed — most musicologists regard it as anonymous",
     year: "11th century (attribution disputed)",
     origin: "Marian antiphon — Compline / Night Prayer",
@@ -4845,7 +4845,7 @@ const SEED_LIBRARY_ENTRIES = [
     tags: ["St. Joseph", "vocation", "work", "protection", "discernment"],
     source: "Approved for public use by Pope St. Pius X, 1909; seven invocations added by Pope Francis, 1 May 2021",
     author: "Traditional / Anonymous",
-    related: ["Litany of the Undiscovered Spouse", "Litany of the Most Precious Blood"],
+    related: ["Litany of the Undiscovered Spouse", "Litany of the Most Precious Blood", "Litany of Loreto"],
     authorNote: "no single author — the invocations accumulated over centuries and were formally fixed in 1909",
     year: "Approved 1909; current form since 2021",
     origin: "Approved devotional litany",
@@ -5162,7 +5162,7 @@ const SEED_LIBRARY_ENTRIES = [
     source: "Drawn up by the Sacred Congregation of Rites; promulgated by Pope John XXIII, 24 February 1960",
     author: "Traditional / Anonymous",
     authorNote: "one of only six litanies approved for public liturgical use",
-    related: ["Litany of St. Joseph", "I Cannot, I Must Not, I Will Not"],
+    related: ["Litany of St. Joseph", "I Cannot, I Must Not, I Will Not", "Litany of Loreto"],
     relatedSaints: ["gaspar-del-bufalo"],
     year: "Promulgated 1960",
     origin: "Approved devotional litany",
@@ -5230,6 +5230,111 @@ const SEED_LIBRARY_ENTRIES = [
       "July is traditionally the month of the Precious Blood. The devotion's great modern promoter was " +
       "St. Gaspar del Bufalo, also in this library, who founded the Missionaries of the Precious Blood " +
       "after the four years of exile and imprisonment he accepted rather than swear Napoleon's oath.",
+  },
+  {
+    title: "Litany of Loreto",
+    kind: "litany",
+    tags: ["Marian", "approved", "intercession"],
+    source: "Litany of the Blessed Virgin Mary — text as published by the Holy See; approved for public use by Sixtus V, 1587",
+    author: "Traditional / Anonymous",
+    authorNote: "one of only six litanies approved for public liturgical use; invocations added by successive popes",
+    related: ["Litany of St. Joseph", "Litany of the Most Precious Blood", "Salve Regina", "The Angelus"],
+    year: "In use at Loreto by the 16th century; approved 1587; last additions 2020",
+    origin: "Approved devotional litany",
+    liturgical: "May and October; traditionally prayed after the Rosary",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "Lord, have mercy.\n" +
+      "Christ, have mercy.\n" +
+      "Lord, have mercy.\n" +
+      "Christ, hear us.\n" +
+      "Christ, graciously hear us.\n\n" +
+      "God, the Father of heaven, have mercy on us.\n" +
+      "God the Son, Redeemer of the world, have mercy on us.\n" +
+      "God the Holy Spirit, have mercy on us.\n" +
+      "Holy Trinity, one God, have mercy on us.\n\n" +
+      "Holy Mary, pray for us.\n" +
+      "Holy Mother of God, pray for us.\n" +
+      "Holy Virgin of virgins, pray for us.\n" +
+      "Mother of Christ, pray for us.\n" +
+      "Mother of the Church, pray for us.\n" +
+      "Mother of Mercy, pray for us.\n" +
+      "Mother of divine grace, pray for us.\n" +
+      "Mother of Hope, pray for us.\n" +
+      "Mother most pure, pray for us.\n" +
+      "Mother most chaste, pray for us.\n" +
+      "Mother inviolate, pray for us.\n" +
+      "Mother undefiled, pray for us.\n" +
+      "Mother most amiable, pray for us.\n" +
+      "Mother most admirable, pray for us.\n" +
+      "Mother of good counsel, pray for us.\n" +
+      "Mother of our Creator, pray for us.\n" +
+      "Mother of our Saviour, pray for us.\n" +
+      "Virgin most prudent, pray for us.\n" +
+      "Virgin most venerable, pray for us.\n" +
+      "Virgin most renowned, pray for us.\n" +
+      "Virgin most powerful, pray for us.\n" +
+      "Virgin most merciful, pray for us.\n" +
+      "Virgin most faithful, pray for us.\n" +
+      "Mirror of justice, pray for us.\n" +
+      "Seat of wisdom, pray for us.\n" +
+      "Cause of our joy, pray for us.\n" +
+      "Spiritual vessel, pray for us.\n" +
+      "Vessel of honour, pray for us.\n" +
+      "Singular vessel of devotion, pray for us.\n" +
+      "Mystical rose, pray for us.\n" +
+      "Tower of David, pray for us.\n" +
+      "Tower of ivory, pray for us.\n" +
+      "House of gold, pray for us.\n" +
+      "Ark of the covenant, pray for us.\n" +
+      "Gate of heaven, pray for us.\n" +
+      "Morning star, pray for us.\n" +
+      "Health of the sick, pray for us.\n" +
+      "Refuge of sinners, pray for us.\n" +
+      "Solace of Migrants, pray for us.\n" +
+      "Comfort of the afflicted, pray for us.\n" +
+      "Help of Christians, pray for us.\n" +
+      "Queen of Angels, pray for us.\n" +
+      "Queen of Patriarchs, pray for us.\n" +
+      "Queen of Prophets, pray for us.\n" +
+      "Queen of Apostles, pray for us.\n" +
+      "Queen of Martyrs, pray for us.\n" +
+      "Queen of Confessors, pray for us.\n" +
+      "Queen of Virgins, pray for us.\n" +
+      "Queen of all Saints, pray for us.\n" +
+      "Queen conceived without original sin, pray for us.\n" +
+      "Queen assumed into heaven, pray for us.\n" +
+      "Queen of the most holy Rosary, pray for us.\n" +
+      "Queen of families, pray for us.\n" +
+      "Queen of peace, pray for us.\n" +
+      "\n" +
+      "Lamb of God, who takes away the sins of the world, spare us, O Lord.\n" +
+      "Lamb of God, who takes away the sins of the world, graciously hear us, O Lord.\n" +
+      "Lamb of God, who takes away the sins of the world, have mercy on us.\n\n" +
+      "V. Pray for us, O holy Mother of God.\n" +
+      "R. That we may be made worthy of the promises of Christ.\n\n" +
+      "Let us pray:\n" +
+      "Grant, we beseech Thee, O Lord God, that we Thy servants may enjoy perpetual health of mind and " +
+      "body; and by the glorious intercession of the Blessed Mary, ever Virgin, be delivered from present " +
+      "sorrow, and obtain eternal joy. Through Christ our Lord. Amen.",
+    background:
+      "The Marian litany, named for the shrine at Loreto where it was in use by the 16th century and " +
+      "approved for public use by Sixtus V in 1587. The third of the six approved litanies now in this " +
+      "library, alongside St. Joseph and the Precious Blood.\n\n" +
+      "Its most striking feature is that it has kept growing, and the layers can be dated. Popes added " +
+      "invocations at moments that mattered to them: 'Queen conceived without original sin' after Pius " +
+      "IX defined the Immaculate Conception (1854); 'Queen of the most holy Rosary' under Leo XIII " +
+      "(1883); 'Queen of peace' under Benedict XV during the First World War (1917); 'Queen assumed " +
+      "into heaven' after Pius XII defined the Assumption (1950); 'Mother of the Church' and 'Queen of " +
+      "families' under John Paul II. Most recently Francis added three in June 2020 — 'Mother of Mercy,' " +
+      "'Mother of Hope' and 'Solace of Migrants' — all present in the text here. The litany is in effect " +
+      "a sedimentary record of what the Church has most needed to say about Mary in each age.\n\n" +
+      "Structurally it moves in blocks: Mother, then Virgin, then the biblical and symbolic images " +
+      "(Mirror of justice, Tower of ivory, Ark of the covenant — mostly drawn from the Song of Songs, " +
+      "Proverbs and the Psalms read Marianly), then those she helps, then Queen. Fifty-four invocations " +
+      "in all.",
   },
 ];
 
