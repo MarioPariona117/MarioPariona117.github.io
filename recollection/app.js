@@ -5560,6 +5560,263 @@ const SEED_LIBRARY_ENTRIES = [
       "Christ's life (an unusual move: pleading the Incarnation, Cross and Resurrection as grounds); " +
       "then a long list of petitions for the Church and the world; then the Agnus Dei.",
   },
+  {
+    title: "Litany of the Holy Name of Jesus",
+    kind: "litany",
+    tags: ["Holy Name", "approved", "Jesus"],
+    source: "Traditional form; approved for public use by Leo XIII, 1886",
+    author: "Traditional / Anonymous",
+    authorNote: "roots in the 15th-century preaching of St. Bernardine of Siena and St. John Capistrano",
+    related: ["Litany of the Saints", "Litany of Loreto", "Litany of St. Joseph", "Litany of the Most Precious Blood"],
+    year: "Devotion 15th century; litany approved 1886",
+    origin: "Approved devotional litany",
+    liturgical: "January — the month of the Holy Name; 3 January, the Most Holy Name of Jesus",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "Lord, have mercy on us.\n" +
+      "Christ, have mercy on us.\n" +
+      "Lord, have mercy on us.\n" +
+      "Jesus, hear us.\n" +
+      "Jesus, graciously hear us.\n\n" +
+      "God the Father of heaven, have mercy on us.\n" +
+      "God the Son, Redeemer of the world, have mercy on us.\n" +
+      "God the Holy Ghost, have mercy on us.\n" +
+      "Holy Trinity, one God, have mercy on us.\n\n" +
+      "Jesus, Son of the living God, have mercy on us.\n" +
+      "Jesus, splendour of the Father, have mercy on us.\n" +
+      "Jesus, brightness of eternal light, have mercy on us.\n" +
+      "Jesus, King of glory, have mercy on us.\n" +
+      "Jesus, sun of justice, have mercy on us.\n" +
+      "Jesus, Son of the Virgin Mary, have mercy on us.\n" +
+      "Jesus, most amiable, have mercy on us.\n" +
+      "Jesus, most admirable, have mercy on us.\n" +
+      "Jesus, mighty God, have mercy on us.\n" +
+      "Jesus, Father of the world to come, have mercy on us.\n" +
+      "Jesus, angel of great counsel, have mercy on us.\n" +
+      "Jesus, most powerful, have mercy on us.\n" +
+      "Jesus, most patient, have mercy on us.\n" +
+      "Jesus, most obedient, have mercy on us.\n" +
+      "Jesus, meek and humble of heart, have mercy on us.\n" +
+      "Jesus, lover of chastity, have mercy on us.\n" +
+      "Jesus, lover of us, have mercy on us.\n" +
+      "Jesus, God of peace, have mercy on us.\n" +
+      "Jesus, author of life, have mercy on us.\n" +
+      "Jesus, model of virtues, have mercy on us.\n" +
+      "Jesus, zealous for souls, have mercy on us.\n" +
+      "Jesus, our God, have mercy on us.\n" +
+      "Jesus, our refuge, have mercy on us.\n" +
+      "Jesus, father of the poor, have mercy on us.\n" +
+      "Jesus, treasure of the faithful, have mercy on us.\n" +
+      "Jesus, good Shepherd, have mercy on us.\n" +
+      "Jesus, true light, have mercy on us.\n" +
+      "Jesus, eternal wisdom, have mercy on us.\n" +
+      "Jesus, infinite goodness, have mercy on us.\n" +
+      "Jesus, our way and our life, have mercy on us.\n" +
+      "Jesus, joy of the Angels, have mercy on us.\n" +
+      "Jesus, King of the Patriarchs, have mercy on us.\n" +
+      "Jesus, Master of the Apostles, have mercy on us.\n" +
+      "Jesus, teacher of the Evangelists, have mercy on us.\n" +
+      "Jesus, strength of Martyrs, have mercy on us.\n" +
+      "Jesus, light of Confessors, have mercy on us.\n" +
+      "Jesus, purity of Virgins, have mercy on us.\n" +
+      "Jesus, crown of all Saints, have mercy on us.\n" +
+      "\nBe merciful, spare us, O Jesus.\n" +
+      "Be merciful, graciously hear us, O Jesus.\n\n" +
+      "From all evil, Jesus, deliver us.\n" +
+      "From all sin, Jesus, deliver us.\n" +
+      "From Thy wrath, Jesus, deliver us.\n" +
+      "From the snares of the devil, Jesus, deliver us.\n" +
+      "From the spirit of fornication, Jesus, deliver us.\n" +
+      "From everlasting death, Jesus, deliver us.\n" +
+      "From the neglect of Thine inspirations, Jesus, deliver us.\n" +
+      "Through the mystery of Thy holy Incarnation, Jesus, deliver us.\n" +
+      "Through Thy Nativity, Jesus, deliver us.\n" +
+      "Through Thine Infancy, Jesus, deliver us.\n" +
+      "Through Thy most divine Life, Jesus, deliver us.\n" +
+      "Through Thy labours, Jesus, deliver us.\n" +
+      "Through Thine agony and passion, Jesus, deliver us.\n" +
+      "Through Thy cross and dereliction, Jesus, deliver us.\n" +
+      "Through Thy sufferings, Jesus, deliver us.\n" +
+      "Through Thy death and burial, Jesus, deliver us.\n" +
+      "Through Thy Resurrection, Jesus, deliver us.\n" +
+      "Through Thine Ascension, Jesus, deliver us.\n" +
+      "Through Thine institution of the Most Holy Eucharist, Jesus, deliver us.\n" +
+      "Through Thy joys, Jesus, deliver us.\n" +
+      "Through Thy glory, Jesus, deliver us.\n" +
+      "\nLamb of God, who takest away the sins of the world, spare us, O Jesus.\n" +
+      "Lamb of God, who takest away the sins of the world, graciously hear us, O Jesus.\n" +
+      "Lamb of God, who takest away the sins of the world, have mercy on us, O Jesus.\n\n" +
+      "Jesus, hear us.\n" +
+      "Jesus, graciously hear us.\n\n" +
+      "Let us pray:\n" +
+      "O Lord Jesus Christ, who hast said: Ask and you shall receive, seek and you shall find, knock " +
+      "and it shall be opened to you; grant, we beseech Thee, to us who ask, the gift of Thy most " +
+      "divine love, that we may ever love Thee with all our hearts, and in all our words and actions, " +
+      "and never cease from showing forth Thy praise. Make us, O Lord, to have both a perpetual fear " +
+      "and love of Thy holy Name; for Thou never failest to govern those whom Thou dost solidly " +
+      "establish in Thy love. Who livest and reignest world without end. Amen.",
+    background:
+      "The fourth of the six approved litanies now in this library, with the Saints, Loreto, St. Joseph " +
+      "and the Precious Blood. Approved for public use by Leo XIII in 1886, though the devotion behind " +
+      "it is much older: the 15th-century preaching of St. Bernardine of Siena and St. John Capistrano, " +
+      "who carried the IHS monogram through Italian towns and made the Name itself the object of " +
+      "devotion.\n\n" +
+      "The shape is worth noticing. Where Loreto piles up titles for Mary and the Precious Blood turns " +
+      "one image twenty-four times, this one simply says the Name again and again — thirty-eight times " +
+      "in the invocations alone — on the premise that the Name is itself the prayer. That is the whole " +
+      "logic of the devotion: Philippians 2:10, that at the name of Jesus every knee should bend.\n\n" +
+      "A note on this text: the fetchable sources kept returning the structure rather than the full " +
+      "list of invocations, so this was assembled from the standard traditional (pre-1886 English) " +
+      "wording, which is fixed and public domain. It is worth a spot-check against a printed missal if " +
+      "precision matters to you — the ordering of the middle invocations varies slightly between " +
+      "editions.",
+  },
+  {
+    title: "The Rosary",
+    kind: "prayer",
+    tags: ["Marian", "Rosary", "meditation", "daily"],
+    source: "Structure of the Rosary; the Luminous Mysteries added by John Paul II, Rosarium Virginis Mariae, 2002",
+    author: "Traditional / Anonymous",
+    authorNote: "the Dominican attribution to St. Dominic is devotional tradition, not documented history",
+    related: ["Hail Mary", "Our Father", "Glory Be", "Salve Regina", "Apostles' Creed", "Litany of Loreto"],
+    relatedSaints: ["dominic"],
+    year: "Developed 12th–16th century; current form since 2002",
+    origin: "Dominican",
+    liturgical: "October — the month of the Rosary; 7 October, Our Lady of the Rosary",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: true,
+    body:
+      "THE ROSARY\n\n" +
+      "1. Make the Sign of the Cross.\n" +
+      "2. Holding the crucifix, say the Apostles' Creed.\n" +
+      "3. On the first bead, say an Our Father.\n" +
+      "4. On the next three beads, say three Hail Marys — for faith, hope and charity.\n" +
+      "5. Say a Glory Be.\n" +
+      "6. Announce the first mystery, then say an Our Father.\n" +
+      "7. On each of the ten beads of the decade, say a Hail Mary while meditating on the mystery.\n" +
+      "8. Say a Glory Be, then the Fatima Prayer.\n" +
+      "9. Announce the next mystery and repeat, until all five decades are prayed.\n" +
+      "10. Conclude with the Hail Holy Queen and the closing prayer.\n\n" +
+      "THE FATIMA PRAYER\n" +
+      "O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those in most need of Thy mercy.\n\n" +
+      "THE JOYFUL MYSTERIES — Mondays and Saturdays\n" +
+      "1. The Annunciation\n" +
+      "2. The Visitation\n" +
+      "3. The Nativity\n" +
+      "4. The Presentation in the Temple\n" +
+      "5. The Finding of Jesus in the Temple\n\n" +
+      "THE LUMINOUS MYSTERIES — Thursdays\n" +
+      "1. The Baptism of Jesus in the Jordan\n" +
+      "2. The Wedding at Cana\n" +
+      "3. The Proclamation of the Kingdom\n" +
+      "4. The Transfiguration\n" +
+      "5. The Institution of the Eucharist\n\n" +
+      "THE SORROWFUL MYSTERIES — Tuesdays and Fridays\n" +
+      "1. The Agony in the Garden\n" +
+      "2. The Scourging at the Pillar\n" +
+      "3. The Crowning with Thorns\n" +
+      "4. The Carrying of the Cross\n" +
+      "5. The Crucifixion and Death of Our Lord\n\n" +
+      "THE GLORIOUS MYSTERIES — Wednesdays and Sundays\n" +
+      "1. The Resurrection\n" +
+      "2. The Ascension\n" +
+      "3. The Descent of the Holy Spirit\n" +
+      "4. The Assumption of Our Lady\n" +
+      "5. The Coronation of Our Lady as Queen of Heaven and Earth",
+    background:
+      "The structure rather than the words — the individual prayers (Our Father, Hail Mary, Glory Be, " +
+      "Apostles' Creed, Salve Regina) each have their own entry here, and this is the frame that holds " +
+      "them. Fifty Hail Marys across five decades, each decade held against one scene from the life of " +
+      "Christ, so the repeated words occupy the mouth while the mind looks at something.\n\n" +
+      "On origins: the tradition that Our Lady gave the Rosary to St. Dominic in 1214 is devotional " +
+      "rather than documented — the form we have grew gradually between the 12th and 16th centuries " +
+      "out of the monastic practice of praying 150 psalms, which the unlettered replaced with 150 Hail " +
+      "Marys. The Dominicans genuinely did spread it, which is where the association is earned. Pius V, " +
+      "a Dominican, fixed the form in 1569.\n\n" +
+      "The Luminous Mysteries are new: John Paul II proposed them in 2002 (Rosarium Virginis Mariae) to " +
+      "fill the gap between the Nativity and the Passion — Christ's public ministry had no place in the " +
+      "older fifteen. They are optional, and anything printed before 2002 will not have them.\n\n" +
+      "ST. LOUIS DE MONTFORT'S THE SECRET OF THE ROSARY is the classic book on it, and its structure is " +
+      "itself an image: fifty-three short chapters, each called a Rose, offered as a bouquet. The three " +
+      "that open it are addressed to different readers —\n" +
+      "• the White Rose, to priests\n" +
+      "• the Red Rose, to sinners\n" +
+      "• the Mystical Rose Tree, to devout souls\n" +
+      "\n" +
+      "then Part One on what the Rosary is, and Part Two on how to say it. His governing image is that " +
+      "praying it devoutly places a crown on the heads of Jesus and Mary — a hundred and fifty-three " +
+      "red roses and sixteen white, being the Hail Marys and Our Fathers of the full fifteen decades. " +
+      "Montfort died in 1716, so his Rosary has no Luminous Mysteries.",
+  },
+  {
+    title: "The Stations of the Cross",
+    kind: "prayer",
+    tags: ["Passion", "Lent", "meditation", "Way of the Cross"],
+    source: "The Way of the Cross of St. Alphonsus Liguori — the standard form since the 18th century",
+    author: "St. Alphonsus Liguori",
+    authorNote: "the devotion is older; Liguori wrote the meditations that became the standard text",
+    related: ["Night Prayer", "Tu scendi dalle stelle (You Come Down from the Stars)", "Every Saint Became a Saint Through Mental Prayer", "The Rosary"],
+    relatedSaints: ["alphonsus-liguori"],
+    year: "Liguori's text, 18th century; the devotion itself medieval",
+    origin: "Franciscan in origin; Liguori's version Redemptorist",
+    liturgical: "Lent, especially Fridays; Good Friday",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: true,
+    body:
+      "OPENING PRAYER\n" +
+      "My Lord Jesus Christ, Thou hast made this journey to die for me with love unutterable, and I " +
+      "have so many times unworthily abandoned Thee; but now I love Thee with my whole heart, and " +
+      "because I love Thee, I repent sincerely for having ever offended Thee. Pardon me, my God, and " +
+      "permit me to accompany Thee on this journey. Thou goest to die for love of me; I wish also, my " +
+      "beloved Redeemer, to die for love of Thee. My Jesus, I will live and die always united to Thee.\n\n" +
+      "AT EACH STATION\n" +
+      "V. We adore Thee, O Christ, and we bless Thee.\n" +
+      "R. Because by Thy holy Cross Thou hast redeemed the world.\n\n" +
+      "— Then the meditation for that station, followed by this act of love: —\n\n" +
+      "I love Thee, Jesus, my love, above all things; I repent with my whole heart for having offended " +
+      "Thee. Never permit me to separate myself from Thee again. Grant that I may love Thee always; " +
+      "and then do with me what Thou wilt.\n\n" +
+      "— then an Our Father, Hail Mary and Glory Be, and a verse of the Stabat Mater, before moving to the next station. —\n\n" +
+      "THE FOURTEEN STATIONS\n\n" +
+      "1. Jesus is condemned to death\n" +
+      "2. Jesus takes up His Cross\n" +
+      "3. Jesus falls the first time\n" +
+      "4. Jesus meets His Mother\n" +
+      "5. Simon of Cyrene helps Jesus carry the Cross\n" +
+      "6. Veronica wipes the face of Jesus\n" +
+      "7. Jesus falls the second time\n" +
+      "8. Jesus meets the women of Jerusalem\n" +
+      "9. Jesus falls the third time\n" +
+      "10. Jesus is stripped of His garments\n" +
+      "11. Jesus is nailed to the Cross\n" +
+      "12. Jesus dies on the Cross\n" +
+      "13. Jesus is taken down from the Cross\n" +
+      "14. Jesus is laid in the tomb\n" +
+      "\nAt the close, the traditional intention is to pray for the intentions of the Holy Father.",
+    background:
+      "The devotion began with pilgrims walking the actual route in Jerusalem, and with the Franciscans " +
+      "— given custody of the Holy Places in the 14th century — who set up carved stations in Europe so " +
+      "that people who would never reach Jerusalem could make the walk anyway. The number settled at " +
+      "fourteen in the 17th–18th century.\n\n" +
+      "What is given here is the FRAME of St. Alphonsus Liguori's version, which has been the standard " +
+      "text almost everywhere since he wrote it: the opening prayer, the versicle and response said at " +
+      "each station, the act of love repeated fourteen times, and the order of the stations. What is " +
+      "NOT here is his fourteen individual meditations — one per station, each a short paragraph " +
+      "addressed directly to Christ. Those are the substance of his book and run to several thousand " +
+      "words; reproducing them from memory would risk putting words in his mouth, so they are best read " +
+      "from a printed copy or prayed from a station booklet. If you want them added properly, say so " +
+      "and I will source them.\n\n" +
+      "Two things worth knowing. Nine of the fourteen stations are drawn directly from the Gospels; " +
+      "five are not — the three falls, the meeting with Mary, and Veronica — and come from tradition " +
+      "rather than Scripture. In 1991 John Paul II introduced a Scriptural Way of the Cross replacing " +
+      "those five with recorded episodes, and both forms are in legitimate use. Second, the closing " +
+      "intention for the Holy Father is not decorative: it is one of the traditional conditions " +
+      "attached to the indulgence for making the Stations.",
+  },
 ];
 
 async function seedDefaultsIfEmpty() {
