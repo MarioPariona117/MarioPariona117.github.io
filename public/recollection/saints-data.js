@@ -3534,6 +3534,268 @@ window.SAINTS = [
   ],
 },
 
+
+{
+  slug: "mary", listTier: "favourite",
+  name: "The Blessed Virgin Mary",
+  sortName: "Mary, Blessed Virgin",
+  depth: "full",
+
+  identity: {
+    birthName: "Miriam (Hebrew); Maryam (Aramaic)",
+    religiousName: "",
+    originalName: "Μαριάμ / Μαρία (Greek); Maria (Latin)",
+    epithets: ["Our Lady", "Notre Dame", "Madonna", "the Theotokos", "the New Eve", "Stella Maris — Star of the Sea"],
+    titles: [
+      "Mother of God (Theotokos) — defined at Ephesus, 431",
+      "Ever-Virgin (Aeiparthenos)",
+      "Immaculate Conception — defined 1854",
+      "Assumed into heaven — defined 1950",
+      "Mother of the Church — proclaimed by Paul VI, 1964",
+      "Queen of Heaven",
+      "Mediatrix of graces (a title of devotion and of theological debate, not a defined dogma)",
+    ],
+    doctorTitle: "",
+    doctorDeclared: "",
+    rank: "Her feasts range from optional memorial to solemnity; the Assumption and the Immaculate Conception are holy days of obligation in most places",
+  },
+
+  dates: {
+    feast: "08-15",
+    feastLabel: "15 August — the Assumption",
+    altFeasts: [
+      { date: "01-01", label: "1 January", calendar: "Solemnity of Mary, the Holy Mother of God — the oldest Marian feast of the Roman rite" },
+      { date: "02-11", label: "11 February", calendar: "Our Lady of Lourdes" },
+      { date: "03-25", label: "25 March", calendar: "The Annunciation — a solemnity of the Lord, kept as hers too" },
+      { date: "05-31", label: "31 May", calendar: "The Visitation" },
+      { date: "07-16", label: "16 July", calendar: "Our Lady of Mount Carmel" },
+      { date: "08-05", label: "5 August", calendar: "Dedication of the Basilica of St. Mary Major" },
+      { date: "08-22", label: "22 August", calendar: "The Queenship of Mary — the octave day of the Assumption" },
+      { date: "09-08", label: "8 September", calendar: "The Nativity of Mary" },
+      { date: "09-12", label: "12 September", calendar: "The Holy Name of Mary" },
+      { date: "09-15", label: "15 September", calendar: "Our Lady of Sorrows" },
+      { date: "10-07", label: "7 October", calendar: "Our Lady of the Rosary" },
+      { date: "11-21", label: "21 November", calendar: "The Presentation of Mary" },
+      { date: "10-12", label: "12 October", calendar: "Our Lady of the Pillar — patronal feast of Spain and of the Hispanic world" },
+      { date: "12-08", label: "8 December", calendar: "The Immaculate Conception — patronal feast of the United States, and of Peru's cathedral of Lima" },
+      { date: "12-12", label: "12 December", calendar: "Our Lady of Guadalupe — patroness of the Americas" },
+    ],
+    born: "Unknown; traditionally reckoned c. 18 BC",
+    bornPlace: "Not recorded in Scripture. Later tradition names Jerusalem or Sepphoris; she is of Nazareth in the Gospels",
+    died: "Not recorded, and deliberately left open by the Church",
+    diedPlace: "Two ancient traditions: Jerusalem (the Dormition, on Mount Sion) and Ephesus (where she is said to have gone with St. John)",
+    deathManner: "The 1950 definition says only that she was assumed 'having completed the course of her earthly life' — the wording was chosen so as not to settle whether she died first",
+    ageAtDeath: "",
+    beatified: null,
+    canonized: null,
+    landmarks: [
+      { date: "c. 5 BC", event: "The Annunciation at Nazareth (Luke 1:26-38)" },
+      { date: "c. 5 BC", event: "The Visitation to Elizabeth; the Magnificat (Luke 1:39-56)" },
+      { date: "c. 4 BC", event: "The birth of Christ at Bethlehem; the shepherds; the presentation in the Temple and Simeon's prophecy of the sword" },
+      { date: "c. AD 8", event: "The finding of the twelve-year-old Jesus in the Temple — the last scene of his hidden life" },
+      { date: "c. AD 30", event: "The wedding at Cana; her last recorded words" },
+      { date: "c. AD 33", event: "Standing at the Cross; entrusted to the beloved disciple (John 19:25-27)" },
+      { date: "c. AD 33", event: "In the upper room with the apostles before Pentecost (Acts 1:14)" },
+    ],
+  },
+
+  life: {
+    nationality: "Jewish, of Galilee; of the house of David",
+    era: "First century — Roman Palestine under Augustus, Herod and Tiberius",
+    places: [
+      "Nazareth — where she lived and where the Annunciation took place",
+      "Bethlehem — the Nativity",
+      "Egypt — the flight, and the years of exile",
+      "Jerusalem — the Presentation, the Passion, and the upper room",
+      "Cana of Galilee — the wedding",
+      "Ephesus — where an ancient tradition places her last years with St. John",
+    ],
+    family: "Wife of St. Joseph. Her parents are not named in Scripture; the names Joachim and Anne come from the second-century Protoevangelium of James, an apocryphal text the Church has never treated as history but whose names the calendar has kept. Kinswoman of Elizabeth, mother of the Baptist.",
+    occupation: "A village woman of Nazareth, wife of a carpenter",
+    education: "Unrecorded. The Magnificat is woven almost entirely out of the Psalms and the canticle of Hannah, which suggests a mind steeped in the Scriptures of her people",
+    order: "",
+    offices: [],
+    stateOfLife: "Virgin; wife; mother; widow",
+    context: "A young woman in an occupied province, in a village small enough that it is never mentioned in the Old Testament. Her consent is asked in private and changes everything, and almost nobody in her lifetime knows it happened.",
+  },
+
+  narrative: {
+    summary: "The Mother of God: a girl of Nazareth whose 'be it done to me' is the hinge of the Incarnation, who appears in Scripture perhaps a dozen times, speaks seven, and whose last recorded words point away from herself.",
+
+    story: "Everything the Church holds about Mary follows from one thing, and it is not a claim about her: it is a claim about her Son. She is called Mother of God because the child she bore is God — the title was defined at Ephesus in 431 to settle a dispute about Christ, not about her, and the crowds who acclaimed the definition understood that a lesser title for the mother would have meant a lesser claim about the child.\n\nThe Gospels give her very little space and use it precisely. She is asked, and consents. She goes into the hill country to help her cousin and sings a song about God overturning the social order. She bears the child in a stable, hears from Simeon that a sword will pass through her own soul, loses the boy for three days, and is told at Cana that his hour has not yet come — and then tells the servants to do whatever he says. She stands at the Cross when almost everyone else has gone. She is in the upper room when the Spirit comes. Then the record stops.\n\nWhat the tradition added afterwards was not stories but conclusions. If she is the mother of the Holy One, then sin never had her — the Immaculate Conception, defined in 1854, meaning that she was preserved from original sin from the first instant of her existence, by her Son's merits applied in advance. If she is the mother of the risen Lord, then death does not hold her body — the Assumption, defined in 1950. Neither dogma stands alone; each is an inference from who her child is.\n\nThe consistent shape of Marian doctrine is that it never terminates in her. Every title turns back to Christ, and every apparition that the Church has approved has said, in effect, what she said at Cana.",
+
+    timeline: [
+      { year: "c. 18 BC", event: "Born — the date is a traditional reckoning, not a record" },
+      { year: "c. 5 BC", event: "The Annunciation; the Visitation; the Magnificat" },
+      { year: "c. 4 BC", event: "The Nativity at Bethlehem; the Presentation; the flight into Egypt" },
+      { year: "c. AD 8", event: "The finding in the Temple — the last words of hers recorded before Cana" },
+      { year: "c. AD 30", event: "The wedding at Cana" },
+      { year: "c. AD 33", event: "Calvary, and the upper room at Pentecost" },
+      { year: "431", event: "The Council of Ephesus defines her as Theotokos, God-bearer" },
+      { year: "649", event: "The Lateran Council affirms her perpetual virginity" },
+      { year: "1854", event: "Pius IX defines the Immaculate Conception in Ineffabilis Deus, 8 December" },
+      { year: "1950", event: "Pius XII defines the Assumption in Munificentissimus Deus, 1 November" },
+      { year: "1964", event: "Paul VI proclaims her Mother of the Church at the close of the third session of Vatican II" },
+    ],
+
+    conversion: "",
+
+    anecdotes: [
+      {
+        title: "Seven speeches",
+        text: "She speaks seven times in the whole of Scripture. She asks the angel how this can be; she consents; she sings the Magnificat; she asks her twelve-year-old why he has done this to them; she says 'They have no wine'; and she tells the servants, 'Whatsoever he shall say to you, do ye.' That last sentence is the final thing she is recorded as saying, and it is an instruction to listen to somebody else.",
+        source: "Luke 1-2; John 2",
+        legend: false,
+      },
+      {
+        title: "The title was about her Son",
+        text: "Nestorius was willing to call her Christotokos, Christ-bearer, but not Theotokos, God-bearer — which would have meant the child had two persons in him, one born of her and one not. Ephesus in 431 defined Theotokos to protect the unity of Christ. The people of Ephesus are said to have escorted the bishops home by torchlight.",
+        source: "Council of Ephesus, 431",
+        legend: false,
+      },
+      {
+        title: "What the Assumption does not say",
+        text: "Munificentissimus Deus defines that she was assumed body and soul into heavenly glory 'having completed the course of her earthly life'. Pius XII chose that phrasing deliberately in order not to define whether she died first. The Eastern churches keep the Dormition — her falling asleep — and the question remains open on purpose.",
+        source: "Munificentissimus Deus, 1950, §44",
+        legend: false,
+      },
+      {
+        title: "The house that flew",
+        text: "The Holy House at Loreto is said to have been carried by angels from Nazareth in 1291. The shrine is ancient and venerable and the story is not history; the likeliest account is that stones were shipped by a family surnamed Angeli. Pilgrimage there has never depended on the legend being true.",
+        source: "Medieval tradition; the shrine at Loreto",
+        legend: true,
+      },
+      {
+        title: "The Rosary and St. Dominic",
+        text: "The tradition that Our Lady gave the Rosary to St. Dominic is told in detail for the first time by Bl. Alan de la Roche in the 1470s — roughly 240 years after Dominic died. The Bollandists and Herbert Thurston rejected it as history, and most scholars follow them. What can be traced is a gradual growth: psalters of 150 Aves in the twelfth century, meditation clauses attached to them by Dominic of Prussia, a Carthusian, in the fifteenth, and then Alan dividing the 150 into three fifties, inserting the Our Father, and founding the first Rosary confraternity at Douai in 1470. Popes have commended the Dominican tradition warmly for centuries without ever asserting it as fact — and the Rosary does not stand or fall on it.",
+        source: "Alanus de Rupe, 1470s; assessed by the Bollandists and by Herbert Thurston, S.J.",
+        legend: true,
+      },
+      {
+        title: "The Brown Scapular",
+        text: "Tradition puts the giving of the scapular to St. Simon Stock at Aylesford on 16 July 1251. The earliest lives of Simon do not mention any vision; the first reference appears in the late fourteenth century, over a hundred years later, and a letter long cited as an eyewitness account by his secretary is a known forgery. The Church has never required belief in the vision, and the devotion has never depended on it. The attached 'Sabbatine Privilege' — release from purgatory on the first Saturday after death — rests on a bull ascribed to John XXII that scholars regard as inauthentic; a 1613 decree of the Holy Office allowed Carmelites to preach only that Mary aids after death those who died in charity, having worn the habit, kept chastity according to their state, and prayed the Little Office. The Carmelites today state plainly that they do not promulgate the Sabbatine privilege.",
+        source: "Carmelite tradition; the 1613 decree of the Holy Office; modern Carmelite catechesis",
+        legend: true,
+      },
+      {
+        title: "The Miraculous Medal",
+        text: "Rue du Bac, Paris, 1830, to a novice named Catherine Labouré. The design was specified in the vision — the figure with rays streaming from her hands, the oval frame, and the invocation asking her prayers for those who have recourse to her. The first medals were struck in 1832 during a cholera epidemic. It is one of the few devotions whose physical form was reportedly given in detail rather than developed afterwards.",
+        source: "The apparitions at the Rue du Bac, 1830; approved",
+        legend: false,
+      },
+      {
+        title: "The pillar at Zaragoza",
+        text: "The oldest of these, and the strangest: a column of jasper, said to have been given to St. James on the bank of the Ebro in AD 40 with the instruction to build a church around it. The column is still there, under a small statue whose robes are changed daily. Two things are worth holding together. The first is that no documentation exists before the thirteenth century, and the Church has never ruled on whether it happened. The second is that it hardly matters to what the shrine became: the feast on 12 October carried across the Atlantic with the language, and Pilar became one of the most common names given to Spanish-speaking girls for four centuries.",
+        source: "Zaragoza tradition; first documented in the 13th century, the feast fixed at 12 October in 1640",
+        legend: true,
+      },
+      {
+        title: "The image at Guadalupe",
+        text: "What is said to have been handed over at Tepeyac in 1531 was not a practice but a picture: the image on Juan Diego's tilma, which is still exhibited and still the object of the most visited Marian pilgrimage in the world. The evangelistic effect was immediate and enormous, and it worked partly because the figure is a native woman speaking Nahuatl rather than a European one.",
+        source: "Nican Mopohua; the shrine at Tepeyac",
+        legend: false,
+      },
+      {
+        title: "Guadalupe",
+        text: "In December 1531, ten years after the fall of Tenochtitlan, she appeared near Mexico City to Juan Diego, an indigenous convert, speaking Nahuatl and appearing as a native woman. The image on his cloak is still there. Nine million are said to have been baptised in the decade that followed. She is patroness of the Americas.",
+        source: "Nican Mopohua; the shrine at Tepeyac",
+        legend: false,
+      },
+    ],
+
+    phenomena: [
+      "How the Church treats these at all: an approved apparition is declared worthy of belief, never required belief. Private revelation adds nothing to the deposit of faith, and no Catholic is obliged to accept any of it.",
+      "Since 17 May 2024 the Dicastery for the Doctrine of the Faith has judged such claims under new norms with six possible outcomes — nihil obstat; prae oculis habeatur; curatur; sub mandato; prohibetur et obstruatur; and declaratio de non supernaturalitate. The decisive change is at §23: as a rule, neither the bishop nor the episcopal conference nor the Dicastery will now declare a phenomenon to be of supernatural origin at all. A nihil obstat means the fruits are recognised and devotion is permitted — not that the apparition is certified.",
+      "Zaragoza, Spain, traditionally AD 40 — Our Lady of the Pillar, kept on 12 October. Unique among them: the tradition holds that she appeared while she was still living in Jerusalem, so it is not an apparition of a saint in glory but a bilocation of a woman still on earth. The story is only documented from the thirteenth century onwards and the Church has never pronounced on its historicity; the devotion nevertheless became the anchor of Marian piety across the Spanish-speaking world.",
+      "Guadalupe, Mexico, 1531 — inscribed in the general calendar, 12 December; patroness of the Americas",
+      "Lourdes, France, 1858 — in the general calendar, 11 February",
+      "Fatima, Portugal, 1917 — in the general calendar, 13 May",
+      "Laus, France, 1664-1718 — approved 2008, after more than two centuries",
+      "The Miraculous Medal, Rue du Bac, Paris, 1830",
+      "La Salette, France, 1846",
+      "Pontmain, France, 1871 — during the Prussian advance; the town was spared",
+      "Knock, Ireland, 1879 — silent throughout; no words were spoken",
+      "Champion, Wisconsin, 1859 — approved 2010, the only approved apparition in the United States",
+      "Beauraing, Belgium, 1932-33, and Banneux, Belgium, 1933 — approved together in 1949",
+      "Akita, Japan, 1973 — approved by the local bishop",
+      "Cuapa, Nicaragua, 1980",
+      "Kibeho, Rwanda, 1981-89 — approved 2001; the visions of slaughter preceded the genocide by a decade",
+      "Betania, Venezuela, 1976-90",
+      "Medjugorje, Bosnia and Herzegovina, from 1981 — the test case for the new framework. The Dicastery granted a nihil obstat in its note The Queen of Peace, 19 September 2024, with the assent of Pope Francis: the spiritual fruits are recognised and the messages may be published, while the question of whether the apparitions are supernatural is deliberately left unanswered.",
+      "The list is selective. The great majority of claims investigated by the Church are rejected, and most are never investigated at all.",
+    ],
+
+    miracles: "The healings recorded at Lourdes are the most heavily documented: of thousands of claims, a medical bureau has judged around seventy inexplicable, and the Church has recognised those.",
+
+    sufferings: "The tradition counts seven: Simeon's prophecy, the flight into Egypt, the loss of the child in the Temple, meeting her Son on the way to Calvary, standing at the Cross, receiving his body, and the burial. The Gospel records no complaint from her at any of them.",
+
+    death: "Not recorded. Two ancient traditions place her last years at Jerusalem and at Ephesus; the Church has never adjudicated between them, and the Assumption was defined without settling whether death preceded it.",
+
+    lastWords: "\"Whatsoever he shall say to you, do ye.\" (John 2:5) — her last recorded words in Scripture, spoken to the servants at Cana",
+  },
+
+  spirituality: {
+    charism: "Consent. The whole of her office turns on a sentence given in private with no guarantees attached: 'Behold the handmaid of the Lord; be it done to me according to thy word.'",
+    teachings: [
+      "The Magnificat is the longest thing she says and it is not about herself after the first two lines — it is about God putting down the mighty and exalting the humble",
+      "At Cana she does not tell her Son what to do; she states the fact ('They have no wine') and then turns to the servants",
+      "Her instruction to the servants is the whole of Marian devotion in one line: it points away from her",
+    ],
+    method: "",
+    devotions: ["The Rosary", "The Angelus", "The Memorare", "The seasonal antiphons at Compline", "The Seven Sorrows"],
+    school: "",
+    influencedBy: [],
+    influenced: ["St. Bernard of Clairvaux", "St. Dominic", "St. Louis de Montfort", "St. Alphonsus Liguori", "St. Maximilian Kolbe"],
+    controversies: "Two are worth naming plainly. Devotion to her is often read from outside as worship, which the Church distinguishes carefully — adoration (latria) belongs to God alone, veneration (dulia) to the saints, and a higher veneration (hyperdulia) to her, but never adoration. And the proposal to define her as Co-Redemptrix has been pressed repeatedly and never accepted; the theological commission at Vatican II declined it, and successive popes have avoided the term.",
+  },
+
+  dailyPractice: {
+    rhythm: "",
+    practices: [],
+    forYou: "Three things scale to an ordinary week without ceremony: the Angelus at midday, which takes forty seconds and interrupts the working day on purpose; a decade of the Rosary rather than none when five feels impossible; and the seasonal antiphon at Compline, which changes four times a year and quietly teaches you the shape of the liturgical calendar.",
+  },
+
+  writings: [],
+  writingsNotes: "She wrote nothing. Everything attributed to her is either Scripture reporting her words or later devotion putting words in her mouth — a distinction worth keeping when reading anything titled 'Mary says'.",
+
+  about: {
+    hagiography: [],
+    biography: [],
+    scholarly: [],
+    devotional: [
+      "St. Louis de Montfort, True Devotion to Mary — the source of the consecration formula and of much modern Marian practice",
+      "St. Alphonsus Liguori, The Glories of Mary — a commentary on the Salve Regina",
+    ],
+  },
+
+  cult: {
+    patronages: ["The universal Church", "The Americas (under the title of Guadalupe)", "Countless nations, dioceses, orders and parishes"],
+    invokedAgainst: [],
+    attributes: ["Blue mantle", "Crown of twelve stars", "Crescent moon", "Lily", "The child", "The pierced heart"],
+    relics: "None. There are no bodily relics of Mary anywhere in the Church, which is itself part of the historical argument for the Assumption: the ancient world collected relics of everyone, and no city ever claimed hers.",
+    incorrupt: false,
+    shrines: [
+      "Santa Maria Maggiore, Rome — the oldest Marian basilica in the West, built after Ephesus",
+      "Guadalupe, Mexico City — the most visited Marian shrine in the world",
+      "Lourdes, France; Fatima, Portugal; Loreto, Italy; Walsingham, England; Czestochowa, Poland",
+    ],
+    devotions: ["The Rosary", "The Angelus", "The Brown Scapular", "The Miraculous Medal", "The Five First Saturdays — asked for at Pontevedra in 1925", "The Pillar — the oldest of the Spanish devotions"],
+    foundations: [],
+  },
+
+  connections: { related: ["bernard-of-clairvaux", "dominic", "alphonsus-liguori", "maximilian-kolbe", "juan-diego", "peregrine-laziosi"] },
+
+  cards: [
+    { q: "What are the four Marian dogmas, and when was each defined?", a: "Mother of God (Ephesus, 431); Perpetual Virginity (Lateran, 649); the Immaculate Conception (Pius IX, 1854); the Assumption (Pius XII, 1950)." },
+    { q: "What does the Immaculate Conception actually mean?", a: "That Mary was preserved free from original sin from the first instant of her conception — by the merits of her Son applied in advance. It is not about the conception of Jesus." },
+    { q: "Does the Church teach that Mary died?", a: "It has not decided. The 1950 definition says she was assumed 'having completed the course of her earthly life', wording chosen precisely to leave the question open." },
+    { q: "Why was the title Theotokos defined?", a: "To protect the unity of Christ, not to exalt Mary. Denying it implied two persons in the child — one born of her, one not." },
+    { q: "What are Mary's last recorded words in Scripture?", a: "\"Whatsoever he shall say to you, do ye\" — to the servants at Cana (John 2:5)." },
+    { q: "Why are there no relics of Mary?", a: "There have never been any, anywhere — an ancient world that collected relics of everyone never claimed hers. It is part of the historical case for the Assumption." },
+    { q: "Latria, dulia, hyperdulia?", a: "Adoration, given to God alone; veneration, given to the saints; and the higher veneration given to Mary — which is still not adoration." },
+  ],
+  note: "",
+},
 // ═══════════════════════════════════════════════════════════════════
 //  CORE SCAFFOLDS — first list (19 remaining after the 12 full dossiers)
 // ═══════════════════════════════════════════════════════════════════

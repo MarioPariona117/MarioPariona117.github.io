@@ -89,13 +89,365 @@ function renderInline(escaped) {
     .replace(/\*(?!\s)([^*\n]*[^*\s])\*/g, "<em>$1</em>");
 }
 
+// An ALL-CAPS line standing on its own is a heading, not a shouted sentence —
+// the traditional way printed prayer books mark divisions ("OPENING PRAYER",
+// "AT THE CLOSE"). Shared with splitSections so the chips and the printed
+// headings can never disagree about what counts as one.
+function sectionHeadingText(line) {
+  const t = (line || "").trim();
+  if (t.length >= 4 && t.length <= 70 && /[A-Z]/.test(t) && t === t.toUpperCase() && !/[a-z]/.test(t)) {
+    return t;
+  }
+  // "— Before —" divides the Preces the way the caps headings divide a litany.
+  // Kept short and colon-free so the Stations' rubric — a whole sentence in
+  // the same dashes — stays a rubric.
+  const dashed = t.match(/^—\s*(\S[^—]*?)\s*—$/);
+  if (dashed && dashed[1].length <= 24 && !/[:.!?]$/.test(dashed[1])) return dashed[1];
+  return null;
+}
+
+function isSectionHeadingLine(line) {
+  return sectionHeadingText(line) !== null;
+}
+
+// A rubric is the instruction rather than the prayer — "then the meditation
+// for that station" — set apart the way a missal sets it apart, so the eye
+// never starts praying it by mistake.
+function isRubricLine(line) {
+  const t = (line || "").trim();
+  return /^—\s*\S[\s\S]*—$/.test(t) || (/^\(.+\)$/.test(t) && t.length < 120);
+}
+
+function stripRubricMarks(t) {
+  return t.replace(/^—\s*/, "").replace(/\s*—$/, "").replace(/^\((.+)\)$/, "$1").trim();
+}
+
+// Versicle and response. The markers carry the alternation between priest and
+// people, so they get the accent colour and the lines hang off them.
+const VR_RE = /^\s*(V\.|R\.|℣|℟)\s+/;
+
+function renderProseLines(lines) {
+  const hasVr = lines.some((l) => VR_RE.test(l));
+  // With a versicle present every line becomes its own row, so the responses
+  // line up under each other rather than each starting wherever its marker
+  // happened to end.
+  const html = lines
+    .map((line) => {
+      const m = line.match(VR_RE);
+      if (!m) return hasVr ? `<span class="vr-line">${renderInline(escapeHtml(line))}</span>` : renderInline(escapeHtml(line));
+      const mark = m[1] === "V." ? "℣" : m[1] === "R." ? "℟" : m[1];
+      return (
+        `<span class="vr-line"><span class="vr-mark">${mark}</span>` +
+        `<span class="vr-text">${renderInline(escapeHtml(line.slice(m[0].length)))}</span></span>`
+      );
+    })
+    .join(hasVr ? "" : "<br>");
+  // A block whose lines are all short is verse, a creed, or a recitation —
+  // none of which want the leading that keeps a wrapped prose paragraph
+  // readable. At prose leading the Divine Praises sprawl down a whole screen.
+  const verse = lines.length > 1 && lines.every((l) => l.length <= 62);
+  return `<p class="reader-para${hasVr ? " reader-vr" : ""}${verse ? " verse" : ""}">${html}</p>`;
+}
+
+// A litany is an invocation plus a response repeated down the whole block —
+// "Holy Mary, pray for us." fifty times over. Set flat, the repetition is all
+// the eye sees and the invocations, which are the part that actually varies,
+// disappear into it. Finding the shared tail lets the response recede.
+//
+// Detected rather than tagged: the responses differ per litany (and per block
+// inside one litany), and nothing in the stored text marks them.
+function splitLitany(lines) {
+  if (lines.length < 4) return null;
+
+  // The shared tail can't be taken from the whole block: a litany of saints
+  // ends "All ye Holy Saints of God, make intercession for us", and that one
+  // odd line out would wipe the common suffix for all sixty above it. So each
+  // adjacent pair votes for a response and the block goes with the winner.
+  const tally = new Map();
+  for (let i = 1; i < lines.length; i++) {
+    const a = lines[i - 1], b = lines[i];
+    let n = 0;
+    while (n < a.length && n < b.length && a[a.length - 1 - n] === b[b.length - 1 - n]) n++;
+    const suf = a.slice(a.length - n);
+    const comma = suf.indexOf(",");
+    if (comma < 0) continue;
+    // Everything before that comma is a coincidence of shared spelling and
+    // belongs to the invocation.
+    const resp = suf.slice(comma + 1).trim();
+    if (resp.length < 6 || resp.length > 60) continue;
+    tally.set(resp, (tally.get(resp) || 0) + 1);
+  }
+  if (!tally.size) return null;
+  const resp = [...tally.entries()].sort((x, y) => y[1] - x[1])[0][0];
+
+  const rows = lines.map((l) => {
+    if (!l.endsWith(resp)) return { plain: l };
+    const inv = l.slice(0, l.length - resp.length).trim();
+    // The response has to be cut off at the comma that introduces it, or a
+    // line that merely happens to end the same way gets split mid-clause.
+    if (!inv.endsWith(",") || inv.length < 3) return { plain: l };
+    return { inv, resp };
+  });
+
+  const matched = rows.filter((r) => r.inv).length;
+  if (matched < 4 || matched / rows.length < 0.6) return null;
+  return rows;
+}
+
+// A pipe-delimited block is a table: "| Matthew 5 | Luke 6 |". The first row
+// is the header. Comparisons — which beatitude appears in which Gospel, which
+// wording the Catechism uses — are the one thing running text is bad at.
+// Within a cell, "//" separates the two halves of a thing being compared —
+// the beatitude and the promise attached to it. The second half is set back,
+// the way a litany response is, so that a column of promises can be read down
+// without the blessings and the promises running into each other.
+function renderCell(cell) {
+  const i = cell.indexOf("//");
+  if (i === -1) return renderInline(escapeHtml(cell));
+  return (
+    `<span class="cell-main">${renderInline(escapeHtml(cell.slice(0, i).trim()))}</span>` +
+    `<span class="cell-sub">${renderInline(escapeHtml(cell.slice(i + 2).trim()))}</span>`
+  );
+}
+
+function splitTable(lines) {
+  if (lines.length < 2) return null;
+  const rows = [];
+  for (const l of lines) {
+    const t = l.trim();
+    if (!t.startsWith("|") || !t.endsWith("|") || t.length < 3) return null;
+    const cells = t.slice(1, -1).split("|").map((c) => c.trim());
+    if (cells.length < 2) return null;
+    rows.push(cells);
+  }
+  // Ragged rows mean it isn't really a table, it's prose with pipes in it.
+  if (rows.some((r) => r.length !== rows[0].length)) return null;
+  return rows;
+}
+
+
+// "17 Dec - O Wisdom, …"
+const DATED_RE = /^(\d{1,2}\s+\p{L}{3,9}\.?)\s+[-–—]\s+(\S[\s\S]*)$/u;
+
+// "WISDOM - to judge and order all things by God's standard" — a term and its
+// definition on one line. The caps term set inline in a serif paragraph just
+// reads as shouting; pulled out into its own column it reads as a glossary,
+// which is what these enumerations of gifts, virtues and vices actually are.
+const DEF_RE = /^([A-Z][A-Z0-9 '’.-]{2,30})\s+[-–—]\s+(\S[\s\S]*)$/;
+
+function splitDefinitions(lines) {
+  const rows = lines.map((l) => {
+    const m = l.match(DEF_RE);
+    // "THE JOYFUL MYSTERIES — MONDAY AND SATURDAY" has the same shape but is a
+    // heading: what follows the dash has to actually read as prose.
+    if (!m || !/[a-z]/.test(m[2])) return { plain: l };
+    return { term: m[1].trim(), text: m[2].trim() };
+  });
+  const matched = rows.filter((r) => r.term).length;
+  if (matched < 2 || matched / rows.length < 0.6) return null;
+  return rows;
+}
+
+// "charity - joy - peace - patience - …" is one enumeration that happens to be
+// typed across two lines, and a hyphen breaking at the end of a line reads as
+// a broken word. Set as a run with proper separators it stays one thing.
+function splitDashRun(lines) {
+  // A run may wrap onto the next line, but only where the writer left the
+  // separator hanging at the end of the line. Without this, seven lines of
+  // "17 Dec - O Sapientia" join into one run and every date ends up glued to
+  // the antiphon above it.
+  if (lines.slice(0, -1).some((l) => !/[-–—]$/.test(l.trim()))) return null;
+  const parts = lines.join(" ").split(/\s+[-–—]\s+/).map((p) => p.trim()).filter(Boolean);
+  if (parts.length < 4) return null;
+  if (!parts.every((p) => p.length <= 26 && !/[.:;!?]/.test(p))) return null;
+  return parts;
+}
+
+// A numbered line: "1. Feed the hungry", "3) …". Whether it is a list item or
+// prose that happens to open with a numeral is decided below, not here.
+const NUM_RE = /^(\d+)[.)]\s+(.+)$/;
+
 function renderTextBlock(text) {
-  return (text || "")
-    .split(/\n\s*\n/)
-    .map((para) => para.trim())
-    .filter(Boolean)
-    .map((para) => `<p class="reader-para">${renderInline(escapeHtml(para)).replace(/\n/g, "<br>")}</p>`)
-    .join("");
+  const out = [];
+  let buf = []; // prose lines waiting to become a paragraph
+  let items = []; // numbered items waiting to become a list
+
+  const flushProse = () => {
+    if (buf.length) out.push(renderProseLines(buf));
+    buf = [];
+  };
+  const flushList = () => {
+    if (!items.length) return;
+    // One bare item is far likelier to be a sentence starting with a numeral
+    // than a list of one, so it goes back to being prose.
+    if (items.length === 1 && !items[0].body.length) {
+      out.push(renderProseLines([items[0].raw]));
+      items = [];
+      return;
+    }
+    // A list whose items carry their own text (the Stations, the Seven Last
+    // Words) needs room between them; a plain enumeration reads better tight.
+    const roomy = items.some((it) => it.body.length);
+    out.push(
+      `<ol class="reader-list${roomy ? " roomy" : ""}">` +
+        items
+          .map(
+            (it) =>
+              `<li><span class="item-n">${escapeHtml(String(it.n))}.</span>` +
+              `<span class="item-body"><span class="item-title">${renderInline(escapeHtml(it.title))}</span>` +
+              (it.body.length
+                ? `<span class="item-text">${it.body.map((l) => renderInline(escapeHtml(l))).join("<br>")}</span>`
+                : "") +
+              `</span></li>`
+          )
+          .join("") +
+        "</ol>"
+    );
+    items = [];
+  };
+  const flush = () => {
+    flushProse();
+    flushList();
+  };
+
+  for (const para of (text || "").split(/\n\s*\n/).map((x) => x.trim()).filter(Boolean)) {
+    const lines = para.split("\n").map((l) => l.trim()).filter(Boolean);
+
+    // Heading before rubric: "— Before —" matches both shapes, and it is a
+    // division of the prayer, not an instruction inside one.
+    if (lines.length === 1 && !isSectionHeadingLine(lines[0]) && isRubricLine(lines[0])) {
+      flush();
+      out.push(`<p class="reader-rubric">${renderInline(escapeHtml(stripRubricMarks(lines[0])))}</p>`);
+      continue;
+    }
+
+    // Headings first so the litany test below sees only the invocations.
+    while (lines.length && isSectionHeadingLine(lines[0])) {
+      flush();
+      out.push(`<h3 class="reader-section-head">${escapeHtml(sectionHeadingText(lines.shift()))}</h3>`);
+    }
+
+    const table = splitTable(lines);
+    if (table) {
+      flush();
+      const [head, ...body] = table;
+      out.push(
+        `<div class="reader-table-wrap"><table class="reader-table"><thead><tr>` +
+          head.map((c) => `<th>${renderInline(escapeHtml(c))}</th>`).join("") +
+          `</tr></thead><tbody>` +
+          body
+            .map((r) =>
+              // A row with only its first cell filled is a group heading —
+              // Aquinas's division of the fruits, Matthew's of the beatitudes.
+              // It spans the table rather than pretending to be data.
+              r.slice(1).every((c) => c === "")
+                ? `<tr class="table-group"><td colspan="${r.length}">${renderInline(escapeHtml(r[0]))}</td></tr>`
+                : `<tr>` + r.map((c) => `<td>${renderCell(c)}</td>`).join("") + `</tr>`
+            )
+            .join("") +
+          `</tbody></table></div>`
+      );
+      continue;
+    }
+
+    const defs = splitDefinitions(lines);
+    if (defs) {
+      flush();
+      out.push(
+        `<div class="reader-defs">` +
+          defs
+            .map((r) =>
+              r.plain
+                ? `<p class="def-full">${renderInline(escapeHtml(r.plain))}</p>`
+                : `<span class="def-term">${escapeHtml(r.term)}</span>` +
+                  `<span class="def-text">${renderInline(escapeHtml(r.text))}</span>`
+            )
+            .join("") +
+          `</div>`
+      );
+      continue;
+    }
+
+    // A line ending in a colon introduces what follows rather than being part
+    // of it — "And the twelve fruits that follow from them:".
+    const lead = lines.length > 1 && /:$/.test(lines[0]) ? lines[0] : null;
+    const run = splitDashRun(lead ? lines.slice(1) : lines);
+    if (run) {
+      flush();
+      if (lead) out.push(renderProseLines([lead]));
+      out.push(
+        `<p class="reader-run">` +
+          run.map((x) => `<span class="run-item">${renderInline(escapeHtml(x))}</span>`).join("") +
+          `</p>`
+      );
+      continue;
+    }
+
+    const litany = lines.length && !lines.some((l) => VR_RE.test(l) || isSectionHeadingLine(l))
+      ? splitLitany(lines)
+      : null;
+    if (litany) {
+      flush();
+      out.push(
+        `<div class="litany">` +
+          litany
+            .map((r) =>
+              r.plain
+                ? `<p class="lit-line lit-plain">${renderInline(escapeHtml(r.plain))}</p>`
+                : `<p class="lit-line"><span class="lit-inv">${renderInline(escapeHtml(r.inv))}</span> ` +
+                  `<span class="lit-resp">${renderInline(escapeHtml(r.resp))}</span></p>`
+            )
+            .join("") +
+          `</div>`
+      );
+      continue;
+    }
+
+    // "17 Dec - O Wisdom, …" — the O Antiphons are indexed by the day they are
+    // sung, which is the one thing you need to find in Advent's last week.
+    // The English sets one per paragraph and the Latin lists all seven in a
+    // block, so both shapes have to work.
+    const dated = lines.map((l) => l.match(DATED_RE));
+    if (dated.length && dated.every(Boolean)) {
+      flush();
+      for (const d of dated) {
+        const short = d[2].length < 60 ? " short" : "";
+        out.push(
+          `<p class="reader-dated${short}"><span class="dated-label">${escapeHtml(d[1])}</span>` +
+            `<span class="dated-text">${renderInline(escapeHtml(d[2]))}</span></p>`
+        );
+      }
+      continue;
+    }
+
+    lines.forEach((line, idx) => {
+      if (isSectionHeadingLine(line)) {
+        flush();
+        out.push(`<h3 class="reader-section-head">${escapeHtml(sectionHeadingText(line))}</h3>`);
+        return;
+      }
+      const m = line.match(NUM_RE);
+      // Must continue the run — 1, then 2, then 3. A stray "1969. " in the
+      // middle of a list is a date, not the next item.
+      const continues = m && Number(m[1]) === (items.length ? items[items.length - 1].n + 1 : 1);
+      if (continues) {
+        flushProse();
+        items.push({ n: Number(m[1]), title: m[2], body: [], raw: line });
+      } else if (items.length && idx > 0) {
+        // An unnumbered line under an item belongs to that item — the
+        // meditation under its station. Only within the same paragraph: a
+        // fresh paragraph that doesn't continue the count ends the list
+        // instead of being swallowed by its last item.
+        items[items.length - 1].body.push(line);
+      } else {
+        flushList();
+        buf.push(line);
+      }
+    });
+    flushProse();
+  }
+  flush();
+  return out.join("");
 }
 
 function splitParagraphs(text) {
@@ -1581,6 +1933,8 @@ const SEED_LIBRARY_ENTRIES = [
     occasion:
       "Said to the boys of the Oratory in Turin — many of them illiterate, most without families — which is why it is built as three questions with one answer a boy could remember without a book.",
     kind: "quote", tags: ["Marian", "rosary", "Salesian", "intercession"],
+    seedVersion: 2,
+    relatedSaints: ["mary"],
     source: "Widely reported in Salesian sources",
     author: "St. John Bosco", authorNote: "consistently attributed across Salesian tradition",
     year: "19th century", origin: "Salesian spirituality", liturgical: "", feastDay: "31 January", favorite: false,
@@ -2130,10 +2484,12 @@ const SEED_LIBRARY_ENTRIES = [
     // one-at-a-time navigation, same mechanism as the hourly prayers.
     title: "Rhythmica Oratio — the Members of the Crucified Christ",
     kind: "prayer",
+    seedVersion: 2,
     tags: ["contemplation", "Passion", "Lent", "Cistercian", "suffering", "love"],
     source: "Salve mundi salutare — a seven-part meditation, one on each member of the crucified Christ",
     author: "Arnulf of Leuven, O.Cist.",
     authorNote: "long attributed to St. Bernard of Clairvaux; the attribution does not hold — see background",
+    related: ["The Five Wounds"],
     year: "c. 1250",
     origin: "Cistercian",
     liturgical: "Lent and Holy Week; Fridays",
@@ -2579,10 +2935,12 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "The Angelus",
     kind: "prayer",
+    seedVersion: 2,
     tags: ["Incarnation", "Marian", "morning", "noon", "evening"],
     source: "Traditional Catholic prayer, prayed at 6am, noon, and 6pm",
     author: "Traditional",
     related: ["Hail Mary", "Regina Caeli", "Litany of Loreto"],
+    relatedSaints: ["mary"],
     authorNote: "developed communally, evening recitation formalized 1318–1327 under Pope John XXII",
     year: "developed 11th–18th century (evening recitation formalized 1318–1327 under Pope John XXII)",
     origin: "Monastic — memorial of the Incarnation",
@@ -2829,11 +3187,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Salve Regina",
-    kind: "prayer",
+    kind: "antiphon",
+    seedVersion: 3,
     tags: ["Marian", "Compline", "antiphon"],
     source: "One of the four seasonal Marian antiphons sung/recited at the close of Compline",
     author: "Bl. Hermann of Reichenau, O.S.B.",
     related: ["Alma Redemptoris Mater", "Ave Regina Caelorum", "Regina Caeli", "Litany of Loreto"],
+    relatedSaints: ["mary"],
     authorNote: "disputed — most musicologists regard it as anonymous",
     year: "11th century (attribution disputed)",
     origin: "Marian antiphon — Compline / Night Prayer",
@@ -2887,11 +3247,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Alma Redemptoris Mater",
-    kind: "prayer",
+    kind: "antiphon",
+    seedVersion: 3,
     tags: ["Marian", "Compline", "antiphon", "Advent"],
     source: "One of the four seasonal Marian antiphons sung/recited at the close of Compline",
     author: "Bl. Hermann of Reichenau, O.S.B.",
     related: ["Salve Regina", "Ave Regina Caelorum", "Regina Caeli"],
+    relatedSaints: ["mary"],
     year: "11th century (c. 1053)",
     origin: "Marian antiphon — Compline / Night Prayer",
     liturgical: "First Sunday of Advent through February 2 (the Presentation / Candlemas)",
@@ -2924,11 +3286,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Ave Regina Caelorum",
-    kind: "prayer",
+    kind: "antiphon",
+    seedVersion: 3,
     tags: ["Marian", "Compline", "antiphon", "Lent"],
     source: "One of the four seasonal Marian antiphons sung/recited at the close of Compline",
     author: "Traditional",
     related: ["Salve Regina", "Alma Redemptoris Mater", "Regina Caeli"],
+    relatedSaints: ["mary"],
     year: "12th century",
     origin: "Marian antiphon — Compline / Night Prayer",
     liturgical: "February 3 (day after Candlemas) through Wednesday of Holy Week",
@@ -2963,11 +3327,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Regina Caeli",
-    kind: "prayer",
+    kind: "antiphon",
+    seedVersion: 3,
     tags: ["Marian", "Compline", "antiphon", "Easter"],
     source: "One of the four seasonal Marian antiphons; also replaces the Angelus during the Easter season",
     author: "Traditional",
     related: ["The Angelus", "Salve Regina", "Alma Redemptoris Mater", "Ave Regina Caelorum"],
+    relatedSaints: ["mary"],
     year: "12th–13th century",
     origin: "Marian antiphon — Compline / Night Prayer",
     liturgical: "Easter Sunday through Pentecost",
@@ -3059,6 +3425,8 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "Hail Mary",
     kind: "prayer",
+    seedVersion: 2,
+    relatedSaints: ["mary"],
     tags: ["Marian", "foundational", "biblical"],
     source: "First half: Luke 1:28 and 1:42; second half: later ecclesial addition",
     author: "Biblical (Gabriel & Elizabeth)",
@@ -3679,10 +4047,12 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "Memorare",
     kind: "prayer",
+    seedVersion: 2,
     tags: ["Marian", "intercession"],
     source: "Manuscript tradition traces to Nicolas Salicetus's Antidotarius animae (1489)",
     author: "Traditional",
     related: ["The Measure of Love"],
+    relatedSaints: ["mary"],
     authorNote: "long misattributed to St. Bernard of Clairvaux",
     year: "Traceable to the 15th century as part of a longer prayer; popularized in its short form in the 17th century",
     origin: "Marian devotional prayer",
@@ -5300,11 +5670,13 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "Litany of Loreto",
     kind: "litany",
+    seedVersion: 2,
     tags: ["Marian", "approved", "intercession"],
     source: "Litany of the Blessed Virgin Mary — text as published by the Holy See; approved for public use by Sixtus V, 1587",
     author: "Traditional / Anonymous",
     authorNote: "one of only six litanies approved for public liturgical use; invocations added by successive popes",
     related: ["Litany of St. Joseph", "Litany of the Most Precious Blood", "Salve Regina", "The Angelus", "Litany of the Saints", "Litany of the Sacred Heart"],
+    relatedSaints: ["mary"],
     year: "In use at Loreto by the 16th century; approved 1587; last additions 2020",
     origin: "Approved devotional litany",
     liturgical: "May and October; traditionally prayed after the Rosary",
@@ -5678,12 +6050,13 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "The Rosary",
     kind: "prayer",
+    seedVersion: 2,
     tags: ["Marian", "Rosary", "meditation", "daily"],
     source: "Structure of the Rosary; the Luminous Mysteries added by John Paul II, Rosarium Virginis Mariae, 2002",
     author: "Traditional / Anonymous",
     authorNote: "the Dominican attribution to St. Dominic is devotional tradition, not documented history",
     related: ["Hail Mary", "Our Father", "Glory Be", "Salve Regina", "Apostles' Creed", "Litany of Loreto"],
-    relatedSaints: ["dominic"],
+    relatedSaints: ["mary", "dominic"],
     year: "Developed 12th–16th century; current form since 2002",
     origin: "Dominican",
     liturgical: "October — the month of the Rosary; 7 October, Our Lady of the Rosary",
@@ -5781,7 +6154,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Seven Last Words",
-    kind: "quote",
+    kind: "teaching",
+    seedVersion: 2,
     tags: ["Passion", "Good Friday", "meditation"],
     source: "The four Gospels, in the traditional harmonised order",
     author: "Jesus Christ",
@@ -5796,16 +6170,18 @@ const SEED_LIBRARY_ENTRIES = [
     body:
       "1. \"Father, forgive them, for they know not what they do.\"\n— Luke 23:34\n\n2. \"Amen I say to thee, this day thou shalt be with me in paradise.\"\n— Luke 23:43\n\n3. \"Woman, behold thy son… Behold thy mother.\"\n— John 19:26–27\n\n4. \"My God, my God, why hast Thou forsaken me?\"\n— Matthew 27:46; Mark 15:34\n\n5. \"I thirst.\"\n— John 19:28\n\n6. \"It is finished.\"\n— John 19:30\n\n7. \"Father, into Thy hands I commend my spirit.\"\n— Luke 23:46",
     background:
-      "A harmony, not a single passage — no one Gospel records all seven. Luke has the first, second and seventh; John the third, fifth and sixth; Matthew and Mark preserve only the fourth, the cry of dereliction. The traditional sequence is the order the Church has long assumed, but the Gospels themselves do not establish it.\n\nThey are the backbone of the Three Hours devotion, noon to three on Good Friday, one word preached at a time. Haydn wrote his Seven Last Words as orchestral meditations for exactly that service in Cádiz.\n\nTwo are worth pausing on. The fourth is a quotation: Christ is praying Psalm 22, which opens in that abandonment and ends in vindication — so it is genuinely a cry, and also the first line of a psalm whose ending He knew. And the sixth, 'It is finished' (tetelestai), is not collapse; the Greek is the word used for a debt discharged or a commission completed.",
+      "A harmony, not a single passage — no one Gospel records all seven. Luke has the first, second and seventh; John the third, fifth and sixth; Matthew and Mark preserve only the fourth, the cry of dereliction. The traditional sequence is the order the Church has long assumed, but the Gospels themselves do not establish it.\n\nThey are the backbone of the Three Hours devotion, noon to three on Good Friday, one word preached at a time. Haydn wrote his Seven Last Words as orchestral meditations for exactly that service in Cádiz.\n\nTwo are worth pausing on. The fourth is a quotation: Christ is praying Psalm 22, which opens in that abandonment and ends in vindication — so it is genuinely a cry, and also the first line of a psalm whose ending He knew. And the sixth, 'It is finished' (tetelestai), is not collapse; the Greek is the word used for a debt discharged or a commission completed." +
+      "\n\nThe Good Friday service built on these seven — the Three Hours' Agony, or Tre Ore, kept from noon to three — began in Lima. It was devised by Fr. Alonso Mesía Bedoya, a Jesuit born in Peru in 1665, who directed a confraternity there called the School of Christ; Herbert Thurston's history of the devotion traces the impulse to the Lima earthquake of 1687 and the public acts of atonement that followed it, with the three-hour Good Friday form growing out of the confraternity's ordinary Friday exercises rather than being composed in one sitting. Mesía died in 1732, his text was printed after his death, and it reached Rome around 1788. He is not a saint and is barely remembered by name — but this is the one devotion in the library that came from Peru before it came from anywhere else.",
   },
   {
     title: "The Five Wounds",
-    kind: "prayer",
+    kind: "teaching",
+    seedVersion: 2,
     tags: ["Passion", "devotion", "reparation"],
     source: "Medieval devotion to the wounds of the crucified Christ",
     author: "Traditional / Anonymous",
     authorNote: "no single authorised formula — devotional arrangements vary between books",
-    related: ["The Seven Last Words", "Anima Christi", "Litany of the Most Precious Blood", "The Stations of the Cross", "Litany of the Sacred Heart"],
+    related: ["The Seven Last Words", "Anima Christi", "Litany of the Most Precious Blood", "The Stations of the Cross", "Litany of the Sacred Heart", "Rhythmica Oratio — the Members of the Crucified Christ"],
     relatedSaints: ["francis-of-assisi"],
     year: "Widespread from the 11th–12th century",
     origin: "Medieval devotional",
@@ -5820,7 +6196,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Four Last Things",
-    kind: "quote",
+    kind: "teaching",
+    seedVersion: 2,
     tags: ["death", "judgment", "heaven", "hell", "examination"],
     source: "Traditional catechetical formula — the Novissima",
     author: "Traditional / Anonymous",
@@ -5858,13 +6235,14 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Seven Sorrows of Mary",
-    kind: "prayer",
+    kind: "teaching",
+    seedVersion: 3,
     tags: ["Marian", "Passion", "sorrow"],
     source: "Servite devotion; feast of Our Lady of Sorrows, 15 September",
     author: "Traditional / Anonymous",
     authorNote: "propagated by the Servite Order, founded at Florence in 1233",
     related: ["The Stations of the Cross", "Salve Regina", "The Miracle Prayer", "Litany of Loreto", "Stabat Mater"],
-    relatedSaints: ["peregrine-laziosi"],
+    relatedSaints: ["mary", "peregrine-laziosi"],
     year: "Devotion from the 13th–14th century",
     origin: "Servite (Order of the Servants of Mary)",
     liturgical: "15 September, Our Lady of Sorrows; Lent",
@@ -5897,7 +6275,8 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The O Antiphons",
-    kind: "prayer",
+    kind: "antiphon",
+    seedVersion: 2,
     tags: ["Advent", "Messianic titles", "liturgy"],
     source: "Antiphons of the Magnificat at Vespers, 17-23 December",
     author: "Traditional / Anonymous",
@@ -5941,11 +6320,13 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "Stabat Mater",
     kind: "hymn",
+    seedVersion: 3,
     tags: ["Marian", "Passion", "sorrow", "Lent"],
     source: "13th-century sequence, traditionally attributed to Jacopone da Todi",
     author: "Attributed to Jacopone da Todi, O.F.M.",
     authorNote: "attribution traditional, not certain; Innocent III has also been proposed",
     related: ["The Seven Sorrows of Mary", "The Stations of the Cross", "The Seven Last Words"],
+    relatedSaints: ["mary"],
     year: "13th century",
     origin: "Franciscan",
     liturgical: "15 September, Our Lady of Sorrows; Fridays in Lent; sung between the Stations",
@@ -5953,20 +6334,22 @@ const SEED_LIBRARY_ENTRIES = [
     originalLanguage: "Latin",
     favorite: false,
     latinBody:
-      "Stabat Mater dolorosa\niuxta crucem lacrimosa,\ndum pendebat Filius.\n\nCuius animam gementem,\ncontristatam et dolentem,\npertransivit gladius.\n\nO quam tristis et afflicta\nfuit illa benedicta\nMater Unigeniti!\n\nEia Mater, fons amoris,\nme sentire vim doloris\nfac, ut tecum lugeam.\n\nSancta Mater, istud agas,\nCrucifixi fige plagas\ncordi meo valide.",
+      "Stabat Mater dolorosa\niuxta crucem lacrimosa,\ndum pendebat Filius.\n\nCuius animam gementem,\ncontristatam et dolentem,\npertransivit gladius.\n\nO quam tristis et afflicta\nfuit illa benedicta\nMater Unigeniti!\n\nQuae maerebat et dolebat,\npia Mater, dum videbat\nnati poenas incliti.\n\nQuis est homo qui non fleret,\nMatrem Christi si videret\nin tanto supplicio?\n\nQuis non posset contristari,\nChristi Matrem contemplari\ndolentem cum Filio?\n\nPro peccatis suae gentis\nvidit Iesum in tormentis\net flagellis subditum.\n\nVidit suum dulcem natum\nmoriendo desolatum,\ndum emisit spiritum.\n\nEia Mater, fons amoris,\nme sentire vim doloris\nfac, ut tecum lugeam.\n\nFac ut ardeat cor meum\nin amando Christum Deum,\nut sibi complaceam.\n\nSancta Mater, istud agas,\nCrucifixi fige plagas\ncordi meo valide.\n\nTui nati vulnerati,\ntam dignati pro me pati,\npoenas mecum divide.\n\nFac me tecum pie flere,\nCrucifixo condolere,\ndonec ego vixero.\n\nIuxta crucem tecum stare,\net me tibi sociare\nin planctu desidero.\n\nVirgo virginum praeclara,\nmihi iam non sis amara:\nfac me tecum plangere.\n\nFac ut portem Christi mortem,\npassionis fac consortem,\net plagas recolere.\n\nFac me plagis vulnerari,\nfac me cruce inebriari\net cruore Filii.\n\nFlammis ne urar succensus,\nper te, Virgo, sim defensus\nin die iudicii.\n\nChriste, cum sit hinc exire,\nda per Matrem me venire\nad palmam victoriae.\n\nQuando corpus morietur,\nfac ut animae donetur\nparadisi gloria.",
     body:
-      "At the Cross her station keeping,\nstood the mournful Mother weeping,\nclose to Jesus to the last.\n\nThrough her heart, His sorrow sharing,\nall His bitter anguish bearing,\nnow at length the sword had passed.\n\nO how sad and sore distressed\nwas that Mother highly blessed\nof the sole-begotten One!\n\nO thou Mother, fount of love,\ntouch my spirit from above,\nmake my heart with thine accord.\n\nHoly Mother, pierce me through,\nin my heart each wound renew\nof my Saviour crucified.\n\n(The sequence continues; the opening stanzas are given here.)",
+      "At the Cross her station keeping,\nstood the mournful Mother weeping,\nclose to Jesus to the last:\n\nThrough her heart, His sorrow sharing,\nall His bitter anguish bearing,\nnow at length the sword had passed.\n\nOh, how sad and sore distressed\nwas that Mother highly blest\nof the sole-begotten One!\n\nChrist above in torment hangs;\nshe beneath beholds the pangs\nof her dying glorious Son.\n\nIs there one who would not weep,\nwhelmed in miseries so deep\nChrist's dear Mother to behold?\n\nCan the human heart refrain\nfrom partaking in her pain,\nin that Mother's pain untold?\n\nBruised, derided, cursed, defiled,\nshe beheld her tender Child\nall with bloody scourges rent;\n\nFor the sins of His own nation\nsaw Him hang in desolation,\ntill His Spirit forth He sent.\n\nO thou Mother! fount of love!\nTouch my spirit from above,\nmake my heart with thine accord:\n\nMake me feel as thou hast felt;\nmake my soul to glow and melt\nwith the love of Christ my Lord.\n\nHoly Mother! pierce me through;\nin my heart each wound renew\nof my Saviour crucified:\n\nLet me share with thee His pain,\nwho for all my sins was slain,\nwho for me in torments died.\n\nLet me mingle tears with thee,\nmourning Him who mourned for me,\nall the days that I may live:\n\nBy the Cross with thee to stay;\nthere with thee to weep and pray;\nis all I ask of thee to give.\n\nVirgin of all virgins best!\nListen to my fond request:\nlet me share thy grief divine;\n\nLet me, to my latest breath,\nin my body bear the death\nof that dying Son of thine.\n\nWounded with His every wound,\nsteep my soul till it hath swooned\nin His very blood away;\n\nBe to me, O Virgin, nigh,\nlest in flames I burn and die,\nin His awful Judgment day.\n\nChrist, when Thou shalt call me hence,\nbe Thy Mother my defence,\nbe Thy Cross my victory;\n\nWhile my body here decays,\nmay my soul Thy goodness praise,\nsafe in Paradise with Thee.",
     background:
-      "The sequence for Our Lady of Sorrows, and the hymn traditionally sung at the Stations of the Cross - one stanza between stations, which is how most people meet it.\n\nIt does something unusual. It does not describe the Crucifixion; it describes the woman standing beside it, and then turns and asks for a share in what she felt - 'make me feel the force of your sorrow, that I may mourn with you.' The petition is not for consolation but for compassion in the strict sense: suffering-with.\n\nTraditionally credited to Jacopone da Todi, a 13th-century Franciscan who came to religion late and violently, after his wife was killed when a floor collapsed at a banquet. The attribution is not certain. Only the opening stanzas are here; the full sequence runs to twenty.",
+      "The sequence for Our Lady of Sorrows, and the hymn traditionally sung at the Stations of the Cross - one stanza between stations, which is how most people meet it.\n\nIt does something unusual. It does not describe the Crucifixion; it describes the woman standing beside it, and then turns and asks for a share in what she felt - 'make me feel the force of your sorrow, that I may mourn with you.' The petition is not for consolation but for compassion in the strict sense: suffering-with.\n\nNotice where it turns. The first eight stanzas look at her: she stands, she weeps, she watches. From the ninth - Eia Mater, fons amoris - every stanza is a request, and the requests get steeper: let me weep with you, let me carry his death in my body, let me be wounded with his wounds. It ends somewhere else entirely, at the hour of one's own death, asking for paradise. A hymn that begins by watching a mother ends by asking to die well.\n\nTraditionally credited to Jacopone da Todi, a 13th-century Franciscan who came to religion late and violently, after his wife was killed when a floor collapsed at a banquet. The attribution is not certain; Innocent III has also been proposed.\n\nTexts. The Latin here is the Roman Breviary text, all twenty stanzas; printings vary in small readings, and this one follows the widespread 'contristatam et dolentem' in the second stanza. The English is Edward Caswall's, from his Lyra Catholica of 1849 - the version nearly every English-speaking Catholic has sung, taken here from the 1849 printing itself rather than from a later abridgement, since hymnals often cut it to thirteen or fifteen stanzas. Caswall's elided spellings (pass'd, whelm'd, swoon'd) are written out in full.",
   },
   {
     title: "The Seven Gifts of the Holy Spirit",
-    kind: "quote",
+    kind: "teaching",
+    seedVersion: 4,
     tags: ["Holy Spirit", "virtue", "catechetical"],
     source: "Isaiah 11:2-3, in the Septuagint and Vulgate enumeration",
     author: "Biblical — the prophet Isaiah",
     authorNote: "the sevenfold count follows the Greek and Latin; the Hebrew lists six",
-    related: ["Come, Holy Spirit", "Veni Creator Spiritus", "Prayer to the Holy Spirit"],
+    related: ["The Twelve Fruits of the Holy Spirit", "Come, Holy Spirit", "Veni Creator Spiritus", "Prayer to the Holy Spirit", "The Beatitudes"],
+    relatedSaints: ["augustine", "ambrose", "thomas-aquinas"],
     year: "Isaiah, 8th century BC",
     origin: "Biblical",
     liturgical: "Pentecost; Confirmation",
@@ -5974,17 +6357,315 @@ const SEED_LIBRARY_ENTRIES = [
     originalLanguage: "",
     favorite: false,
     body:
-      "WISDOM - to judge and order all things by God's standard rather than one's own\nUNDERSTANDING - to grasp what is revealed, not merely assent to it\nCOUNSEL - to know the right thing to do in this particular case\nFORTITUDE - to do it when it costs\nKNOWLEDGE - to see created things rightly, in relation to God\nPIETY - to relate to God as a son rather than a servant\nFEAR OF THE LORD - reverence; the unwillingness to be separated from Him\n\nAnd the twelve fruits that follow from them (Galatians 5:22-23, Vulgate):\ncharity - joy - peace - patience - kindness - goodness - generosity -\ngentleness - faithfulness - modesty - self-control - chastity",
+      "THE SEVEN — ISAIAH 11:2-3\n\nWISDOM - to judge and order all things by God's standard rather than one's own\nUNDERSTANDING - to grasp what is revealed, not merely assent to it\nCOUNSEL - to know the right thing to do in this particular case\nFORTITUDE - to do it when it costs\nKNOWLEDGE - to see created things rightly, in relation to God\nPIETY - to relate to God as a son rather than a servant\nFEAR OF THE LORD - reverence; the unwillingness to be separated from Him\n\nThose seven lines are summaries written for this library. What follows is not.\n\nWHAT THE CATECHISM SAYS\n\n\"The moral life of Christians is sustained by the gifts of the Holy Spirit. These are permanent dispositions which make man docile in following the promptings of the Holy Spirit.\" (CCC 1830)\n\n\"The seven gifts of the Holy Spirit are wisdom, understanding, counsel, fortitude, knowledge, piety, and fear of the Lord. They belong in their fullness to Christ, Son of David. They complete and perfect the virtues of those who receive them. They make the faithful docile in readily obeying divine inspirations.\" (CCC 1831)\n\nThe Catechism names the seven and says what a gift is. It does not define them one by one — for that the tradition goes to St. Thomas, who gives each its own question in the Summa.\n\nWHAT ST. THOMAS SAYS\n\n| Gift | Summa Theologiae II-II |\n| Wisdom // q. 45 a. 2 | \"It belongs to wisdom as a gift of the Holy Ghost to judge aright about [divine things] on account of connaturality with them.\" |\n| Understanding // q. 8 a. 1 | \"Understanding implies an intimate knowledge, for *intelligere* is the same as *intus legere*\" — to read inwardly. The gift is the light by which the mind reaches what its natural light cannot. |\n| Counsel // q. 52 a. 1 | Man \"is directed as though counselled by God, just as, in human affairs, those who are unable to take counsel for themselves, seek counsel from those who are wiser.\" |\n| Fortitude // q. 139 a. 1 | \"Fortitude, as a virtue, perfects the mind in the endurance of all perils whatever; but it does not go so far as to give confidence of overcoming all dangers: this belongs to the fortitude that is a gift of the Holy Ghost.\" |\n| Knowledge // q. 9 a. 2 | Distinguished from wisdom by its object: \"the gift of knowledge is only about human or created things.\" Wisdom judges by the highest cause; knowledge judges rightly among the things that are made. |\n| Piety // q. 121 a. 1 | \"Piety, whereby, at the Holy Ghost's instigation, we pay worship and duty to God as our Father, is a gift of the Holy Ghost.\" |\n| Fear of the Lord // q. 19 a. 2 | \"If a man turn to God and adhere to Him, through fear of punishment, it will be servile fear; but if it be on account of fear of committing a fault, it will be filial fear, for it becomes a child to fear offending its father.\" |\n\nServile fear drops away in heaven; filial fear does not (q. 19 a. 11). It is the one fear that survives having nothing left to be afraid of.\n\nWHAT THEY ARE NOT\n\nThey are not the twelve fruits. The gifts are dispositions the Spirit gives; the fruits are what shows in a life where those dispositions are actually being followed — see the separate entry.",
     background:
-      "From Isaiah 11:2-3, describing the Spirit resting on the shoot from the root of Jesse. The Hebrew text actually lists six, with 'fear of the Lord' appearing twice; the Greek Septuagint and Latin Vulgate render the first instance as 'piety', which is how the list became seven - the number the tradition has kept ever since.\n\nThe gifts are not the fruits. The gifts are dispositions the Spirit gives, making a person able to be moved by Him promptly and readily; the fruits (Galatians 5) are what shows in a life where that is actually happening. Aquinas treats the gifts at length in the Summa, arguing they are necessary precisely because the virtues alone, worked at humanly, cannot reach a supernatural end.\n\nWhen the Veni Creator calls the Spirit 'sevenfold in gift', this is the list it means.",
+      "From Isaiah 11:2-3, describing the Spirit resting on the shoot from the root of Jesse. The Hebrew text actually lists six, with 'fear of the Lord' appearing twice; the Greek Septuagint and Latin Vulgate render the first instance as 'piety', which is how the list became seven - the number the tradition has kept ever since.\n\nAquinas argues the gifts are necessary precisely because the virtues alone, worked at humanly, cannot reach a supernatural end (I-II q. 68). When the Veni Creator calls the Spirit 'sevenfold in gift', this is the list it means.\n\nThe tradition did not leave this as a bare list of seven names. St. Augustine, preaching on the Sermon on the Mount, matched each beatitude to a gift — understanding to the clean of heart, whose eye being purified can see; piety to the meek — so that the two sevens read as one thing: the gift is what the Spirit gives, the beatitude is what it looks like in a life. St. Ambrose made a different pairing, reading the four beatitudes in Luke against the four cardinal virtues. St. Thomas took up both and set them side by side in the Summa — the gifts at I-II q. 68, the beatitudes at q. 69 — where he argues that a beatitude differs from a gift as an act differs from the habit behind it.",
+  },
+  {
+    title: "The Twelve Fruits of the Holy Spirit",
+    kind: "teaching",
+    seedVersion: 3,
+    tags: ["Holy Spirit", "virtue", "catechetical", "examination"],
+    source: "Galatians 5:22-23 in the Vulgate enumeration; listed at CCC 1832",
+    author: "Biblical — St. Paul",
+    authorNote: "the count of twelve is the Vulgate's; the Greek text names nine",
+    related: ["The Seven Gifts of the Holy Spirit", "The Beatitudes", "Come, Holy Spirit", "Veni Creator Spiritus"],
+    relatedSaints: ["thomas-aquinas"],
+    year: "c. AD 50s (the letter); the sevenfold and twelvefold enumerations settled by the Middle Ages",
+    origin: "Biblical",
+    liturgical: "Pentecost; Confirmation",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "THE TWELVE — GALATIANS 5:22-23\n\ncharity - joy - peace - patience - benignity - goodness - longanimity -\nmildness - faith - modesty - continency - chastity\n\nThat is the Douay wording, translating the Vulgate. The Catechism gives the same twelve in more modern English:\n\ncharity - joy - peace - patience - kindness - goodness - generosity -\ngentleness - faithfulness - modesty - self-control - chastity\n\nWHAT EACH ONE IS\n\nSt. Thomas shows the twelve are not a heap. They are ordered outward in three movements — the mind set right in itself, then towards other people, then towards what is beneath it — and the first movement is itself split, according to whether what the mind faces is good or evil (I-II q. 70 a. 3).\n\nWhere a fruit is given a second name below, that is the modern English for the same thing; the rest are called the same in both.\n\n| Fruit | St. Thomas, I-II q. 70 a. 3 |\n| The mind set right in itself — facing good | |\n| Charity | The root of the rest. \"The charity of God is poured forth in our hearts by the Holy Ghost, Who is given to us\" — love being the first of the emotions and the root of them all. |\n| Joy | Follows charity necessarily, \"since every lover rejoices at being united to the beloved.\" |\n| Peace | Joy made perfect: undisturbed from outside, and no longer pulled apart by competing desires, because they come to rest in one object. |\n| The mind set right in itself — facing evil | |\n| Patience | Not being disturbed when evil threatens. |\n| Longanimity // long-suffering | Not being disturbed \"whenever good things are delayed; since to lack good is a kind of evil.\" The fruit for waiting, as patience is the fruit for suffering. |\n| The mind set right towards one's neighbour | |\n| Goodness | The will actually turned towards doing good to others. |\n| Benignity // kindness | Goodness carried out — the doing of it, not only the willing. |\n| Mildness // meekness, gentleness | Evenness under the wrongs a neighbour does; it \"curbs anger.\" |\n| Faith // faithfulness | Taken here as fidelity: refraining from harming a neighbour \"not only through anger, but also through fraud or deceit.\" |\n| The mind set right towards what is beneath it | |\n| Modesty | Keeping \"the mode in all our words and deeds\" — proportion, in what one says and does. |\n| Continency // self-control | Holding back from unlawful desires. |\n| Chastity | Further than continency: the continent man is still \"subject to concupiscence\" and unconquered by it, while chastity has withdrawn from the desire itself. |\n\nWHAT A FRUIT IS\n\n\"The fruits of the Spirit are perfections that the Holy Spirit forms in us as the first fruits of eternal glory. The tradition of the Church lists twelve of them.\" (CCC 1832)\n\nSt. Thomas explains the word by the analogy it comes from: when a man's action \"proceeds from him in respect of a higher power, which is the power of the Holy Ghost, then man's operation is said to be the fruit of the Holy Ghost\" (I-II q. 70 a. 1).\n\nHe then separates three things that are easily run together:\n\nA virtue is a habit — a settled capacity. A fruit is an act that comes out of it. \"The names of the virtues are applied to their actions\" when the fruits are enumerated, which is why charity appears in both lists and means something slightly different in each: as a virtue it is the capacity to love God and neighbour, as a fruit it is \"the movement of the soul in loving God and our neighbour\" (I-II q. 70 a. 3).\n\nA beatitude is a fruit too, but not every fruit is a beatitude. \"More is required for a beatitude than for a fruit. Because it is sufficient for a fruit to be something ultimate and delightful; whereas for a beatitude, it must be something perfect and excellent.\" (I-II q. 70 a. 2)\n\nWHY TWELVE AND NOT NINE\n\nThe Greek text of Galatians names nine. The Latin Vulgate has twelve, the three extra being modesty, continency and chastity. The Church's tradition, and the Catechism with it, follows the Vulgate — which is why a Catholic list has twelve and most English Bibles translated from the Greek have nine. Neither is wrong; they are counting from different texts.\n\nThe Catechism lists the twelve (CCC 1832) but, as with the seven gifts, does not define them one by one. The definitions above are St. Thomas's.",
+    background:
+      "St. Paul's list in Galatians 5:22-23, set against the 'works of the flesh' immediately before it — the fruits are what the passage offers as the visible alternative to that.\n\nThe gifts and the fruits are constantly confused, and the distinction is worth holding onto: the seven gifts are dispositions the Holy Spirit gives, making a person able to be moved by Him promptly; the twelve fruits are what shows in a life where that is actually happening. One is the capacity, the other is the evidence. You cannot see a gift directly. You can see whether someone has become patient.\n\nNote that the twelve are not a scoring system. Aquinas's point in calling them fruits rather than rewards is that they are enjoyed now — 'ultimate and delightful', the first instalment of what is promised in full later, which is what CCC 1832 means by 'the first fruits of eternal glory'.",
+  },
+  {
+    title: "The Three Powers of the Soul",
+    kind: "teaching",
+    seedVersion: 4,
+    tags: ["the soul", "self-knowledge", "meditation", "catechetical", "Patristic"],
+    source: "St. Augustine, De Trinitate, Book X",
+    author: "St. Augustine",
+    authorNote: "the triad is Augustine's; the later tradition and the meditation manuals build on it",
+    related: ["Suscipe", "The Two Portions of the Soul", "The Three Stages of Temptation"],
+    relatedSaints: ["augustine", "thomas-aquinas", "ignatius-of-loyola"],
+    year: "De Trinitate finished c. AD 420",
+    origin: "Patristic",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "THE THREE\n\n| Power | What it does |\n| Memory | Holds what has been known and loved — and so holds the self together across time. Not only recall: it is where you already are before you think. |\n| Understanding | Sees what is there. Not the having of opinions but the actual grasp of a thing. |\n| Will | Loves, chooses, and moves the whole towards what it loves. |\n\nWHAT EACH POWER IS FOR\n\nA power is defined by what it reaches for. The classical answer is that the will reaches for the good and the understanding for the true — and that beauty belongs, which surprises people, to the understanding rather than to the will.\n\nBecause the good and the beautiful are the same thing approached by different powers. St. Thomas: \"Beauty and goodness in a thing are identical fundamentally; for they are based upon the same thing, namely, the form. But they differ logically, for goodness properly relates to the appetite... On the other hand, beauty relates to the cognitive faculty; for beautiful things are those which please when seen.\" (I q. 5 a. 4)\n\nSo the will goes out to the good as to an end — something to be reached and had. The understanding meets the same reality as beauty — something that pleases simply by being seen, with nothing further wanted. Which is a description of heaven: the good, finally, as beauty; possession collapsing into sight.\n\nSt Francis de Sales says the same thing in one line, in the very sermon where he defines faith: comme la bonte est l'objet de la volonte, la beaute l'est aussi de l'entendement — as goodness is the object of the will, so beauty is the object of the understanding. He then puts the two powers to work together: God, wishing to draw a soul to the knowledge of truth, \"always discovers to it the beauty thereof,\" so that the understanding, taken by it, hands the truth to the will, which loves it for the goodness and beauty it recognises there.\n\nMemory is the odd one out, and it is worth saying so rather than inventing a match. The intellect and the will have objects the tradition calls transcendental — the true and the good, which belong to everything that exists — and memory has nothing of the kind. That asymmetry is one reason the scholastics generally worked with two rational powers where Augustine worked with three. St. John of the Cross gives memory an object of a different sort altogether: not something that is, but something promised — which is why he assigns hope to it.\n\nIt is tempting to hand truth to the memory instead, since God is truth as well as goodness and beauty. It does not work as a division of objects: truth simply is being as it stands to the intellect, so giving it away leaves the understanding with nothing of its own. But the instinct behind it is sound, and Augustine had it first. In the tenth book of the Confessions he goes looking for God through his own memory and finds Him already there: \"where I found truth, there found I my God, who is the Truth itself, which from the time I learned it have I not forgotten.\"\n\nSo the distinction to keep is between what a power reaches for and where what it has reached is kept. Truth is the understanding's object; memory is the room truth lives in once it has been understood, which is why a thing known and then forgotten was never really possessed. Augustine sets the limit himself in the same book: memory cannot be the last word about God, since beasts have memory too, and he must \"pass beyond\" it to reach the One he is looking for.\n\nONE MIND, NOT THREE\n\n\"Since, then, these three, memory, understanding, will, are not three lives, but one life; nor three minds, but one mind; it follows certainly that neither are they three substances, but one substance.\" (De Trinitate X, 11.18)\n\nAugustine's point is that they are wholly distinct and wholly inseparable, each containing the other two:\n\n\"For I remember that I have memory and understanding, and will; and I understand that I understand, and will, and remember; and I will that I will, and remember, and understand.\" (X, 11.18)\n\nThat is why he treats them as an image — \"an inadequate image, yet an image\" (X, 12.19) — of the Trinity: three that are really distinct and yet one thing, found in the only place a man can examine from the inside.\n\nWHAT IT IS FOR\n\nTwo practical uses have come out of this.\n\nThe first is meditation. The classical method works all three in turn: memory brings the scene or the truth to mind, understanding considers it, will responds — and a meditation that stops at understanding has not finished.\n\nThe second is self-examination. When something is wrong, it helps to ask which power is failing. A truth known and not loved is a failure of will, not of understanding, and no amount of further reading will fix it. A love running ahead of what is actually known is the opposite fault.\n\nIt is also what St. Ignatius offers back in the Suscipe: \"Take, Lord, and receive all my liberty, my memory, my understanding, and my entire will.\" He is not listing faculties for the sake of it — he is handing over the whole of the interior man, by its parts.",
+    background:
+      "From Book X of the De Trinitate, where Augustine goes looking for a trace of the Trinity in the creature made in its image, and finds it not in the body or in the world but in the mind's knowledge of itself.\n\nThe move is worth noticing: he does not argue from the outside in. He asks what a mind is doing when it knows and loves itself, and finds three acts that cannot be collapsed into each other and cannot be separated either. That structure — really distinct, really one — is what he offers as the image.\n\nHe is careful about how far it goes. The image is \"inadequate\", and he spends much of the following books saying so. What it can do is give a person somewhere to stand: the Trinity is not an arbitrary arithmetic puzzle imposed from outside, since something answering to it is going on in you whenever you remember, understand and choose.\n\nThe later tradition kept the triad and used it more practically than Augustine did — for the structure of meditation, and for examining where in oneself something has gone wrong." +
+      "\n\nWhat status does this have? It is an analogy, and Augustine says so himself — \"an inadequate image, yet an image\". The doctrine of the Trinity does not rest on it, and it is not a proof; it is a way in from the inside, from the one thing a person can examine directly. The Catechism is worth checking here, because the triad is often quoted as though it were catechism doctrine. It is not. The Catechism teaches that man is made in God's image, that the soul is \"that by which he is most especially in God's image\" (CCC 363), and that man alone \"is able to know and love his creator\" (CCC 356) — but it nowhere names memory, understanding and will as three powers, and nowhere presents them as an image of the Trinity. That belongs to Augustine and to the tradition that followed him.",
+  },
+  {
+    title: "The Theological Virtues",
+    kind: "teaching",
+    seedVersion: 4,
+    tags: ["virtue", "the soul", "faith", "hope", "charity", "catechetical", "examination"],
+    source: "CCC 1812-1829; St. Thomas, Summa II-II; St. John of the Cross, Ascent of Mount Carmel II",
+    author: "The Catechism, with St. Thomas Aquinas and St. John of the Cross",
+    authorNote: "the definitions are the Catechism's; the mapping onto the powers of the soul is not",
+    related: ["The Three Powers of the Soul", "The Cardinal Virtues", "The Seven Gifts of the Holy Spirit", "The Twelve Fruits of the Holy Spirit", "The Beatitudes", "The Two Portions of the Soul", "Act of Faith", "Act of Hope", "Act of Charity"],
+    relatedSaints: ["thomas-aquinas", "john-of-the-cross", "francis-de-sales", "augustine"],
+    year: "1 Corinthians 13; the scholastic treatment 13th century; St. John of the Cross 16th",
+    origin: "Biblical",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "THE THREE\n\n\"The theological virtues relate directly to God. They dispose Christians to live in a relationship with the Holy Trinity.\" (CCC 1812)\n\nThey are called theological because God is not only their end but their object and their origin: they are about Him, aimed at Him, and given by Him. The cardinal virtues can be built by practice. These cannot; they are infused.\n\n| Virtue | The Catechism |\n| Faith // CCC 1814 | \"The theological virtue by which we believe in God and believe all that he has said and revealed to us.\" |\n| Hope // CCC 1817 | \"The theological virtue by which we desire the kingdom of heaven and eternal life as our happiness, placing our trust in Christ's promises.\" |\n| Charity // CCC 1822 | \"The theological virtue by which we love God above all things for his own sake, and our neighbour as ourselves for the love of God.\" |\n\nWHERE EACH ONE LIVES\n\nEach virtue takes hold of a particular power of the soul. This is not decoration — it is why they cannot substitute for one another, and why a person can be strong in one and starving in another.\n\n| Power | Its object | The virtue that perfects it |\n| Understanding // the knowing power | The true — and beauty, which is the good as it pleases when seen | Faith |\n| Memory // what holds you together across time | What has been given, and what is promised | Hope |\n| Will // the appetite, the loving power | The good | Charity |\n\nSt. Thomas puts faith in the intellect: \"to believe is an act of the intellect inasmuch as the will moves it to assent\" (II-II q. 4 a. 2). Hope he puts in the will — \"hope resides in the higher appetite called the will\" (II-II q. 18 a. 1) — and charity in the will also, as its perfection.\n\nSt. John of the Cross arranges them across all three faculties, and this is the arrangement worth memorising: \"Faith, in the understanding; hope, in the memory; and charity, in the will.\" (Ascent of Mount Carmel II, 6)\n\nWHAT EACH ONE EMPTIES\n\nJohn of the Cross's point is not that the virtues decorate the faculties but that they hollow them out, so that something larger can be held.\n\n| Virtue | What it does to its faculty |\n| Faith | \"Causes an emptiness and darkness with respect to understanding.\" It gives certainty without clarity — you know more and see less, which is why growing faith can feel like losing it. |\n| Hope | \"Causes emptiness of all possessions\" in the memory. It detaches you from what you have held, including your own past — the reason nostalgia and hope pull in opposite directions. |\n| Charity | \"Causes emptiness in the will and detachment from all affection and from rejoicing in all that is not God.\" |\n\nST FRANCIS DE SALES ON EACH\n\nHis account, in the Treatise on the Love of God, keeps understanding and will together at every step — which is why it is the one people remember.\n\n| Virtue | De Sales |\n| Faith // Book II, ch. 14 | God \"proposes in so sweet a manner unto the understanding that which ought to be believed, that the will receives therefrom a great complacency, so great indeed that it moves the understanding to consent and yield to truth without any doubt or distrust.\" |\n| Hope // Book II, chs. 15-17 | \"An expecting and aspiring love\" — two movements at once: expecting from God what He has promised, and rousing oneself to do what is required. |\n| Charity // Book II, ch. 22 | \"A friendship, and a disinterested love, for by charity we love God for his own sake, by reason of his most sovereignly amiable goodness.\" |\n\n— faith, and what it means to half-see —\n\nFaith's certainty does not come with clarity. God proposes the mysteries \"amidst obscurities and darkness, in such sort that we do not see the truths but we only half-see them\" — like the sun behind mist, where \"we see it without seeing it; because on the one hand we see it not so well that we can truly say we see it, yet again we see it not so little that we can say we do not see it.\"\n\nAnd the act itself is an acquiescence: \"having received the grateful light of truth,\" the spirit \"accepts it by means of a sweet, yet powerful and solid assurance and certitude which it finds in the authority of the revelation.\" Once faith arrives, \"the understanding puts off all discourse and arguments, and laying them underneath faith, makes her sit upon them, acknowledging her as Queen.\"\n\nAnd since beauty is the understanding's proper object while goodness is the will's, faith turns out to be both powers closing on the same thing at once — which is exactly why he can define it as an adhesion of both.\n\n— hope, and the falcon in the leash —\n\nFaith shows the good; the will desires it; and the desire would be pure torment if there were no assurance of ever reaching it. His image: \"as the unhooded falcon having her prey in view suddenly launches herself upon the wing, and if held in her leash struggles upon the hand with extreme ardour.\"\n\nGod's promises are what make that ardour bearable — they increase the desire and undo its despair at the same time.\n\n— charity, and the friendship it is —\n\nA true friendship, he insists, because it meets every condition of one: it is reciprocal, it is mutually acknowledged, and it is in continual communication. Not a simple friendship either but \"a friendship of dilection, by which we make election of God\" — He is \"chosen out of thousands.\"\n\nAnd it cannot be worked up from below: \"charity which gives life to our hearts has not her origin from our hearts, but is poured into them as a heavenly liquor.\" It \"makes its abode in the point and summit of the spirit, and, as a queen of majesty, is seated in the will as on her throne.\"\n\nNote the symmetry he leaves standing. Faith is queen over the understanding, enthroned on the arguments it has set aside; charity is queen in the will. The two powers each have their sovereign, and hope moves between them.",
+    background:
+      "The three that St. Paul leaves standing at the end of 1 Corinthians 13 — \"and the greatest of these is charity.\"\n\nThe Catechism's definitions are given above verbatim, because they are unusually good: each is one sentence, each says what the virtue does rather than how it feels, and each names its object. Notice that none of the three is defined as a feeling. Faith is believing, hope is desiring and trusting, charity is loving in the sense of willing the good — all acts, and so all commandable. That is the whole reason they can be commanded at all.\n\nThe mapping onto the three powers of the soul is not in the Catechism, and should not be quoted as though it were. It is St. Thomas for the seats of faith and hope, and St. John of the Cross for the threefold arrangement across understanding, memory and will. John's version is the one that has done the most work in the spiritual tradition, because it explains the experience of a soul in the dark: if faith empties the understanding, hope the memory, and charity the will, then the sense of losing one's grip on all three at once is not necessarily decline. It may be the thing working.\n\nWhere the two differ: St. Thomas puts hope in the will, as a movement of the higher appetite towards a difficult but possible good; St. John puts it in the memory. They are not contradicting each other so much as answering different questions — Thomas asks which power performs the act, John asks which power is purified by it." +
+      "\n\nThe definition of faith most often quoted from de Sales is not in the Treatise at all but in the Lenten sermons he preached at Annecy in 1622, in the sermon on faith — taken from the Gospel of the Canaanite woman, and beginning from Our Lord's \"Woman, great is thy faith.\" He asks whether her faith was greater than ours, and answers by saying what faith is: la foy n'est autre chose qu'une adhesion de l'entendement et de la volonte aux verites des divins mysteres — faith is nothing else than an adhesion of the understanding and of the will to the truths of the divine mysteries.\n\nThe Catechism arrives at the same place by a different road: \"By faith, man completely submits his intellect and his will to God\" (CCC 143), and \"Faith is first of all a personal adherence of man to God. At the same time, and inseparably, it is a free assent to the whole truth that God has revealed\" (CCC 150). Adherence, intellect and will, revealed truth — the same three elements, two and a half centuries apart.\n\nThe French above is from the Annecy edition of his works; the extended passages quoted in this entry are from the Treatise, whose English translation is old enough to be freely reproduced, while the sermons exist in English only in a modern translation.",
+  },
+  {
+    title: "The Cardinal Virtues",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["virtue", "the soul", "examination", "catechetical", "self-knowledge"],
+    source: "CCC 1805-1809; St. Thomas, Summa I-II q. 61; Wisdom 8:7",
+    author: "The Catechism, with St. Thomas Aquinas",
+    authorNote: "the four are named together in Wisdom 8:7 and were common property of the philosophers before that",
+    related: ["The Theological Virtues", "The Three Powers of the Soul", "The Eleven Passions", "The Seven Capital Sins", "The Beatitudes"],
+    relatedSaints: ["thomas-aquinas", "ambrose", "augustine"],
+    year: "Wisdom 8:7; the scholastic treatment 13th century",
+    origin: "Biblical",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "THE FOUR\n\n\"Four virtues play a pivotal role and accordingly are called 'cardinal.'\" (CCC 1805) The word is from cardo, a hinge: not the four greatest virtues, but the four everything else turns on.\n\n| Virtue | The Catechism |\n| Prudence // CCC 1806 | \"The virtue that disposes practical reason to discern our true good in every circumstance and to choose the right means of achieving it.\" |\n| Justice // CCC 1807 | \"The moral virtue that consists in the constant and firm will to give their due to God and neighbour.\" |\n| Fortitude // CCC 1808 | \"The moral virtue that ensures firmness in difficulties and constancy in the pursuit of the good.\" |\n| Temperance // CCC 1809 | \"The moral virtue that moderates the attraction of pleasures and provides balance in the use of created goods.\" |\n\nScripture names all four in one breath: \"she teacheth temperance, and prudence, and justice, and fortitude, which are such things as men can have nothing more profitable in life.\" (Wisdom 8:7)\n\nWHERE EACH ONE LIVES\n\nFour virtues because there are four things in a man that can go right or wrong. St. Thomas assigns each to its own power (I-II q. 61 a. 2):\n\n| Power | Virtue | What it is for |\n| Reason itself // the power \"which is rational in its essence\" | Prudence | Seeing what is actually to be done here, in this case, now |\n| The will | Justice | Rendering what is owed |\n| The irascible appetite // what rises to meet difficulty | Fortitude | Standing when standing is hard |\n| The concupiscible appetite // what is drawn to pleasure | Temperance | Wanting rightly, in measure |\n\nThat is why they cannot be swapped or averaged. A brave man who wants wrongly is not partly temperate; the fault is in a different room of the house.\n\nHOW THEY DIFFER FROM FAITH, HOPE AND CHARITY\n\nThese four can be built. They are acquired by repetition, the way any skill is: you become just by doing just things, and each act makes the next easier. A pagan can have them, and many did.\n\nThe theological virtues cannot be built. They have God as their object and their origin, and they are infused or not there at all.\n\nBoth are needed and neither substitutes. Grace does not make prudence unnecessary; charity does not tell you what to do on Tuesday. And the seven gifts of the Holy Spirit sit above both, because even the infused virtues, worked at humanly, still move at the pace of the one working them.",
+    background:
+      "These four are older than Christianity. Plato has them, the Stoics organise a whole ethics around them, and Ambrose - who gave them the name cardinal in Latin - took them over deliberately rather than inventing a rival set. The tradition has never been embarrassed by that. It reads Wisdom 8:7 as the point where they are already inside Scripture.\n\nWhat Christianity did was subordinate rather than replace. Left to themselves the four cardinal virtues make a good man and stop there; a good man is not the same as a saint, and no amount of temperance reaches God. So the tradition keeps them, ranks them below faith, hope and charity, and then says something more surprising: charity re-forms them from inside, so that justice done for love of God is not the same act as justice done for its own sake, even when it looks identical from outside.\n\nThe order among the four matters too. Prudence comes first, not because it is the noblest but because the other three cannot act without it: courage that does not know what is worth standing for is recklessness, and justice that misreads the case does harm. Prudence is not caution. It is the ability to see what is really the case and what should be done about it - which is why it is seated in reason and why it is the virtue most easily faked.",
+  },
+  {
+    title: "The Seven Capital Sins",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["examination", "self-examination", "conscience", "self-knowledge", "temptation", "humility", "virtue", "the soul"],
+    source: "St. Gregory the Great, Moralia in Job XXXI; St. Thomas, Summa I-II q. 84; Galatians 5:19-21",
+    author: "St. Gregory the Great",
+    authorNote: "the sevenfold list is Gregory's; the desert tradition before him counted eight",
+    related: ["The Twelve Fruits of the Holy Spirit", "The Cardinal Virtues", "The Three Stages of Temptation", "The Eleven Passions", "Litany of Humility"],
+    relatedSaints: ["gregory-the-great", "thomas-aquinas"],
+    year: "Moralia in Job, late 6th century",
+    origin: "Patristic",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "WHAT \"CAPITAL\" MEANS\n\nNot the worst sins. The word is from caput, a head: a capital sin is one others come out of. St. Thomas: \"a capital vice is one from which other vices arise, chiefly by being their final cause\" - it stands to the rest \"what the head is to an animal, what the root is to a plant\" (I-II q. 84 a. 3).\n\nSo this is not a league table of wickedness. Murder is worse than gluttony and is not on the list. The list answers a different question: if you want to know where your sins are coming from, look here.\n\nTHE SEVEN\n\nGregory's own enumeration, in Book XXXI of the Moralia, runs: inanis gloria, invidia, ira, tristitia, avaritia, ventris ingluvies, luxuria.\n\n| Gregory's name | Usually now |\n| Vainglory // inanis gloria | Pride, in the popular list |\n| Envy // invidia | Envy |\n| Anger // ira | Wrath |\n| Melancholy // tristitia | Sloth, or acedia |\n| Avarice // avaritia | Greed |\n| Gluttony // ventris ingluvies | Gluttony |\n| Lust // luxuria | Lust |\n\nSt. Thomas gives the same seven and names Gregory as his authority (I-II q. 84 a. 4).\n\nWHERE PRIDE IS\n\nNot on the list - and this is the part most often lost. For Gregory pride is not one of the seven; it is the root they all grow from. He calls it the queen of the vices, who once she has taken a heart hands it over to the seven as to her generals, each leading its own army.\n\nThat arrangement says something the flat modern list cannot. Pride is not a sin among sins to be worked on alongside gluttony. It is the condition that makes the others possible, which is why humility is not one virtue among others either, and why a man can correct six of the seven and be further from God than when he started.\n\nTHE OTHER LIST\n\nSt. Paul had already put one alongside the fruits of the Spirit, in the same passage: \"Now the works of the flesh are manifest, which are fornication, uncleanness, immodesty, luxury, idolatry, witchcrafts, enmities, contentions, emulations, wraths, quarrels, dissensions, sects, envies, murders, drunkenness, revellings, and such like.\" (Galatians 5:19-21)\n\nSeventeen, and then \"and such like\" - Paul is not counting. Set against the twelve fruits three verses later, the contrast is not sin-by-sin but soil-by-soil: two lists of what grows, depending on what governs.",
+    background:
+      "The list comes out of the desert. Evagrius of Pontus, in the fourth century, catalogued eight evil thoughts that assail a monk - the same material, differently cut, with vainglory and pride counted separately and acedia given its full weight as the noonday devil. Cassian brought the eight west. Gregory the Great, at the end of the sixth century, reorganised them into seven under pride, and that is the shape that lasted.\n\nIt is worth knowing that the list has moved. What Gregory calls tristitia - a heaviness, a sadness at spiritual good - became acedia and then sloth, and sloth in English drifted towards mere laziness, which is not what any of them meant. And vainglory quietly became pride in popular usage, which flattened Gregory's whole structure by demoting the root to one branch among seven.\n\nThe purpose of the list was practical, not taxonomic. It is a tool for the examination of conscience, and specifically for the question a bare list of sins cannot answer: not what did I do, but what in me keeps producing this. That is why the capital sins are traditionally paired with contrary virtues rather than merely forbidden - the remedy for a root is not vigilance but a different planting.",
+  },
+  {
+    title: "The Eleven Passions",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["the soul", "self-knowledge", "temptation", "examination", "love", "virtue", "peace"],
+    source: "St. Thomas, Summa I-II qq. 22-48, especially q. 23 and q. 25",
+    author: "St. Thomas Aquinas",
+    authorNote: "the division into concupiscible and irascible is older; the ordering is his",
+    related: ["The Two Portions of the Soul", "The Three Stages of Temptation", "The Cardinal Virtues", "The Twelve Fruits of the Holy Spirit", "The Three Powers of the Soul"],
+    relatedSaints: ["thomas-aquinas"],
+    year: "Summa Theologiae, 1265-1274",
+    origin: "Scholastic",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "TWO APPETITES\n\nBefore the eleven, a division. The passions are movements of the sensitive appetite - the part of us that is drawn and repelled before any choosing happens - and it works in two distinct ways.\n\n| Appetite | Its object |\n| The concupiscible | Good or evil \"simply apprehended as such, which causes pleasure or pain\" - the thing taken straight |\n| The irascible | Good or evil \"inasmuch as it is of an arduous or difficult nature\" - the thing taken as hard to get or hard to escape |\n\nThe same object engages both differently. A good simply seen is desired; the same good seen as difficult raises hope, or despair.\n\nTHE ELEVEN\n\n| In the concupiscible | |\n| Love | The first of them all, and the root of the rest |\n| Hatred | Love's contrary |\n| Desire | Love in movement towards what it does not yet have |\n| Aversion | Desire's contrary |\n| Joy | Love at rest in what it has |\n| Sadness | Joy's contrary |\n| In the irascible | |\n| Hope | The difficult good, judged possible |\n| Despair | The same good, judged out of reach |\n| Fear | The difficult evil, judged unavoidable |\n| Daring | The same evil, faced |\n| Anger | Alone, with no contrary passion of its own |\n\nLOVE FIRST\n\nEverything here starts in one place. Love is \"the aptitude or proportion of the appetite to good\" - the fit between what you are and what you are made for - and it comes before desire, because nothing moves towards what it has no aptitude for.\n\nSt. Thomas quotes Augustine to compress the whole sequence: \"Love yearning for the beloved object, is desire; and, having and enjoying it, is joy.\" (I-II q. 25 a. 2)\n\nAnd then: \"in respect of good, movement begins in love, goes forward to desire, and ends in hope\" (a. 4). Every passion in the list is love in one of its positions - reaching, resting, thwarted, or turned about.\n\nWHY NONE OF THIS IS SIN\n\nThe passions are movements, not choices. In themselves they are morally neutral; they become good or bad by what reason and will do with them. This is the machinery underneath the middle stage of a temptation: delight is a passion of the concupiscible appetite, and it can be violent, and it is still not consent - because consent is an act of the will, and the will is a different power altogether.\n\nIt is also why the cardinal virtues are placed where they are. Temperance is seated in the concupiscible appetite and fortitude in the irascible: the virtues do not suppress the passions, they train them, so that what is felt and what is willed stop pulling in opposite directions.",
+    background:
+      "Twenty-seven questions of the Summa go on the passions - more than St. Thomas gives to the Incarnation. That proportion is worth registering, because the caricature of scholastic anthropology is that it is all intellect and will and has nothing to say about feeling.\n\nThe opposite is true. He takes the passions seriously enough to name eleven of them, distinguish them by object rather than by intensity, and insist they are not sins. A tradition that thought feeling was the enemy would not have bothered.\n\nNote what the division by object does. It stops you asking \"is this a good feeling or a bad feeling\" and makes you ask what the feeling is about and whether the thing is really as it appears - which is a question reason can answer. Fear and daring are the same evil seen from two positions; hope and despair are the same good, differently judged. Correcting the judgment corrects the passion, which is why so much of the spiritual tradition works on what a person believes about their situation rather than on what they feel about it.\n\nAnger is the odd one, alone without a contrary. St. Thomas's reason is that anger already contains a contrariety within itself: it is a movement against an evil that has been suffered, mixed with hope of redress, so nothing stands opposite it in the way hatred stands opposite love.",
+  },
+  {
+    title: "The Four Senses of Scripture",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["Scripture", "reading", "contemplation", "catechetical", "study"],
+    source: "CCC 115-119; the medieval couplet of Augustine of Dacia",
+    author: "The Catechism, from the medieval tradition",
+    authorNote: "the couplet is 13th-century, usually credited to Augustine of Dacia, O.P.",
+    related: ["The Theological Virtues", "The Ladder of Monks", "Scripture Grows With the Reader", "We Hear Him When We Read"],
+    relatedSaints: ["thomas-aquinas", "augustine"],
+    year: "Ancient; the fourfold scheme settled by the Middle Ages",
+    origin: "Patristic and medieval",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "TWO SENSES, THEN FOUR\n\n\"According to an ancient tradition, one can distinguish between two senses of Scripture: the literal and the spiritual, the latter being subdivided into the allegorical, moral and anagogical senses.\" (CCC 115)\n\n| Sense | What it reads |\n| The literal // CCC 116 | \"The meaning conveyed by the words of Scripture and discovered by exegesis, following the rules of sound interpretation.\" Everything else rests on it: \"all other senses of Sacred Scripture are based on the literal.\" |\n| The allegorical // CCC 117 | The event as a sign of Christ. The crossing of the Red Sea is a sign of his victory, and of baptism. |\n| The moral // CCC 117 | What the events \"ought to lead us to act\" — the text turned towards conduct. |\n| The anagogical // CCC 117 | The same realities \"in terms of their eternal significance\": the Church on earth as a sign of the heavenly Jerusalem. |\n\nThe word anagogical is worth keeping: from anagoge, a leading-up. It is the sense that reads a thing for where it is going.\n\nTHE COUPLET\n\nThe Middle Ages compressed all four into two lines of verse, so that a student could carry them:\n\nLittera gesta docet, quid credas allegoria,\nmoralis quid agas, quo tendas anagogia.\n\nThe Catechism gives it as: \"The Letter speaks of deeds; Allegory to faith; the Moral how to act; Anagogy our destiny.\" (CCC 118)\n\nRead that again with the theological virtues in view. Allegory is what you believe; the moral sense is how you act; anagogy is where you are going — faith, charity, hope. The fourfold reading of Scripture is the three theological virtues brought to bear on a text, standing on the literal sense as their floor.\n\nTHE ORDER IS A SAFEGUARD\n\nThe literal comes first and holds the rest up. That ordering is doing real work: without it the spiritual senses float free, and a text can be made to mean anything the reader already wanted. St. Thomas is blunt that nothing necessary to faith is contained in the spiritual sense that Scripture does not somewhere teach plainly through the literal.\n\nSo the four are not four options. They are one reading at four depths, and the deeper three are only as sound as the first.",
+    background:
+      "The scheme is older than the couplet and older than the Catechism's use of it. Origen distinguishes senses in the third century; Cassian in the fifth gives the four with Jerusalem as his worked example — the city itself literally, the Church allegorically, the soul morally, the heavenly city anagogically. That single example is probably why the fourfold stuck: it shows all four working on one word without any of them cancelling the others.\n\nThere is a reason a modern reader meets this with suspicion. Allegorical reading has been abused spectacularly, and the nineteenth century largely threw it out in favour of the literal alone. The Catechism keeps all four, and keeps the ordering that makes the abuse detectable: everything must be grounded in what the text actually says.\n\nWorth noticing what the scheme assumes. The spiritual senses are possible not because the words are elastic but because, in the Catechism's phrase, \"not only the text of Scripture but also the realities and events about which it speaks can be signs\" — history itself is held to signify. That is a claim about God's authorship of events, not about the reader's ingenuity, and it is what separates this from simply making things up.",
+  },
+  {
+    title: "The Ladder of Monks",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["reading", "prayer", "contemplation", "meditation", "study", "the soul"],
+    source: "Guigo II, Scala Claustralium (The Ladder of Monks), c. 1150",
+    author: "Guigo II, Carthusian",
+    authorNote: "ninth prior of the Grande Chartreuse; not a canonised saint",
+    related: ["The Four Senses of Scripture", "The Three Powers of the Soul", "Every Saint Became a Saint Through Mental Prayer", "The Three Ways"],
+    relatedSaints: [],
+    year: "c. 1150",
+    origin: "Carthusian",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "FOUR RUNGS\n\nGuigo saw \"a ladder with just four rungs, the one end standing on the ground, the other reaching into the clouds.\"\n\n| Rung | Guigo's definition |\n| Reading // lectio | \"Busily looking on Holy Scripture with all one's will and wit.\" |\n| Meditation // meditatio | \"A studious insearching with the mind to know what was before concealed.\" |\n| Prayer // oratio | \"A devout desiring of the heart to get what is good and avoid what is evil.\" |\n| Contemplation // contemplatio | \"The lifting up of the heart to God tasting somewhat of the heavenly sweetness and savour.\" |\n\nTHE IMAGE THAT EXPLAINS IT\n\n\"Reading puts as it were whole food into your mouth; meditation chews it and breaks it down; prayer finds its savour; contemplation is the sweetness that so delights and strengthens.\"\n\nWhich is a complete account of why reading alone does not nourish. The food is in the mouth and goes no further. It also explains the particular futility of reading a great deal of spiritual writing quickly: swallowing whole.\n\nGuigo's other compression: \"Reading seeks, meditation finds, prayer asks, contemplation feels.\"\n\nWHAT DEPENDS ON WHAT\n\nThe rungs are not four separate practices to be chosen between. Each is useless without the next: reading without meditation is idle, meditation without prayer has no effect, prayer without devotion is fruitless — and contemplation is not climbed to at all, but given, when the first three have prepared for it.\n\nThat last point is the one Guigo is most careful about. Three rungs are your work. The fourth is not.\n\nIt maps exactly onto the three powers of the soul, which is why the method has outlasted its monastery: reading puts the thing into the memory, meditation sets the understanding to work on it, prayer is the will responding. Contemplation is what happens when all three are quiet and God is not.",
+    background:
+      "Written about 1150 by Guigo II, ninth prior of the Grande Chartreuse, as a letter to a fellow monk — the Scala Claustralium, the ladder of the cloistered. It is short, perhaps twenty pages, and it is the reason the phrase lectio divina names a method rather than a mood.\n\nThe ladder is Jacob's, from Genesis 28, and the choice matters: a ladder set on the earth with its top in heaven, with angels going both up and down. Guigo is describing something with traffic in both directions, not a self-improvement staircase.\n\nThe practical value of the scheme is diagnostic. When prayer has gone dead it is usually possible to say which rung has been skipped — most often the second, because meditation is slow and produces nothing visible, and most often the fault of the well-read, who mistake having read something for having chewed it.\n\nOne caution about the fourth rung. Guigo is describing a monastic life with hours of silence built into it, and the tradition after him has sometimes turned contemplation into a target to be achieved by technique, which is the exact opposite of his point. He puts it plainly: the first three are what a man does, and the fourth is what is done to him.",
+  },
+  {
+    title: "The Three Ways",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["the soul", "contemplation", "virtue", "self-knowledge", "examination"],
+    source: "St. Thomas, Summa II-II q. 24 a. 9; the terms from Pseudo-Dionysius and the tradition after him",
+    author: "The spiritual tradition, with St. Thomas Aquinas",
+    authorNote: "the three names are Dionysian; the three degrees of charity below are St. Thomas's own",
+    related: ["The Theological Virtues", "The Dark Night", "The Ladder of Monks", "Consolation and Desolation", "The Cardinal Virtues"],
+    relatedSaints: ["thomas-aquinas", "john-of-the-cross", "teresa-of-avila"],
+    year: "The scheme patristic; St. Thomas 13th century",
+    origin: "Patristic and scholastic",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "THE THREE\n\n| Way | Whose road it is | What the work is |\n| The purgative | Beginners | Getting free of sin and of the appetite for it |\n| The illuminative | Proficients | Growing in virtue; seeing by the light of faith what was only assented to |\n| The unitive | The perfect | Union with God, and delight in Him |\n\nWHAT ST. THOMAS ACTUALLY SAYS\n\nHe does not use the three names. He gives three degrees of charity, and the tradition laid the names over them (II-II q. 24 a. 9):\n\nThe beginner's chief concern is \"to avoid sin and resist his concupiscences\" — charity here has to be \"fed or fostered lest it be destroyed.\"\n\nThe proficient's is \"to aim at progress in good,\" strengthening charity \"by adding to it.\"\n\nThe perfect \"aim chiefly at union with and enjoyment of God,\" desiring \"to be dissolved and to be with Christ.\"\n\nNote what the divisions are made of. Not achievements, not consolations, not years elapsed — but what a person is chiefly concerned with. The question the scheme asks is: what is your attention mostly on? Staying out of trouble, getting better, or God Himself?\n\nWHAT THE MAP IS AND IS NOT\n\nIt is not a ladder with landings. St. Thomas's own image is growth: a body passes through stages without anyone announcing the crossing, and all three states remain possible to a wayfarer.\n\nNor is it a ranking of persons. A man may be a beginner at fifty and in the illuminative way at twenty, and someone deep in the third way is not thereby finished with the first — purgation does not stop, it goes deeper, which is the whole burden of the dark night.\n\nIts real use is diagnostic, and it cuts both ways. It stops a beginner expecting the consolations of the second way and concluding that prayer does not work. And it stops someone in the second way from mistaking the loss of the first way's comforts for regression, when the light has simply moved to where the eye cannot follow it.",
+    background:
+      "The three names come from Pseudo-Dionysius, writing about 500, who used purification, illumination and perfection to describe the hierarchies of angels and of the Church. Later writers took the scheme and turned it on the individual soul; by the high Middle Ages it was standard, and it is the frame inside which St. John of the Cross and St. Teresa both work.\n\nSt. Thomas's contribution is the part that keeps it honest. By grounding the divisions in degrees of charity rather than in experiences, he makes the scheme immune to the obvious abuse — measuring progress by how prayer feels. Charity is a disposition of the will, and the will is precisely the part not directly available to feeling.\n\nThe scheme's danger is the one every map has: mistaking it for the country. Spiritual writers of the seventeenth century sometimes produced elaborate charts with prescribed durations and symptoms, and the effect on scrupulous readers was predictable. Teresa's seven mansions are a finer-grained version of the same three, and she is careful to say the soul moves between rooms rather than graduating out of them.\n\nThe one thing the scheme is genuinely good for: recognising that the disappearance of a kind of prayer is not always a loss. Something that stops working may have stopped because it has been outgrown, and the tradition's three names are mostly a way of saying that this happens twice.",
+  },
+  {
+    title: "The Dark Night",
+    kind: "teaching",
+    seedVersion: 2,
+    tags: ["suffering", "contemplation", "the soul", "trust", "self-knowledge", "prayer"],
+    source: "St. John of the Cross, The Dark Night, Book I ch. 9; The Ascent of Mount Carmel",
+    author: "St. John of the Cross",
+    authorNote: "the phrase is now used for almost any distress; his meaning is narrower",
+    related: ["The Theological Virtues", "Consolation and Desolation", "The Three Ways", "The Two Portions of the Soul", "The Three Powers of the Soul"],
+    relatedSaints: ["john-of-the-cross", "teresa-of-avila", "mother-teresa"],
+    year: "c. 1578-1585",
+    origin: "Carmelite",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "TWO NIGHTS\n\n| Night | What is being purified |\n| The night of sense | The appetite for consolation in prayer and in created things. Common, and usually early. |\n| The night of spirit | The deeper self-reliance in the faculties themselves — the mind's grip on its own understanding of God. Rarer, later, and far darker. |\n\nBoth are called night for three reasons in John's scheme: the point of departure is dark (going out from appetite), the road is dark (faith), and the destination is dark to us (God). The night is not an interruption of the journey. It is the journey.\n\nTHE THREE SIGNS\n\nThe pastorally serious part. Dryness in prayer may be God's purgation, or it may be lukewarmness, or sin, or illness — and these call for opposite responses. John gives three signs, and requires all three together (Dark Night I, 9):\n\n| Sign | What it is |\n| The first | \"When a soul finds no pleasure or consolation in the things of God, it also fails to find it in any thing created.\" Not selective dryness — the taste for substitutes has gone too. |\n| The second | \"That the memory is ordinarily centred upon God, with painful care and solicitude, thinking that it is not serving God, but is backsliding.\" The anxiety is itself about God, which is what tepidity never produces. |\n| The third | \"That the soul can no longer meditate or reflect in the imaginative sphere of sense as it was wont, however much it may of itself endeavour to do so.\" The old method has stopped working, and effort does not restart it. |\n\nThe second sign is the one that turns the whole thing round. The fear of having lost God is evidence against having lost Him: lukewarmness does not grieve.\n\nWHY IT LOOKS LIKE LOSS\n\nBecause of what the theological virtues do to the faculties they take hold of. Faith gives the understanding certainty without clarity; hope empties the memory of what it possessed; charity empties the will of every affection that is not God.\n\nA soul in which all three are working at once has, by definition, less to hold on to than before — and no way of telling from inside whether it is being emptied or simply losing everything. That is why John wrote signs rather than reassurances.\n\nWHAT IT IS NOT\n\nIt is not depression, and treating one as the other does harm in both directions. It is not desolation in the Ignatian sense, which is a movement to be resisted and which lifts. And it is not a mark of advancement to be sought — John's readers were people already given to prayer, wondering whether to turn back.\n\nA CASE THAT STRETCHES THE CATEGORIES\n\nMother Teresa's interior darkness is the best-documented modern instance, and it does not sit neatly in either framework. It began around 1948, as she started the work in Calcutta, and lasted with one brief respite until her death in 1997 — roughly fifty years of the sense of God's absence held alongside a longing for Him, while she founded and governed an order and was, to everyone who met her, evidently joyful.\n\nTest it against what is above. It is not Ignatian desolation: that is a movement to be resisted, and it lifts. It is not tepidity: the first sign fails, since nothing created consoled her either, and the second is written all over the letters. It has the shape of the night of the spirit.\n\nBut her director, Fr. Joseph Neuner, told her something that does not fit the purgative account, and it was his reading that finally gave her peace: that this was not chiefly for her own purification. It was a share in Christ's own abandonment, and in the darkness of the very people she served — the unwanted, and those who feel themselves without God. Her darkness was, on that reading, the interior side of her work rather than an obstacle to it.\n\nHe gave her one sign to hold, and it is John's second sign in different words: the thirst for God is itself the evidence of God's presence, since no one can long for God unless God is already there.\n\nSo the categories are not wrong, but they were built to answer a different question. John is describing purification — darkness aimed at the one in it. What Neuner described is reparative, a darkness borne on behalf of others. That possibility is old in the tradition and rarely tabulated, and it is why a rigid diagnostic chart would have failed her exactly when she needed it.",
+    background:
+      "Written after his imprisonment. In 1577 John was seized by friars of his own order who opposed the reform, held for nine months in a cell in Toledo barely larger than his body, beaten weekly, and given the psalms and darkness. He escaped through a window with a rope of knotted strips. The poems came out of that, and the treatises are commentaries on the poems.\n\nThat order — poem first, explanation afterwards — matters for reading him. The Dark Night and the Ascent of Mount Carmel are both expositions of the same eight stanzas, and he never finished either; they stop mid-argument. What survives is a man analysing his own verse with the tools of a schoolman, which is why the prose can be simultaneously dry and incandescent.\n\nThe phrase has escaped him completely. \"Dark night of the soul\" now covers grief, burnout, depression and ordinary unhappiness, none of which he was describing. His subject is specific: what happens to a person who is praying seriously when God withdraws the sensible supports of prayer in order to work at a depth the person cannot reach or feel.\n\nThe three signs exist because he knew the diagnosis could go wrong in both directions, and that the pastoral cost was high either way — a director who tells someone in genuine purgation to try harder is prescribing exactly the wrong medicine, and one who tells a lukewarm soul it is in the dark night has flattered it into staying there.",
+  },
+  {
+    title: "Consolation and Desolation",
+    kind: "teaching",
+    seedVersion: 2,
+    tags: ["discernment", "the soul", "trust", "temptation", "self-knowledge", "prayer"],
+    source: "St. Ignatius of Loyola, Spiritual Exercises, Rules for the Discernment of Spirits (First Week)",
+    author: "St. Ignatius of Loyola",
+    authorNote: "the rules were written for a retreatant under direction, not for solitary self-diagnosis",
+    related: ["The Dark Night", "The Two Portions of the Soul", "The Three Stages of Temptation", "Suscipe", "The Three Ways"],
+    relatedSaints: ["ignatius-of-loyola", "teresa-of-avila", "john-of-the-cross"],
+    year: "Spiritual Exercises, composed 1522-1524",
+    origin: "Ignatian",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "THE TWO MOVEMENTS\n\n| Movement | Ignatius's description |\n| Consolation // Rule 3 | \"When some interior movement in the soul is caused, through which the soul comes to be inflamed with love of its Creator and Lord\" — with increase of faith, hope and charity, and interior joy. |\n| Desolation // Rule 4 | \"Darkness of soul, disturbance in it, movement to things low and earthly, the unquiet of different agitations and temptations, moving to want of confidence, without hope, without love, when one finds oneself all lazy, tepid, sad, and as if separated from his Creator and Lord.\" |\n\nRead the two definitions again for what they are not. Neither is defined by pleasantness. Consolation is named by the direction it moves you — towards God, with the theological virtues increasing. A grief that draws you towards God is consolation. A contentment that settles you away from Him is not.\n\nTHE RULE THAT DOES THE MOST WORK\n\n\"In time of desolation never to make a change; but to be firm and constant in the resolutions and determination in which one was the day preceding such desolation.\" (Rule 5)\n\nThe reasoning is simple and hard to remember when it applies. In desolation the counsel available to you is coming from the wrong source, and it will present itself as clarity. So the decision belongs to the person you were before it descended, and to the person you will be after — never to the one inside it.\n\nThe corollary is that consolation is the time to decide, and desolation the time to hold; and that whatever is resolved in the light should be written down, because it will not be believed later.\n\nTHE ENEMY'S THREE HABITS\n\nIgnatius describes them as behaviours, which makes them recognisable:\n\nHe is weak when faced, and strong when fled from.\n\nHe behaves \"as a false lover\" who \"wants his words and persuasions to be secret\" — and when they are told to a confessor or director, \"it is very grievous to him,\" because he sees the deceit cannot succeed once said out loud.\n\nHe attacks where the defences are weakest, having first surveyed them.\n\nThe second is the practically decisive one. Nearly everything in this analysis depends on saying the thing to another person, which is why these rules were written for someone under direction and are least reliable when used alone.\n\nNOT THE SAME AS THE DARK NIGHT\n\nThey look alike from inside and call for opposite responses. Ignatian desolation is a movement to be resisted, examined for its cause, and outlasted; it lifts. The night of sense is God's own work, is not resisted but consented to, and does not lift on the same timescale.\n\nJohn of the Cross's three signs are the usual test: in desolation the taste for created consolations remains, and in the night it has gone too.\n\nTHE CARMELITE VOCABULARY IS DIFFERENT\n\nThe same two words do not mean the same things in Teresa and John of the Cross, and the mismatch causes real confusion, because a person reading both at once will get opposite counsel about the identical interior state.\n\nFor Ignatius the pair is a diagnostic. Consolation and desolation name movements, identified by the direction they pull, attributed to a source, and acted on by rules. Neither is defined by pleasantness — a grief drawing you towards God is consolation.\n\nThe Carmelites are not asking that question, and they do not use the words as a matched pair at all.\n\n| Term | Whose | What it means there |\n| Consolation, desolation | Ignatius | Movements to be read for their direction and origin; desolation resisted and outlasted |\n| Contentos // consolations | Teresa | Sweetness that begins in our own effort and ends in God — reached by meditation, as water reaches a fountain through aqueducts |\n| Gustos // spiritual delights | Teresa | Sweetness that begins in God and is simply given, welling up like a spring at its own source; not obtainable by effort |\n| Sequedad // dryness, aridity | John of the Cross | The withdrawal of sensible sweetness — which may be tepidity, or may be God's own purgation, distinguished by the three signs |\n\nWHAT THE DIFFERENCE COMES TO\n\nTeresa asks a question Ignatius does not: where did this come from — my own working, or God's giving? That is the whole point of separating contentos from gustos, and it is why she warns against straining after sweetness: what can be manufactured is by definition not the thing that matters most.\n\nJohn goes further and treats attachment to consolation as a fault with a name. Beginners, he says, \"think that all the business of prayer consists in experiencing sensible pleasure and devotion and they strive to obtain this by great effort\" — and he files that under spiritual gluttony, among the imperfections that make the night necessary in the first place.\n\nSo consolation has almost opposite roles in the two accounts. For Ignatius it is a sign to be read, and the time in which to decide. For John it is scaffolding to be weaned off, and clinging to it is the problem.\n\nThey are not contradicting each other. Ignatius is describing spirits moving a soul; John is describing God purifying one; Teresa is distinguishing what we produce from what we are given. The words overlap and the subjects do not — which is why the practical rules cannot be swapped. Ignatian desolation is resisted. Carmelite night is consented to. Getting that backwards means either fighting God or indulging tepidity.",
+    background:
+      "Ignatius worked these out on himself, convalescing at Loyola in 1521 with a shattered leg and nothing to read but a life of Christ and a book of saints. He noticed that daydreams of knightly glory left him dry afterwards, while thoughts of imitating Francis and Dominic left him content — and that the difference showed up not during but after. That single observation, that the movements can be told apart by their aftertaste rather than their intensity, is the seed of the whole method.\n\nThe rules are deliberately unmystical. They are a set of behaviours to notice and instructions on what to do, written in the imperative, closer to a field manual than to a treatise. Nothing in them requires unusual experiences.\n\nTwo cautions worth carrying. First, they were written for a person making the Exercises under a director, and the thirteenth rule says why: the analysis depends on the movements being spoken aloud to someone else. Used privately by an anxious person, the rules become one more thing to be anxious about.\n\nSecond, Ignatius is describing spiritual movements, not moods, and not illness. He had no framework for clinical depression and did not claim one. A desolation that does not lift, that has no discernible spiritual cause, and that touches sleep, appetite and the body, is a different question and needs a different kind of help.",
+  },
+  {
+    title: "How These Lists Fit Together",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["catechetical", "the soul", "virtue", "study", "self-knowledge"],
+    source: "St. Augustine, De sermone Domini in monte I-II; St. Thomas, Summa I-II qq. 69-70; St. John of the Cross, Ascent II",
+    author: "Augustine, Aquinas and John of the Cross",
+    authorNote: "assembled here; the correspondences are theirs, and the ones that are not are named as such",
+    related: ["The Seven Gifts of the Holy Spirit", "The Beatitudes", "The Twelve Fruits of the Holy Spirit", "The Theological Virtues", "The Cardinal Virtues", "The Three Powers of the Soul"],
+    relatedSaints: ["augustine", "thomas-aquinas", "john-of-the-cross", "ambrose"],
+    year: "Augustine c. 394; Aquinas 13th century; John of the Cross 16th",
+    origin: "Patristic and scholastic",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "WHY THIS EXISTS\n\nBecause the lists are not independent, and nobody says so in one place. The gifts, the beatitudes, the fruits, the virtues and the powers of the soul were joined to each other by particular writers for particular reasons — and other joinings, which look identical in a table, were invented later by nobody in particular.\n\nThis entry keeps the two apart.\n\nWHAT AUGUSTINE JOINED\n\nThe beatitudes to the gifts, in his commentary on the Sermon on the Mount, taking Matthew's list because it was spoken to disciples rather than to the crowd. His pairing runs downward: fear of the Lord to the poor in spirit, piety to the meek, knowledge to those who mourn, and so on up to wisdom and the peacemakers.\n\nThen, in the second book, he does something bolder and adds a third column: the seven petitions of the Our Father. \"If it is the fear of God through which the poor in spirit are blessed... let us ask that the name of God may be hallowed. If it is piety through which the meek are blessed... let us ask that His kingdom may come. If it is knowledge through which those who mourn are blessed, let us pray that His will may be done.\" (II, 38)\n\nSo gift, beatitude and petition are read as one thing seen three ways: what the Spirit gives, what it looks like in a life, and what we ask for.\n\nWHAT AMBROSE JOINED\n\nThe four beatitudes in Luke to the four cardinal virtues — a different list, a different pairing, for a different audience. Aquinas keeps both readings without forcing them together, noting that Ambrose is commenting on beatitudes \"propounded to the multitude\" and Augustine on those given to the more perfect.\n\nWHAT AQUINAS JOINED\n\nThe fruits to the beatitudes, by rank rather than one-to-one: every beatitude is a fruit, but not every fruit is a beatitude, because \"it is sufficient for a fruit to be something ultimate and delightful; whereas for a beatitude, it must be something perfect and excellent\" (I-II q. 70 a. 2).\n\nAnd the beatitudes to the gifts as act to habit (q. 69): a beatitude is not a different thing from a gift but the gift in operation, which is why beatitudes can be promised as rewards and gifts cannot.\n\nWHAT JOHN OF THE CROSS JOINED\n\nThe theological virtues to the powers of the soul: faith in the understanding, hope in the memory, charity in the will — each emptying the faculty it takes hold of.\n\nWHAT NOBODY JOINED\n\nCharts circulate pairing each of the seven gifts with one capital sin, one beatitude, one fruit and one petition, in tidy rows. The gift-beatitude-petition columns are Augustine's and can be defended. The rest are not his and not anyone else's in particular: the sins are Gregory's seven, drawn up three centuries later for a different purpose, and the twelve fruits will not divide into seven without being cut to fit.\n\nThe temptation is understandable — sevens attract each other. But a correspondence is only worth anything if someone actually argued for it, and the honest position is that these particular rows were assembled by later devotional writers for their symmetry.\n\nTHE ONE PATTERN THAT DOES RUN THROUGH\n\nNot a table but a shape, and all four writers assume it: God gives the disposition, the disposition issues in acts, and the acts are enjoyed.\n\nGifts and infused virtues are what is given. Beatitudes are those in operation. Fruits are the enjoyment of them — \"the first fruits of eternal glory\". The lists are not four parallel systems but one movement caught at three moments: what is planted, what it does, and what it tastes like.",
+    background:
+      "The medieval habit of correlating everything with everything is easy to mock and worth understanding first. It was a memory art before it was a theology: a student with no index and few books held material by hanging it on structures, and sevens hung well on sevens.\n\nThe trouble is that the aid became an assertion. Once the columns are drawn, a chart says by its shape that gift four causes beatitude four defeats sin four — a claim nobody makes in prose, and one that would be hard to defend if anyone did. That is how a mnemonic becomes a doctrine nobody taught.\n\nSo the test applied here is simple: did a named writer argue for this correspondence, giving reasons? Augustine did, twice. Ambrose did, for a different set. Aquinas argued about the relations between the lists rather than lining them up. John of the Cross assigned three virtues to three faculties and was explicit about why. Everything else in the circulating charts fails the test.\n\nKeeping the distinction is not pedantry. The genuine correspondences do work — Augustine's reading of the Our Father as a prayer for the seven gifts changes how the prayer is said. Invented ones do the opposite: they make the faith look like a filing system, and the moment a reader notices the rows do not really line up, the true joinings get discarded along with the false.",
+  },
+  {
+    title: "The Three Stages of Temptation",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["temptation", "self-knowledge", "the soul", "chastity", "examination", "conscience"],
+    source: "St. Francis de Sales, Introduction to the Devout Life, Part IV",
+    author: "St. Francis de Sales",
+    authorNote: "the threefold analysis is older than de Sales; his is the clearest statement of it",
+    related: ["The Two Portions of the Soul", "The Three Powers of the Soul", "Litany of Chastity", "Litany of Humility"],
+    relatedSaints: ["francis-de-sales"],
+    year: "Introduction to the Devout Life, 1609",
+    origin: "Devotional",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "THE THREE STAGES\n\nDe Sales sets them out in a line: \"Sin is proposed to it. 2. Which proposals are either pleasing or displeasing to the soul. 3. The soul either consents, or rejects them.\"\n\n| Stage | What happens | Is it sin? |\n| Suggestion | The thing is put before you. It arrives; you did not send for it. | No |\n| Delight // delectation | It is found pleasing. The lower part of the soul is drawn, and may be drawn strongly. | Not of itself |\n| Consent | The will says yes. | Yes — and only here |\n\nWHY THIS MATTERS\n\nBecause the whole weight falls on the third, and almost all the anxiety falls on the first two.\n\n\"The soul... cannot always refuse to experience temptation, although it be always in its power to refuse consent.\" A temptation felt is not a sin committed, and felt strongly is still not a sin committed. De Sales is blunt about how far this extends: \"If we should undergo the temptation to every sin whatsoever during our whole life, that would not damage us in the sight of God's majesty; provided we took no pleasure in it, and did not consent to it.\"\n\nThe middle stage is where scruples breed, because delight is felt and feels like guilt. But it can happen, he says, \"not only without consent from, but absolutely in contradiction to the superior will\" — which is the point of the two portions of the soul. What the lower part is drawn to and what the higher part wills can differ, and the man is where his will is.\n\n\"So long as we abide in our firm resolution to take no pleasure therein, we cannot offend God.\"\n\nTHE PRINCESS\n\nHis image for it: \"Picture to yourself a young princess beloved of her husband, to whom some evil wretch should send a messenger to tempt her to infidelity.\"\n\nThe messenger arrives — she did not invite him. He makes his proposal: that is the suggestion. She may be shaken by it: that is the delight, and it is not yet unfaithfulness. Only her yes would be. And here is the difference between her and us: \"the former has it in her power to drive away the messenger of evil and never hear him more, while the latter cannot always refuse to experience temptation, although it be always in its power to refuse consent.\"\n\nThe messenger cannot always be kept from the door. The answer can always be no.",
+    background:
+      "Part IV of the Introduction to the Devout Life is addressed to a reader who has begun to take the interior life seriously and has discovered that it did not make temptation stop — and who is now frightened by what goes on in his own head.\n\nDe Sales's whole strategy is to move the question off feeling and onto consent. He knows that the person who most needs this is the one least able to see it, because the felt experience of a strong temptation is almost indistinguishable from the felt experience of guilt.\n\nThe threefold analysis is not his invention — suggestion, delectation and consent were standard in moral theology long before him, and the substance is in the Fathers. What is his is the pastoral nerve: the willingness to say plainly that a lifetime of violent temptation, unconsented, does no damage at all in the sight of God.\n\nWorth reading alongside the two portions of the soul from his Treatise, which supplies the machinery this chapter leans on.",
+  },
+  {
+    title: "The Two Portions of the Soul",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["the soul", "self-knowledge", "temptation", "suffering", "conscience"],
+    source: "St. Francis de Sales, Treatise on the Love of God, Book I, ch. 11",
+    author: "St. Francis de Sales",
+    authorNote: "the superior/inferior distinction is scholastic; the treatment here is his",
+    related: ["The Three Stages of Temptation", "The Three Powers of the Soul", "Stay with Me, Lord", "Anima Christi"],
+    relatedSaints: ["francis-de-sales"],
+    year: "Treatise on the Love of God, 1616",
+    origin: "Devotional",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "THE TWO PORTIONS\n\n| Portion | How it reasons |\n| The inferior // the lower part | It \"reasons and draws conclusions according to what it learns and experiences by the senses.\" What it knows, it knows from feeling and from what has happened to it. |\n| The superior // the higher part | It \"reasons and draws conclusions according to an intellectual knowledge not grounded upon the experience of sense, but on the discernment and judgment of the spirit.\" It can work by reason, or by the light of faith. |\n\nThey are not two souls. They are one soul working at two levels, and the levels can disagree — which is the whole reason the distinction is worth having.\n\nABRAHAM\n\n\"According to the inferior portion of his soul\" Abraham could not see how the promise of a son could be kept, and said so. \"According to his superior part he believed in God and it was reputed to him unto justice.\"\n\nBoth were true of the same man at the same moment. The doubt was real. The faith was also real, and it was the faith that counted, because that is where his will stood.\n\nGETHSEMANE\n\nDe Sales takes the distinction to the one place where it cannot be dismissed as a trick of psychology.\n\nOur Lord's soul was \"sorrowful even unto death\" — that is the inferior portion, and there is nothing feigned about it. And in the same breath: \"not my will, but thine be done\" — the superior portion, holding.\n\nThere was no sin anywhere in that. The dread was not a failure. It is the clearest possible statement that anguish and obedience can occupy the same soul at the same time.\n\nWHAT IT IS FOR\n\nChiefly this: you are not required to feel what you believe in order to be believing it.\n\nA man who is frightened, or dry in prayer, or violently drawn to something he has no intention of doing, is not thereby a hypocrite or a backslider. The lower part reports the storm; the higher part holds the course. The tradition puts the man where his will is, not where his feelings are — which is also why the middle stage of a temptation is not yet a sin.",
+    background:
+      "From the first book of the Treatise on the Love of God, where de Sales is laying groundwork before he says anything about love itself: what a soul is, and what parts of it are in play.\n\nThe distinction is old scholastic property — the superior and inferior reason go back through the schoolmen to Augustine — but de Sales does something particular with it. In the schools it settles questions about the gravity of sin. In his hands it becomes consolation: a way of telling a devout and anxious person that the war in them is not evidence against them.\n\nThe choice of examples is deliberate. Abraham is the father of believers, and he argued with the promise. Christ is sinless, and he sweated blood at the prospect. If those two can hold contradiction inside one soul without fault, so can the reader.\n\nThere is a further refinement in the next chapter, where he distinguishes four degrees of reason within the two portions, rising to what he calls the supreme point of the spirit — the summit where the soul touches God directly, above reasoning altogether. That is the part later writers borrowed most and understood least, and it is not reproduced here.",
   },
   {
     title: "The Works of Mercy",
-    kind: "quote",
+    kind: "teaching",
+    seedVersion: 2,
     tags: ["charity", "justice", "the poor", "examination"],
     source: "Corporal works from Matthew 25:35-36 and Tobit; spiritual works assembled by the tradition",
     author: "Traditional / Anonymous",
     related: ["Christ in the Beggar", "Love Proves Itself By Deeds", "The Four Last Things", "The Beatitudes"],
+    relatedSaints: ["thomas-aquinas"],
     year: "Standard by the medieval period",
     origin: "Catechetical",
     liturgical: "Lent; the Jubilee of Mercy, 2016",
@@ -5994,15 +6675,18 @@ const SEED_LIBRARY_ENTRIES = [
     body:
       "THE SEVEN CORPORAL WORKS\n1. Feed the hungry\n2. Give drink to the thirsty\n3. Clothe the naked\n4. Shelter the homeless\n5. Visit the sick\n6. Visit the imprisoned\n7. Bury the dead\n\nTHE SEVEN SPIRITUAL WORKS\n1. Instruct the ignorant\n2. Counsel the doubtful\n3. Admonish sinners\n4. Bear wrongs patiently\n5. Forgive offences willingly\n6. Comfort the afflicted\n7. Pray for the living and the dead",
     background:
-      "Six of the seven corporal works come straight out of Matthew 25 - the passage where Christ identifies Himself with the hungry, the thirsty, the stranger, the naked, the sick and the prisoner, and makes the judgement of the nations turn on them. The seventh, burying the dead, was added from the book of Tobit.\n\nThe spiritual works have no single scriptural list; the tradition assembled them as a deliberate parallel, on the reasoning that a person can be destitute in more than one way. Worth noticing that four of the seven are hard rather than pleasant - admonishing sinners, bearing wrongs, forgiving offences, counselling the doubtful - and that several cost nothing material at all, which removes the usual excuse.\n\nThis is the practical shape of what Chrysostom argues in 'Christ in the Beggar', also here: the Christ of Matthew 25 and the Christ of the altar are the same person, so honouring one while stepping over the other is a contradiction.",
+      "Six of the seven corporal works come straight out of Matthew 25 - the passage where Christ identifies Himself with the hungry, the thirsty, the stranger, the naked, the sick and the prisoner, and makes the judgement of the nations turn on them. The seventh, burying the dead, was added from the book of Tobit.\n\nThe spiritual works have no single scriptural list; the tradition assembled them as a deliberate parallel, on the reasoning that a person can be destitute in more than one way. Worth noticing that four of the seven are hard rather than pleasant - admonishing sinners, bearing wrongs, forgiving offences, counselling the doubtful - and that several cost nothing material at all, which removes the usual excuse.\n\nThis is the practical shape of what Chrysostom argues in 'Christ in the Beggar', also here: the Christ of Matthew 25 and the Christ of the altar are the same person, so honouring one while stepping over the other is a contradiction." +
+      "\n\nThe pairing of seven with seven is St. Thomas Aquinas's, in the Summa (II-II q.32 a.2), where he sets out both lists with the mnemonic verses the schools used to memorise them — 'to visit, to quench, to feed, to ransom, clothe, harbour or bury' for the corporal works, and 'to counsel, reprove, console, to pardon, forbear, and to pray' for the spiritual. One word there has shifted: his fourth corporal work is ransoming the captive, which in a world of slavery and hostage-taking meant buying someone out of it. Modern lists say 'visit the imprisoned' — a narrowing worth noticing when you examine yourself on it.",
   },
   {
     title: "The Beatitudes",
-    kind: "quote",
+    kind: "teaching",
+    seedVersion: 4,
     tags: ["Sermon on the Mount", "biblical", "holiness"],
     source: "Matthew 5:3-12, the opening of the Sermon on the Mount",
     author: "Jesus Christ",
-    related: ["The Works of Mercy", "Our Father", "Litany of Humility"],
+    related: ["The Works of Mercy", "Our Father", "Litany of Humility", "The Seven Gifts of the Holy Spirit"],
+    relatedSaints: ["augustine", "ambrose", "thomas-aquinas"],
     year: "1st century",
     origin: "Biblical",
     liturgical: "All Saints' Day",
@@ -6010,9 +6694,12 @@ const SEED_LIBRARY_ENTRIES = [
     originalLanguage: "",
     favorite: true,
     body:
-      "Blessed are the poor in spirit: for theirs is the kingdom of heaven.\nBlessed are the meek: for they shall possess the land.\nBlessed are they that mourn: for they shall be comforted.\nBlessed are they that hunger and thirst after justice: for they shall have their fill.\nBlessed are the merciful: for they shall obtain mercy.\nBlessed are the clean of heart: for they shall see God.\nBlessed are the peacemakers: for they shall be called children of God.\nBlessed are they that suffer persecution for justice' sake: for theirs is the kingdom of heaven.\n\nBlessed are ye when they shall revile you, and persecute you, and speak all that is evil against you, untruly, for my sake: be glad and rejoice, for your reward is very great in heaven.",
+      "THE EIGHT — MATTHEW 5:3-12\n\nBlessed are the poor in spirit: for theirs is the kingdom of heaven.\nBlessed are the meek: for they shall possess the land.\nBlessed are they that mourn: for they shall be comforted.\nBlessed are they that hunger and thirst after justice: for they shall have their fill.\nBlessed are the merciful: for they shall obtain mercy.\nBlessed are the clean of heart: for they shall see God.\nBlessed are the peacemakers: for they shall be called children of God.\nBlessed are they that suffer persecution for justice' sake: for theirs is the kingdom of heaven.\n\nBlessed are ye when they shall revile you, and persecute you, and speak all that is evil against you, untruly, for my sake: be glad and rejoice, for your reward is very great in heaven.\n\nMATTHEW AND LUKE COMPARED\n\n| Matthew 5 — on the mountain | Luke 6 — on the plain |\n| Poor in spirit — v. 3 // for theirs is the kingdom of heaven | Blessed are ye poor — v. 20 // for yours is the kingdom of God |\n| The meek — v. 4 // for they shall possess the land | not in Luke |\n| They that mourn — v. 5 // for they shall be comforted | Ye that weep now — v. 21 // for you shall laugh |\n| Hunger and thirst after justice — v. 6 // for they shall have their fill | Ye that hunger now — v. 21 // for you shall be filled |\n| The merciful — v. 7 // for they shall obtain mercy | not in Luke |\n| The clean of heart — v. 8 // for they shall see God | not in Luke |\n| The peacemakers — v. 9 // for they shall be called children of God | not in Luke |\n| Persecuted for justice' sake — v. 10 // for theirs is the kingdom of heaven | not in Luke |\n| Reviled for my sake — vv. 11-12 // your reward is very great in heaven | When men shall hate you — vv. 22-23 // your reward is great in heaven |\n\nMark and John contain no beatitudes at all.\n\nLUKE'S FOUR WOES — LUKE 6:24-26\n\nWoe to you that are rich: for you have your consolation.\nWoe to you that are filled: for you shall hunger.\nWoe to you that now laugh: for you shall mourn and weep.\nWoe to you when men shall bless you: for according to these things did their fathers to the false prophets.",
     background:
-      "The opening of the Sermon on the Mount, and read on All Saints' Day because the Church takes them as the portrait of a saint - not eight kinds of person but eight facets of one.\n\nThe Greek makarios, rendered 'blessed', is stronger than 'happy' and quite different from 'lucky': it names the state of one whose situation is genuinely good regardless of how it looks from outside. Which is the whole difficulty, since every condition named - poverty, mourning, hunger, persecution - is one nobody would choose. The claim is not that these things are good in themselves but that the kingdom reverses the ledger.\n\nLuke has a shorter parallel (6:20-23) with four beatitudes and four matching woes, and Luke is blunter: 'blessed are the poor', not 'poor in spirit'. The difference has been argued over for centuries, and is worth knowing before leaning hard on either version.",
+      "The opening of the Sermon on the Mount, and read on All Saints' Day because the Church takes them as the portrait of a saint - not eight kinds of person but eight facets of one.\n\nThe Greek makarios, rendered 'blessed', is stronger than 'happy' and quite different from 'lucky': it names the state of one whose situation is genuinely good regardless of how it looks from outside. Which is the whole difficulty, since every condition named - poverty, mourning, hunger, persecution - is one nobody would choose. The claim is not that these things are good in themselves but that the kingdom reverses the ledger.\n\nLuke has a shorter parallel (6:20-23) with four beatitudes and four matching woes, and Luke is blunter: 'blessed are the poor', not 'poor in spirit'. The difference has been argued over for centuries, and is worth knowing before leaning hard on either version." +
+      "\n\nSt. Augustine's De sermone Domini in monte reads them against the seven gifts of the Spirit, one beatitude to each gift; St. Ambrose, commenting on the four beatitudes in Luke rather than the eight in Matthew, reads them against the four cardinal virtues instead. St. Thomas Aquinas keeps both readings in the Summa (I-II q.69) and explains why they need not compete: the virtues and the gifts are the settled dispositions, and the beatitudes are the acts that come out of them." +
+      "\n\nThe Beatitudes are not a harmony of the four Gospels: only Matthew and Luke have any, and Mark and John have none. Matthew gives eight, spoken on a mountain, in the third person, and spiritualised — 'poor in spirit', 'hunger and thirst after justice'. Luke gives four, spoken on a level place, in the second person and blunt — 'blessed are ye poor', 'ye that hunger now' — and pairs each with a matching woe, which Matthew has not got. Whether one evangelist spiritualised the other's blunter version or Luke sharpened Matthew's is an old argument and not a settled one.\n\nThe Catechism (CCC 1716) prints Matthew's, so those are the ones catechesis works from. Two differences from the text above are worth knowing about, because they can make you think you have misremembered it. The Catechism quotes the RSV, which reads 'inherit the earth', 'righteousness', 'pure in heart', 'sons of God' where the Douay here reads 'possess the land', 'justice', 'clean of heart', 'children of God'. And the order of the second and third differs: the Vulgate and the Douay after it put the meek at v. 4 and the mourners at v. 5, while the Greek behind modern translations — and the Catechism with it — has them the other way round. Both orders are ancient; neither is a mistake." +
+      "\n\nThe second half of each — the promise — is doing as much work as the first, and it is where the two Gospels diverge most. Matthew promises 'the kingdom of heaven' where Luke promises 'the kingdom of God'; the usual explanation is that Matthew, writing for readers who avoided saying the divine name, uses 'heaven' as a reverent substitute, and that the two phrases mean one thing. Matthew's mourners 'shall be comforted' where Luke's weepers 'shall laugh' — the same promise, one of them stated gently and the other not. And the promises are not eight different rewards: the first and the eighth are given the identical one, 'for theirs is the kingdom of heaven', which closes the list back onto its opening. What lies between — the land, comfort, filling, mercy, the sight of God, the name of children — reads less as a list of separate payments than as one thing described from eight sides. All but two of the promises are in the future tense; those two are in the present.",
   },
 ];
 
@@ -6023,7 +6710,13 @@ async function seedDefaultsIfEmpty() {
     // kind must still be recognized as the same entry, or it re-inserts a
     // duplicate under the new kind instead of updating the existing one.
     const already = existing.find((e) => e.title === seed.title);
-    if (already && already.author) continue; // already fully seeded, nothing to do
+    // Seeding is one-shot per entry — otherwise every reload would overwrite
+    // whatever had been edited here. The cost is that a correction to a seed
+    // entry (a wrong kind, a missing saint link) could never reach a device
+    // that already had the old copy. seedVersion is the way through: bump it
+    // on the seed definition and that one entry is re-seeded, once.
+    const stale = already && (already.seedVersion || 1) < (seed.seedVersion || 1);
+    if (already && already.author && !stale) continue;
     await saveLibraryEntry({ ...seed, id: already ? already.id : null });
   }
 }
@@ -6418,7 +7111,20 @@ function renderLibraryList() {
   );
 }
 
-const KIND_LABELS = { prayer: "Prayer", hymn: "Hymn", litany: "Litany", saint: "Saint", quote: "Quote" };
+// "Antiphon" is deliberately not folded into "hymn" (Mario asked, 30 Aug 2026).
+// A hymn is metrical strophic verse; an antiphon is prose chant attached to
+// psalmody. The four seasonal Marian antiphons that close Compline, and the O
+// Antiphons of Advent, are antiphons — the Church distinguishes them, and so
+// does the season they belong to, which is the useful part when choosing one.
+//
+// "Teaching" covers the structures the Church hands on to be learned and
+// examined by — the gifts, the works of mercy, the last things. They were
+// filed as quotes, which they are not: a quote is one saying kept for itself,
+// and these are lists you measure yourself against. The dividing line used
+// here is whether the entry contains words you actually say: the Rosary and
+// the Stations do, so they stay prayers; the Beatitudes and the Seven Gifts
+// don't.
+const KIND_LABELS = { prayer: "Prayer", hymn: "Hymn", litany: "Litany", antiphon: "Antiphon", saint: "Saint", quote: "Quote", teaching: "Teaching" };
 
 function updateFeastDayVisibility() {
   $("#lib-feast-day-field").classList.toggle("hidden", $("#lib-kind").value !== "saint");
@@ -6641,15 +7347,13 @@ function splitSections(text) {
   const lines = (text || "").split("\n");
   const sections = [];
   let cur = null;
-  const isHeading = (l) => {
-    const t = l.trim();
-    if (t.length < 4 || t.length > 70) return false;
-    if (!/[A-Z]/.test(t)) return false;
-    return t === t.toUpperCase() && !/[a-z]/.test(t);
-  };
+  const isHeading = isSectionHeadingLine;
   for (const line of lines) {
     if (isHeading(line)) {
-      cur = { name: line.trim(), lines: [] };
+      // name is the raw line — it gets re-rendered when a single section is
+      // shown, and the renderer needs to recognise it as a heading again.
+      // label is what the chip says.
+      cur = { name: line.trim(), label: sectionHeadingText(line), lines: [] };
       sections.push(cur);
     } else if (cur) {
       cur.lines.push(line);
@@ -6659,7 +7363,7 @@ function splitSections(text) {
     }
   }
   const built = sections
-    .map((x) => ({ name: x.name, text: x.lines.join("\n").trim() }))
+    .map((x) => ({ name: x.name, label: x.label || x.name, text: x.lines.join("\n").trim() }))
     .filter((x) => x.text);
   // Two or more sections that actually have body text. Without this, a bare
   // list of capitalised words (DEATH / JUDGMENT / HEAVEN / HELL) would be
@@ -6672,9 +7376,22 @@ const readerSection = { list: [], active: -1 }; // -1 = show the whole thing
 
 // Headings are stored in caps for the plain view; shown in normal case on the
 // chips so the strip doesn't shout.
+const TITLE_SMALL_WORDS = new Set(
+  ["a", "an", "and", "as", "at", "by", "de", "for", "in", "of", "on", "or", "the", "to", "with"]
+);
+
 function titleCaseSection(name) {
-  const t = name.toLowerCase().replace(/\b([a-z])/g, (m) => m.toUpperCase());
-  return t.replace(/\bThe\b/g, "the").replace(/^the /, "The ");
+  // A word-boundary regex capitalises the letter after an apostrophe too, which
+  // turned Montfort's into Montfort'S. Split on whitespace instead.
+  return (name || "")
+    .toLowerCase()
+    .split(/(\s+)/)
+    .map((w, i) => {
+      if (/^\s*$/.test(w)) return w;
+      if (i > 0 && TITLE_SMALL_WORDS.has(w)) return w;
+      return w.replace(/^([a-z])/, (m) => m.toUpperCase());
+    })
+    .join("");
 }
 
 function renderSectionBar() {
@@ -6684,7 +7401,11 @@ function renderSectionBar() {
   if (list.length < 2) return;
   const chip = (label, i) =>
     `<button class="chip section-chip${readerSection.active === i ? " active" : ""}" data-i="${i}">${escapeHtml(label)}</button>`;
-  bar.innerHTML = chip("All", -1) + list.map((x, i) => chip(titleCaseSection(x.name), i)).join("");
+  // A chip only needs to name the section — "The Joyful Mysteries" rather than
+  // "The Joyful Mysteries — Monday and Saturday". The heading still says when.
+  bar.innerHTML =
+    chip("All", -1) +
+    list.map((x, i) => chip(titleCaseSection(x.label.split(/\s+[—–]\s+/)[0]), i)).join("");
   $$(".section-chip", bar).forEach((b) =>
     b.addEventListener("click", () => {
       readerSection.active = Number(b.dataset.i);
@@ -7014,6 +7735,10 @@ async function onSaveLibraryEntry(e) {
       id: state.editingLibraryId,
       related: existingRelated,
       relatedSaints: existingRelatedSaints,
+      // The editor has no field for these three; without carrying them the
+      // save wipes the cross-links and resets the seed marker, which would
+      // then re-seed over this very edit on the next load.
+      seedVersion: existingEntry.seedVersion || 1,
       title: $("#lib-title").value.trim() || "Untitled",
       kind: $("#lib-kind").value,
       tags,
@@ -9076,7 +9801,17 @@ const FINDER_STEPS = [
       { label: "A prayer", hint: "Something to pray", match: (e) => e.kind === "prayer" },
       { label: "A litany", hint: "Call and response", match: (e) => e.kind === "litany" },
       { label: "A hymn", hint: "Something sung", match: (e) => e.kind === "hymn" },
+      {
+        label: "An antiphon",
+        hint: "The seasonal chants — Compline, Advent",
+        match: (e) => e.kind === "antiphon",
+      },
       { label: "Words to sit with", hint: "A quote to dwell on", match: (e) => e.kind === "quote" },
+      {
+        label: "Something to learn",
+        hint: "A list to know by heart and examine yourself on",
+        match: (e) => e.kind === "teaching",
+      },
       // No "saint" option: saints live in their own tab, and the Library has
       // never held one. If a legacy entry does, the catch-all still routes it.
     ],
