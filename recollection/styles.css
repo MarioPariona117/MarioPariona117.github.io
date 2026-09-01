@@ -4,6 +4,8 @@
 :root {
   color-scheme: dark;
   --danger: #c96a5a;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --serif: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
 }
 
 * { box-sizing: border-box; }
@@ -2303,3 +2305,269 @@ body,
 .reader-section-bar { justify-content: center; margin: 0 0 1.4rem; }
 .section-chip { font-weight: 600; }
 .section-chip.active { color: #1a1408; background: var(--gold); border-color: var(--gold); }
+
+/* --- Inside the prayer: headings, rubrics, versicles ---------------------- *
+   A long entry (the Stations, the Rosary, a litany) used to arrive as one
+   undifferentiated slab of serif — the divisions were there in the text, in
+   caps, but they read as shouted sentences rather than structure. These three
+   rules give the reader the same three registers a printed prayer book uses:
+   the division heading, the rubric that tells you what to do, and the prayer
+   itself. Everything spoken stays serif; everything *about* the prayer is sans,
+   so the eye never starts praying an instruction by mistake. */
+
+.reader-section-head {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: center;
+  margin: 2.9rem 0 1.3rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid rgba(var(--gold-rgb), 0.18);
+}
+.reader-text > .reader-section-head:first-child { margin-top: 0.2rem; }
+
+.reader-rubric {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--muted);
+  text-align: center;
+  margin: 1.6rem 0;
+  opacity: 0.9;
+}
+
+/* Versicle and response hang off their markers, so the alternation is visible
+   down the left edge without reading a word. */
+.reader-vr { display: flex; flex-direction: column; gap: 0.15em; }
+.vr-line { display: flex; gap: 0.6em; }
+.vr-mark {
+  flex: 0 0 1.2em;
+  font-family: var(--sans);
+  font-size: 0.82em;
+  line-height: inherit;
+  color: var(--gold);
+  opacity: 0.9;
+}
+.vr-text { flex: 1; min-width: 0; }
+
+/* Slightly tighter leading than before: at 1.85 the wrapped lines of a prose
+   prayer drifted so far apart that the paragraph stopped reading as one unit.
+   The paragraph gap does the separating instead. */
+.reader-text { line-height: 1.72; }
+.reader-para { margin-bottom: 1.45em; }
+
+/* In the background note the same headings appear at note scale. */
+.reader-background .reader-section-head {
+  font-size: 0.6rem;
+  margin: 1.6rem 0 0.8rem;
+  padding-bottom: 0.5rem;
+}
+.reader-background .reader-rubric { font-size: 0.78rem; margin: 1rem 0; }
+
+/* Numbered enumerations — the fourteen Stations, the works of mercy, the ten
+   steps of the Rosary — as a real list with the numeral hanging in the margin,
+   rather than lines of body text that happen to begin with a digit. A list
+   whose items carry their own meditation gets room to breathe; a plain
+   enumeration stays tight so it can be taken in at a glance. */
+.reader-list {
+  list-style: none;
+  margin: 0 0 1.45em;
+  padding: 0;
+}
+.reader-list li {
+  display: flex;
+  gap: 0.8em;
+  margin-bottom: 0.4em;
+  line-height: 1.6;
+}
+.reader-list li:last-child { margin-bottom: 0; }
+.reader-list.roomy li { margin-bottom: 1.7em; }
+.reader-list .item-n {
+  flex: 0 0 1.8em;
+  text-align: right;
+  font-family: var(--sans);
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--gold);
+  opacity: 0.8;
+  padding-top: 0.45em;
+}
+.reader-list .item-body { flex: 1; min-width: 0; }
+.reader-list .item-title { display: block; }
+.reader-list.roomy .item-title {
+  font-weight: 600;
+  color: var(--heading);
+  margin-bottom: 0.35em;
+}
+.reader-list .item-text { display: block; }
+
+/* At note scale in the background, the same lists shouldn't shout. */
+.reader-background .reader-list li { line-height: 1.55; }
+.reader-background .reader-list .item-n { padding-top: 0.3em; }
+
+/* --- Litany: invocation and response ------------------------------------- *
+   Fifty lines of "…, pray for us." set flat means the repetition is the only
+   thing the eye sees, and the invocations — the part that varies, and the part
+   being prayed — vanish into it. Dimming the response lets it read down the
+   left edge as a list of titles, with the response still there to be said. */
+.litany { margin: 0 0 1.45em; }
+.lit-line {
+  margin: 0 0 0.3em;
+  line-height: 1.5;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+.lit-line:last-child { margin-bottom: 0; }
+.lit-resp {
+  color: var(--muted);
+  font-size: 0.92em;
+  opacity: 0.75;
+}
+
+/* Verse, creeds, recitations: lines short enough that none of them wrap don't
+   want prose leading holding them apart. */
+.reader-para.verse { line-height: 1.55; }
+
+/* The O Antiphons are indexed by the day they are sung. */
+.reader-dated {
+  display: flex;
+  gap: 0.9em;
+  margin: 0 0 1.2em;
+  line-height: 1.6;
+}
+.reader-dated .dated-label {
+  flex: 0 0 4.2em;
+  font-family: var(--sans);
+  font-size: 0.68em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.85;
+  padding-top: 0.5em;
+  white-space: nowrap;
+}
+.reader-dated .dated-text { flex: 1; min-width: 0; }
+/* A block of one-line entries — the Latin incipits — doesn't need the gap that
+   separates seven full antiphons. */
+.reader-dated.short { margin-bottom: 0.4em; }
+.reader-dated.short .dated-label { padding-top: 0.35em; }
+
+/* --- Glossary shapes: "TERM - what it means" ------------------------------ *
+   The gifts, the virtues, the vices: a term and its definition on one line.
+   Inline, the caps term just shouts in the middle of a serif paragraph; in its
+   own column it reads as the glossary it is, and the terms align down the page.
+   Stacks on a narrow screen, where a two-column grid would leave the
+   definitions three words wide. */
+.reader-defs {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.6em 1.3em;
+  align-items: baseline;
+  margin: 0 0 1.45em;
+}
+.def-term {
+  font-family: var(--sans);
+  font-size: 0.66em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.9;
+}
+.def-text { line-height: 1.55; }
+.def-full { grid-column: 1 / -1; margin: 0; }
+
+@media (max-width: 620px) {
+  .reader-defs { grid-template-columns: 1fr; gap: 0.2em; }
+  .reader-defs .def-text { margin-bottom: 1em; }
+  .reader-defs .def-text:last-child { margin-bottom: 0; }
+}
+
+/* An enumeration written as a run — "charity - joy - peace - …" — kept as one
+   flowing thing with real separators instead of hyphens that break at a line
+   end and read as broken words. */
+.reader-run {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2em 0;
+  margin: 0 0 1.45em;
+  line-height: 1.7;
+}
+.reader-run .run-item:not(:last-child)::after {
+  content: "·";
+  color: var(--gold);
+  opacity: 0.55;
+  margin: 0 0.6em;
+}
+
+/* --- Comparison tables ---------------------------------------------------- *
+   Which beatitude is in which Gospel, which wording the Catechism uses: the one
+   thing running prose is bad at. Scrolls inside its own box on a narrow screen
+   rather than pushing the page sideways. */
+.reader-table-wrap {
+  overflow-x: auto;
+  margin: 0 0 1.6em;
+  -webkit-overflow-scrolling: touch;
+}
+.reader-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.92em;
+  line-height: 1.5;
+}
+.reader-table th {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.9;
+  text-align: left;
+  padding: 0 1.1em 0.6em 0;
+  border-bottom: 1px solid rgba(var(--gold-rgb), 0.22);
+  white-space: nowrap;
+}
+.reader-table td {
+  padding: 0.62em 1.1em 0.62em 0;
+  border-bottom: 1px solid rgba(var(--edge-rgb), 0.07);
+  vertical-align: top;
+}
+.reader-table tr:last-child td { border-bottom: 0; }
+.reader-table th:last-child, .reader-table td:last-child { padding-right: 0; }
+/* An em dash in a cell means "not in this one" — it shouldn't read as loudly
+   as the text it sits beside. */
+.reader-table td:only-of-type { color: var(--ivory); }
+
+/* The second half of a compared pair — the promise attached to a beatitude.
+   Present to be read, set back so the first halves line up down the column. */
+.reader-table .cell-main { display: block; }
+.reader-table .cell-sub {
+  display: block;
+  margin-top: 0.2em;
+  color: var(--muted);
+  font-size: 0.93em;
+  opacity: 0.85;
+}
+
+/* A group heading inside a table — the division a source makes within its own
+   list. Spans the table so it reads as structure, not as a row of data. */
+.reader-table .table-group td {
+  padding: 1.5em 0 0.5em;
+  border-bottom: 1px solid rgba(var(--gold-rgb), 0.16);
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.75;
+}
+.reader-table tr:first-child .table-group td,
+.reader-table .table-group:first-child td { padding-top: 0.2em; }

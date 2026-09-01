@@ -43,6 +43,7 @@ async function listLibrary() {
       authorNote: e.authorNote || "",
       related: e.related || [],
       relatedSaints: e.relatedSaints || [],
+      seedVersion: e.seedVersion || 1,
       year: e.year || "",
       origin: e.origin || "",
       feastDay: e.feastDay || "",
@@ -69,10 +70,10 @@ async function getLibraryEntryText(id) {
   };
 }
 
-async function saveLibraryEntry({ id, title, kind, tags, source, author, authorNote, year, origin, feastDay, liturgical, originalLanguage, favorite, body, background, latinBody, spanishBody, occasion, related, relatedSaints }) {
+async function saveLibraryEntry({ id, title, kind, tags, source, author, authorNote, year, origin, feastDay, liturgical, originalLanguage, favorite, body, background, latinBody, spanishBody, occasion, related, relatedSaints, seedVersion }) {
   const list = lsRead(LS_LIBRARY_KEY);
   const modifiedTime = new Date().toISOString();
-  const fields = { title, kind, tags, source, author, authorNote, year, origin, feastDay, liturgical, originalLanguage, favorite, body, background, latinBody, spanishBody, occasion, related, relatedSaints };
+  const fields = { title, kind, tags, source, author, authorNote, year, origin, feastDay, liturgical, originalLanguage, favorite, body, background, latinBody, spanishBody, occasion, related, relatedSaints, seedVersion };
   if (id) {
     const idx = list.findIndex((e) => e.id === id);
     if (idx >= 0) list[idx] = { ...list[idx], ...fields, modifiedTime };
