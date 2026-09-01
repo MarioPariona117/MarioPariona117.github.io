@@ -6234,6 +6234,27 @@ const SEED_LIBRARY_ENTRIES = [
       "Said after Benediction, and the piece that completes the sequence this library now holds: O Salutaris, then Tantum Ergo with its versicle and collect, the blessing with the monstrance, then these.\n\nIts origin is specific and unusual. Written in Italian in 1797 by a Jesuit, Luigi Felici, as an act of REPARATION — something to say after hearing blasphemy or the Holy Name taken in vain. That is why the form is simply a list of blessings: each line is a deliberate counterweight to a curse.\n\nLike the Litany of Loreto it has grown by papal addition, and the layers date it:\n• 1851 — her holy and Immaculate Conception (Pius IX)\n• 1897 — His most Sacred Heart (Leo XIII)\n• 1920 — Saint Joseph, her most chaste spouse (Benedict XV)\n• 1952 — her glorious Assumption (Pius XII)\n• 1960 — His most Precious Blood (John XXIII)\n• 1964 — the Holy Spirit, the Paraclete (Paul VI)\n\nThe author is not a saint: an ordinary Jesuit priest whose fourteen lines outlived him and are now said in Catholic churches everywhere.",
   },
   {
+    title: "The Golden Arrow",
+    kind: "prayer",
+    seedVersion: 1,
+    tags: ["reparation", "Passion", "holy name", "blasphemy", "Carmelite", "Holy Face"],
+    source: "Given at Tours in 1843; the central prayer of the devotion to the Holy Face",
+    author: "Sister Marie de Saint-Pierre, O.C.D.",
+    authorNote: "she received and recorded it; the words are given in her account as Our Lord's own",
+    related: ["The Divine Praises", "Litany of the Holy Name of Jesus", "Anima Christi", "Litany of the Sacred Heart"],
+    relatedSaints: [],
+    year: "1843",
+    origin: "Carmelite — Tours, France",
+    liturgical: "The Holy Face, Shrove Tuesday; any act of reparation",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "May the most holy, most sacred, most adorable,\nmost incomprehensible and unutterable Name of God\nbe for ever praised, blessed, loved, adored and glorified\nin heaven, on earth, and under the earth,\nby all the creatures of God,\nand by the Sacred Heart of Our Lord Jesus Christ\nin the Most Holy Sacrament of the Altar. Amen.",
+    background:
+      "Given at Tours in 1843 to Sister Marie de Saint-Pierre (1816-1848), a Discalced Carmelite who entered the monastery there at twenty-three and died at thirty-one. She recorded a series of communications about a devotion to the Holy Face, and this prayer is the heart of it. Our Lord is said to have called it the Golden Arrow, and to have said that whoever prayed it would wound Him delightfully, and heal the wounds inflicted by the malice of sinners.\n\nThat image is the whole point of the prayer, and it is worth pausing on. Blasphemy is described in these accounts as a poisoned arrow; the answer given is not a shield but another arrow, made of gold. Reparation here is not defence or protest. It is the offering of the opposite thing.\n\nNotice that the prayer contains no petition. It asks for nothing at all. Every word of it is praise of the Name — which is precise, because the offence it answers is the abuse of the Name. It sets right the specific thing that was put wrong, and it does so by blessing rather than by complaining.\n\nTwo things it is for, in the contemporary accounts: blasphemy, and the profanation of Sunday. Some later English versions add 'the Communists' to that list, which is anachronistic — the revelations date from 1843, five years before the Communist Manifesto, and the target in the original setting is the anticlericalism of post-revolutionary France. The devotion does not need the update.\n\nThe devotion spread through Leo Dupont, a layman of Tours known afterwards as the Holy Man of Tours, who kept a lamp burning before an image of the Holy Face for thirty years. Leo XIII approved the Archconfraternity of the Holy Face in 1885. Pius XII established the feast in 1958, and put it on Shrove Tuesday — the day before Lent begins, and traditionally the loudest day of the year.\n\nOn the text: it is translated from French and the English wording varies between printings. Some have 'ineffable' where this has 'unutterable', and 'So be it' for 'Amen'. Nothing turns on the difference.\n\nThree further prayers of the same devotion are usually printed alongside this one, including an offering of the Holy Face to the Eternal Father. They are not reproduced here because the wording I could verify was not consistent enough to be worth fixing in this library.",
+  },
+  {
     title: "The Seven Sorrows of Mary",
     kind: "teaching",
     seedVersion: 3,
