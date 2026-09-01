@@ -5884,6 +5884,84 @@ core({
   ],
 }),
 
+core({
+  slug: "agnes", listTier: "toKnow", name: "St. Agnes", sortName: "Agnes",
+  titles: ["Virgin", "Martyr"], rank: "Memorial (21 January)",
+  feast: "01-21", feastLabel: "21 January",
+  born: "c. 291", bornPlace: "Rome",
+  died: "c. 304", diedPlace: "Rome", deathManner: "Martyred in the persecution under Diocletian", ageAtDeath: "about 12 or 13",
+  nationality: "Roman", state: "Virgin martyr", era: "Diocletian persecution",
+  summary: "A Roman girl of about twelve or thirteen who refused marriage because she considered herself already given to Christ, and was killed for it. One of the earliest and most firmly attested of the Roman martyrs: her cult is documented within decades of her death, and Ambrose, Jerome and Prudentius all wrote about her within a century.",
+  charism: "The refusal of a child, holding against the whole weight of Roman family expectation.",
+  patronages: [{ of: "Girls, chastity, engaged couples, gardeners", why: "From her age and the manner of her refusal" }],
+  attributes: ["A lamb", "Palm of martyrdom", "Long hair"],
+  related: ["cecilia", "lucy", "agatha"],
+  note: "The lamb is a play on her name — Latin agnus — but the name is actually Greek, hagne, meaning pure. Each year on her feast two lambs are blessed at Sant\'Agnese fuori le mura, and their wool is woven into the pallia given to new archbishops.",
+  cards: [
+    { q: "St. Agnes — feast day and age at death?", a: "21 January; traditionally about twelve or thirteen." },
+    { q: "What are the lambs blessed on St. Agnes\' feast used for?", a: "Their wool is woven into the pallia worn by metropolitan archbishops." },
+  ],
+}),
+
+core({
+  slug: "lucy", listTier: "toKnow", name: "St. Lucy", sortName: "Lucy",
+  originalName: "Lucia di Siracusa (Italian)",
+  titles: ["Virgin", "Martyr"], rank: "Memorial (13 December)",
+  feast: "12-13", feastLabel: "13 December",
+  born: "c. 283", bornPlace: "Syracuse, Sicily",
+  died: "304", diedPlace: "Syracuse, Sicily", deathManner: "Martyred in the persecution under Diocletian",
+  nationality: "Sicilian (Greek-speaking Roman Sicily)", state: "Virgin martyr", era: "Diocletian persecution",
+  summary: "A Syracusan girl killed in the last great persecution, whose name means light and whose feast fell, under the old calendar, on the shortest day of the year — which is why northern Europe kept it as a festival of light long after it stopped keeping much else.",
+  charism: "Light, in the plainest sense the tradition could find: her name, her feast, and her patronage all say the same thing.",
+  patronages: [{ of: "The blind, eye disease, writers", why: "From her name (lux, light) and the later legend of her eyes" }],
+  attributes: ["A lamp", "Two eyes on a dish", "Palm of martyrdom"],
+  related: ["cecilia", "agnes", "agatha"],
+  note: "The eyes on a dish are a late medieval addition, read backwards out of her name; the earliest accounts of her death do not mention them.",
+  cards: [
+    { q: "St. Lucy — feast day, and why it is a festival of light?", a: "13 December. Her name means light, and under the Julian calendar the date fell on the winter solstice." },
+    { q: "Are St. Lucy\'s eyes part of the earliest accounts?", a: "No — the eyes on a dish are a late medieval attribute, derived from her name." },
+  ],
+}),
+
+core({
+  slug: "agatha", listTier: "toKnow", name: "St. Agatha", sortName: "Agatha",
+  titles: ["Virgin", "Martyr"], rank: "Memorial (5 February)",
+  feast: "02-05", feastLabel: "5 February",
+  born: "c. 231", bornPlace: "Catania (or Palermo), Sicily",
+  died: "c. 251", diedPlace: "Catania, Sicily", deathManner: "Tortured and martyred in the persecution under Decius",
+  nationality: "Sicilian", state: "Virgin martyr", era: "Decian persecution",
+  summary: "A Sicilian noblewoman who refused a Roman official and was tortured for it, her breasts cut off. A year after her death Etna erupted and the people of Catania are said to have carried her veil against the lava, which is why a virgin martyr became the patron invoked against fire.",
+  charism: "Endurance under a torture aimed precisely at what made her a woman, answered by a cult that made her the city\'s protector.",
+  patronages: [{ of: "Breast cancer patients, nurses, bell-founders, Catania and Palermo; invoked against fire and eruption", why: "From the manner of her martyrdom and from the veil carried against Etna" }],
+  attributes: ["Her breasts on a dish", "Pincers", "A veil", "Palm of martyrdom"],
+  related: ["cecilia", "agnes", "lucy"],
+  note: "The bell-founding patronage comes from a misreading of her iconography: the objects on the dish were taken for bells.",
+  cards: [
+    { q: "St. Agatha — feast day and place?", a: "5 February; Catania in Sicily." },
+    { q: "Why is St. Agatha invoked against fire and volcanic eruption?", a: "Her veil was carried against the lava when Etna erupted the year after her death." },
+  ],
+}),
+
+core({
+  slug: "valerian", listTier: "toKnow", name: "St. Valerian", sortName: "Valerian",
+  titles: ["Martyr"], rank: "Commemorated with Ss. Tiburtius and Maximus (14 April)",
+  feast: "04-14", feastLabel: "14 April",
+  born: "—", bornPlace: "Rome",
+  died: "3rd century", diedPlace: "Rome", deathManner: "Martyred with his brother Tiburtius and the officer Maximus",
+  nationality: "Roman", state: "Layman; husband of St. Cecilia", era: "Roman persecutions, 3rd century",
+  summary: "The husband of St. Cecilia. In the story he is a pagan nobleman who, on their wedding night, is told by his bride that she is already guarded by an angel; he goes to be baptised, returns, sees the angel holding two crowns, and is martyred with his brother not long after.",
+  charism: "The convert who is persuaded by his wife and then outruns her into martyrdom.",
+  patronages: [],
+  attributes: ["A crown of roses and lilies", "Palm of martyrdom"],
+  related: ["cecilia"],
+  note: "Two things stand on different ground here. The cult is early and solidly attested — Valerian, Tiburtius and Maximus were buried on 14 April in the Catacombs of Praetextatus on the Via Appia, and the date is in the Martyrologium Hieronymianum. The narrative, including the angel and the crowns of roses and lilies, comes entirely from the Acts of St. Cecilia, a mid-fifth-century composition that historians treat as hagiography rather than record.",
+  cards: [
+    { q: "Who was St. Valerian?", a: "The husband of St. Cecilia, martyred with his brother Tiburtius and the officer Maximus; feast 14 April." },
+    { q: "How reliable is the story of Cecilia and Valerian?", a: "The cult and the burial on the Via Appia are early and attested; the narrative comes from the fifth-century Acts of St. Cecilia and is hagiography." },
+  ],
+}),
+
+
 // Added 17 August — St. John Eudes, "favourite."
 core({
   slug: "john-eudes", listTier: "favourite", name: "St. John Eudes", sortName: "John Eudes",
