@@ -56,6 +56,12 @@ a { color: var(--gold); }
 }
 #view-gate.active { display: flex; }
 
+/* Set by the pre-paint script in index.html for a browser that has already
+   accepted the gate. Without this the gate paints on every single load and is
+   only removed once app.js has parsed and read localStorage — a visible flash
+   of a screen that was meant to be shown once. */
+:root[data-gate="accepted"] #view-gate { display: none !important; }
+
 .gate-box { max-width: 440px; }
 .gate-box .icn { font-size: 2.4rem; margin-bottom: 0.9rem; display: block; color: var(--gold); }
 .gate-eyebrow {
@@ -1268,6 +1274,21 @@ body.public-mode .tabpanel[data-tab="journal"] { display: none !important; }
 }
 .finder-crumbs.hidden { display: none; }
 
+.finder-saints {
+  max-width: 620px;
+  margin: 0 auto 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(var(--gold-rgb), 0.06);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+}
+.finder-saints.hidden { display: none; }
+.finder-saints-label { font-size: 0.72rem; color: var(--muted); margin-right: 0.2rem; }
+
 .finder-crumb {
   background: rgba(var(--gold-rgb), 0.10);
   border: 1px solid rgba(var(--gold-rgb), 0.30);
@@ -1639,10 +1660,12 @@ body.public-mode .tabpanel[data-tab="journal"] { display: none !important; }
 /* --- Palettes -------------------------------------------------------------
    Every colour the theme uses lives here. A palette is just one of these
    blocks; the picker sets data-palette on <html> and everything follows.
-   The attribute selectors outrank the bare :root default, so the first block
-   is what you get before any choice is made. */
+   The attribute selectors outrank the bare :root default, so whichever block
+   also carries a plain `:root` is what you get before any choice is made —
+   that must stay in step with DEFAULT_PALETTE in app.js. It used to be
+   midnight while app.js defaulted to candlelight, so a first visit painted
+   navy and then swapped. */
 
-:root,
 :root[data-palette="midnight"] {
   --ground: #0b1524;
   --ground-deep: #091220;
@@ -1716,6 +1739,7 @@ body.public-mode .tabpanel[data-tab="journal"] { display: none !important; }
    every surface it reaches goes warm. Two light sources, one low (the flame on
    the table) and one faint overhead, with the corners falling away to almost
    nothing. Cards are lit brown rather than tinted grey. */
+:root,
 :root[data-palette="candlelight"] {
   --ground: #0a0705;
   --ground-deep: #050303;
@@ -2571,3 +2595,16 @@ body,
 }
 .reader-table tr:first-child .table-group td,
 .reader-table .table-group:first-child td { padding-top: 0.2em; }
+
+/* References out to primary texts. Underlined rather than coloured-only, so
+   they read as links in the middle of a serif paragraph. */
+.reader-text a,
+.reader-background a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-decoration-color: rgba(var(--gold-rgb), 0.4);
+  text-underline-offset: 0.18em;
+  overflow-wrap: anywhere;
+}
+.reader-text a:hover,
+.reader-background a:hover { text-decoration-color: var(--gold); }
