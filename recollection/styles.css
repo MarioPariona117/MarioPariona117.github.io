@@ -1320,10 +1320,16 @@ body.public-mode .tabpanel[data-tab="journal"] { display: none !important; }
 
 .finder-option {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.15rem;
+  /* Grid rather than a column, so the icon sits beside the words and spans
+     both lines — it reads as one row instead of a stack. */
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "icon label"
+    "icon hint";
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0.1rem;
   width: 100%;
   text-align: left;
   padding: 0.85rem 3rem 0.85rem 1rem;
@@ -1342,8 +1348,11 @@ body.public-mode .tabpanel[data-tab="journal"] { display: none !important; }
 .finder-option.catch-all { background: transparent; border: 1px dashed var(--faint); }
 .finder-option.catch-all:hover { border-color: var(--gold); border-style: dashed; }
 
-.finder-option-label { font-size: 0.95rem; color: var(--ivory); }
-.finder-option-hint { font-size: 0.74rem; color: var(--muted); }
+.finder-option-label { grid-area: label; font-size: 0.95rem; color: var(--ivory); align-self: end; }
+.finder-option-hint { grid-area: hint; font-size: 0.74rem; color: var(--muted); align-self: start; }
+/* With no hint the label should sit centred rather than pushed up. */
+.finder-option-hint:empty { display: none; }
+.finder-option:not(:has(.finder-option-hint:not(:empty))) .finder-option-label { align-self: center; }
 .finder-option-count {
   position: absolute;
   top: 50%;
@@ -2091,7 +2100,7 @@ body.public-mode .tabpanel[data-tab="journal"] { display: none !important; }
   border-bottom-color: rgba(154, 116, 32, 0.25);
 }
 :root[data-palette="parchment"] .part-pip.selected,
-:root[data-palette="parchment"] .btn {
+:root[data-palette="parchment"] .btn:not(.secondary):not(.ghost):not(.danger) {
   color: var(--on-accent);
 }
 
@@ -2608,3 +2617,231 @@ body,
 }
 .reader-text a:hover,
 .reader-background a:hover { text-decoration-color: var(--gold); }
+
+/* --- "For today" shelf ---------------------------------------------------- *
+   Answers the likely need before anything is clicked, and disappears the
+   moment the reader states a need of their own. */
+.library-today { margin: 0 0 1.1rem; }
+.library-today.hidden { display: none; }
+.today-label {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+.today-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.6rem;
+}
+.today-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  text-align: left;
+  padding: 0.7rem 0.8rem;
+  background: var(--card);
+  border: 1px solid rgba(var(--edge-rgb), 0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color .15s, transform .1s;
+}
+.today-card:hover { border-color: rgba(var(--gold-rgb), 0.45); }
+.today-card:active { transform: translateY(1px); }
+.today-why {
+  font-family: var(--sans);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.75;
+}
+.today-title {
+  font-family: var(--serif);
+  font-size: 0.98rem;
+  color: var(--heading);
+  line-height: 1.25;
+}
+.today-kind {
+  font-family: var(--sans);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Finder options: an icon to land on before reading the label. */
+.finder-option-icon {
+  grid-area: icon;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  flex: 0 0 auto;
+  color: var(--gold);
+  opacity: 0.9;
+}
+.finder-option-icon svg { width: 100%; height: 100%; }
+
+/* Refinement is subordinate to the finder now — one obvious door, with
+   refining offered where it is actually wanted. */
+.toolbar-refine { opacity: 0.85; }
+
+/* A breadcrumb says which question it answered and that it can be changed,
+   so a wrong turn is visibly cheap to undo. */
+.finder-crumb {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4em;
+}
+.finder-crumb .crumb-step {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+.finder-crumb .crumb-change {
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0;
+  transition: opacity .15s;
+}
+.finder-crumb:hover .crumb-change { opacity: 0.85; }
+
+/* --- Day: the shape of an ordinary day ------------------------------------ *
+   Two columns: when, and what. The next timed moment is marked so the eye has
+   somewhere to land without reading the whole list. */
+.day-group-label {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.8;
+  margin: 1.6rem 0 0.7rem;
+}
+.day-group-label:first-child { margin-top: 0.2rem; }
+
+.day-row {
+  display: grid;
+  grid-template-columns: 11.5rem 1fr;
+  gap: 0.9rem;
+  align-items: baseline;
+  padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid rgba(var(--edge-rgb), 0.08);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.day-row:hover { background: rgba(var(--gold-rgb), 0.05); }
+.day-row-plain { cursor: default; }
+.day-row-plain:hover { background: none; }
+.day-row.is-next {
+  background: rgba(var(--gold-rgb), 0.07);
+  border-bottom-color: rgba(var(--gold-rgb), 0.25);
+}
+
+.day-when {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+}
+.day-next-tag {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.day-what { display: flex; flex-direction: column; gap: 0.15rem; }
+.day-title {
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  color: var(--heading);
+  line-height: 1.3;
+}
+.day-alt {
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  color: var(--body);
+  opacity: 0.85;
+  cursor: pointer;
+  width: fit-content;
+}
+.day-alt:hover { color: var(--gold); }
+.day-note {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.day-missing { font-family: var(--sans); font-size: 0.68rem; color: var(--danger); }
+
+@media (max-width: 620px) {
+  .day-row { grid-template-columns: 1fr; gap: 0.2rem; }
+}
+
+/* --- The Day button ------------------------------------------------------- *
+   Not a fourth peer tab: the day is a different kind of thing from a
+   collection, so it reads as an action set slightly apart. Higher specificity
+   than .tab, and later in the file, so it wins over the uppercase tab rules. */
+.tab.day-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  color: var(--gold);
+  border: 1px solid rgba(var(--gold-rgb), 0.45);
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  letter-spacing: 0.12em;
+}
+.tab.day-btn::before {
+  content: "✝";
+  font-size: 0.9em;
+  opacity: 0.9;
+  vertical-align: 0.05em;
+}
+.tab.day-btn:hover {
+  border-color: var(--gold);
+  background: rgba(var(--gold-rgb), 0.08);
+}
+.tab.day-btn.active {
+  background: rgba(var(--gold-rgb), 0.16);
+  border-color: var(--gold);
+  color: var(--heading);
+}
+
+/* On a phone the row is tight, so the button keeps its shape while the plain
+   tabs give up their padding first. */
+@media (max-width: 560px) {
+  .tabs { gap: 0.15rem; }
+  .tabs .tab { padding: 0.45rem 0.4rem; }
+  .tab.day-btn { padding: 0.3rem 0.7rem; }
+  .topbar-right { gap: 0.35rem; }
+}
+
+/* Who each prayer in the rule is by, taken from the entry rather than written
+   into the rule, so it stays truthful as the library's attributions change. */
+.day-author {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  color: var(--gold);
+  opacity: 0.75;
+}
+.day-alt-author { color: var(--muted); font-size: 0.9em; }
