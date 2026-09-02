@@ -68,10 +68,11 @@
     <div class="brand">Recollection</div>
     <div class="tabs">
       <button class="tab active" data-tab="library">Library</button>
-      <button class="tab" data-tab="journal">Journal</button>
       <button class="tab" data-tab="saints">Saints</button>
+      <button class="tab" data-tab="journal">Journal</button>
     </div>
     <div class="topbar-right">
+      <button class="tab day-btn" data-tab="day">Day</button>
       <button id="btn-palette" class="palette-btn" aria-haspopup="true" aria-expanded="false" title="Change the colours">
         <span class="palette-dot"></span>
       </button>
@@ -109,6 +110,19 @@
   </header>
 
   <main class="content">
+    <div class="tabpanel" data-tab="day">
+      <div class="panel-note" id="day-note" data-note="day">
+        <p>So that no hour of the day may pass without God, I have set down here
+        the things I want to do, drawn from the beauty and the variety of the
+        saints and the lives they made. It is only a beginning, and being
+        imperfect I do not keep all of it daily — but it is the shape I try to
+        return to.</p>
+        <button class="note-dismiss" data-toggle-note="day" aria-label="Hide this note">×</button>
+        <button class="note-reopen" data-toggle-note="day">What this is</button>
+      </div>
+      <div id="day-content"></div>
+    </div>
+
     <div class="tabpanel active" data-tab="library">
       <!-- Why this collection exists. Collapsible rather than dismissible —
            it's for someone arriving for the first time, but closing it leaves
@@ -128,8 +142,8 @@
           <option value="title">Title A–Z</option>
           <option value="kind">By kind</option>
         </select>
-        <button id="btn-open-finder" class="btn finder-cta">Find a prayer, hymn or quote</button>
-        <button id="btn-open-filters" class="btn secondary">Filters<span id="filter-count-badge" class="filter-badge hidden"></span></button>
+        <button id="btn-open-finder" class="btn finder-cta">What do you need?</button>
+        <button id="btn-open-filters" class="btn ghost toolbar-refine">Refine<span id="filter-count-badge" class="filter-badge hidden"></span></button>
         <button id="btn-new-library" class="btn secondary authoring-only">+ New</button>
       </div>
       <div class="result-row">
@@ -140,6 +154,7 @@
       <!-- This hour's arrow prayer, surfaced at the top of the Library the
            same way the Saints tab surfaces today's feast. -->
       <div id="library-hour-banner" class="todays-saint-banner hour-banner hidden"></div>
+      <div id="library-today" class="library-today hidden"></div>
       <div id="library-list" class="entry-list"></div>
     </div>
 
@@ -393,6 +408,7 @@
     <div class="finder-foot">
       <span class="finder-count" id="finder-count"></span>
       <button class="btn ghost" id="btn-finder-showall">Show these now</button>
+      <button class="btn ghost" id="btn-finder-refine">Refine by tag, author…</button>
     </div>
 
     <div id="finder-results" class="entry-list"></div>

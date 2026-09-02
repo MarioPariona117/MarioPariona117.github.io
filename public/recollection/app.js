@@ -5,6 +5,10 @@ const state = {
   filterKind: "all",
   filterTags: new Set(), // multiple tags AND'd together to narrow results fast
   filterAuthor: null, // one active author at a time — click a byline to toggle
+  // The set the finder narrowed to, carried into the Filters panel so that
+  // refining continues from those entries instead of starting over on the
+  // whole library. { ids: Set, label: string } or null.
+  finderRestrict: null,
   filterOrigin: null, // one active origin/tradition at a time
   filterLiturgical: null, // one active liturgical season/use at a time
   filterFavoritesOnly: false,
@@ -620,6 +624,7 @@ window.addEventListener("DOMContentLoaded", () => {
     state.filterLiturgical = null;
     state.filterFavoritesOnly = false;
     state.filterBilingualOnly = false;
+    state.finderRestrict = null;
     renderLibraryList();
   }
   $("#btn-clear-tag-filter").addEventListener("click", clearAllFilters);
@@ -632,6 +637,24 @@ window.addEventListener("DOMContentLoaded", () => {
   );
   $("#btn-open-filters").addEventListener("click", () => setView("library-filters"));
   $("#btn-open-finder").addEventListener("click", openFinder);
+  // Refinement is offered where it is wanted — at the end of the finder —
+  // rather than as a rival door beside it on the library screen.
+  $("#btn-finder-refine").addEventListener("click", () => {
+    // Carry the finder's candidates over. Without this the Filters panel
+    // narrows the whole library and the finder's work is silently thrown away.
+    const candidates = finderCandidates();
+    state.finderRestrict = finderState.answers.length
+      ? {
+          ids: new Set(candidates.map((e) => e.id)),
+          label: finderState.answers.map((a) => a.optionLabel).join(" › "),
+        }
+      : null;
+    // Setting state is not enough — the list keeps its previous render until
+    // something redraws it, which is why the restriction appeared to do
+    // nothing until the next click.
+    renderLibraryList();
+    setView("library-filters");
+  });
   $("#btn-finder-back").addEventListener("click", () => setView("library"));
   $("#btn-finder-restart").addEventListener("click", openFinder);
   $("#btn-finder-showall").addEventListener("click", () => {
@@ -842,6 +865,16 @@ window.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => rateFlashcard(btn.dataset.quality))
   );
 
+  // Back and forward. A hash the app wrote itself is skipped, or every
+  // programmatic navigation would round-trip through the router.
+  window.addEventListener("hashchange", () => {
+    if (writingHash) {
+      writingHash = false;
+      return;
+    }
+    routeFromHash();
+  });
+
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").catch(() => {});
   }
@@ -854,7 +887,8 @@ async function onSignedIn() {
   await pruneRetiredSeeds();
   await dedupeLibraryByTitle();
   await Promise.all([refreshLibrary(), refreshJournal(), refreshSaints()]);
-  setView("library");
+  // Honour a deep link if there is one; otherwise open on the library.
+  routeFromHash();
 }
 
 // AUTHOR FIELD CONVENTION
@@ -4780,6 +4814,27 @@ const SEED_LIBRARY_ENTRIES = [
       "themes rather than a verified verbatim citation.",
   },
   {
+    title: "Nothing Is So Strong as Gentleness",
+    kind: "quote",
+    seedVersion: 1,
+    tags: ["humility", "charity", "gentleness", "meekness", "strength", "self-knowledge"],
+    source: "The received form of a saying of St. Francis de Sales — see background",
+    author: "St. Francis de Sales",
+    authorNote: "attributed everywhere, sourced almost nowhere; the nearest text is in the Treatise, Book I ch. 6",
+    related: ["Humbled to Be an Example", "Do Your Best and Leave the Rest", "The Two Portions of the Soul", "Litany of Humility"],
+    relatedSaints: ["francis-de-sales"],
+    year: "Early 17th century",
+    origin: "Devotional",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "Nothing is so strong as gentleness, nothing so gentle as real strength.\n\nWHERE TO READ MORE\n\n**St. Francis de Sales, Treatise on the Love of God, Book I** — chapter 6 carries the sentence this one appears to descend from. Free, full text.\nhttps://www.ccel.org/ccel/desales/love.toc.html\n\n**St. Francis de Sales, Introduction to the Devout Life, Part III** — his sustained teaching on gentleness, including gentleness towards oneself, which is the harder half.\nhttps://www.ccel.org/ccel/desales/devout_life.toc.html",
+    background:
+      "The line most often quoted from de Sales, and the one that best summarises him: he was known for a gentleness that his contemporaries found almost implausible in a bishop of the Counter-Reformation, and he insisted it was not weakness but the harder discipline.\n\nA note on the wording, because it is worth knowing. This exact sentence is attributed to him everywhere and sourced almost nowhere — the quotation sites all cite each other. Searching the full text of the Treatise on the Love of God and of his sermons, I could not find it. What is there, in the Treatise (Book I, ch. 6), is a sentence of the same shape about love rather than gentleness: he says that love holds everything in its obedience with a force so delightful that as nothing is so strong as love, nothing is so sweet as its strength.\n\nChange love to gentleness and sweet to gentle and you have the popular form. Whether that reshaping happened in a later translation, in a letter I have not seen, or in someone's summary, I cannot say — his letters run to many volumes and I have not searched them all. So: the sentiment is unmistakably his and the structure is demonstrably his; the exact wording above should be treated as the received form rather than a verified quotation.\n\nThe claim itself is worth sitting with rather than admiring. Both halves are doing work. The first says gentleness is not the absence of strength but its most effective form. The second is the sharper one: that anything genuinely strong will be gentle, so harshness is evidence of weakness rather than of force. On his own account this was not natural to him — he described his temper as something he spent twenty years learning to govern.",
+  },
+  {
     title: "To Know That You Died for Him",
     occasion:
       "From the Confessions, in the long meditation on what it means to be sought by God before one has begun looking.",
@@ -6639,7 +6694,28 @@ const SEED_LIBRARY_ENTRIES = [
       "Ignatius worked these out on himself, convalescing at Loyola in 1521 with a shattered leg and nothing to read but a life of Christ and a book of saints. He noticed that daydreams of knightly glory left him dry afterwards, while thoughts of imitating Francis and Dominic left him content — and that the difference showed up not during but after. That single observation, that the movements can be told apart by their aftertaste rather than their intensity, is the seed of the whole method.\n\nThe rules are deliberately unmystical. They are a set of behaviours to notice and instructions on what to do, written in the imperative, closer to a field manual than to a treatise. Nothing in them requires unusual experiences.\n\nTwo cautions worth carrying. First, they were written for a person making the Exercises under a director, and the thirteenth rule says why: the analysis depends on the movements being spoken aloud to someone else. Used privately by an anxious person, the rules become one more thing to be anxious about.\n\nSecond, Ignatius is describing spiritual movements, not moods, and not illness. He had no framework for clinical depression and did not claim one. A desolation that does not lift, that has no discernible spiritual cause, and that touches sleep, appetite and the body, is a different question and needs a different kind of help.",
   },
   {
-    title: "How These Lists Fit Together",
+    title: "The Examen",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["examination", "self-examination", "conscience", "self-knowledge", "Ignatian", "the soul"],
+    source: "St. Ignatius of Loyola, Spiritual Exercises, 43 — the General Examen",
+    author: "St. Ignatius of Loyola",
+    authorNote: "the five points are his; the daily form is how the tradition has kept it",
+    related: ["Consolation and Desolation", "Suscipe", "The Three Powers of the Soul", "The Seven Capital Sins", "Act of Contrition"],
+    relatedSaints: ["ignatius-of-loyola"],
+    year: "Spiritual Exercises, composed 1522-1524",
+    origin: "Ignatian",
+    liturgical: "Nightly; twice daily in the full Exercises",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "THE FIVE POINTS\n\nSt. Ignatius sets them out in order, and the order is the argument (Spiritual Exercises, 43):\n\n| Point | What you do |\n| First | \"Give thanks to God our Lord for the benefits received.\" |\n| Second | \"Ask grace to know our sins and cast them out.\" |\n| Third | \"Ask account of our soul from the hour that we rose up to the present Examen, hour by hour, or period by period.\" |\n| Fourth | \"Ask pardon of God our Lord for the faults.\" |\n| Fifth | \"Purpose amendment with His grace.\" |\n\nIt closes with an Our Father.\n\nWHY THANKSGIVING COMES FIRST\n\nBecause an examination that opens with your faults produces a different person than one that opens with gifts received. Ignatius puts gratitude first deliberately: you look at the day as something given before you look at what you did with it. Reverse the order and the exercise curdles into a nightly audit, which is not what it is for.\n\nNotice too that the second point is a request for *grace* to see. He does not assume you can spot your own sins by trying harder — self-knowledge is asked for, not achieved.\n\nWHAT THE THIRD POINT ACTUALLY ASKS\n\nHour by hour, or period by period. Not \"how was today\" in general — the general question gets a general answer, and a general answer is useless. The instruction is to walk back through the day in sections, which is slower and much harder to fool.\n\nThoughts first, then words, then deeds — the order the tradition uses everywhere, because the deed is the last thing to go wrong and the easiest to notice.\n\nHOW LONG\n\nIgnatius intends something that fits inside a day, twice a day in the full Exercises. Fifteen minutes is generous; five done nightly is worth more than thirty done occasionally. The examen is the one Ignatian practice he expected everyone to keep even when everything else was dropped.\n\nWHERE TO READ MORE\n\n**The Spiritual Exercises, the General Examen** — the five points in Ignatius's own words, in the public-domain Mullan translation. The passage is short; the surrounding material on the particular examen is worth reading too.\nhttps://mycatholic.life/books/the-spiritual-exercises-of-saint-ignatius-of-loyola/first-week/",
+    background:
+      "The examen is the smallest piece of the Spiritual Exercises and the one Ignatius refused to let go of. In a well-known letter he told a correspondent that if the pressure of work meant dropping everything else, this was the practice to keep — the reasoning being that a person who never reviews the day never notices the pattern in it, and it is the pattern rather than the individual fault that shapes a life.\n\nTwo things distinguish it from an examination of conscience before confession. It is daily rather than occasional, and it is not primarily about sin: three of the five points are thanksgiving, petition and resolution. The Ignatian tradition sometimes calls it a review of consciousness rather than of conscience — looking for where God was at work in the day, not only where you failed.\n\nThe third point is the one people quietly skip, because walking back through the hours is slower than summarising them. It is also the only point that produces information you did not already have.",
+  },
+  {
+    title: "How the Gifts, Fruits, Beatitudes, Virtues and Powers of the Soul Fit Together",
     kind: "teaching",
     seedVersion: 2,
     tags: ["catechetical", "the soul", "virtue", "study", "self-knowledge"],
@@ -6781,6 +6857,11 @@ const RETIRED_SEED_TITLES = [
   // Merged into the single "Preces for Mental Prayer" entry, Aug 2026.
   "Preces Before Mental Prayer",
   "Preces After Mental Prayer",
+  // Renamed twice on 2 Sept 2026 — the first title named no lists at all, and
+  // the second left out the virtues and the powers of the soul. Both are listed
+  // because either may already have seeded into a browser between renames.
+  "How These Lists Fit Together",
+  "How the Gifts, Beatitudes and Fruits Fit Together",
 ];
 
 async function pruneRetiredSeeds() {
@@ -6822,7 +6903,7 @@ function setView(view) {
   $("#view-saints-calendar").classList.remove("active");
   $("#view-saints-atlas").classList.remove("active");
   $("#view-finder").classList.remove("active");
-  if (view === "library" || view === "journal" || view === "saints") {
+  if (view === "day" || view === "library" || view === "journal" || view === "saints") {
     switchTab(view);
   } else if (view === "library-editor") {
     $("#view-library-editor").classList.add("active");
@@ -6847,9 +6928,182 @@ function setView(view) {
   }
 }
 
+// --- Routing ---------------------------------------------------------------
+//
+// Hash routing rather than path routing, and not as a stylistic choice: with a
+// path (/e/the-rosary) the part after the domain goes to a server, which has to
+// be told to serve index.html for a path that has no file behind it. GitHub
+// Pages cannot rewrite, and under file:// there is no server at all — the
+// browser just looks for a file that isn't there. Everything after "#" is never
+// sent anywhere, so the same links work offline from a double-clicked file, on
+// localhost, and on the deployed site, with no configuration.
+//
+// Entry ids can't appear in a URL: they are generated per device, so the same
+// prayer has a different id in every browser. The stable identity is the title
+// — which is what seeding and deduping already match on — so slugs come from
+// titles, with retired titles kept as aliases so old links still resolve.
+
+const TITLE_ALIASES = {
+  "how-these-lists-fit-together":
+    "How the Gifts, Fruits, Beatitudes, Virtues and Powers of the Soul Fit Together",
+  "how-the-gifts-beatitudes-and-fruits-fit-together":
+    "How the Gifts, Fruits, Beatitudes, Virtues and Powers of the Soul Fit Together",
+  "preces-before-mental-prayer": "Preces for Mental Prayer",
+  "preces-after-mental-prayer": "Preces for Mental Prayer",
+};
+
+function slugify(text) {
+  return (text || "")
+    .toLowerCase()
+    .replace(/['\u2019]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function entryBySlug(slug) {
+  const direct = state.libraryEntries.find((e) => slugify(e.title) === slug);
+  if (direct) return direct;
+  const aliased = TITLE_ALIASES[slug];
+  return aliased ? state.libraryEntries.find((e) => e.title === aliased) : null;
+}
+
+// Set while the app writes the hash itself, so its own writes don't bounce back
+// through the router as if the user had navigated.
+let writingHash = false;
+
+function setHash(hash) {
+  if (location.hash === hash) return; // no event would fire; don't arm the flag
+  writingHash = true;
+  location.hash = hash;
+}
+
+const TAB_ROUTES = ["day", "library", "journal", "saints"];
+
+function routeFromHash() {
+  const raw = decodeURIComponent((location.hash || "").replace(/^#\/?/, ""));
+  const head = raw.split("/")[0];
+  const rest = raw.split("/").slice(1).join("/");
+
+  if (head === "e" && rest) {
+    const entry = entryBySlug(rest);
+    if (entry) return openLibraryReader(entry.id);
+  }
+  if (head === "s" && rest && typeof saintBySlug === "function" && saintBySlug(rest)) {
+    switchTab("saints");
+    return openSaintReader(rest);
+  }
+  if (TAB_ROUTES.includes(head)) return setView(head);
+  return setView("library");
+}
+
 function switchTab(tab) {
   $$(".tab").forEach((t) => t.classList.toggle("active", t.dataset.tab === tab));
   $$(".tabpanel").forEach((p) => p.classList.toggle("active", p.dataset.tab === tab));
+  // The "next" marker depends on the clock, so recompute on every visit.
+  if (tab === "day") renderDay();
+  setHash("#/" + tab);
+}
+
+// --- Day: the shape of an ordinary day -------------------------------------
+//
+// Mario's actual rule, given 2 Sept 2026. Two kinds of moment: those the clock
+// decides, and those an occasion decides. The point of the tab is that most of
+// the time you should not have to search for anything — the day already knows
+// what comes next.
+
+const RULE_CLOCK = [
+  { when: "On waking", title: "Morning Offering", hour: 7 },
+  { when: "Every hour", title: "Hourly Prayers of St. John Chrysostom", hourly: true,
+    note: "One arrow for each hour, day and night" },
+  { when: "Noon", title: "The Angelus", easterTitle: "Regina Caeli", hour: 12 },
+  { when: "Six in the evening", title: "The Angelus", easterTitle: "Regina Caeli", hour: 18 },
+  { when: "Before bed", title: "The Examen", hour: 22,
+    note: "Thanks first, then the day hour by hour" },
+  { when: "Closing your eyes", title: "Night Prayer", hour: 23 },
+];
+
+const RULE_OCCASION = [
+  { when: "Before mental prayer", title: "Escape from Your Everyday Business",
+    note: "The opening of St. Anselm's Proslogion" },
+  { when: "After mental prayer", title: "Preces for Mental Prayer" },
+  { when: "Entering the chapel", title: "Love Undefiled" },
+  { when: "Before Mass", title: "Prayer Before Mass" },
+  { when: "At Communion", title: null,
+    note: "Your own — the nailing of the heart to His feet" },
+  { when: "After Mass", title: "Stay with Me, Lord", alt: "Prayer Before the Crucifix",
+    note: "Or left open" },
+  { when: "At meals", title: "Guardian Angel Prayer",
+    note: "And a thought for the angels of those at the table" },
+  { when: "Seeing someone in the street", title: null,
+    note: "The sign of the cross over people and things, as a blessing" },
+];
+
+function entryByTitle(title) {
+  return title ? state.libraryEntries.find((e) => e.title === title) : null;
+}
+
+// The Angelus gives way to the Regina Caeli through Eastertide — the one
+// substitution the rule makes on its own.
+function ruleTitleFor(item) {
+  if (item.easterTitle && liturgicalSeason(new Date()).key === "easter") return item.easterTitle;
+  return item.title;
+}
+
+function renderDay() {
+  const host = $("#day-content");
+  if (!host) return;
+  const now = new Date();
+  const hour = now.getHours();
+
+  // The next timed moment still ahead today, so the eye has somewhere to go.
+  const timed = RULE_CLOCK.filter((r) => !r.hourly);
+  const next = timed.find((r) => r.hour > hour) || timed[0];
+
+  const row = (item, isNext) => {
+    const title = ruleTitleFor(item);
+    const entry = entryByTitle(title);
+    const alt = entryByTitle(item.alt);
+    const openable = entry || alt;
+    return (
+      `<div class="day-row${isNext ? " is-next" : ""}${openable ? "" : " day-row-plain"}"` +
+      (entry ? ` data-id="${entry.id}"` : "") + `>` +
+      `<div class="day-when">${escapeHtml(item.when)}${isNext ? '<span class="day-next-tag">next</span>' : ""}</div>` +
+      `<div class="day-what">` +
+      (title ? `<span class="day-title">${escapeHtml(title)}</span>` : "") +
+      // Attribution comes from the entry itself rather than being written out
+      // here, so it stays whatever the library says — including "Traditional"
+      // where no author is established.
+      (entry && entry.author ? `<span class="day-author">${escapeHtml(entry.author)}</span>` : "") +
+      (alt
+        ? `<span class="day-alt" data-id="${alt.id}">or ${escapeHtml(item.alt)}` +
+          (alt.author ? ` <span class="day-alt-author">— ${escapeHtml(alt.author)}</span>` : "") +
+          `</span>`
+        : "") +
+      (item.note ? `<span class="day-note">${escapeHtml(item.note)}</span>` : "") +
+      (title && !entry ? `<span class="day-missing">not in the library yet</span>` : "") +
+      `</div></div>`
+    );
+  };
+
+  const hourly = RULE_CLOCK.find((r) => r.hourly);
+  const hourlyEntry = entryByTitle(hourly.title);
+
+  host.innerHTML =
+    `<div class="day-group-label">Through the day</div>` +
+    RULE_CLOCK.map((r) => row(r, r === next && !r.hourly)).join("") +
+    `<div class="day-group-label">As it comes</div>` +
+    RULE_OCCASION.map((r) => row(r, false)).join("") +
+    (hourlyEntry ? "" : "");
+
+  $$(".day-row[data-id]", host).forEach((el) =>
+    el.addEventListener("click", () => openLibraryReader(el.dataset.id))
+  );
+  $$(".day-alt[data-id]", host).forEach((el) =>
+    el.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      openLibraryReader(el.dataset.id);
+    })
+  );
 }
 
 // --- Library ---
@@ -6857,6 +7111,7 @@ function switchTab(tab) {
 async function refreshLibrary() {
   state.libraryEntries = await listLibrary();
   renderLibraryList();
+  renderDay();
   renderLinkOptions();
   buildLibraryBodyIndex(); // fire-and-forget — search picks up matches as entries come in
 }
@@ -6939,9 +7194,18 @@ function toggleLiturgicalFilter(season) {
   renderLibraryList();
 }
 
+// The pool the filter panel offers choices from. When the finder has narrowed
+// things, offering authors and tags from the whole library is misleading: most
+// of them would return nothing inside the current set.
+function filterOptionPool() {
+  return state.finderRestrict
+    ? state.libraryEntries.filter((e) => state.finderRestrict.ids.has(e.id))
+    : state.libraryEntries;
+}
+
 function renderTagChipRow() {
   const row = $("#tag-chip-row");
-  row.innerHTML = allTags(state.libraryEntries)
+  row.innerHTML = allTags(filterOptionPool())
     .map(
       (t) =>
         `<span class="chip tag-select-chip${state.filterTags.has(t) ? " active" : ""}" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</span>`
@@ -6952,7 +7216,7 @@ function renderTagChipRow() {
 
 function renderOriginChipRow() {
   const row = $("#filter-origin-row");
-  const origins = allOrigins(state.libraryEntries);
+  const origins = allOrigins(filterOptionPool());
   row.innerHTML = origins.length
     ? origins
         .map(
@@ -6966,7 +7230,7 @@ function renderOriginChipRow() {
 
 function renderLiturgicalChipRow() {
   const row = $("#filter-liturgical-row");
-  const seasons = allLiturgical(state.libraryEntries);
+  const seasons = allLiturgical(filterOptionPool());
   row.innerHTML = seasons.length
     ? seasons
         .map(
@@ -6980,7 +7244,7 @@ function renderLiturgicalChipRow() {
 
 function renderAuthorSelect() {
   const select = $("#filter-author-select");
-  const authors = allAuthors(state.libraryEntries);
+  const authors = allAuthors(filterOptionPool());
   select.innerHTML =
     `<option value="">All authors</option>` +
     authors.map(([name, count]) => `<option value="${escapeHtml(name)}">${escapeHtml(name)} (${count})</option>`).join("");
@@ -6995,6 +7259,8 @@ function activeFilterList() {
   const list = [];
   if (state.filterKind !== "all") list.push({ type: "kind", value: "", label: `Kind: ${KIND_LABELS[state.filterKind] || state.filterKind}` });
   state.filterTags.forEach((t) => list.push({ type: "tag", value: t, label: "#" + t }));
+  if (state.finderRestrict)
+    list.push({ type: "finder", value: "", label: "From: " + state.finderRestrict.label });
   if (state.filterAuthor) list.push({ type: "author", value: "", label: "Author: " + state.filterAuthor });
   if (state.filterOrigin) list.push({ type: "origin", value: "", label: "Origin: " + state.filterOrigin });
   if (state.filterLiturgical) list.push({ type: "liturgical", value: "", label: "Season: " + state.filterLiturgical });
@@ -7006,6 +7272,7 @@ function activeFilterList() {
 function removeActiveFilter(type, value) {
   if (type === "kind") state.filterKind = "all";
   else if (type === "tag") state.filterTags.delete(value);
+  else if (type === "finder") state.finderRestrict = null;
   else if (type === "author") state.filterAuthor = null;
   else if (type === "origin") state.filterOrigin = null;
   else if (type === "liturgical") state.filterLiturgical = null;
@@ -7053,6 +7320,127 @@ function renderByline(e) {
   return `<div class="byline${active ? " active" : ""}">— ${name}${chip}</div>`;
 }
 
+// --- "For today" shelf ----------------------------------------------------
+//
+// The library used to open on whatever was added most recently, which is the
+// authoring order, not the praying order. This answers the likely need before
+// anything is clicked: the season, the day, and a favourite to fall back on.
+// It shows only when nothing is being filtered or searched — the moment the
+// user states a need of their own, it gets out of the way.
+
+// Anonymous Gregorian computus. Everything movable hangs off this date.
+function easterSunday(year) {
+  const a = year % 19, b = Math.floor(year / 100), c = year % 100;
+  const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4), k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31);
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(year, month - 1, day);
+}
+
+const DAY = 86400000;
+
+// Approximate but honest: Christmastide is cut at 13 January rather than the
+// true Baptism of the Lord, and Ordinary Time is simply "none of the above".
+function liturgicalSeason(now) {
+  const y = now.getFullYear();
+  const easter = easterSunday(y);
+  const ash = new Date(easter.getTime() - 46 * DAY);
+  const pentecost = new Date(easter.getTime() + 49 * DAY);
+  const christmas = new Date(y, 11, 25);
+  // Advent opens on the fourth Sunday before Christmas.
+  const advent = new Date(christmas.getTime() - ((christmas.getDay() || 7) + 21) * DAY);
+  if (now >= advent && now < christmas) return { key: "advent", label: "Advent" };
+  if (now >= christmas || now < new Date(y, 0, 14)) return { key: "christmas", label: "Christmastide" };
+  if (now >= ash && now < easter) return { key: "lent", label: "Lent" };
+  if (now >= easter && now <= pentecost) return { key: "easter", label: "Eastertide" };
+  return { key: "ordinary", label: "" };
+}
+
+// Matches a season or theme against both tags and the free-text liturgical
+// note, because the liturgical field is prose and almost every value in it is
+// unique — tags alone would find far too little.
+function entriesTouching(words) {
+  const w = words.map((x) => x.toLowerCase());
+  return state.libraryEntries.filter((e) => {
+    const hay = `${e.liturgical || ""} ${e.origin || ""} ${e.source || ""}`.toLowerCase();
+    return e.tags.some((t) => w.includes(t.toLowerCase())) || w.some((x) => hay.includes(x));
+  });
+}
+
+function todaySuggestions() {
+  const now = new Date();
+  const season = liturgicalSeason(now);
+  const day = now.getDay(); // 0 Sun … 6 Sat
+  // Rotate by the day of the year, so the shelf is not the same four entries
+  // every morning while still being stable within a day.
+  const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / DAY);
+
+  const out = [];
+  const taken = new Set();
+  const add = (list, why, count = 1) => {
+    if (!list.length) return;
+    // Deterministic per day, but different from one day to the next.
+    const rotated = list.slice(dayOfYear % list.length).concat(list.slice(0, dayOfYear % list.length));
+    let added = 0;
+    for (const e of rotated) {
+      if (added >= count || out.length >= 4) break;
+      if (taken.has(e.id)) continue;
+      taken.add(e.id);
+      out.push({ entry: e, why });
+      added++;
+    }
+  };
+
+  if (season.key !== "ordinary") add(entriesTouching([season.key, season.label]), season.label);
+  if (day === 5) add(entriesTouching(["passion", "the cross", "good friday"]), "Friday — the Passion");
+  if (day === 6) add(entriesTouching(["marian", "our lady"]), "Saturday — Our Lady");
+  if (day === 0) add(entriesTouching(["sunday", "creed", "doxology"]), "Sunday");
+
+  // Always available, so an ordinary weekday still gets a useful shelf.
+  add(entriesTouching(["before prayer", "preparation", "mental prayer"]), "To begin");
+  add(state.libraryEntries.filter((e) => e.favorite), "A favourite", 2);
+  add(state.libraryEntries.filter((e) => e.kind === "teaching"), "Something to learn");
+  return out.slice(0, 4);
+}
+
+function renderTodayShelf(anyFilterOrSearch) {
+  const wrap = $("#library-today");
+  if (!wrap) return;
+  if (anyFilterOrSearch) {
+    wrap.classList.add("hidden");
+    wrap.innerHTML = "";
+    return;
+  }
+  const picks = todaySuggestions();
+  if (!picks.length) {
+    wrap.classList.add("hidden");
+    return;
+  }
+  wrap.classList.remove("hidden");
+  wrap.innerHTML =
+    `<div class="today-label">For today</div>` +
+    `<div class="today-row">` +
+    picks
+      .map(
+        ({ entry, why }) => `
+      <button class="today-card" data-id="${entry.id}">
+        <span class="today-why">${escapeHtml(why)}</span>
+        <span class="today-title">${escapeHtml(entry.title)}</span>
+        <span class="today-kind">${escapeHtml(KIND_LABELS[entry.kind] || entry.kind)}</span>
+      </button>`
+      )
+      .join("") +
+    `</div>`;
+  $$(".today-card", wrap).forEach((b) =>
+    b.addEventListener("click", () => openLibraryReader(b.dataset.id))
+  );
+}
+
 function renderLibraryList() {
   const q = state.searchQuery.trim().toLowerCase();
 
@@ -7065,6 +7453,7 @@ function renderLibraryList() {
   $("#filter-bilingual-only").checked = state.filterBilingualOnly;
 
   const hasAnyFilter =
+    !!state.finderRestrict ||
     state.filterKind !== "all" ||
     state.filterTags.size > 0 ||
     state.filterAuthor ||
@@ -7073,8 +7462,10 @@ function renderLibraryList() {
     state.filterFavoritesOnly ||
     state.filterBilingualOnly;
   $("#btn-clear-tag-filter").classList.toggle("hidden", !hasAnyFilter);
+  renderTodayShelf(hasAnyFilter || !!q);
 
   let entries = state.libraryEntries.filter((e) => {
+    if (state.finderRestrict && !state.finderRestrict.ids.has(e.id)) return false;
     if (state.filterKind !== "all" && e.kind !== state.filterKind) return false;
     if (state.filterTags.size > 0 && ![...state.filterTags].every((t) => e.tags.includes(t))) return false;
     if (state.filterAuthor && e.author !== state.filterAuthor) return false;
@@ -7223,6 +7614,7 @@ function saintSlugForAuthor(author) {
 async function openLibraryReader(id) {
   state.readingLibraryId = id;
   const entry = state.libraryEntries.find((e) => e.id === id);
+  if (entry) setHash("#/e/" + slugify(entry.title));
 
   $("#reader-kind").textContent = (KIND_LABELS[entry.kind] || entry.kind) + (entry.favorite ? " · ★ Favourite" : "");
   $("#reader-title").textContent = entry.title;
@@ -7838,7 +8230,7 @@ async function refreshJournal() {
 function renderJournalList() {
   const list = $("#journal-list");
   if (state.journalEntries.length === 0) {
-    list.innerHTML = `<div class="empty-state">No reflections yet — tap "+ New reflection" to write one.</div>`;
+    list.innerHTML = `<div class="empty-state">No reflections yet.</div>`;
     return;
   }
   list.innerHTML = state.journalEntries
@@ -9633,6 +10025,7 @@ function wireSaintReaderInteractions(s) {
 function openSaintReader(slug) {
   const s = saintBySlug(slug);
   if (!s) return;
+  setHash("#/s/" + slug);
   if (state.readingSaintSlug !== slug) state.readingSaintTab = null; // switching to a different saint starts back at its first tab
   state.readingSaintSlug = slug;
   $("#saint-reader-body").innerHTML = renderSaintDossier(s);
@@ -9835,37 +10228,48 @@ const mentions = (entry, words) => {
   return words.some((w) => hay.includes(w));
 };
 
+// Hand-drawn line icons for the finder, one visual family on a 24px grid.
+// Emoji were the first attempt and read as borrowed — they come from different
+// design languages and render differently on each platform. These inherit
+// currentColor, so they follow whichever palette is set, and stay sharp at any
+// size for a few hundred bytes each.
+const ICON = (d) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" ` +
+  `stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+
+const FINDER_ICONS = {
+  candle: ICON('<path d="M12 3.2c1.2 1.5 1.8 2.5 1.8 3.4a1.8 1.8 0 0 1-3.6 0c0-.9.6-1.9 1.8-3.4Z"/><path d="M9.6 10.6h4.8V20a1 1 0 0 1-1 1h-2.8a1 1 0 0 1-1-1Z"/>'),
+  moon: ICON('<path d="M20 14.4A8 8 0 1 1 9.6 4a6.5 6.5 0 0 0 10.4 10.4Z"/>'),
+  star: ICON('<path d="m12 3.2 2.6 5.5 6 .8-4.3 4.2 1 6-5.3-2.8L6.7 19.7l1-6L3.4 9.5l6-.8Z"/>'),
+  heart: ICON('<path d="M12 20.3s-7-4.5-7-9.1A3.9 3.9 0 0 1 12 8.6a3.9 3.9 0 0 1 7 2.6c0 4.6-7 9.1-7 9.1Z"/>'),
+  lily: ICON('<path d="M12 21V10.2"/><path d="M12 10.2C9.3 10.2 7 8.4 7 5.9c2.8 0 5 1.9 5 4.3Z"/><path d="M12 10.2c2.7 0 5-1.8 5-4.3-2.8 0-5 1.9-5 4.3Z"/><path d="M12 10.2c0-2.4.9-4.3 0-6-.9 1.7-.9 3.6 0 6Z"/>'),
+  chalice: ICON('<path d="M7 4h10c0 4-2.2 6.6-5 6.6S7 8 7 4Z"/><path d="M12 10.6V19"/><path d="M8 20.2h8"/>'),
+  cross: ICON('<path d="M12 3v18"/><path d="M6.2 8.4h11.6"/>'),
+  clock: ICON('<circle cx="12" cy="12" r="8.4"/><path d="M12 7.2V12l3.1 2"/>'),
+  tear: ICON('<path d="M12 3.4c3.2 4.1 5.4 6.7 5.4 9.5a5.4 5.4 0 0 1-10.8 0c0-2.8 2.2-5.4 5.4-9.5Z"/>'),
+  leaf: ICON('<path d="M19.8 4.2C10.4 4.2 4.6 9 4.6 14.7A5 5 0 0 0 9.4 19.7c5.9 0 10.4-6 10.4-15.5Z"/><path d="M5 19.6C8.6 14.2 12.4 11.2 17 9.4"/>'),
+  anchor: ICON('<circle cx="12" cy="5.4" r="2"/><path d="M12 7.4V21"/><path d="M7.4 11h9.2"/><path d="M4.4 15.2c0 3.6 3.4 5.6 7.6 5.6s7.6-2 7.6-5.6"/>'),
+  sprout: ICON('<path d="M12 21v-6.8"/><path d="M12 14.2c-3.7 0-5.8-2.4-5.8-5.8 3.4 0 5.8 2 5.8 5.8Z"/><path d="M12 14.2c2.9 0 4.8-2 4.8-4.8-2.9 0-4.8 2-4.8 4.8Z"/>'),
+  compass: ICON('<circle cx="12" cy="12" r="8.4"/><path d="m15.2 8.8-1.9 4.5-4.5 1.9 1.9-4.5Z"/>'),
+  book: ICON('<path d="M4 4.8h5.4A2.6 2.6 0 0 1 12 7.4V20a2.6 2.6 0 0 0-2.6-1.8H4Z"/><path d="M20 4.8h-5.4A2.6 2.6 0 0 0 12 7.4V20a2.6 2.6 0 0 1 2.6-1.8H20Z"/>'),
+  hands: ICON('<path d="M12 21V8.4"/><path d="M12 8.4c0-3 1.4-5 3-5.6.8 2 .4 4.6-1.1 6.6"/><path d="M12 8.4c0-3-1.4-5-3-5.6-.8 2-.4 4.6 1.1 6.6"/><path d="M8.4 21h7.2"/>'),
+  repeat: ICON('<path d="M4.4 8.6h12.2a3 3 0 0 1 3 3"/><path d="m13.8 5.4 3.2 3.2-3.2 3.2"/><path d="M19.6 15.4H7.4a3 3 0 0 1-3-3"/><path d="m10.2 18.6-3.2-3.2 3.2-3.2"/>'),
+  note: ICON('<path d="M9.4 17.6V5.8l8.8-2v11.6"/><circle cx="7" cy="17.8" r="2.4"/><circle cx="15.8" cy="15.6" r="2.4"/>'),
+  staff: ICON('<path d="M3.4 6.6h17.2"/><path d="M3.4 11h17.2"/><path d="M3.4 15.4h17.2"/><circle cx="8.6" cy="15.4" r="2.1"/><path d="M10.7 15.4V8"/>'),
+  quote: ICON('<path d="M9.4 6.8C6.9 6.8 5.2 8.6 5.2 11s1.7 3.6 3.6 3.6c-.1 2-1.2 3.3-2.8 4.2"/><path d="M18.8 6.8c-2.5 0-4.2 1.8-4.2 4.2s1.7 3.6 3.6 3.6c-.1 2-1.2 3.3-2.8 4.2"/>'),
+  question: ICON('<circle cx="12" cy="12" r="8.4"/><path d="M9.7 9.4A2.4 2.4 0 0 1 14.4 10c0 1.7-2.4 2-2.4 3.7"/><path d="M12 17.1h.01"/>'),
+  dot: ICON('<circle cx="12" cy="12" r="3"/>'),
+};
+
 // Fixed opening steps. Each option is {label, hint, match}. Order matters:
 // an entry lands in the first option it matches.
 const FINDER_STEPS = [
-  {
-    label: "Kind",
-    question: "What are you looking for?",
-    options: [
-      { label: "A prayer", hint: "Something to pray", match: (e) => e.kind === "prayer" },
-      { label: "A litany", hint: "Call and response", match: (e) => e.kind === "litany" },
-      { label: "A hymn", hint: "Something sung", match: (e) => e.kind === "hymn" },
-      {
-        label: "An antiphon",
-        hint: "The seasonal chants — Compline, Advent",
-        match: (e) => e.kind === "antiphon",
-      },
-      { label: "Words to sit with", hint: "A quote to dwell on", match: (e) => e.kind === "quote" },
-      {
-        label: "Something to learn",
-        hint: "A list to know by heart and examine yourself on",
-        match: (e) => e.kind === "teaching",
-      },
-      // No "saint" option: saints live in their own tab, and the Library has
-      // never held one. If a legacy entry does, the catch-all still routes it.
-    ],
-  },
   {
     label: "Occasion",
     question: "What is it for?",
     options: [
       {
-        label: "To aid with prayer",
+        label: "To aid with prayer", icon: "candle",
         hint: "Beginning, settling, giving thanks at the end",
         keywords: ["before prayer", "after prayer", "preparation", "thanksgiving", "contemplation", "opus dei", "prayer", "mental prayer", "meditation"],
         match: (e) =>
@@ -9875,7 +10279,7 @@ const FINDER_STEPS = [
           ]) || mentions(e, ["before mental prayer", "after mental prayer", "before prayer"]),
       },
       {
-        label: "Contemplative",
+        label: "Contemplative", icon: "moon",
         hint: "Short, quiet, meant to be dwelt on",
         keywords: ["contemplation", "holy spirit", "adoration", "surrender", "self-offering", "silence", "trust"],
         match: (e) =>
@@ -9890,13 +10294,13 @@ const FINDER_STEPS = [
         // genuinely basic, but they're catechism prayers rather than ones
         // learned by heart in childhood — so they're excluded here and get
         // their own option below.
-        label: "The prayers everyone knows",
+        label: "The prayers everyone knows", icon: "star",
         hint: "The basic ones, learned by heart",
         match: (e) =>
           hasTag(e, ["foundational", "creed", "doxology"]) && !hasTag(e, ["catechetical"]),
       },
       {
-        label: "Acts of faith, hope and love",
+        label: "Acts of faith, hope and love", icon: "heart",
         hint: "The three theological virtues, said as acts",
         keywords: ["faith", "hope", "charity"],
         match: (e) => hasTag(e, ["catechetical"]) && /^Act of /i.test(e.title || ""),
@@ -9905,13 +10309,13 @@ const FINDER_STEPS = [
         // Ahead of "the hours of the day" on purpose: the four seasonal
         // antiphons belong to Our Lady first, even though they are sung at
         // Compline. The hours option no longer claims them.
-        label: "To Our Lady",
+        label: "To Our Lady", icon: "lily",
         hint: "Marian prayers and the seasonal antiphons",
         keywords: ["marian", "our lady", "mary", "blessed virgin"],
         match: (e) => hasTag(e, ["marian", "antiphon"]) || mentions(e, ["marian"]),
       },
       {
-        label: "Mass and Communion",
+        label: "Mass and Communion", icon: "chalice",
         hint: "Before, during, after — and Adoration",
         keywords: ["mass", "eucharist", "communion", "adoration", "benediction", "corpus christi"],
         match: (e) =>
@@ -9922,7 +10326,7 @@ const FINDER_STEPS = [
         // The collection had no way to ask for Passion devotions at all —
         // the Seven Last Words, Five Wounds and Litany of the Sacred Heart
         // were unreachable through this tree before this option existed.
-        label: "The Passion and the Cross",
+        label: "The Passion and the Cross", icon: "cross",
         hint: "The Cross, the Wounds, the Sacred Heart, Our Lady of Sorrows",
         keywords: ["passion", "cross", "sacred heart", "precious blood", "sorrow", "reparation", "crucifix"],
         match: (e) =>
@@ -9932,13 +10336,13 @@ const FINDER_STEPS = [
           ]) || mentions(e, ["crucifix", "the cross", "calvary", "passion"]),
       },
       {
-        label: "The hours of the day",
+        label: "The hours of the day", icon: "clock",
         hint: "Morning, evening, night prayer",
         // Deliberately does NOT match "antiphon"/"Compline" — see above.
         match: (e) => hasTag(e, ["morning", "noon", "evening", "daily", "night"]),
       },
       {
-        label: "Confession and repentance",
+        label: "Confession and repentance", icon: "tear",
         hint: "Examining conscience, sorrow, conversion",
         keywords: ["confession", "penance", "repentance", "conversion", "reconciliation"],
         match: (e) =>
@@ -9946,7 +10350,7 @@ const FINDER_STEPS = [
           mentions(e, ["confession", "conscience", "reconciliation", "penance"]),
       },
       {
-        label: "A season of the year",
+        label: "A season of the year", icon: "leaf",
         hint: "Advent, Christmas, Lent, Easter",
         keywords: ["advent", "christmas", "lent", "easter"],
         match: (e) =>
@@ -9954,7 +10358,7 @@ const FINDER_STEPS = [
           mentions(e, ["advent", "christmas", "lent", "easter", "pentecost", "candlemas", "holy week"]),
       },
       {
-        label: "When things are hard",
+        label: "When things are hard", icon: "anchor",
         hint: "Anxiety, suffering, fear, protection",
         keywords: ["anxiety", "suffering", "death", "courage", "protection", "fear", "peace", "hope", "perseverance", "illness", "sickness"],
         match: (e) =>
@@ -9964,7 +10368,7 @@ const FINDER_STEPS = [
           ]),
       },
       {
-        label: "To grow in virtue",
+        label: "To grow in virtue", icon: "sprout",
         hint: "Humility, charity, purity, surrender",
         keywords: ["humility", "charity", "love", "purity", "chastity", "joy", "faithfulness", "surrender"],
         match: (e) =>
@@ -9976,7 +10380,7 @@ const FINDER_STEPS = [
       {
         // Nothing in the tree asked about state of life, so the spouse and
         // discernment entries had no route to them.
-        label: "Vocation and state of life",
+        label: "Vocation and state of life", icon: "compass",
         hint: "Discernment, marriage, singleness, work",
         keywords: ["vocation", "discernment", "marriage", "spouses", "singleness", "widows", "students", "work"],
         match: (e) =>
@@ -9986,7 +10390,7 @@ const FINDER_STEPS = [
           ]),
       },
       {
-        label: "The faith itself",
+        label: "The faith itself", icon: "book",
         hint: "Creeds, doctrine, the Trinity",
         keywords: ["trinity", "faith", "holy spirit", "theologians", "converts"],
         match: (e) =>
@@ -9998,6 +10402,29 @@ const FINDER_STEPS = [
       },
     ],
   },
+  {
+    label: "Kind",
+    question: "What are you looking for?",
+    options: [
+      { label: "A prayer", icon: "hands", hint: "Something to pray", match: (e) => e.kind === "prayer" },
+      { label: "A litany", icon: "repeat", hint: "Call and response", match: (e) => e.kind === "litany" },
+      { label: "A hymn", icon: "note", hint: "Something sung", match: (e) => e.kind === "hymn" },
+      {
+        label: "An antiphon", icon: "staff",
+        hint: "The seasonal chants — Compline, Advent",
+        match: (e) => e.kind === "antiphon",
+      },
+      { label: "Words to sit with", icon: "quote", hint: "A quote to dwell on", match: (e) => e.kind === "quote" },
+      {
+        label: "Something to learn", icon: "book",
+        hint: "A list to know by heart and examine yourself on",
+        match: (e) => e.kind === "teaching",
+      },
+      // No "saint" option: saints live in their own tab, and the Library has
+      // never held one. If a legacy entry does, the catch-all still routes it.
+    ],
+  },
+
 ];
 
 // Later steps are generated from whatever tags the remaining entries carry, so
@@ -10077,6 +10504,7 @@ function buildFinderStep(candidates) {
   if (leftovers.length > 0) {
     shown.push({
       label: "Something else",
+      icon: "question",
       hint: "Everything not covered above",
       ids: leftovers,
       isCatchAll: true,
@@ -10125,6 +10553,7 @@ function finderCandidates() {
 }
 
 function openFinder() {
+  state.finderRestrict = null;
   finderState.answers = [];
   finderState.showingAll = false;
   setView("finder");
@@ -10139,7 +10568,10 @@ function renderFinder() {
   crumbs.innerHTML = finderState.answers
     .map(
       (a, i) =>
-        `<button class="finder-crumb" data-step="${i}">${escapeHtml(a.optionLabel)}</button>`
+        `<button class="finder-crumb" data-step="${i}" title="Change this answer">` +
+        `<span class="crumb-step">${escapeHtml(a.stepLabel)}</span>` +
+        `<span class="crumb-value">${escapeHtml(a.optionLabel)}</span>` +
+        `<span class="crumb-change">change</span></button>`
     )
     .join(`<span class="finder-crumb-sep">›</span>`);
   crumbs.classList.toggle("hidden", finderState.answers.length === 0);
@@ -10151,9 +10583,8 @@ function renderFinder() {
     });
   });
 
-  // A saint or two matching the same need, wherever the answers so far
-  // carry keywords (the opening "Kind" step doesn't — it's about content
-  // type, not need — so this stays empty until "Occasion" is answered).
+  // A saint or two matching the same need. The occasion step now comes
+  // first, so this can populate from the very first answer.
   const saintsPanel = $("#finder-saints");
   const keywords = [...new Set(finderState.answers.flatMap((a) => a.keywords || []))];
   const matchingSaints = matchingSaintsForKeywords(keywords);
@@ -10186,6 +10617,7 @@ function renderFinder() {
       .map(
         (opt, i) => `
         <button class="finder-option${opt.isCatchAll ? " catch-all" : ""}" data-opt="${i}">
+          <span class="finder-option-icon">${FINDER_ICONS[opt.icon] || FINDER_ICONS.dot}</span>
           <span class="finder-option-label">${escapeHtml(opt.label)}</span>
           ${opt.hint ? `<span class="finder-option-hint">${escapeHtml(opt.hint)}</span>` : ""}
           <span class="finder-option-count">${opt.ids.length}</span>
