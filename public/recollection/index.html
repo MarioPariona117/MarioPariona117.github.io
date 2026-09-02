@@ -9,10 +9,19 @@
 <link rel="icon" href="icons/icon-192.png">
 <link rel="stylesheet" href="styles.css">
 <script>
-  // Before first paint, so a chosen palette never flashes the default first.
+  // Before first paint. Both of these decide what the very first frame looks
+  // like, so they cannot wait for app.js — it is a large file, and the gap
+  // was long enough to see.
   try {
-    var p = localStorage.getItem("recollection.palette.v1");
-    if (p) document.documentElement.setAttribute("data-palette", p);
+    var p = localStorage.getItem("recollection.palette.v1") || "candlelight";
+    document.documentElement.setAttribute("data-palette", p);
+
+    // The gate ships with class="active" so it still works with no JS at all.
+    // Marking <html> here lets CSS hide it before it is ever painted, for
+    // someone who accepted it long ago; app.js removes the class as usual.
+    if (localStorage.getItem("recollection.gateAccepted.v1") === "true") {
+      document.documentElement.setAttribute("data-gate", "accepted");
+    }
   } catch (e) {}
 </script>
 </head>
@@ -374,6 +383,7 @@
   </header>
   <main class="content">
     <div class="finder-crumbs" id="finder-crumbs"></div>
+    <div class="finder-saints hidden" id="finder-saints"></div>
 
     <div id="finder-question-block">
       <p class="finder-question" id="finder-question"></p>
