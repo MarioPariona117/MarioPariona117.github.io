@@ -1,59 +1,105 @@
+// Olympiad and contest record.
+//
+// Previously one flat, undated list of 18 entries, which flattened an NWERC
+// medal and a 2015 junior olympiad to the same visual weight. Each entry now
+// carries a year and a category so the Achievements page can group them and
+// lead with the strongest.
+
 export const achievementItems = [
+  // --- Informatics & competitive programming ---
   {
-    name: "Gold Medal in Iranian Geometry Olympiad 2016",
-    // description: "Top 5, only 4 Chinese above me?",
-    // date: "2016"
+    name: 'Bronze Medal, Northwestern European Regional Contest (NWERC)',
+    year: '2022',
+    category: 'informatics',
+    highlight: true,
   },
   {
-    name: "Bronze Medal in Olimpiada de Mayo 2015"
+    name: '538th, Meta Hacker Cup Round 2',
+    year: '2022',
+    category: 'informatics',
   },
   {
-    name: "Silver Medal in Olimpiada de Mayo 2016"
+    name: 'Bronze Medal, Competencia Iberoamericana de Informática y Computación (CIIC)',
+    year: '2021',
+    category: 'informatics',
   },
   {
-    name: "Gold Medal in Olimpiada de Mayo 2018"
+    name: '1017th, Google Code Jam Round 2',
+    year: '2021',
+    category: 'informatics',
   },
   {
-    name: "Gold medal in the Peruvian Olympiad of Mathematics in 2018 and 2019"
+    name: 'Bronze Medal, International Olympiad of Metropolises (Informatics)',
+    year: '2020',
+    category: 'informatics',
   },
   {
-    name: "Silver Medal Olimpiada Matematica Rioplatense 2018, 2019"
-  },
-  {
-    name: "Honorable Mention in Geometrical Olympiad in Honour of I.F. Sharygin 2019"
-  },
-  {
-    name: "Silver Medal in Olimpiada de Matemática del Cono Sur 2019",
-  },
-  {
-    name: "Honorable Mention in Romanian Master of Mathematics 2020",       
-  },
-  {
-    name: "Bronze Medal in Asian Pacific Mathematical Olympiad 2020",
-  },
-  {
-    name: "Gold Medal in Cyberspace Mathematical Competition 2020",
-  },
-  {
-    name: "Bronze Medal in Competencia Iberoamericana de Informática y Computación (CIIC) 2020",
-  },
-  {
-    name: "Bronze Medal International Olympiad of Metropolises en la modalidad de Informatica 2020",
-  },
-  {
-    name: "1017th, Google Code Jam Round 2, 2021"
-  },
-  {
-    name: "Bronze Medal in Competencia Iberoamericana de Informática y Computación (CIIC) 2021",
-  },
-  {
-    name: "Gold Medal in IberoAmerican Olympiad of Mathematics 2021"
-  },
-  {
-    name: "538th, Meta Hacker Cup Round 2, 2022"
-  },
-  {
-    name: "Bronze Medal in the Northwestern Europe Regional Contest 2022"
+    name: 'Bronze Medal, Competencia Iberoamericana de Informática y Computación (CIIC)',
+    year: '2020',
+    category: 'informatics',
   },
 
+  // --- Mathematics ---
+  {
+    name: 'Gold Medal, Ibero-American Olympiad of Mathematics',
+    year: '2021',
+    category: 'mathematics',
+    highlight: true,
+  },
+  {
+    name: 'Gold Medal, Cyberspace Mathematical Competition',
+    year: '2020',
+    category: 'mathematics',
+    highlight: true,
+  },
+  {
+    name: 'Bronze Medal, Asian Pacific Mathematical Olympiad',
+    year: '2020',
+    category: 'mathematics',
+  },
+  {
+    name: 'Honourable Mention, Romanian Master of Mathematics',
+    year: '2020',
+    category: 'mathematics',
+  },
+  {
+    name: 'Silver Medal, Olimpiada de Matemática del Cono Sur',
+    year: '2019',
+    category: 'mathematics',
+  },
+  {
+    name: 'Honourable Mention, Geometrical Olympiad in Honour of I. F. Sharygin',
+    year: '2019',
+    category: 'mathematics',
+  },
+  {
+    name: 'Gold Medal, Peruvian Olympiad of Mathematics',
+    year: '2018, 2019',
+    category: 'mathematics',
+  },
+  {
+    name: 'Silver Medal, Olimpiada Matemática Rioplatense',
+    year: '2018, 2019',
+    category: 'mathematics',
+  },
+  {
+    name: 'Gold Medal, Olimpiada de Mayo',
+    year: '2018',
+    category: 'mathematics',
+  },
+  {
+    name: 'Gold Medal, Iranian Geometry Olympiad',
+    year: '2016',
+    category: 'mathematics',
+  },
+  {
+    name: 'Silver Medal, Olimpiada de Mayo',
+    year: '2016',
+    category: 'mathematics',
+  },
+  {
+    name: 'Bronze Medal, Olimpiada de Mayo',
+    year: '2015',
+    category: 'mathematics',
+  },
 ];

@@ -3,152 +3,186 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import { useLocation } from 'react-router-dom';
-
+import IconButton from '@mui/material/IconButton';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import { useLocation, Link } from 'react-router-dom';
+import { palette, contentColumn } from '../styles/theme';
+import RecollectionDoor from './RecollectionDoor';
 
 import { menuItems } from './items/menuItems';
-import { Link } from 'react-router-dom';
+
+// Six flat nav items plus the Recollection pill do not fit on a phone — they
+// wrapped onto a second row and left the pill stranded. Below `md` the items
+// collapse into a drawer behind a menu button, which is the pattern people
+// already expect (Jakob's Law) and which gives each destination a full-width
+// row well above the 44pt touch-target minimum. Breakpoints are done in `sx`
+// rather than with useMediaQuery so the correct nav is in the first paint
+// instead of appearing after a measurement.
+
+// A nav item is "current" when the path equals its url, or is a descendant of
+// it. The old check was `pathname.includes(item.url)`, which matched the Home
+// item ('/') on literally every page.
+const isCurrent = (pathname, url) =>
+  url === '/' ? pathname === '/' : pathname === url || pathname.startsWith(url + '/');
 
 const Header = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [open, setOpen] = React.useState(Array(menuItems.length).fill(false));
   const location = useLocation();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const handleOpen = (event, idx) => {
-    handleClose1(event);
-    setAnchorEl(event.currentTarget);
-    setOpen(prevOpen => {
-      const newOpen = [...prevOpen];
-      newOpen[idx] = true;
-      return newOpen;
-    });
-  };
-  const handleClose = (e, idx) => {
-    if (e.currentTarget.localName !== "ul") {
-      const menu2 = document.getElementById("menu-appbar" + idx);
-      console.log(menu2);
-      if (menu2) {
-      const menu1=menu2.children;
-      const menu = menu1[2];
-      const menuBoundary = {
-        left: menu.offsetLeft,
-        top: menu.offsetTop,
-        right: menu.offsetLeft + menu.offsetWidth,
-        bottom: menu.offsetTop + menu.offsetHeight,
-      };
-      console.log(menuBoundary);
-      console.log(e.clientX, e.clientY);
-      if (
-        e.clientX >= menuBoundary.left &&
-        e.clientX <= menuBoundary.right &&
-        e.clientY <= menuBoundary.bottom &&
-        e.clientY >= menuBoundary.top
-      ) {
-        return;
-      }
-    }
-    }
-    setAnchorEl(null);
-    setOpen(Array(menuItems.length).fill(false));
-  };
-
-  const handleClose1 = (env) => {
-    setAnchorEl(null);
-    setOpen(Array(menuItems.length).fill(false));
-  }
   return (
-    //just change with <div> if these three don't work!
-    <AppBar 
-      position="static" 
+    <AppBar
+      position="sticky"
+      elevation={0}
       sx={{
-        backgroundColor:'transparent',
-        boxShadow: 'none',
-        display: 'flex',         // Flex layout
-        // justifyContent: 'center',
-        pr: '20%',
-        pl: '20%',
+        // Recollection's .topbar: the ground, one shade deeper, made
+        // translucent and blurred so the page's glow shows through it.
+        backgroundColor: 'rgba(239, 227, 205, 0.82)',
+        backdropFilter: 'blur(10px)',
+        borderBottom: `1px solid rgba(${palette.flameRgb}, 0.24)`,
+        color: 'text.primary',
       }}
     >
-      <Container 
-        maxWidth="xl"
-        sx={{ backgroundColor: 'transparent', display: 'flex',  }}
-      >
-        <Toolbar disableGutters
-          display="flex"
-          // flexDirection="row"
-          // justifyContent="space-between"
-          // flexWrap="wrap" 
+      <Box sx={contentColumn}>
+        <Toolbar
+          disableGutters
+          sx={{
+            gap: { xs: 0.5, md: 0.3 },
+            flexWrap: 'nowrap',
+            minHeight: { xs: 56, sm: 64, md: 72 },
+          }}
         >
-          {
-            menuItems.map((item, index) => {
-              const thingy = location.pathname.includes(item.url) ? {color:'brown', weight:'bold'} : {color:'transparent', weight:'normal'};
+          <Typography
+            component={Link}
+            to="/"
+            variant="h6"
+            sx={{
+              mr: 'auto',
+              color: palette.heading,
+              textDecoration: 'none',
+              fontSize: { xs: '1rem', sm: '1.15rem' },
+              letterSpacing: '0.02em',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Mario Pariona
+          </Typography>
+
+          {/* Wide screens: the full nav. */}
+          <Box sx={{ display: { xs: 'none', md: 'inline-flex' }, alignItems: 'center' }}>
+            {menuItems.map((item) => {
+              const current = isCurrent(location.pathname, item.url);
               return (
-                <div key={index}>
-                  <Button
-                    id={`button-${index}`}
-                    aria-owns={open[index]? "menu-appbar" + index : null}
-                    aria-haspopup="true"
-                    onMouseOver={(event)=>handleOpen(event, index)}
-                    onMouseLeave={(event)=>handleClose(event, index)}
-                    style={{ zIndex: 1301 }}
-                    sx={{
-                      display: { xs: 'flex', md: 'flex' },
-                      letterSpacing: '.1rem',
-                      // color: 'inherit',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    <Typography
-                      variant="body"
-                      noWrap
-                      sx={{
-                        display: { xs: 'flex', md: 'flex' },
-                        // letterSpacing: '.1rem',
-                        color: 'inherit',
-                        textDecoration: 'none',
-                        borderBottom:`2px solid ${thingy.color}`,
-                        paddingBottom: '2px',
-                        cornerRadius: '0.5px',
-                      }}
-                      component={Link}
-                      to={item.url}
-                      fontWeight={thingy.weight}
-                    >
-                      {item.title}
-                    </Typography>
-                  </Button>
-                  <Menu
-                    id={"menu-appbar" + index}
-                    anchorEl={anchorEl}
-                    open={Boolean(Boolean(item.submenu) && open[index])}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "center",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "center",
-                    }}
-                  >
-                    <Box onMouseLeave= {handleClose1}> 
-                      {(item.submenu? item.submenu: []).map((i, key) => ( // NEVER onMouseLeave around the Menu
-                          <MenuItem key={key} component={Link} to={i.url} onClick={() => {}}>
-                          <Typography sx={{ textAlign: 'center' }}>{i.title}</Typography>
-                        </MenuItem>
-                        ))}
-                    </Box>
-                    
-                  </Menu>
-                </div>
+                <Button
+                  key={item.url}
+                  component={Link}
+                  to={item.url}
+                  aria-current={current ? 'page' : undefined}
+                  sx={{
+                    // Recollection's .tab — small tracked caps, no pill, a
+                    // flame underline on the current one.
+                    px: 1,
+                    minWidth: 0,
+                    fontSize: '0.7rem',
+                    letterSpacing: '0.16em',
+                    textTransform: 'uppercase',
+                    color: current ? palette.heading : 'text.secondary',
+                    fontWeight: current ? 700 : 600,
+                    borderRadius: 0,
+                    borderBottom: `2px solid ${current ? palette.flame : 'transparent'}`,
+                    '&:hover': { backgroundColor: 'transparent', color: palette.heading },
+                  }}
+                >
+                  {item.title}
+                </Button>
               );
-            })
-          }
+            })}
+            <RecollectionDoor variant="header" />
+          </Box>
+
+          {/* Phones and small tablets: one button, everything behind it. */}
+          <IconButton
+            aria-label="Open menu"
+            onClick={() => setDrawerOpen(true)}
+            sx={{
+              display: { xs: 'inline-flex', md: 'none' },
+              color: palette.heading,
+              width: 44,
+              height: 44,
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
         </Toolbar>
-      </Container>
+      </Box>
+
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        // PaperProps, not slotProps — Drawer only gained slotProps in MUI v6
+        // and this project is on 5.16, where the prop is silently ignored
+        // rather than erroring. Same trap documented in RecollectionDoor.js.
+        PaperProps={{
+          sx: {
+            width: 'min(80vw, 300px)',
+            backgroundColor: palette.card,
+            backgroundImage: 'none',
+            borderLeft: `1px solid ${palette.hairline}`,
+          },
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
+          <IconButton
+            aria-label="Close menu"
+            onClick={() => setDrawerOpen(false)}
+            sx={{ color: palette.heading, width: 44, height: 44 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+
+        <List sx={{ px: 1 }}>
+          {menuItems.map((item) => {
+            const current = isCurrent(location.pathname, item.url);
+            return (
+              <ListItemButton
+                key={item.url}
+                component={Link}
+                to={item.url}
+                onClick={() => setDrawerOpen(false)}
+                aria-current={current ? 'page' : undefined}
+                sx={{
+                  minHeight: 48,
+                  borderRadius: '4px',
+                  borderLeft: `2px solid ${current ? palette.flame : 'transparent'}`,
+                  backgroundColor: current ? palette.accentSoft : 'transparent',
+                }}
+              >
+                <ListItemText
+                  primary={item.title}
+                  primaryTypographyProps={{
+                    fontSize: '0.78rem',
+                    letterSpacing: '0.16em',
+                    textTransform: 'uppercase',
+                    fontWeight: current ? 700 : 600,
+                    color: current ? palette.heading : palette.body,
+                  }}
+                />
+              </ListItemButton>
+            );
+          })}
+        </List>
+
+        <Box sx={{ px: 2, pt: 1 }}>
+          <RecollectionDoor variant="button" />
+        </Box>
+      </Drawer>
     </AppBar>
   );
 };

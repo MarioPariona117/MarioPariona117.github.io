@@ -1,29 +1,21 @@
+/* Base document styles only. Fonts and colours are defined in styles/theme.js;
+   the @font-face blocks that used to live here (Roboto Slab, Ubuntu Mono) went
+   with the fonts they declared, which nothing referenced. */
+
+html,
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  background-color: #f7efe0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-@font-face {
-  font-family: "Roboto Slab";
-  src: local("Reboto Slab"),
-   url("../assets/RobotoSlab-VariableFont_wght.ttf") format("truetype");
-  font-weight: regular;
- }
-
-@font-face {
-  font-family: "Ubuntu Mono";
-  src: local("Ubuntu Mono"),
-   url("../assets/UbuntuMono-Regular.ttf") format("truetype");
-  /* font-weight: regular; */
- }
-
- 
+/* Visible focus ring for keyboard users, against the candlelit ground. */
+:focus-visible {
+  outline: 2px solid #8f5d0c;
+  outline-offset: 2px;
+}

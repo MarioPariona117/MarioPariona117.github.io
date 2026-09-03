@@ -1,41 +1,24 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import React from 'react';
-import theme from "../styles/theme";
-import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import { contentColumn } from '../styles/theme';
 import '../styles/App1.css';
-// import Container from '@mui/material/Container';
+
+// The ThemeProvider lives in index.js and wraps the whole tree, so this file
+// no longer re-provides it. The two 10%-width grey Boxes that used to sit here
+// as "side spacing" were siblings of a non-flex div, so they rendered as full
+// width grey strips above and below the content rather than gutters — removed;
+// centring is done by .card's max-width + auto margins.
+
 const Layout = () => {
   return (
-    <ThemeProvider theme={theme}>
-    <div>
-      {/* Left side space */}
-      <Box sx={{ width: '10%', backgroundColor: '#ecf0f1' }}> {/* Left space box */}</Box>
-  
-      <div>
-        <Header />
-        <Box
-          classname="card"
-          sx={{ 
-            mt: 10, 
-            mb: 10,
-            // pr: "20%",
-            // pl: "20%",
-            backgroundColor: theme.palette.background.default,
-            display: 'flex',         // Flex layout
-            // justifyContent: 'center', // Center the content horizontally
-            lexGrow: 1,
-          }} 
-        >
-          <Outlet />
-        </Box>
-      </div>
-  
-      {/* Right side space */}
-      <Box sx={{ width: '10%', backgroundColor: '#ecf0f1' }}> {/* Right space box */}</Box>
-    </div>
-    </ThemeProvider>
+    <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+      <Header />
+      <Box component="main" sx={{ ...contentColumn, flexGrow: 1, pb: 6 }}>
+        <Outlet />
+      </Box>
+    </Box>
   );
 };
 

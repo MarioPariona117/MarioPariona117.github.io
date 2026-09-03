@@ -1,84 +1,77 @@
 import React from "react";
-import { Typography, Card, CardContent, Button } from "@mui/material";
+import { Typography, Card, CardContent, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import { palette } from "../styles/theme";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
-import WarningIcon from '@mui/icons-material/Warning';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 
-const getStatusIcon = (status) => {
-  switch (status) {
-    case "Finished":
-      return <CheckCircleIcon color="success" />;
-    case "Evolving":
-      return <PendingIcon color="warning" />;
-    case "Stopped":
-      return <WarningIcon color="action" />;
-    case "Ongoing":
-      return <PendingIcon color="primary" />;
-    case "Starting stage":
-      return <WarningIcon color="action" />;
-    case "Crawling Baby":
-      return <WarningIcon color="action" />;
-    default:
-      return null;
-  }
+const STATUS = {
+  "Finished":       { icon: <CheckCircleIcon fontSize="small" />, color: 'success.main' },
+  "Evolving":       { icon: <PendingIcon fontSize="small" />,     color: 'secondary.dark' },
+  "Ongoing":        { icon: <PendingIcon fontSize="small" />,     color: 'secondary.main' },
+  "Starting stage": { icon: <PendingIcon fontSize="small" />,     color: 'text.secondary' },
+  "Crawling Baby":  { icon: <PendingIcon fontSize="small" />,     color: 'text.secondary' },
+  "Stopped":        { icon: <PauseCircleOutlineIcon fontSize="small" />, color: 'text.secondary' },
 };
 
-const ProjecTab = ({project, index}) => {
+const ProjectTab = ({ project }) => {
+  const status = STATUS[project.status?.short];
+
   return (
-    // <li key={index} style={{ marginBottom: 0 }}>
-      <Card
-        sx={{
-          transition: '0.3s',
-          backgroundColor: '#f9f9f9',
-          '&:hover': {
-            boxShadow: 20,
-            transform: 'scale(1.02)',
-            backgroundColor: '#ecf2fa',
-          },
-        }}
-      >
-        <CardContent>
-          <Typography 
-            variant="h6" 
-            component={Link} 
-            to={`/p/projects/${project.url}`}
+    <Card>
+      <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+        <Typography
+          variant="h6"
+          component={Link}
+          to={`/projects/${project.url}`}
+          sx={{
+            color: 'text.primary',
+            textDecoration: 'none',
+            display: 'inline-block',
+            '&:hover': { textDecoration: 'underline', textDecorationColor: palette.flame },
+          }}
+        >
+          {project.title}
+        </Typography>
+
+        {status && (
+          <Box
             sx={{
-              color: 'primary.main',
-              textDecoration: 'none',
-              '&:hover': {
-                textDecoration: 'underline',
-                color: 'secondary.main',
-              },
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.75,
+              mt: 0.75,
+              mb: 1.5,
+              color: status.color,
             }}
           >
-            {project.title} 
-          </Typography>
-          
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
-            {getStatusIcon(project.status.short)} {/* Display the appropriate icon */}
-            <span style={{ marginLeft: '8px' }}>Status: {project.status.short}</span>
-          </Typography>
-
-          {project.status.long && (
-            <Typography variant="caption" color="text.secondary" sx={{ mt: 1, pl: 2, fontStyle: 'italic' }}>
-              {project.status.long}
+            {status.icon}
+            <Typography variant="caption" sx={{ fontWeight: 700, letterSpacing: '0.04em' }}>
+              {project.status.short}
+              {project.status.long ? ` · ${project.status.long}` : ''}
             </Typography>
-          )}
+          </Box>
+        )}
 
-          <Typography variant="body2" color="text.secondary" sx={{ p: 0, m: 0 }}>
-            {project.description}
-          </Typography>
-          
-          {Boolean(project.render)?
-            <Button component={Link} to={`/p/projects/${project.url}`} variant="contained" color="primary" sx={{ mt: 2}}>
-                Check Now
-            </Button> : (null)
-          }
-        </CardContent>
-      </Card>
-    // </li>
+        <Typography variant="body2" color="text.secondary" component="div">
+          {project.description}
+        </Typography>
+
+        {Boolean(project.render) && (
+          <Button
+            component={Link}
+            to={`/projects/${project.url}`}
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+          >
+            Check now
+          </Button>
+        )}
+      </CardContent>
+    </Card>
   );
-}
+};
 
-export default ProjecTab;
+export default ProjectTab;

@@ -1,217 +1,192 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { keyframes } from '@emotion/react';
-import { Box, Button, Typography } from '@mui/material';
-import { Container } from '@mui/material';
+import { Box, Button, Typography, Container } from '@mui/material';
+import { palette } from '../../../styles/theme';
+
+// The agent is the tabular Q-learning policy from the tic-tac-toe-rl project,
+// trained by self-play and exported to JSON (see that repo's train_export.py).
+//
+// Two things changed here. This demo used to download Pyodide — a multi-megabyte
+// CPython/WASM runtime — from a CDN in order to call `random.choice()`, and the
+// page carried a note admitting the trained agent had never been uploaded. The
+// original QLearningAgent only ever held its Q-table in memory ("Optionally:
+// save the Q-table to disk", which it never did), so no artefact existed.
+//
+// The exported policy covers all 4,520 reachable non-terminal positions, and
+// verify_unbeatable.py walks the entire game tree to confirm it cannot be beaten
+// from either side. So there is no fallback path here: every position the board
+// can reach has an entry.
 
 const pump = keyframes`
-  0%, 100% {
-    font-size: 24px;
-  }
-  50% {
-    font-size: 30px
-  }
+  0%, 100% { font-size: 24px; }
+  50% { font-size: 30px; }
 `;
 
+const LINES = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8],
+  [0, 3, 6], [1, 4, 7], [2, 5, 8],
+  [0, 4, 8], [2, 4, 6],
+];
+
+const winnerOf = (squares) => {
+  for (const line of LINES) {
+    const [a, b, c] = line;
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return { mark: squares[a], line };
+    }
+  }
+  return squares.every(Boolean) ? { mark: 'draw', line: [] } : null;
+};
+
+// Policy keys are the board from the mover's point of view: 0 empty, 1 mine,
+// 2 theirs. The agent plays O.
+const keyFor = (squares) =>
+  squares.map((c) => (c === 'O' ? '1' : c === 'X' ? '2' : '0')).join('');
+
 const TicTacToe = () => {
-    // const [board, setBoard] = useState(Array(9).fill(null));
-    const [isXNext, setIsXNext] = useState(true);
-    const [pyodide, setPyodide] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [scores, setScores] = useState({ wins: 0, losses: 0, draws: 0 });
-    const [winnerLine, setWinnerLine] = useState([]);
-    // const [winner, setWinner] = useState(null);
-    const [{ board, winner }, setBoardAndWinner] = useState({ board: Array(9).fill(null), winner: null });
+  const [policy, setPolicy] = useState(null);
+  const [loadError, setLoadError] = useState(false);
+  const [scores, setScores] = useState({ wins: 0, losses: 0, draws: 0 });
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [result, setResult] = useState(null);
+  const [thinking, setThinking] = useState(false);
 
-    useEffect(() => {
-        const loadPyodide = async () => {
-            let pyodideInstance = await window.loadPyodide();
-            setLoading(false); 
-            setPyodide(pyodideInstance);
-            await pyodideInstance.runPython(`
-                import random
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${process.env.PUBLIC_URL}/models/tictactoe-policy.json`)
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then((data) => { if (!cancelled) setPolicy(data.policy); })
+      .catch(() => { if (!cancelled) setLoadError(true); });
+    return () => { cancelled = true; };
+  }, []);
 
-                class TicTacToeAgent:
-                    def __init__(self):
-                        self.q_table = {}
+  const settle = useCallback((outcome) => {
+    setResult(outcome);
+    setScores((s) => ({
+      wins: s.wins + (outcome.mark === 'X' ? 1 : 0),
+      losses: s.losses + (outcome.mark === 'O' ? 1 : 0),
+      draws: s.draws + (outcome.mark === 'draw' ? 1 : 0),
+    }));
+  }, []);
 
-                    def get_action(self, board):
-                        available_moves = [i for i, x in enumerate(board) if x is None]
-                        if not available_moves:  # No available moves means it's a draw
-                            return None
-                        return random.choice(available_moves)
-                agent = TicTacToeAgent()
-            `);
-        };
-        loadPyodide();
-    }, []);
+  const handleClick = (index) => {
+    if (!policy || board[index] || result || thinking) return;
 
-    const handleClick = (index) => {
-        console.log(index, winner);
-        if (!pyodide || board[index] || winner) return; // Prevent clicking after game over
-    
-        const newBoard = board.slice();
-        newBoard[index] = 'X';  
-        const currentWinner = calculateWinner(newBoard);
-        if(currentWinner) {
-            updateScores(currentWinner);
-            setBoardAndWinner({ board: newBoard, winner: currentWinner });
-            return;
-        }
-        setBoardAndWinner({ board: newBoard, winner: currentWinner });
-        setIsXNext(false); // It's the agent's turn
-        console.log("winner:", winner)
-        handleAgentMove(newBoard); // Call a new function to handle the agent's move
-    };
-    
-    const handleAgentMove = async (newBoard) => {
-        const agentMove = await pyodide.runPython(`
-            import json
-            board = json.loads('${JSON.stringify(newBoard)}')
-            agent_action = agent.get_action(board)
-            agent_action
-        `);
-    
-        if (agentMove !== null && agentMove !== undefined) {
-            newBoard[agentMove] = 'O'; 
-            
-            const newWinner = calculateWinner(newBoard);
-            if (newWinner) {
-                updateScores(newWinner);
-                setBoardAndWinner({ board: newBoard, winner: newWinner });
-            } else {
-                setIsXNext(true); // Back to your turn
-            }
-        }
-    };
+    const afterHuman = board.slice();
+    afterHuman[index] = 'X';
+    const humanOutcome = winnerOf(afterHuman);
+    setBoard(afterHuman);
+    if (humanOutcome) { settle(humanOutcome); return; }
 
-    const calculateWinner = (squares) => {
-        const lines = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6],
-        ];
-        console.log("on calculateWinner:", squares);
-        console.log(lines);
-        for (let i = 0; i < lines.length; i++) {
-            const [a, b, c] = lines[i];
-            console.log("a, b, c:", a, b, c);
-            console.log("squares[a], squares[b], squares[c]:", squares[a], squares[b], squares[c]);
-            if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-                console.log("winner line:", lines[i]);
-                setWinnerLine(lines[i]);
-                return squares[a];
-            }
-        }
-        if (squares.every(square => square !== null)) {
-            return 'draw';
-        }
-        return null;
-    };
+    // A beat before replying, so the move is legible rather than instant.
+    setThinking(true);
+    setTimeout(() => {
+      const move = policy[keyFor(afterHuman)];
+      const afterAgent = afterHuman.slice();
+      afterAgent[move] = 'O';
+      setBoard(afterAgent);
+      const agentOutcome = winnerOf(afterAgent);
+      if (agentOutcome) settle(agentOutcome);
+      setThinking(false);
+    }, 260);
+  };
 
-    const status = winner ? 
-        (winner === 'draw' ? "It's a draw!" : `Winner: ${winner}`) : 
-        `Next player: ${isXNext ? 'X' : 'O'}`;
+  const resetGame = () => {
+    setBoard(Array(9).fill(null));
+    setResult(null);
+    setThinking(false);
+  };
 
-    const updateScores = (result) => {
-        console.log(result, scores.wins, scores.losses, scores.draws);
-        if (result === 'X') {
-            setScores(prevScores => ({ ...prevScores, wins: prevScores.wins + 1 }));
-        } else if (result === 'O') {
-            setScores(prevScores => ({ ...prevScores, losses: prevScores.losses + 1 }));
-        } else if (result === 'draw') {
-            setScores(prevScores => ({ ...prevScores, draws: prevScores.draws + 1 }));
-        }
-    };
+  const status = result
+    ? result.mark === 'draw'
+      ? "A draw — the best anyone can do."
+      : result.mark === 'X'
+        ? 'You won. That should not be possible — please tell me how.'
+        : 'The agent wins.'
+    : thinking
+      ? 'Thinking…'
+      : 'Your move — you play X.';
 
-    const resetGame = () => {
-        setBoardAndWinner({ board: Array(9).fill(null), winner: null });
-        setIsXNext(true);
-        setWinnerLine([]); // Reset the winner line
-    };
-
-    const renderSquare = (index) => {
-        const isWinningSquare = winnerLine.includes(index);
-        return (
-            <Button 
-                variant="contained" 
-                color="primary" 
-                sx={{
-                    width: '60px', 
-                    height: '60px', 
-                    fontSize: '24px', 
-                    fontWeight: isWinningSquare ? 'bold' : 'normal', // Bold the winning squares
-                    margin: '5px', 
-                    animation: isWinningSquare ? `${pump} 0.85s infinite` : 'none',
-                    color: isWinningSquare ? 'brown' : 'black' // Optional: change color for winning squares
-                }} 
-                onClick={() => handleClick(index)}
-            >
-                {board[index]}
-            </Button>
-        );
-    };
+  const renderSquare = (index) => {
+    const isWinning = result?.line.includes(index);
     return (
-        <Container 
-            sx={{
-                width: '100%',          
-                maxWidth: 600,          
-                height: 400,         
-                display: 'flex',        
-                flexDirection: 'column', 
-                alignItems: 'center',   
-                justifyContent: 'center', 
-                margin: '0 auto',       
-                mt: 4,
-                padding: 2,             
-                borderRadius: 2,        
-                boxShadow: 3,           
-                backgroundColor: 'background.default',
-                position: 'relative', // Set to relative for absolute positioning of the line
-            }}
-        >
-            {loading ? (
-                <Typography variant="h6">Loading Pyodide...</Typography>
-            ) : (
-                <>
-                    <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                        {status}
-                    </Typography>
-                    <Typography variant="body1" sx={{ marginBottom: 2 }}>
-                        Wins: {scores.wins} | Losses: {scores.losses} | Draws: {scores.draws}
-                    </Typography>
-                    <Box display="flex" flexDirection="column" alignItems="center">
-                        <Box display="flex">
-                            {renderSquare(0)}
-                            {renderSquare(1)}
-                            {renderSquare(2)}
-                        </Box>
-                        <Box display="flex">
-                            {renderSquare(3)}
-                            {renderSquare(4)}
-                            {renderSquare(5)}
-                        </Box>
-                        <Box display="flex">
-                            {renderSquare(6)}
-                            {renderSquare(7)}
-                            {renderSquare(8)}
-                        </Box>
-                    </Box>
-                    <Button 
-                        variant="contained" 
-                        sx={{backgroundColor: "brown", marginTop: 2 }}
-                        onClick={resetGame} 
-                    >
-                        Play Again
-                    </Button>
-                </>
-            )}
-        </Container>
+      <Button
+        key={index}
+        variant="contained"
+        color="primary"
+        aria-label={`Square ${index + 1}${board[index] ? `, ${board[index]}` : ', empty'}`}
+        sx={{
+          width: '60px',
+          height: '60px',
+          fontSize: '24px',
+          fontWeight: isWinning ? 'bold' : 'normal',
+          margin: '5px',
+          minWidth: 0,
+          borderRadius: '4px',
+          animation: isWinning ? `${pump} 0.85s infinite` : 'none',
+          // The squares are a flame-coloured fill, so their marks are dark ink —
+          // white on #e0a94a is 2:1 and unreadable.
+          color: isWinning ? '#3d2506' : '#170e04',
+        }}
+        onClick={() => handleClick(index)}
+      >
+        {board[index]}
+      </Button>
     );
+  };
+
+  return (
+    <Container
+      sx={{
+        width: '100%',
+        maxWidth: 600,
+        minHeight: 400,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: '0 auto',
+        mt: 4,
+        p: 2,
+        borderRadius: '4px',
+        border: `1px solid ${palette.hairline}`,
+        backgroundColor: palette.card,
+      }}
+    >
+      {loadError ? (
+        <Typography variant="body1" sx={{ textAlign: 'center', mb: 0 }}>
+          The trained policy couldn't be loaded just now. Reload to try again.
+        </Typography>
+      ) : !policy ? (
+        <Typography variant="body1">Loading the trained policy…</Typography>
+      ) : (
+        <>
+          <Typography variant="h6" sx={{ mb: 1 }}>{status}</Typography>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            You: {scores.wins} · Agent: {scores.losses} · Drawn: {scores.draws}
+          </Typography>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            {[0, 3, 6].map((row) => (
+              <Box display="flex" key={row}>
+                {[0, 1, 2].map((col) => renderSquare(row + col))}
+              </Box>
+            ))}
+          </Box>
+          <Button variant="outlined" sx={{ mt: 2 }} onClick={resetGame}>
+            Play again
+          </Button>
+          <Typography variant="body2" sx={{ mt: 2, textAlign: 'center', mb: 0 }}>
+            Tabular Q-learning, trained by self-play over 400,000 episodes.
+            Exhaustive search of the game tree confirms it cannot be beaten from
+            either side — a draw is the best available against it.
+          </Typography>
+        </>
+      )}
+    </Container>
+  );
 };
 
 export default TicTacToe;

@@ -4,14 +4,13 @@ import { HashRouter } from 'react-router-dom';
 import './styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import './assets/PressStart2P-Regular.ttf'
-import './assets/static/RobotoSlab-Regular.ttf'
-import './assets/background.png'
 import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 import theme from './styles/theme';
 
-import { CssBaseline } from '@mui/material';
-
+// The bare `import './assets/…ttf'` / `background.png` lines that used to be
+// here only forced those files into the bundle; nothing referenced them.
+// Typography now comes from styles/theme.js.
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -19,13 +18,10 @@ root.render(
     <HashRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <App />  
+        <App />
       </ThemeProvider>
-    </HashRouter>  
+    </HashRouter>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

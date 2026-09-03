@@ -1,14 +1,7 @@
-const extracurricularItems = [
-    {   
-        date: "2024-2025",
-        name: "Vice chair of the Fisher Society (Cambridge Catholic Society)",
-        description: "Organized events and talks",
-    },
-    {
-        date: "2022-2025",
-        name: "Dolphins (Fisher House Football Team)",
-        description: "Played for the house team. Played Moore Cup against Oxford Catholic chaplaincy.",
-    },
+// Was declared without an `export`, so the (unrouted) page importing it would
+// have crashed the moment it got a route. Named export, matching the other
+// items files.
+export const extracurricularItems = [
     {
         name: "Trinity College Football Team",
         date: "2022-2024",

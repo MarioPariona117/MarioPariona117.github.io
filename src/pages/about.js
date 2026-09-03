@@ -1,95 +1,124 @@
+import { palette } from '../styles/theme';
 import React from 'react';
-import { Container, Typography, Box, /*Avatar,*/ Grid } from '@mui/material';
+import { Typography, Box, Grid } from '@mui/material';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-// import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import CodeIcon from '@mui/icons-material/Code';
-import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'; // Laugh Icon
-// import ChurchIcon from '@mui/icons-material/Church'; // Faith Icon
+import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import RosaryIcon from '../assets/RosaryIcon';
+import PageSurface from '../components/PageSurface';
+import RecollectionDoor from '../components/RecollectionDoor';
+
+const iconSx = { fontSize: 44, color: 'secondary.dark' };
 
 const quickFacts = [
   {
     title: 'Catholic Faith',
-    description: "Through my faith, I draw strength and motivation, striving to embody the principles of love, humility, compassion and a commitment to serve others.",
-    // icon: <ChurchIcon sx={{ fontSize: 50, color: 'primary.main' }} />,
-    icon: <RosaryIcon sx={{ fontSize: 50, color: 'primary.main' }} />
+    description:
+      'Through my faith, I draw strength and motivation, striving to embody the principles of love, humility, compassion and a commitment to serve others.',
+    icon: <RosaryIcon sx={iconSx} />,
+    // The one place on the site where the faith side is already on the page —
+    // so the second, contextual door into /recollection belongs here.
+    extra: <RecollectionDoor variant="text" label="More on that →" />,
   },
   {
     title: 'Tech Enthusiast',
-    description: 'Passionate about discovering how Machine Learning can be harnessed to create a more equitable world for all.',
-    icon: <CodeIcon sx={{ fontSize: 50, color: 'primary.main' }} />
+    description:
+      'Passionate about discovering how Machine Learning can be harnessed to create a more equitable world for all.',
+    icon: <CodeIcon sx={iconSx} />,
   },
   {
     title: 'Active Lifestyle',
-    description: "The joy of movement in running, football, and ultimate frisbee keeps me fit and healthy, bringing balance and energy to my life while keeping me physically and mentally active.",
-    icon: <SportsSoccerIcon sx={{ fontSize: 50, color: 'primary.main' }} />
+    description:
+      'The joy of movement in running, football, and ultimate frisbee keeps me fit and healthy, bringing balance and energy to my life while keeping me physically and mentally active.',
+    icon: <SportsSoccerIcon sx={iconSx} />,
   },
   {
     title: 'Laughter Lover',
-    description: "I believe that laughter is contagious; there’s nothing quite like the warmth of making others smile and creating moments of genuine connection through humor.",
-    icon: <SentimentVerySatisfiedIcon sx={{ fontSize: 50, color: 'primary.main' }} />
+    description:
+      'I believe that laughter is contagious; there’s nothing quite like the warmth of making others smile and creating moments of genuine connection through humour.',
+    icon: <SentimentVerySatisfiedIcon sx={iconSx} />,
   },
 ];
 
 function About() {
   return (
-    <Container 
-      maxWidth="lg" 
-      sx={{mb: 4, p:4,  borderRadius:2, boxShadow:3}}
-    >
-      <Box sx={{ textAlign: 'center', mb: 4 }}>
-        {/* <Avatar
-          alt="Mario Pariona"
-          src="/path_to_image" // If you have an image of yourself, you can place the path here
-          sx={{ width: 120, height: 120, mx: 'auto', mb: 2 }}
-        /> */}
-        <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-          It's-a me, Mario!
-        </Typography>
-        <Typography variant="h6" component="p" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
-          Computer Science Graduate • ML Learner • Committed to Global Impact
-        </Typography>
-      </Box>
-        
-      <Typography variant="body1" paragraph>
-        Hi there! I'm Mario Pariona, a Computer Science graduate from the University of Cambridge with a passion for harnessing the power of Machine Learning to make a positive impact in the world. 
-        My journey in computer science began in 2020 after high school when I discovered my love for programming through competitive programming. 
-        This passion has evolved into a keen interest in Neural Networks, Convolutional Networks (CNNs), and reinforcement learning (RL), as I seek to leverage these technologies to solve real-world problems.
+    <PageSurface eyebrow="Who I am" title="It's-a me, Mario!">
+      <Typography
+        variant="h6"
+        component="p"
+        sx={{ fontStyle: 'italic', color: 'text.secondary', mb: 4, fontWeight: 400 }}
+      >
+        Research Software Engineer · Cambridge Computer Science · Machine Learning
       </Typography>
 
       <Typography variant="body1" paragraph>
-        My academic journey has been profoundly shaped by a deep appreciation for mathematics, which blossomed during high school when I represented my country in numerous international Olympiads.
-        The rigorous environment pushed me to excel, fostering a competitive spirit and a passion for problem-solving that continues to drive my pursuits in Computer Science and Machine Learning.
+        I'm Mario Pariona. I grew up in Peru, came to Cambridge in 2022 to read Computer
+        Science, and stayed on after graduating — I now work as a Research Software
+        Engineer at a company here, where I own the computer vision system and the data
+        pipeline behind estimating nutritional information from sequences of food
+        photographs. Rather more of that job is pipeline work than modelling, which I
+        did not expect when I started and have come to enjoy a great deal.
       </Typography>
 
       <Typography variant="body1" paragraph>
-        Beyond academics, I cherish the joy of movement and the friendship of sports.
-        Whether it's playing football, engaging in ultimate frisbee, or going for a run, I discover balance and joy through physical activity.
-        These experiences highlight the value of physical activity, friendship, and mental well-being in people's lives, which align with my core values. 
-        I strive to embody principles of love, humility, and compassion in everything I do, drawing strength and motivation from my Catholic faith.
+        Mathematics came before any of it. I competed for Peru at international olympiads
+        throughout school, winning a gold at the Ibero-American Mathematical Olympiad in
+        2021, and only found programming in 2020, by way of competitive programming. The
+        two have never really separated in my head. My final-year dissertation was a year
+        spent teaching a neural network to play Blokus, and the hardest part of it was
+        not the reinforcement learning at all but making the environment fast enough that
+        the experiments could run in the first place.
       </Typography>
 
       <Typography variant="body1" paragraph>
-        As I continue to explore the intersections of technology and humanity, I'm committed to creating innovative solutions that enhance lives and empower communities.
-        I invite you to join me on this journey, as I learn, grow, and strive to make a difference in the world.
+        My faith is at the centre of my life. I am Catholic, and it shapes what I choose
+        to work on and how I spend the time around it. I served as vice chair of the
+        Fisher Society, the Catholic student society at Cambridge, and spent a year
+        leading a Confirmation group for twelve- to fourteen-year-olds at Our Lady and
+        the English Martyrs.
       </Typography>
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h2" component="h1" gutterBottom sx={{ textAlign: 'center', fontWeight: 'bold', color: 'primary.main' }}>
-          Quick Facts About Me
+
+      <Typography variant="body1" paragraph>
+        I played football for the Catholic chaplaincy side, which I co-captained through
+        an undefeated 2025–26 season, and for Trinity as an undergraduate, along with a
+        few years of ultimate frisbee. These days I mostly run.
+      </Typography>
+
+      <Typography variant="body1" paragraph>
+        Teaching runs through most of what I do outside engineering. I taught mathematics
+        in Lima from 2021, went on to coach competitive programming at Xplain and then
+        for the competitive programming society at UTEC, the University of Engineering
+        and Technology in Lima, and mentored two students through selection for the European
+        Girls' Olympiad in Informatics.
+      </Typography>
+
+      <Box sx={{ mt: 6 }}>
+        <Typography variant="overline" component="p">
+          In short
         </Typography>
-        <Grid container spacing={3} justifyContent="center">
+        <Typography variant="h3" component="h2" sx={{ mb: 1 }}>
+          Quick facts about me
+        </Typography>
+        <Box aria-hidden sx={{ width: 48, height: 2, backgroundColor: palette.flame, mb: 4 }} />
+
+        {/* md={3} so all four sit on one row — md={4} totalled 16 columns and
+            wrapped as 3 + 1. */}
+        <Grid container spacing={4} justifyContent="center">
           {quickFacts.map((fact, index) => (
-            <Grid item key={index} xs={12} md={4} sx={{ textAlign: 'center' }}>
+            <Grid item key={index} xs={12} sm={6} md={3} sx={{ textAlign: 'center' }}>
               {fact.icon}
-              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{fact.title}</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 700, mt: 1, mb: 0.5 }}>
+                {fact.title}
+              </Typography>
               <Typography variant="body2" color="text.secondary">
                 {fact.description}
               </Typography>
+              {fact.extra && <Box sx={{ mt: 1.5 }}>{fact.extra}</Box>}
             </Grid>
-        ))}
+          ))}
         </Grid>
       </Box>
-    </Container>
+    </PageSurface>
   );
 }
 
