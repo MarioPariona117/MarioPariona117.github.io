@@ -1273,8 +1273,9 @@ const SEED_LIBRARY_ENTRIES = [
     title: "Prayer Purifies, Reading Instructs",
     occasion:
       "From the Sentences, written c. 620 by the last of the Latin Fathers, who spent his life trying to preserve learning in a Spain that had stopped producing it.",
-    kind: "quote", tags: ["Scripture", "reading", "prayer", "contemplation"],
+    kind: "quote", seedVersion: 2, tags: ["Scripture", "reading", "prayer", "contemplation"],
     source: "Sentences III.8", author: "St. Isidore of Seville",
+    related: ["When We Pray, When We Read", "Reading Puts Food in the Mouth", "The Ladder of Monks"],
     year: "c. 620", origin: "Patristic", liturgical: "", feastDay: "4 April", favorite: false,
     body:
       "Prayer purifies us, reading instructs us.\n" +
@@ -2474,9 +2475,11 @@ const SEED_LIBRARY_ENTRIES = [
       "Jerome wrote to Eustochium in 384, urging a young Roman noblewoman toward the ascetic life — 'You pray: you speak to the Bridegroom. You read: he speaks to you.' The smoothed wording everyone quotes is St. Alphonsus Liguori's paraphrase, made some fourteen centuries later.",
     kind: "quote",
     tags: ["contemplation", "Scripture", "reading", "biblical", "Patristic"],
+    seedVersion: 2,
     source: "St. Alphonsus Liguori's paraphrase of St. Jerome, Letter 22 (to Eustochium), 25",
     author: "St. Jerome",
     authorNote: "this familiar wording is St. Alphonsus Liguori's paraphrase — Jerome's own is in the background",
+    related: ["Prayer Purifies, Reading Instructs", "Reading Puts Food in the Mouth", "The Ladder of Monks"],
     year: "384 (Jerome) / 18th century (this wording)",
     origin: "Patristic",
     liturgical: "",
@@ -6233,12 +6236,12 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "The Seven Last Words",
     kind: "teaching",
-    seedVersion: 3,
+    seedVersion: 4,
     tags: ["Passion", "Good Friday", "meditation"],
-    source: "The four Gospels, in the traditional harmonised order",
+    source: "The four Gospels, in the traditional harmonised order; commentary from St. Robert Bellarmine, De Septem Verbis (1618)",
     author: "Jesus Christ",
     authorNote: "assembled from all four Gospels — no single Gospel records all seven",
-    related: ["The Stations of the Cross", "Anima Christi", "The Five Wounds"],
+    related: ["The Stations of the Cross", "Anima Christi", "The Five Wounds", "The Seven Sorrows of Mary", "The Three Ways"],
     year: "1st century sayings; traditional harmony",
     origin: "Biblical",
     liturgical: "Good Friday; the Three Hours devotion",
@@ -6246,10 +6249,11 @@ const SEED_LIBRARY_ENTRIES = [
     originalLanguage: "",
     favorite: true,
     body:
-      "1. \"Father, forgive them, for they know not what they do.\"\n— Luke 23:34\n\n2. \"Amen I say to thee, this day thou shalt be with me in paradise.\"\n— Luke 23:43\n\n3. \"Woman, behold thy son… Behold thy mother.\"\n— John 19:26–27\n\n4. \"My God, my God, why hast Thou forsaken me?\"\n— Matthew 27:46; Mark 15:34\n\n5. \"I thirst.\"\n— John 19:28\n\n6. \"It is finished.\"\n— John 19:30\n\n7. \"Father, into Thy hands I commend my spirit.\"\n— Luke 23:46\n\nWHERE TO READ MORE\n\n**Fr. Alonso Mesía, The Devotion of the Three Hours' Agony** — The 1732 Lima devotion in English, with Herbert Thurston's historical introduction — which is where the account of its origin after the 1687 earthquake comes from. Scanned, full text, free.\nhttps://archive.org/stream/thedevotionofthe00mesiuoft/thedevotionofthe00mesiuoft_djvu.txt",
+      "1. \"Father, forgive them, for they know not what they do.\"\n— Luke 23:34\n\n2. \"Amen I say to thee, this day thou shalt be with me in paradise.\"\n— Luke 23:43\n\n3. \"Woman, behold thy son… Behold thy mother.\"\n— John 19:26–27\n\n4. \"My God, my God, why hast Thou forsaken me?\"\n— Matthew 27:46; Mark 15:34\n\n5. \"I thirst.\"\n— John 19:28\n\n6. \"It is finished.\"\n— John 19:30\n\n7. \"Father, into Thy hands I commend my spirit.\"\n— Luke 23:46\n\nBELLARMINE'S READING\n\nSt. Robert Bellarmine gave these seven a whole book in 1618, and his first move is to stop treating them as seven sayings. They are one sermon — \"the last sermon which the Redeemer of the world preached from the Cross, as from an elevated pulpit, to the human race.\"\n\nThe Cross he reads four ways at once: \"the pulpit of the Preacher, the altar of the Sacrificing Priest, the arena of the Combatant, the workshop of the Wonder-worker.\"\n\nWHO EACH WORD IS FOR\n\n\"Of the seven words our Redeemer spoke three were for the good of others, three for His own good, and one was common both to Himself and to us. His first care, however, was for others. He thought of Himself last.\"\n\nThe first three are ordered by need, not by affection:\n\n| Word | Spoken for |\n| First | His enemies |\n| Second | His friends — the thief |\n| Third | His relations — His Mother |\n\nEnemies come first because \"the first demand of charity is to succour those who are in want,\" and they were the ones most in want. The order is the exact reverse of the one that comes naturally, which is the point.\n\nA VIRTUE FROM EACH HALF\n\n| Words 1-3 | charity towards enemies · kindness to those in distress · affection for parents |\n| Words 4-7 | humility · patience · perseverance · obedience |\n\nTHE ONE SACRIFICE\n\nHis compression of what was finished at the sixth word: \"In this one Sacrifice of Christ, the priest is the God-Man, the altar is the Cross, the victim is the Lamb of God, the fire for the holocaust is charity, the fruit of the sacrifice is the redemption of the world.\"\n\nAnd on the contest the Cross settled: \"This struggle was a judicial, not a military one; it was a struggle between rival suitors, not between rival armies.\"\n\nWHERE TO READ MORE\n\n**St. Robert Bellarmine, The Seven Words Spoken on the Cross** — The 1618 book, in English, free. Two books, seven words, each followed by its \"fruits.\" Go to the fourth and seventh words first; see the cautions in the background before reading the chapter on the darkness.\nhttps://archive.org/details/the-seven-words-spoken-on-the-cross-by-saint-robert-bellarmine\n\n**Fr. Alonso Mesía, The Devotion of the Three Hours' Agony** — The 1732 Lima devotion in English, with Herbert Thurston's historical introduction — which is where the account of its origin after the 1687 earthquake comes from. Scanned, full text, free.\nhttps://archive.org/stream/thedevotionofthe00mesiuoft/thedevotionofthe00mesiuoft_djvu.txt",
     background:
       "A harmony, not a single passage — no one Gospel records all seven. Luke has the first, second and seventh; John the third, fifth and sixth; Matthew and Mark preserve only the fourth, the cry of dereliction. The traditional sequence is the order the Church has long assumed, but the Gospels themselves do not establish it.\n\nThey are the backbone of the Three Hours devotion, noon to three on Good Friday, one word preached at a time. Haydn wrote his Seven Last Words as orchestral meditations for exactly that service in Cádiz.\n\nTwo are worth pausing on. The fourth is a quotation: Christ is praying Psalm 22, which opens in that abandonment and ends in vindication — so it is genuinely a cry, and also the first line of a psalm whose ending He knew. And the sixth, 'It is finished' (tetelestai), is not collapse; the Greek is the word used for a debt discharged or a commission completed." +
-      "\n\nThe Good Friday service built on these seven — the Three Hours' Agony, or Tre Ore, kept from noon to three — began in Lima. It was devised by Fr. Alonso Mesía Bedoya, a Jesuit born in Peru in 1665, who directed a confraternity there called the School of Christ; Herbert Thurston's history of the devotion traces the impulse to the Lima earthquake of 1687 and the public acts of atonement that followed it, with the three-hour Good Friday form growing out of the confraternity's ordinary Friday exercises rather than being composed in one sitting. Mesía died in 1732, his text was printed after his death, and it reached Rome around 1788. He is not a saint and is barely remembered by name — but this is the one devotion in the library that came from Peru before it came from anywhere else.",
+      "\n\nThe Good Friday service built on these seven — the Three Hours' Agony, or Tre Ore, kept from noon to three — began in Lima. It was devised by Fr. Alonso Mesía Bedoya, a Jesuit born in Peru in 1665, who directed a confraternity there called the School of Christ; Herbert Thurston's history of the devotion traces the impulse to the Lima earthquake of 1687 and the public acts of atonement that followed it, with the three-hour Good Friday form growing out of the confraternity's ordinary Friday exercises rather than being composed in one sitting. Mesía died in 1732, his text was printed after his death, and it reached Rome around 1788. He is not a saint and is barely remembered by name — but this is the one devotion in the library that came from Peru before it came from anywhere else." +
+      "\n\nBELLARMINE ON THE HARD ONES\n\nHe wrote the book expecting to die: 'Behold me, now, for the fourth year, preparing for my death... so that if I am no longer able to be of use by word of mouth, or the composition of voluminous works, I may at least be of some use to my brethren, by these pious little books.' He died three years later, in 1621.\n\nThe fourth word. His answer to 'in what sense was He forsaken' is the most useful thing in the book, because it is an answer rather than a hush. He lists five unions between Father and Son — the eternal union of essence; the union of the divine nature with the human in the Person; the union of grace and will; the union of glory, which is the beatific vision; and the union of protection — and shows that the first four cannot be broken at all. 'There remains then the union of protection only, which was broken for a short period, in order to allow time for the oblation of the bloody sacrifice.' God abandoned His Son 'when He allowed His Human flesh to suffer such cruel torments without any consolation.'\n\nThen he notices the pronoun, which is the sharpest observation in the book. Christ does not say My Father, why hast Thou forsaken Me. He says My God — because 'the Father is called the God of the Son only after the Incarnation and by reason of the Incarnation.' The one union that could not be touched is the one the cry deliberately declines to name.\n\nHe also explains the volume. Until that hour Christ had borne everything in silence: 'He did not complain of the Jews who accused Him, nor of Pilate who condemned Him, nor of the soldiers who crucified Him. He did not groan: He did not cry out.' So the loud cry is not a breaking. It is a publication — the words 'are not words of one who accuses, or who reproaches, or who complains, but... the words of One who declares the greatness of His suffering.'\n\nThe fifth word. The thirst had been there from the first hour and was among the worst of the pains, since a body that has lost that much blood wants nothing else. He bore it three hours in silence and spoke only at the end, so that it would be on record. And the vinegar was not a kindness: that vessel was kept at executions 'in order to make those who were crucified die the quicker.'\n\nThe seventh word, which is the one that reaches the daily office. Bellarmine argues that 'spirit' here means the life of the body rather than the soul — Christ's soul was in no danger, having enjoyed the beatific vision from its creation — so the prayer is for a swift resurrection: 'He prayed not to be swallowed up by death, but merely to taste death and then return to life again.'\n\nHe also notices what Christ leaves out. The psalm continues 'Thou hast redeemed me, O Lord, the God of truth,' and Christ stops before it, 'because He was the Redeemer and not one of the redeemed, but we who have been redeemed with His precious Blood must not omit it.' So we do not pray it as He prayed it: we say Lord rather than Father, and we finish the verse.\n\nThe Church sets that one prayer at three moments, and Bellarmine names all three — daily at the beginning of Compline, after the Domine non sum dignus before Communion, and at the hour of death. St. Basil's reason for the Compline placement is the plain one: say it as the dark comes on, so that 'if a sudden death overtake us we may not be found unprepared.'\n\nThe third word. Two things worth keeping. Christ says Woman and not Mother because 'His love for Mary would not permit Him at such a moment to address her by the endearing name of Mother.' And John, who had left his own mother to follow Christ, is the one who gets the hundredfold literally: 'leaving his mother, the wife of a fisherman, received as a mother, the Mother of the Creator.' Bellarmine also reads the three women at the Cross as the three ways — Magdalene the penitent beginner, Mary of Cleophas the proficient, the Virgin the perfect.\n\nTWO CAUTIONS ABOUT THE BOOK\n\nIt is a book of 1618 and it shows in two places. The first is harmless: a long chapter arguing that the three-hour darkness was a miraculous eclipse in which God moved the moon across fourteen days of orbit and back. That is apologetics against sceptics, not devotional meat, and can be skipped without loss.\n\nThe second is not harmless. The treatment of the Jews is sustained and at points contemptuous — he argues their blindness 'lasts till this moment,' and reads their scattering as proof that they 'have been abandoned by God.' The Church has since taught the opposite in as many words: Nostra Aetate (1965) rejects both the charge of collective guilt for the Passion and the idea that the Jewish people are rejected or accursed by God. Read Bellarmine for the fourth and seventh words. Do not take him on this.",
   },
   {
     title: "The Five Wounds",
@@ -6591,12 +6595,12 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "The Four Senses of Scripture",
     kind: "teaching",
-    seedVersion: 2,
+    seedVersion: 3,
     tags: ["Scripture", "reading", "contemplation", "catechetical", "study"],
     source: "CCC 115-119; the medieval couplet of Augustine of Dacia",
     author: "The Catechism, from the medieval tradition",
     authorNote: "the couplet is 13th-century, usually credited to Augustine of Dacia, O.P.",
-    related: ["The Theological Virtues", "The Ladder of Monks", "Scripture Grows With the Reader", "We Hear Him When We Read"],
+    related: ["The Theological Virtues", "The Ladder of Monks", "Reading Puts Food in the Mouth", "Scripture Grows With the Reader", "We Hear Him When We Read"],
     relatedSaints: ["thomas-aquinas", "augustine"],
     year: "Ancient; the fourfold scheme settled by the Middle Ages",
     origin: "Patristic and medieval",
@@ -6612,12 +6616,12 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "The Ladder of Monks",
     kind: "teaching",
-    seedVersion: 2,
+    seedVersion: 3,
     tags: ["reading", "prayer", "contemplation", "meditation", "study", "the soul"],
     source: "Guigo II, Scala Claustralium (The Ladder of Monks), c. 1150",
     author: "Guigo II, Carthusian",
     authorNote: "ninth prior of the Grande Chartreuse; not a canonised saint",
-    related: ["The Four Senses of Scripture", "The Three Powers of the Soul", "Every Saint Became a Saint Through Mental Prayer", "The Three Ways"],
+    related: ["Reading Puts Food in the Mouth", "One Drop of the Heavenly Joy", "The Four Senses of Scripture", "The Three Powers of the Soul", "Every Saint Became a Saint Through Mental Prayer", "The Three Ways"],
     relatedSaints: [],
     year: "c. 1150",
     origin: "Carthusian",
@@ -6629,6 +6633,123 @@ const SEED_LIBRARY_ENTRIES = [
       "FOUR RUNGS\n\nGuigo saw \"a ladder with just four rungs, the one end standing on the ground, the other reaching into the clouds.\"\n\n| Rung | Guigo's definition |\n| Reading // lectio | \"Busily looking on Holy Scripture with all one's will and wit.\" |\n| Meditation // meditatio | \"A studious insearching with the mind to know what was before concealed.\" |\n| Prayer // oratio | \"A devout desiring of the heart to get what is good and avoid what is evil.\" |\n| Contemplation // contemplatio | \"The lifting up of the heart to God tasting somewhat of the heavenly sweetness and savour.\" |\n\nTHE IMAGE THAT EXPLAINS IT\n\n\"Reading puts as it were whole food into your mouth; meditation chews it and breaks it down; prayer finds its savour; contemplation is the sweetness that so delights and strengthens.\"\n\nWhich is a complete account of why reading alone does not nourish. The food is in the mouth and goes no further. It also explains the particular futility of reading a great deal of spiritual writing quickly: swallowing whole.\n\nGuigo's other compression: \"Reading seeks, meditation finds, prayer asks, contemplation feels.\"\n\nWHAT DEPENDS ON WHAT\n\nThe rungs are not four separate practices to be chosen between. Each is useless without the next: reading without meditation is idle, meditation without prayer has no effect, prayer without devotion is fruitless — and contemplation is not climbed to at all, but given, when the first three have prepared for it.\n\nThat last point is the one Guigo is most careful about. Three rungs are your work. The fourth is not.\n\nIt maps exactly onto the three powers of the soul, which is why the method has outlasted its monastery: reading puts the thing into the memory, meditation sets the understanding to work on it, prayer is the will responding. Contemplation is what happens when all three are quiet and God is not.\n\nWHERE TO READ MORE\n\n**Guigo II, The Ladder of Four Rungs** — The whole letter, in English, free. It is about twenty pages and repays being read in one sitting.\nhttps://www.umilta.net/ladder.html",
     background:
       "Written about 1150 by Guigo II, ninth prior of the Grande Chartreuse, as a letter to a fellow monk — the Scala Claustralium, the ladder of the cloistered. It is short, perhaps twenty pages, and it is the reason the phrase lectio divina names a method rather than a mood.\n\nThe ladder is Jacob's, from Genesis 28, and the choice matters: a ladder set on the earth with its top in heaven, with angels going both up and down. Guigo is describing something with traffic in both directions, not a self-improvement staircase.\n\nThe practical value of the scheme is diagnostic. When prayer has gone dead it is usually possible to say which rung has been skipped — most often the second, because meditation is slow and produces nothing visible, and most often the fault of the well-read, who mistake having read something for having chewed it.\n\nOne caution about the fourth rung. Guigo is describing a monastic life with hours of silence built into it, and the tradition after him has sometimes turned contemplation into a target to be achieved by technique, which is the exact opposite of his point. He puts it plainly: the first three are what a man does, and the fourth is what is done to him.",
+  },
+  {
+    title: "Reading Puts Food in the Mouth",
+    occasion:
+      "From the letter that gave lectio divina its four steps. Guigo has just defined the four rungs; this is the image he reaches for to explain why they are one process and not four options.",
+    kind: "quote",
+    seedVersion: 1,
+    tags: ["reading", "meditation", "prayer", "contemplation", "study", "Scripture"],
+    source: "Scala Claustralium (The Ladder of Monks), ch. III in the Latin; ch. 1 in the Middle English version",
+    author: "Guigo II, Carthusian",
+    authorNote: "ninth prior of the Grande Chartreuse; not a canonised saint",
+    related: ["The Ladder of Monks", "One Drop of the Heavenly Joy", "Prayer Purifies, Reading Instructs", "When We Pray, When We Read", "The Four Senses of Scripture"],
+    relatedSaints: ["benedict", "augustine", "bernard-of-clairvaux"],
+    year: "c. 1150",
+    origin: "Carthusian",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "Latin",
+    favorite: false,
+    latinBody:
+      "Lectio quasi solidum cibum ori apponit,\n" +
+      "meditatio masticat et frangit,\n" +
+      "oratio saporem acquirit,\n" +
+      "contemplatio est ipsa dulcedo quae jocundat et reficit.",
+    body:
+      "Reading puts as it were whole food into your mouth;\n" +
+      "meditation chews it and breaks it down;\n" +
+      "prayer finds its savour;\n" +
+      "contemplation is the sweetness that so delights and strengthens.",
+    background:
+      "Four verbs for one mouthful. The point is not that the four are " +
+      "equally good things to do, but that they are consecutive operations " +
+      "on the same food — and that stopping early leaves the food in the " +
+      "mouth, undigested, having nourished nothing.\n\n" +
+      "Applied honestly it is uncomfortable, because the rung most often " +
+      "skipped is the second, and it is skipped by exactly the sort of " +
+      "person who reads a lot. Chewing is slow and produces nothing you " +
+      "could show anyone. Reading produces a finished page and the feeling " +
+      "of having done something. Guigo's image says that feeling is " +
+      "unreliable: getting through more pages is eating faster, which is " +
+      "the opposite of the remedy.\n\n" +
+      "Note also what the fourth verb is not. Sweetness is not something " +
+      "you do to food; it is what the food turns out to be once it has been " +
+      "broken down. That is Guigo's whole argument about contemplation in a " +
+      "single word — the first three rungs are work, the fourth is not " +
+      "climbed to but given.\n\n" +
+      "Text. The Latin is Guigo's. The English is Julia Bolton Holloway's, " +
+      "made not from the Latin but from the 15th-century Middle English " +
+      "translation, A Ladder of Foure Ronges — so it is a translation of a " +
+      "translation and runs slightly loose against the Latin beside it " +
+      "('prayer finds its savour' for oratio saporem acquirit, prayer " +
+      "acquires its savour). It is kept here because it is the version the " +
+      "prayer entry from chapter 4 comes from, and the two should read in " +
+      "the same voice.\n\n" +
+      "Attribution. The Scala circulated for centuries under other names — " +
+      "as St. Augustine's Scala Paradisi and as St. Bernard's Scala " +
+      "Claustralium — before it was returned to Guigo II, ninth prior of " +
+      "the Grande Chartreuse, who wrote it about 1150 and is not a " +
+      "canonised saint.",
+  },
+  {
+    title: "One Drop of the Heavenly Joy",
+    kind: "prayer",
+    seedVersion: 1,
+    tags: ["contemplation", "humility", "desire", "reading", "Carthusian"],
+    source: "Scala Claustralium (The Ladder of Monks), ch. 4",
+    author: "Guigo II, Carthusian",
+    authorNote: "ninth prior of the Grande Chartreuse; not a canonised saint",
+    related: ["The Ladder of Monks", "Reading Puts Food in the Mouth", "The Beatitudes"],
+    relatedSaints: [],
+    year: "c. 1150",
+    origin: "Carthusian",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "Latin",
+    favorite: false,
+    body:
+      "Lord, you will not be seen, but by those who are clean of heart.\n\n" +
+      "I have done what is in me to do, read and thought deeply and searched " +
+      "what it is and in what manner I might best come to this cleanness " +
+      "that I might somewhat know you.\n\n" +
+      "Lord, I have sought and thought with all my poor heart; and, Lord, in " +
+      "my meditation the fire of desire kindles to know you, not only the " +
+      "bitter bark without, in feeling and tasting in my soul.\n\n" +
+      "Lord, this worthiness I ask not for myself, for I am wretched and " +
+      "sinful and most unworthy than all others. But as much, Lord, as the " +
+      "puppy eats of the crumbs that fall from the board of the lord, I ask " +
+      "of the heritage that is to come one drop of the heavenly joy to " +
+      "comfort my thirsty soul that burns in love-longing to you.",
+    background:
+      "This is not a freestanding prayer. It is a worked example — the third " +
+      "rung of the ladder shown actually happening, put where a lesser " +
+      "writer would have put a definition.\n\n" +
+      "The setup is chapter 4. Guigo has taken one verse for his reading — " +
+      "'Blessed are the clean of heart, for they shall see God' — and chewed " +
+      "it, and got nowhere: 'the more we think to travail to climb there, " +
+      "the more we see what the Godhead does, then we see our strength and " +
+      "our intelligence are nought.' Meditation has done its proper work, " +
+      "which is to run out. What follows is what a man says when it does.\n\n" +
+      "Two things in it are worth noticing. First, the request is " +
+      "deliberately tiny. He does not ask to see God; he asks for one drop, " +
+      "on account — 'of the heritage that is to come' — as a foretaste " +
+      "rather than the inheritance. Second, he asks for it as a dog, which " +
+      "is the Canaanite woman's argument in Matthew 15:27, the one place in " +
+      "the Gospels where someone wins a point off Christ, and wins it by " +
+      "conceding everything first.\n\n" +
+      "'Board' is bord, the table; 'puppy' is the Middle English whelp; " +
+      "'love-longing' is the vocabulary of the 14th-century English " +
+      "contemplatives. The clause 'not only the bitter bark without, in " +
+      "feeling and tasting in my soul' reads as though a 'but' has dropped " +
+      "out — the sense is bark without and taste within — but it is printed " +
+      "this way in the source and is left alone here rather than quietly " +
+      "mended.\n\n" +
+      "Text. Guigo wrote in Latin about 1150. This English is Julia Bolton " +
+      "Holloway's modernisation of the 15th-century Middle English version, " +
+      "A Ladder of Foure Ronges, which is why it sounds three hundred years " +
+      "younger than it is.",
   },
   {
     title: "The Three Ways",
