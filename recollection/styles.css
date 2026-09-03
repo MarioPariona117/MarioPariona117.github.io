@@ -2565,7 +2565,6 @@ body,
   text-align: left;
   padding: 0 1.1em 0.6em 0;
   border-bottom: 1px solid rgba(var(--gold-rgb), 0.22);
-  white-space: nowrap;
 }
 .reader-table td {
   padding: 0.62em 1.1em 0.62em 0;
@@ -2573,6 +2572,9 @@ body,
   vertical-align: top;
 }
 .reader-table tr:last-child td { border-bottom: 0; }
+/* Keep a short label column from being squeezed until it breaks at a hyphen
+   ("Words 1-" / "3"), without forbidding a long first cell from wrapping. */
+.reader-table td:first-child { min-width: 6.5rem; }
 .reader-table th:last-child, .reader-table td:last-child { padding-right: 0; }
 /* An em dash in a cell means "not in this one" — it shouldn't read as loudly
    as the text it sits beside. */
