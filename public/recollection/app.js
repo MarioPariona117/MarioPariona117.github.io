@@ -5118,6 +5118,27 @@ const SEED_LIBRARY_ENTRIES = [
       "Almost every famous saying of St. Francis turns out not to be his. This one is — it is in the Rule he wrote, approved by Honorius III in 1223, which is about as securely attributed as a medieval text gets. He then repeated it in a short letter to St. Anthony of Padua, applying it to study instead of manual work.\n\nThe claim is stronger than 'pray as well as working'. Cui debent cetera temporalia deservire — everything else temporal should *serve* the spirit of prayer. Not balance it, not make room for it: serve it. Work, study, meals, errands are not interruptions of prayer and not equals of it; they are its staff.\n\nNotice what he does not say. He does not say to work less, and he explicitly names idleness as the enemy of the soul in the same sentence — so this is not an argument for doing nothing devoutly. It is an argument about which of the two is in service to the other, and the answer is fixed.\n\nThe phrase he uses is 'the spirit of prayer', not prayer itself. What must not be extinguished is not the practice — you can keep saying the words with it gone — but the disposition underneath, which is easier to lose and harder to notice going.\n\nOn the translation: the last clause appears variously as 'which all other temporal things should serve zealously', 'to which all temporal things must contribute', and 'to which every temporal consideration must be subordinate'. The Latin is cui debent cetera temporalia deservire. Nothing turns on the difference; the version above is from the Capuchin text.",
   },
   {
+    title: "Not So Much Praying as Become Prayer",
+    kind: "quote",
+    seedVersion: 1,
+    tags: ["contemplation", "mental prayer", "Franciscan", "self-knowledge", "catechetical"],
+    source: "Thomas of Celano, Second Life of St. Francis — a description of Francis, not a saying of his",
+    author: "Thomas of Celano",
+    authorNote: "circulates as a saying of St. Francis; it is his biographer describing him",
+    related: ["Do Not Extinguish the Spirit of Prayer", "Use Words If Necessary", "Peace Prayer of St. Francis", "Prayer Before the Crucifix", "Then the Impossible"],
+    relatedSaints: ["francis-of-assisi"],
+    year: "c. 1247",
+    origin: "Franciscan",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "Non tam orans quam oratio factus.\n\nHe was not so much a man praying as prayer itself, become prayer.\n\n— Thomas of Celano, of St. Francis\n\nWHAT IS USUALLY QUOTED INSTEAD\n\n\"We should seek not so much to pray but to become prayer.\" Attributed to St. Francis, printed on cards and posters, and repeated everywhere.\n\nHe did not say it. It is Celano's sentence about him, turned around: an observation of what Francis had become has been rewritten as an instruction to us, and put in his mouth. The change is small and it costs the whole point. Celano is reporting something that happened to a man; the circulating version makes it a technique to attempt.\n\nWHERE TO READ MORE\n\n**The Writings of St. Francis of Assisi**, trans. Paschal Robinson — everything Francis actually wrote is one slim volume, which is why claims about what he said are unusually easy to check.\nhttps://www.ecatholic2000.com/francis/writings1.shtml",
+    background:
+      "Thomas of Celano wrote the first life of Francis three years after his death, commissioned for the canonisation, and a fuller second life about twenty years later. This line is from the second. It is a biographer's description, made close enough in time that people who had known Francis were still alive to object.\n\nThe distinction matters more than it looks. In Celano it is a report: this is what praying had done to the man over a lifetime, until the activity and the person were no longer separable. In the version that circulates it becomes advice — we should seek to become prayer — which is the sort of thing that can be printed under a photograph of a sunset and attempted on a Tuesday.\n\nFrancis is the most misquoted saint in the Church, and the reasons are worth knowing, because they recur. His authentic writings are few and short, so anything long and lyrical is suspect on sight. His popularity is enormous and crosses religious boundaries, so sentiments get attached to him for the authority his name lends. And there is a specific modern source of contamination: Daniel Ladinsky's Love Poems from God presents his own compositions as renderings of Francis, Teresa of Ávila, Eckhart and others; scholars of Hafez say the same of his Hafez volume. Lines from it circulate as genuine.\n\nAgainst that background it is worth noticing what he really did say on this, in the Rule he wrote himself: that nothing should extinguish the spirit of holy prayer and devotion, which all other temporal things should serve. That is the same thought, from him, and verifiable.",
+  },
+  {
     title: "Lenten Prayer of St. Ephrem",
     kind: "prayer",
     tags: ["Lent", "repentance", "humility"],
