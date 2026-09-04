@@ -5070,6 +5070,7 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "Prayer Before the Crucifix",
     kind: "prayer",
+    seedVersion: 2,
     tags: ["Franciscan", "faith", "hope", "charity"],
     source: "Recorded in the margins of two early manuscripts of the Legend of the Three Companions",
     author: "St. Francis of Assisi",
@@ -5087,13 +5088,34 @@ const SEED_LIBRARY_ENTRIES = [
       "that I may carry out Your holy and true command.\n" +
       "Amen.",
     background:
-      "Unlike the 'Peace Prayer' also attributed to Francis elsewhere (and deliberately excluded from " +
-      "this library as a known 20th-century misattribution), this one has a real claim to authenticity: " +
+      "Unlike the 'Peace Prayer' also attributed to Francis elsewhere (which is in this library too, " +
+      "under its real status as an anonymous 20th-century prayer), this one has a real claim to authenticity: " +
       "Franciscan scholars trace it to Francis himself, connected to the pivotal early moment in his " +
       "conversion when, praying before the crucifix in the ruined chapel of San Damiano near Assisi " +
       "(around 1205–1206), he reported hearing Christ speak to him — 'Francis, go and rebuild my house.' " +
       "That crucifix and that moment are what set his whole later life in motion; this prayer is the one " +
       "the early Franciscan sources actually place in his mouth there.",
+  },
+  {
+    title: "Do Not Extinguish the Spirit of Prayer",
+    kind: "quote",
+    seedVersion: 1,
+    tags: ["work", "study", "contemplation", "daily", "Franciscan", "mental prayer"],
+    source: "The Later Rule (Regula bullata), 1223, ch. 5; repeated in the Letter to Brother Anthony",
+    author: "St. Francis of Assisi",
+    authorNote: "genuinely his — from the Rule he wrote, unlike the sayings usually quoted in his name",
+    related: ["Prayer Before the Crucifix", "That You Are and Nothing More", "Use Words If Necessary", "Preces for Mental Prayer", "Work as if Everything Depended on You"],
+    relatedSaints: ["francis-of-assisi", "anthony-of-padua"],
+    year: "1223",
+    origin: "Franciscan",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "They are to work faithfully and devotedly, so that, having excluded idleness, the enemy of the soul, they do not extinguish the spirit of holy prayer and devotion, which all other temporal things should serve zealously.\n\n— The Later Rule, 1223, chapter 5\n\nHe said the same thing again to St. Anthony of Padua, about study rather than work: teach theology to the brothers, provided you do not extinguish the spirit of prayer and devotion in doing it.\n\nWHERE TO READ MORE\n\n**The Later Rule (Regula bullata), 1223** — chapter 5 is four sentences long. The whole Rule is about twenty minutes' reading and is the most reliable thing we have from him.\nhttps://capconstitutions.blogspot.com/2012/11/rule-of-st-francis-of-assisi-from-1223.html",
+    background:
+      "Almost every famous saying of St. Francis turns out not to be his. This one is — it is in the Rule he wrote, approved by Honorius III in 1223, which is about as securely attributed as a medieval text gets. He then repeated it in a short letter to St. Anthony of Padua, applying it to study instead of manual work.\n\nThe claim is stronger than 'pray as well as working'. Cui debent cetera temporalia deservire — everything else temporal should *serve* the spirit of prayer. Not balance it, not make room for it: serve it. Work, study, meals, errands are not interruptions of prayer and not equals of it; they are its staff.\n\nNotice what he does not say. He does not say to work less, and he explicitly names idleness as the enemy of the soul in the same sentence — so this is not an argument for doing nothing devoutly. It is an argument about which of the two is in service to the other, and the answer is fixed.\n\nThe phrase he uses is 'the spirit of prayer', not prayer itself. What must not be extinguished is not the practice — you can keep saying the words with it gone — but the disposition underneath, which is easier to lose and harder to notice going.\n\nOn the translation: the last clause appears variously as 'which all other temporal things should serve zealously', 'to which all temporal things must contribute', and 'to which every temporal consideration must be subordinate'. The Latin is cui debent cetera temporalia deservire. Nothing turns on the difference; the version above is from the Capuchin text.",
   },
   {
     title: "Lenten Prayer of St. Ephrem",
