@@ -256,6 +256,9 @@ function splitTable(lines) {
   // pushed off the page, and one that starts with a group row lost the group.
   const isDelimiter = (r) => r.every((c) => /^:?-{2,}:?$/.test(c));
   if (rows.length > 2 && isDelimiter(rows[1])) {
+    // A row of empty cells above a delimiter is a header in form only — it
+    // renders as a blank band. Treat the table as headerless instead.
+    if (rows[0].every((c) => c === "")) return { head: null, body: rows.slice(2) };
     return { head: rows[0], body: rows.slice(2) };
   }
   return { head: null, body: rows };
@@ -7035,6 +7038,90 @@ const SEED_LIBRARY_ENTRIES = [
       "THE FIVE POINTS\n\nSt. Ignatius sets them out in order, and the order is the argument (Spiritual Exercises, 43):\n\n| Point | What you do |\n| --- | --- |\n| First | \"Give thanks to God our Lord for the benefits received.\" |\n| Second | \"Ask grace to know our sins and cast them out.\" |\n| Third | \"Ask account of our soul from the hour that we rose up to the present Examen, hour by hour, or period by period.\" |\n| Fourth | \"Ask pardon of God our Lord for the faults.\" |\n| Fifth | \"Purpose amendment with His grace.\" |\n\nIt closes with an Our Father.\n\nWHY THANKSGIVING COMES FIRST\n\nBecause an examination that opens with your faults produces a different person than one that opens with gifts received. Ignatius puts gratitude first deliberately: you look at the day as something given before you look at what you did with it. Reverse the order and the exercise curdles into a nightly audit, which is not what it is for.\n\nNotice too that the second point is a request for *grace* to see. He does not assume you can spot your own sins by trying harder — self-knowledge is asked for, not achieved.\n\nWHAT THE THIRD POINT ACTUALLY ASKS\n\nHour by hour, or period by period. Not \"how was today\" in general — the general question gets a general answer, and a general answer is useless. The instruction is to walk back through the day in sections, which is slower and much harder to fool.\n\nThoughts first, then words, then deeds — the order the tradition uses everywhere, because the deed is the last thing to go wrong and the easiest to notice.\n\nHOW LONG\n\nIgnatius intends something that fits inside a day, twice a day in the full Exercises. Fifteen minutes is generous; five done nightly is worth more than thirty done occasionally. The examen is the one Ignatian practice he expected everyone to keep even when everything else was dropped.\n\nWHERE TO READ MORE\n\n**The Spiritual Exercises, the General Examen** — the five points in Ignatius's own words, in the public-domain Mullan translation. The passage is short; the surrounding material on the particular examen is worth reading too.\nhttps://mycatholic.life/books/the-spiritual-exercises-of-saint-ignatius-of-loyola/first-week/",
     background:
       "The examen is the smallest piece of the Spiritual Exercises and the one Ignatius refused to let go of. In a well-known letter he told a correspondent that if the pressure of work meant dropping everything else, this was the practice to keep — the reasoning being that a person who never reviews the day never notices the pattern in it, and it is the pattern rather than the individual fault that shapes a life.\n\nTwo things distinguish it from an examination of conscience before confession. It is daily rather than occasional, and it is not primarily about sin: three of the five points are thanksgiving, petition and resolution. The Ignatian tradition sometimes calls it a review of consciousness rather than of conscience — looking for where God was at work in the day, not only where you failed.\n\nThe third point is the one people quietly skip, because walking back through the hours is slower than summarising them. It is also the only point that produces information you did not already have.",
+  },
+  {
+    title: "The Seven Petitions",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["prayer", "foundational", "catechetical", "the soul", "virtue"],
+    source: "CCC 2803-2865; the correspondences are St. Augustine's, On the Sermon on the Mount II, 38",
+    author: "The Catechism, with St. Augustine",
+    authorNote: "the prayer is Our Lord's; the structure is how the tradition reads it",
+    related: ["Our Father", "The Seven Gifts of the Holy Spirit", "The Beatitudes", "How the Gifts, Fruits, Beatitudes, Virtues and Powers of the Soul Fit Together", "The Theological Virtues"],
+    relatedSaints: ["augustine", "thomas-aquinas"],
+    year: "Patristic and scholastic; CCC 1992",
+    origin: "Biblical",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "THE SHAPE\n\nSeven petitions, in two unequal groups. The Catechism: the first three, \"more theological, draw us toward the glory of the Father\"; the last four, \"as ways toward him, commend our wretchedness to his grace\" (CCC 2803).\n\nThe first series is addressed to Thou — thy name, thy kingdom, thy will. The second is about us — bread, forgiveness, temptation, evil. You ask for nothing of your own until you have asked for three things of His.\n\nAnd the first three are not three unrelated requests: \"By the three first petitions, we are strengthened in faith, filled with hope, and set aflame by charity.\"\n\nAUGUSTINE'S SEVEN AND SEVEN AND SEVEN\n\nAugustine reads the petitions against the gifts of the Spirit and the beatitudes, one to each, in the same work where he pairs the beatitudes with the gifts.\n\n| Petition | Gift | Beatitude |\n| --- | --- | --- |\n| Hallowed be thy name | Fear of the Lord | The poor in spirit |\n| Thy kingdom come | Piety | The meek |\n| Thy will be done | Knowledge | Those who mourn |\n| Give us this day our daily bread | Fortitude | Those who hunger for righteousness |\n| Forgive us our trespasses | Counsel | The merciful |\n| Lead us not into temptation | Understanding | The clean of heart |\n| Deliver us from evil | Wisdom | The peacemakers |\n\nTHE DIRECTION OF TRAVEL\n\nRead the middle column downward. It runs from fear of the Lord, the lowest of the gifts, to wisdom, the highest.\n\nSo on Augustine's reading the Our Father is not a list of requests in any order. It is an ascent: you begin where the spiritual life begins, in fear, and the last thing you ask for — deliverance from evil — is the petition of wisdom, which is the gift of the perfect. Praying it slowly walks you up the whole scale, several times a day, in about twenty seconds.\n\nWHAT IT IS\n\nTertullian's phrase, quoted at CCC 2761: the Lord's Prayer \"is truly the summary of the whole gospel.\"\n\nWHERE TO READ MORE\n\n**The Catechism on the seven petitions** — CCC 2803 onwards, one section per petition.\nhttps://www.vatican.va/content/catechism/en/part_four/section_two/article_3.html\n\n**St. Augustine, On the Sermon on the Mount, Book II** — section 38 is where the three sevens are laid side by side.\nhttps://www.newadvent.org/fathers/16012.htm",
+    background:
+      "The Catechism gives the whole fourth part of itself to this prayer, which is a structural statement in its own right: creed, sacraments, commandments, and then the Our Father.\n\nAugustine's threefold correspondence is the boldest of the schemes in this library, and it should be held the way he held it — as a reading that illuminates, not a doctrine to be defended. He is not claiming Our Lord composed the petitions to match a list of gifts drawn from Isaiah. He is claiming that when you set the three sevens beside each other they turn out to move in the same direction, and that this is not accidental because the same Spirit is behind all three.\n\nWhether the pairings convince at every link is less important than the observation underneath: the prayer ascends. Most people pray it as a sequence of requests of descending importance, and on Augustine's reading it is the opposite — the last petition is the highest.",
+  },
+  {
+    title: "The Three Kinds of Humility",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["humility", "vocation", "discernment", "self-knowledge", "Ignatian", "virtue"],
+    source: "St. Ignatius of Loyola, Spiritual Exercises, Second Week",
+    author: "St. Ignatius of Loyola",
+    authorNote: "also translated 'three modes' or 'three degrees' of humility",
+    related: ["The Two Standards", "Litany of Humility", "Humility Is Nothing But Truth", "The Cardinal Virtues", "Suscipe"],
+    relatedSaints: ["ignatius-of-loyola"],
+    year: "Spiritual Exercises, 1522-1524",
+    origin: "Ignatian",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "THREE DEGREES\n\n| Degree | What it is |\n| --- | --- |\n| The first | To obey God's law in everything, so far as not to break a commandment — divine or human — even were one offered dominion over all created things, and even to save one's life on earth. |\n| The second | Indifference. To have come to the point of not wanting riches more than poverty, or honour more than dishonour, a long life more than a short one — and not to commit even a venial sin for any created thing. |\n| The third | The most perfect. Where the first two are equal in all else, to choose poverty with Christ poor rather than riches, contempt with Christ scorned rather than honour, and to be accounted a fool for Christ rather than wise — in order to imitate Him more closely. |\n\nWHERE EACH ONE BITES\n\nThe first is not modesty. It is the refusal to break a commandment for anything whatever, including one's life — which is a far higher floor than it sounds, and most people are not standing on it.\n\nThe second is the one that sounds achievable and is not. It is not preferring poverty; it is not preferring either. Indifference in Ignatius's sense means the scales genuinely at rest, so that the only thing that moves them is what God wants. Most spiritual difficulty lives here.\n\nThe third is the one nobody wants and Ignatius knows it. Notice its condition: it applies \"where the first two are equal\" — it is not a licence to court humiliation, and it is not for choosing between a good and a bad option. It applies when two courses are equally to God's service, and then it says: take the poorer, the more despised, the more foolish-looking, for the sake of resembling Him.\n\nWHY IT COMES WHERE IT DOES\n\nIt follows the Two Standards and precedes the election. Ignatius puts it there because a person about to make a decision needs to know which of the three they are actually standing in — not which they admire.\n\nWHERE TO READ MORE\n\n**The Spiritual Exercises, Second Week** — the three modes are set out in a few paragraphs, immediately before the material on making a choice.\nhttps://mycatholic.life/books/the-spiritual-exercises-of-saint-ignatius-of-loyola/second-week/",
+    background:
+      "Ignatius calls them modes or kinds rather than degrees of achievement, and he does not ask the retreatant to attain the third by effort. He asks them to notice which one they are in, and — if they want the third and do not have it — to ask for it. The Exercises tell the retreatant to make colloquies begging to be received under that third kind, if it is for God's greater service.\n\nThe structure answers a question the Litany of Humility raises but does not settle: what humility is actually for. Here it is not self-erasure and not low self-esteem. It is a disposition that leaves you free to choose the better thing when two things are equally available — which is why it sits immediately before the election, and why Ignatius treats the second kind, indifference, as the working goal for most people most of the time.",
+  },
+  {
+    title: "The Two Standards",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["humility", "discernment", "temptation", "self-knowledge", "Ignatian", "examination"],
+    source: "St. Ignatius of Loyola, Spiritual Exercises, Second Week",
+    author: "St. Ignatius of Loyola",
+    authorNote: "a meditation, not a list — the order is the teaching",
+    related: ["The Three Kinds of Humility", "Consolation and Desolation", "The Seven Capital Sins", "Litany of Humility", "The Examen"],
+    relatedSaints: ["ignatius-of-loyola"],
+    year: "Spiritual Exercises, 1522-1524",
+    origin: "Ignatian",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "TWO CHAINS\n\nIgnatius sets two campaigns side by side, each working in three steps. What matters is that they are steps, in order, and not a heap of vices and virtues.\n\n| Lucifer's standard | Christ's standard |\n| --- | --- |\n| First, **riches** — \"to tempt with a longing for riches\" | First, **poverty** — \"to bring them first to the highest spiritual poverty\" |\n| Second, **honour** — \"that men may more easily come to vain honor of the world\" | Second, **contumely** — \"to be of contumely and contempt\" |\n| Third, **pride** — \"and then to vast pride\" | Third, **humility** — \"humility follows\" |\n\n\"So that the first step shall be that of riches; the second, that of honor; the third, that of pride.\"\n\nWHY IT IS DIAGNOSTIC\n\nBecause pride is the end of the chain, not the beginning, and nobody catches themselves at the end. By the time the third step has been taken there is no one left inside willing to notice.\n\nThe first step is where it can be caught, and the first step is not a sin. Wanting security, resources, standing, the means to do good — none of that is vice, which is exactly why it works as an opening. Ignatius is not saying riches are evil. He is saying that is the door, and the door is always the reasonable one.\n\nRun the chain on yourself in the order given and the question at each link is small and answerable. Run it backwards, starting at pride, and you will find nothing, because pride is precisely the condition of not finding it.\n\nTHE MIRROR\n\nThe second column is not three separate virtues either. Poverty makes honour impossible to hold onto; losing honour is what contumely means; and humility is what is left standing when both are gone. Ignatius is describing the same mechanism running in reverse — which is his answer to the question of how anyone gets out of the first chain once in it.\n\nWHERE TO READ MORE\n\n**The Spiritual Exercises, Second Week** — the meditation is short. Read it with the Three Kinds of Humility, which follows it and is its practical end.\nhttps://mycatholic.life/books/the-spiritual-exercises-of-saint-ignatius-of-loyola/second-week/",
+    background:
+      "Made on the fourth day of the Second Week, after the retreatant has spent days contemplating Christ's life and before the election — the choice of state of life the whole Exercises are built around. Its position is the point: Ignatius wants the two chains clearly in view before anybody decides anything, because a decision made from inside the first chain will feel entirely sensible.\n\n\"Contumely\" is the word that dates the translation and is worth keeping anyway. It means insult, being treated with contempt — not poverty of means but poverty of standing. Ignatius is asking whether you would accept being thought less of, which is a harder question than whether you would accept having less.\n\nNote what he does not do. He does not ask the retreatant to want riches less. He asks them to see what riches are for, in the campaign of somebody else.",
+  },
+  {
+    title: "Acedia, the Noonday Devil",
+    kind: "teaching",
+    seedVersion: 1,
+    tags: ["acedia", "sloth", "perseverance", "daily", "self-knowledge", "examination", "desert fathers"],
+    source: "St. John Cassian, Institutes, Book X; the diagnosis is Evagrius's",
+    author: "St. John Cassian",
+    authorNote: "Cassian brought Evagrius's list of eight thoughts into the Latin West",
+    related: ["The Seven Capital Sins", "Consolation and Desolation", "The Examen", "The Dark Night", "The Eleven Passions"],
+    relatedSaints: ["gregory-the-great"],
+    year: "c. 420",
+    origin: "Desert Fathers, via Gaul",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "WHAT IT LOOKS LIKE\n\nCassian is describing a monk, but the portrait survives translation to any life with a rule in it.\n\nHe \"looks about anxiously this way and that, and sighs that none of the brethren come to see him, and often goes in and out of his cell, and frequently gazes up at the sun, as if it was too slow in setting.\"\n\nHe becomes disgusted with where he is. Other monasteries, further off, begin to look \"more profitable and better suited for salvation\"; the place he is in offers nothing but hardship, and nobody there is spiritually serious. Then comes the urge to leave — the demon \"drives out from the confinement of its cell\" the one it has weakened.\n\nWHY NOONDAY\n\nIt attacks \"especially about the sixth hour\" — midday. The elders, Cassian says, identify it with \"the midday demon spoken of in the ninetieth Psalm.\"\n\nThe timing is the diagnosis. Not the dark night of the soul but the middle of an ordinary afternoon, when the morning's resolve has worn off and the evening is not yet in sight.\n\nTHE TWO FACES\n\n| Paralysis | Nothing is worth beginning; the hours will not pass. |\n| Restlessness | Anywhere else would be better; anything else would be more useful. |\n\nThey look opposite and are the same thing. This is what makes acedia hard to catch: it rarely arrives as laziness. It usually arrives as a very reasonable plan to do something else — often something more ambitious than what you had promised to do.\n\nWHAT IT IS NOT\n\nNot depression, which is an affliction rather than a fault and does not lift when you stay put. Not desolation in the Ignatian sense, though Ignatius's fifth rule is exactly the right response: make no change while it lasts.\n\nThe remedy in Cassian is unglamorous and physical — stay in the cell, and work. Not because work is holier than prayer, but because leaving is the thing being proposed, and the proposal is the temptation.\n\nWHERE TO READ MORE\n\n**Cassian, Institutes, Book X** — five short chapters, free, and the description in chapter 2 is uncomfortably exact.\nhttps://www.newadvent.org/fathers/350710.htm",
+    background:
+      "Evagrius of Pontus, a fourth-century monk in the Egyptian desert, listed eight evil thoughts; Cassian carried the list into the Latin West around 420, and Gregory the Great later compressed it into the seven that became the capital sins. Acedia was folded into what English calls sloth, which is a bad translation and has cost the concept most of its usefulness: sloth suggests a man in bed, and acedia is usually a man very busy with the wrong thing.\n\nOf the eight thoughts it is the one that attacks the spiritual life directly. Gluttony and lust attack through appetite; acedia attacks the practice itself, and it does so by making the practice look pointless — which is why it is the characteristic danger of anyone who keeps a rule rather than anyone who has none.\n\nIt is worth knowing that the desert tradition regarded it as the hardest of the eight, and that its remedy was not more fervour but staying put. The monk is told to remain in the cell precisely when the cell has become unbearable, on the grounds that the unbearableness is the attack and not information about the cell.",
   },
   {
     title: "How the Gifts, Fruits, Beatitudes, Virtues and Powers of the Soul Fit Together",
