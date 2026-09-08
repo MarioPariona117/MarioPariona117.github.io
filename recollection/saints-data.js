@@ -5770,7 +5770,7 @@ core({
   slug: "fulton-sheen", listTier: "toKnow", causeStage: "venerable", name: "Ven. Fulton J. Sheen", sortName: "Fulton Sheen",
   birthName: "Peter John Sheen", religiousName: "Archbishop Fulton John Sheen",
   titles: ["Archbishop", "Broadcaster"],
-  note: "Not yet canonized — currently Venerable (declared 2012). A miracle for his beatification was approved in 2019, but the beatification itself was postponed for six years over a jurisdictional dispute between the Diocese of Peoria and the Archdiocese of New York; as of this entry, the Vatican has cleared the way and his beatification is scheduled for 24 September 2026 in St. Louis, Missouri. Update this entry (and add a `beatified` date and feast day) once that actually takes place.",
+  note: "Not yet canonized — Venerable since 2012, and to be beatified on 24 September 2026 at The Dome at America's Center in St. Louis, at a Mass presided over by Cardinal Tagle. The miracle (the recovery of a stillborn child in 2010) was approved in 2019 and a beatification was scheduled for that December, then postponed — first by a dispute over his remains, then by a review of his handling of clergy misconduct cases. After that review the cause was cleared. Until the 24th the correct style is Venerable; from that date, Blessed.",
   rank: "Not yet beatified — no liturgical feast", feast: "",
   born: "8 May 1895", bornPlace: "El Paso, Illinois, USA",
   died: "9 December 1979", diedPlace: "New York City, USA", ageAtDeath: "84",

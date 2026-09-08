@@ -1481,6 +1481,27 @@ const SEED_LIBRARY_ENTRIES = [
       "Berle in the same slot.",
   },
   {
+    title: "Measured by the Perfect",
+    kind: "quote",
+    seedVersion: 1,
+    tags: ["humility", "self-knowledge", "conscience", "examination", "virtue"],
+    source: "Ven. Fulton J. Sheen — the thought is in Way to Inner Peace; the exact wording is not traceable",
+    author: "Ven. Fulton J. Sheen",
+    authorNote: "Venerable until 24 September 2026, when he is to be beatified",
+    related: ["Humility Is Nothing But Truth", "What They Wrongly Believe", "Not of Obligation, But of Love", "The Three Kinds of Humility", "The Cell of Self-Knowledge"],
+    relatedSaints: ["fulton-sheen"],
+    year: "20th century",
+    origin: "American",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "",
+    favorite: false,
+    body:
+      "The good man is never sure he is good because he measures himself by the Perfect; the evil man is quite sure he is good because he measures himself by himself.\n\nWHAT IS DOCUMENTED\n\nThe same thought, in wording that can be traced to his own book:\n\n\"The humble man knows himself as he really is, for he judges himself as he judges time, by a standard outside himself, namely, God and His Moral Law.\"\n\nAnd its opposite, from the same passage: \"A proud man thinks himself better than he is, and when criticized always believes his neighbour is jealous or has a grudge against him.\"\n\n— Way to Inner Peace\n\nWHERE TO READ MORE\n\n**Way to Inner Peace** — the short chapters on humility and self-knowledge are where this line of thought lives.\n\n**Documented quotations**, with sources where they exist.\nhttps://en.wikiquote.org/wiki/Fulton_J._Sheen",
+    background:
+      "Two notes on this one, one about the wording and one about the name.\n\nThe wording. The sentence above circulates widely and reads exactly like him — the antithesis, the reversal in the second half, the sting kept for last are all his manner. But I could not trace this precise sentence to a book. What is traceable is the same argument in Way to Inner Peace, quoted above: the humble man judges himself \"by a standard outside himself\", the proud man does not. So the thought is documented and the sentence is not, which is a common situation with Sheen: he published dozens of books and gave hundreds of broadcast talks, many transcribed loosely or paraphrased by listeners, so a line can be genuinely his and still be unfindable. Treat the wording as received rather than quoted.\n\nThe name. He is Venerable, not Blessed — until 24 September 2026, when he is to be beatified at The Dome at America's Center in St. Louis. After that date \"Bl. Fulton Sheen\" becomes correct and this note becomes obsolete.\n\nThe claim itself is worth more than its provenance. It explains why moral confidence is so poor a sign of moral quality: the man with the higher standard has more to fall short of, and knows it. Which is also the reason the tradition treats scrupulosity and complacency as errors of the same kind — both are measurements taken against the wrong thing.",
+  },
+  {
     title: "Not of Obligation, But of Love",
     occasion:
       "From his 1980 autobiography, describing the daily hour before the Blessed Sacrament he kept for over sixty years from his ordination in 1919. He was found dead in his private chapel.",
