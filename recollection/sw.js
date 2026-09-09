@@ -40,7 +40,14 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    fetch(event.request)
+    // "no-cache" forces revalidation with the server instead of letting the
+    // browser's own HTTP cache answer. Without it this is not network-first at
+    // all: GitHub Pages sends cache-control max-age=600, so for ten minutes
+    // after a deploy the HTTP cache replies and the network is never asked —
+    // which is the staleness this handler exists to prevent. A revalidation
+    // that finds nothing new costs a 304, and the offline fallback below is
+    // untouched.
+    fetch(event.request, { cache: "no-cache" })
       .then((response) => {
         const copy = response.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
