@@ -2847,3 +2847,11 @@ body,
   opacity: 0.75;
 }
 .day-alt-author { color: var(--muted); font-size: 0.9em; }
+
+/* Bilingual cells now contain real paragraphs, so the grid's own row-gap does
+   the spacing rather than paragraph margins stacking on top of it. */
+.bilingual-latin .reader-para,
+.bilingual-english .reader-para { margin: 0; }
+/* The versicle marker sits in the accent colour in both columns; in the Latin
+   column it should not also be italicised into illegibility. */
+.bilingual-latin .vr-mark { font-style: normal; }
