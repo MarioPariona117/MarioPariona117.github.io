@@ -506,7 +506,13 @@ function renderBilingualBlock(original, english, language) {
   const originalParas = splitParagraphs(original);
   const englishParas = splitParagraphs(english);
   const rows = Math.max(originalParas.length, englishParas.length);
-  const cell = (text, cls) => `<div class="${cls}">${escapeHtml(text).replace(/\n/g, "<br>")}</div>`;
+  // Route each cell through the same prose renderer the single-column view
+  // uses, so a versicle gets its ℣/℟ here too. Escaping straight to <br> left
+  // "V." and "R." as bare text in the one place they most need marking.
+  const cell = (text, cls) => {
+    const lines = (text || "").split("\n").map((l) => l.trim()).filter(Boolean);
+    return `<div class="${cls}">${lines.length ? renderProseLines(lines) : ""}</div>`;
+  };
 
   let html = `<div class="bilingual-label">${escapeHtml(language || "Latin")}</div><div class="bilingual-label">English</div>`;
   for (let i = 0; i < rows; i++) {
