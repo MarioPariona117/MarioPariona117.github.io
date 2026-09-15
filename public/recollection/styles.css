@@ -917,6 +917,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 }
 .calendar-saint-chip:hover { color: var(--gold); background: rgba(var(--gold-rgb),0.15); }
 .calendar-saint-chip.tier-top { color: var(--gold); font-weight: 700; }
+.calendar-saint-chip.alt-feast { font-style: italic; }
 
 @media (max-width: 520px) {
   .calendar-cell { min-height: 3.2rem; }
@@ -2855,3 +2856,22 @@ body,
 /* The versicle marker sits in the accent colour in both columns; in the Latin
    column it should not also be italicised into illegibility. */
 .bilingual-latin .vr-mark { font-style: normal; }
+
+/* A translation choice can have three or more buttons; the middle ones join
+   the pill on both sides. */
+.lang-group .lang-btn:not(:first-child):not(:last-child) { border-radius: 0; margin-left: -1px; }
+
+/* An entry whose best-known version is deliberately not reproduced — a
+   copyrighted modern translation, or a text whose copies disagree. */
+.badge-familiar {
+  display: inline-block;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--gold);
+  border: 1px solid rgba(var(--gold-rgb), 0.45);
+  border-radius: 20px;
+  padding: 0.05rem 0.5rem;
+  line-height: 1.5;
+}
+.reader-familiar { margin: 0.1rem 0 0.35rem; }

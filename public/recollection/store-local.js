@@ -50,6 +50,7 @@ async function listLibrary() {
       liturgical: e.liturgical || "",
       originalLanguage: e.originalLanguage || "",
       occasion: e.occasion || "",
+      familiarVersion: e.familiarVersion || "",
       favorite: !!e.favorite,
       modifiedTime: e.modifiedTime,
     }))
@@ -59,7 +60,10 @@ async function listLibrary() {
 // Returns { body, background, latinBody } — the main (English) text, the
 // freeform "why/when/where it was written" note, and an optional original-
 // language text (Latin, Spanish, etc. — see originalLanguage) shown side by
-// side with body when present.
+// side with body when present. When a text has more than one English
+// translation worth keeping, `body` is the default and `altTranslations`
+// holds the others as { label, body }; `bodyLabel` names the default so the
+// reader can offer a choice between them.
 async function getLibraryEntryText(id) {
   const entry = lsRead(LS_LIBRARY_KEY).find((e) => e.id === id);
   return {
@@ -67,13 +71,15 @@ async function getLibraryEntryText(id) {
     background: entry ? entry.background || "" : "",
     latinBody: entry ? entry.latinBody || "" : "",
     spanishBody: entry ? entry.spanishBody || "" : "",
+    bodyLabel: entry ? entry.bodyLabel || "" : "",
+    altTranslations: entry ? entry.altTranslations || [] : [],
   };
 }
 
-async function saveLibraryEntry({ id, title, kind, tags, source, author, authorNote, year, origin, feastDay, liturgical, originalLanguage, favorite, body, background, latinBody, spanishBody, occasion, related, relatedSaints, seedVersion }) {
+async function saveLibraryEntry({ id, title, kind, tags, source, author, authorNote, year, origin, feastDay, liturgical, originalLanguage, favorite, body, background, latinBody, spanishBody, bodyLabel, altTranslations, familiarVersion, occasion, related, relatedSaints, seedVersion }) {
   const list = lsRead(LS_LIBRARY_KEY);
   const modifiedTime = new Date().toISOString();
-  const fields = { title, kind, tags, source, author, authorNote, year, origin, feastDay, liturgical, originalLanguage, favorite, body, background, latinBody, spanishBody, occasion, related, relatedSaints, seedVersion };
+  const fields = { title, kind, tags, source, author, authorNote, year, origin, feastDay, liturgical, originalLanguage, favorite, body, background, latinBody, spanishBody, bodyLabel, altTranslations, familiarVersion, occasion, related, relatedSaints, seedVersion };
   if (id) {
     const idx = list.findIndex((e) => e.id === id);
     if (idx >= 0) list[idx] = { ...list[idx], ...fields, modifiedTime };
