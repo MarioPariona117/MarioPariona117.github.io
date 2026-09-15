@@ -13,12 +13,15 @@ const state = {
   filterLiturgical: null, // one active liturgical season/use at a time
   filterFavoritesOnly: false,
   filterBilingualOnly: false,
+  filterFamiliarMissing: false, // entries whose best-known version is not reproduced (copyright or doubtful text)
   searchQuery: "",
   sortBy: "recent", // recent | title | kind
   libraryBodyIndex: {}, // id -> lowercased "body \n background \n latinBody", built lazily for full-text search
   readingLibraryId: null, // set while the library reader is open
   readerLang: "en", // "en" | "es" — which vernacular the reader shows; Latin (when present) stays alongside
   readerShowOriginal: true, // whether the original-language column is shown at all
+  readerVersion: 0, // which English translation is showing, when an entry has more than one
+  editingTextExtras: {}, // text-side fields the editor has no inputs for, carried through a save
   editingLibraryId: null, // set while the library editor is open; null id = new entry
   editingJournalId: null, // set while the writer is open; null id = new entry
 
@@ -644,6 +647,7 @@ window.addEventListener("DOMContentLoaded", () => {
     state.filterLiturgical = null;
     state.filterFavoritesOnly = false;
     state.filterBilingualOnly = false;
+    state.filterFamiliarMissing = false;
     state.finderRestrict = null;
     renderLibraryList();
   }
@@ -690,6 +694,10 @@ window.addEventListener("DOMContentLoaded", () => {
   });
   $("#filter-bilingual-only").addEventListener("change", (e) => {
     state.filterBilingualOnly = e.target.checked;
+    renderLibraryList();
+  });
+  $("#filter-familiar-missing").addEventListener("change", (e) => {
+    state.filterFamiliarMissing = e.target.checked;
     renderLibraryList();
   });
   $("#filter-author-select").addEventListener("change", (e) => {
@@ -1837,12 +1845,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Lead, Kindly Light",
-    seedVersion: 7,
+    seedVersion: 9,
     occasion:
       "Written in June 1833 in a becalmed orange boat between Palermo and Marseilles, after a near-fatal illness in Sicily. Newman was 32 and twelve years from becoming a Catholic; by his own account he did not know what he was being led toward.",
     kind: "hymn", tags: ["trust", "hope", "perseverance", "conversion"],
     source: "Written at sea off Sardinia, June 1833; set to Dykes's 'Lux Benigna'",
     author: "St. John Henry Newman", year: "1833", origin: "Oratorian",
+    related: ["Support Us All the Day Long"],
     liturgical: "Sung widely; often at funerals", feastDay: "9 October", favorite: false,
     body:
       "Lead, kindly Light, amid the encircling gloom,\n" +
@@ -1864,13 +1873,19 @@ const SEED_LIBRARY_ENTRIES = [
       "And with the morn those angel faces smile\n" +
       "Which I have loved long since, and lost awhile.",
     background:
-      "Not knowing where he was being led is the whole argument of the second " +
-      "verse: he had always preferred to see the route, and says so.\n\n" +
-      "'One step enough for me' is the line people take away, and it is worth " +
-      "noticing that he did not find it consoling at the time; he wrote it as " +
-      "a surrender, not a comfort. Asked decades later what the angel faces " +
-      "meant, he refused to explain, saying a poem has its own life and the " +
-      "author is not its interpreter.",
+      "Not knowing where he was being led is the whole argument of the second verse: he had always " +
+      "preferred to see the route, and says so.\n\n'One step enough for me' is the line people take " +
+      "away, and it is worth noticing that he did not find it consoling at the time; he wrote it as " +
+      "a surrender, not a comfort. Asked decades later what the angel faces meant, he refused to " +
+      "explain, saying a poem has its own life and the author is not its interpreter.\n\nTHE " +
+      "TITLE\n\nNewman never called it Lead, Kindly Light. In his own collection, Verses on Various " +
+      "Occasions, it is \"The Pillar of the Cloud\", dated \"At Sea. June 16, 1833\" — the pillar of " +
+      "cloud by day and fire by night that led Israel through the wilderness (Exodus 13:21). The " +
+      "hymn tune gave it its first line as a name.\n\nWHERE TO READ MORE\n\n**Newman, Verses on " +
+      "Various Occasions, no. 90 — \"The Pillar of the Cloud\"**, the poem as he printed " +
+      "it.\nhttps://www.newmanreader.org/works/verses/verse90.html\n\n**Newman, Apologia Pro Vita " +
+      "Sua, chapter 1** — his own account of the illness in Sicily and the voyage " +
+      "home.\nhttps://www.newmanreader.org/works/apologia65/chapter1.html",
   },
   {
     title: "Whoever Seeks Truth Seeks God",
@@ -2125,11 +2140,12 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "A Joyful Heart",
-    seedVersion: 7,
+    seedVersion: 8,
     occasion:
       "From the same collected maxims. Philip spent his life deliberately producing cheerfulness in others — breaking up excessive piety with jokes and absurd errands — rather than demanding it of them.",
     kind: "quote", tags: ["joy", "Oratorian", "perseverance"],
     source: "Maxims and Sayings", author: "St. Philip Neri", year: "16th century",
+    related: ["Prayer for Good Humour"],
     origin: "Oratorian", liturgical: "", feastDay: "26 May", favorite: false,
     body:
       "A joyful heart is more easily made perfect\n" +
@@ -2424,12 +2440,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "My Vocation Is Love",
-    seedVersion: 7,
+    seedVersion: 8,
     occasion:
       "Written in September 1896 for her sister Marie, who had asked her to put down her 'little doctrine'. Thérèse was 23, already ill, and had been tormented by wanting to be missionary, priest, martyr and doctor at once while knowing she would be none of them.",
     kind: "quote", tags: ["love", "little way", "vocation", "Carmelite"],
     source: "Story of a Soul, Manuscript B — written for her sister Marie",
     author: "St. Thérèse of Lisieux", year: "1896", origin: "Carmelite",
+    related: ["Offering to Merciful Love"],
     liturgical: "", feastDay: "1 October", favorite: true,
     body:
       "In the heart of the Church, my Mother,\n" +
@@ -2718,11 +2735,12 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer to St. Michael the Archangel",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "prayer",
     tags: ["protection", "exorcism", "guardian angel", "courage"],
     source: "Composed by Pope Leo XIII; long said at the end of Low Mass",
     author: "Pope Leo XIII",
+    related: ["The Nine Choirs of Angels"],
     year: "1886",
     origin: "Papal",
     liturgical: "Formerly among the Leonine Prayers after Low Mass",
@@ -3240,12 +3258,12 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Tantum Ergo",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "hymn",
     tags: ["eucharist", "benediction", "adoration"],
     source: "Last two verses of Pange Lingua Gloriosi Corporis Mysterium; English by Fr. Edward Caswall (19th c.)",
     author: "St. Thomas Aquinas, O.P.",
-    related: ["Panis Angelicus", "Prayer Before Mass", "The Divine Praises"],
+    related: ["Panis Angelicus", "Prayer Before Mass", "The Divine Praises", "O Salutaris Hostia"],
     year: "c. 1264",
     origin: "Dominican",
     liturgical: "Benediction / Adoration of the Blessed Sacrament",
@@ -3309,12 +3327,12 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Panis Angelicus",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "hymn",
     tags: ["eucharist", "Corpus Christi"],
     source: "Penultimate stanza of Sacris Solemniis; famously set to music separately by César Franck (1872)",
     author: "St. Thomas Aquinas, O.P.",
-    related: ["Tantum Ergo", "Prayer Before Mass"],
+    related: ["Tantum Ergo", "Prayer Before Mass", "Adoro Te Devote"],
     year: "c. 1264",
     origin: "Dominican",
     liturgical: "Corpus Christi; often sung at Eucharistic devotions and weddings",
@@ -3352,12 +3370,12 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Anima Christi",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "prayer",
     tags: ["eucharist", "Ignatian", "communion"],
     source: "Traditional; placed at the opening of St. Ignatius of Loyola's Spiritual Exercises (1548)",
     author: "Traditional",
-    related: ["The Seven Last Words", "The Five Wounds"],
+    related: ["Prayer After Mass", "The Seven Last Words", "The Five Wounds"],
     authorNote: "long misattributed to St. Ignatius of Loyola, who merely placed it at the start of his Spiritual Exercises",
     year: "early 14th century",
     origin: "Ignatian",
@@ -3691,12 +3709,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Hail Mary",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "prayer",
     relatedSaints: ["mary"],
     tags: ["Marian", "foundational", "biblical"],
     source: "First half: Luke 1:28 and 1:42; second half: later ecclesial addition",
     author: "Biblical (Gabriel & Elizabeth)",
+    related: ["The Magnificat"],
     authorNote: "the second half's petition was added later by an unknown ecclesial author",
     year: "Biblical greeting, 1st century; petition added by the Middle Ages, standardized 1568",
     origin: "Biblical",
@@ -3989,11 +4008,12 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Guardian Angel Prayer",
-    seedVersion: 7,
+    seedVersion: 9,
     kind: "prayer",
     tags: ["guardian angel", "children", "catechetical"],
     source: "Traditional catechetical prayer",
     author: "Traditional",
+    related: ["Grace Before Meals", "The Nine Choirs of Angels"],
     authorNote: "popularized through catechisms",
     year: "Common English wording widespread by the 19th century",
     origin: "Devotion to the Guardian Angels",
@@ -4023,12 +4043,176 @@ const SEED_LIBRARY_ENTRIES = [
       "leading through difficulty.",
   },
   {
-    title: "Let Nothing Disturb You",
+    title: "Support Us All the Day Long",
     seedVersion: 7,
+    kind: "prayer",
+    tags: ["evening", "rest", "a good death", "work"],
+    source: "The close of his sermon \"Wisdom and Innocence\" (Sermons on Subjects of the Day, 1843); the prayed form is in the Book of Common Prayer and the Catholic funeral rite of England and Wales",
+    author: "St. John Henry Newman",
+    authorNote: "a sentence from a sermon, later made a prayer; two versions above",
+    related: ["Lead, Kindly Light", "The Nunc Dimittis", "Watch, O Lord", "Radiating Christ"],
+    year: "1843",
+    origin: "Oratorian",
+    liturgical: "Evening; at the time of death",
+    body:
+      "O Lord, support us all the day long of this troublous life, until the shadows lengthen, and " +
+      "the evening comes, and the busy world is hushed, and the fever of life is over, and our work " +
+      "is done. Then, Lord, in thy mercy, grant us a safe lodging, a holy rest, and peace at the " +
+      "last. Amen.",
+    bodyLabel: "As usually prayed",
+    altTranslations: [
+      {
+        label: "Newman's sentence, 1843",
+        body:
+          "May He support us all the day long, till the shades lengthen, and the evening comes, and the " +
+          "busy world is hushed, and the fever of life is over, and our work is done! Then in His mercy " +
+          "may He give us safe lodging, and a holy rest, and peace at the last!",
+      },
+    ],
+    background:
+      "One long sentence that is a whole day and a whole life at once. The shadows lengthen, the " +
+      "evening comes, the noise stops, the fever breaks, the work is finished — and then three " +
+      "things asked for, each smaller and quieter than the last: a safe lodging, a holy rest, peace " +
+      "at the last. It can be said at the end of any ordinary day and at a deathbed, and it means " +
+      "both.\n\nWHERE IT COMES FROM\n\nIt was never written as a prayer. It is the last sentence of " +
+      "\"Wisdom and Innocence\", a sermon Newman preached in 1843, still an Anglican, near the end " +
+      "of his time at Oxford, and printed that year in Sermons on Subjects of the Day. There it is a " +
+      "wish, in the third person — may He support us. Someone turned it into a direct prayer, adding " +
+      "\"of this troublous life\" and addressing God as \"O Lord\"; in that form it went into the " +
+      "American Book of Common Prayer (among the prayers for the evening) and into the Catholic " +
+      "Order of Christian Funerals for England and Wales, among the prayers at the time of death. " +
+      "Both versions are above.\n\nWHERE TO READ MORE\n\n**Newman, \"Wisdom and Innocence\"**, " +
+      "Sermons on Subjects of the Day, no. 20 — the whole sermon, on being sheep among " +
+      "wolves.\nhttps://www.newmanreader.org/works/subjects/sermon20.html\n\n**Liturgy Office of " +
+      "England and Wales — Prayers at the Time of Death** (PDF), where it stands beside the Nunc " +
+      "Dimittis.\nhttps://www.liturgyoffice.org.uk/Resources/OCF/Prayers-Time-Death.pdf",
+  },
+  {
+    title: "Watch, O Lord",
+    seedVersion: 7,
+    kind: "prayer",
+    tags: ["night", "intercession", "the sick", "the dying"],
+    source: "Night Prayer (Compline) in the American Book of Common Prayer, 1979; credited to St. Augustine since at least 1913, but found in no work of his",
+    author: "Traditional",
+    authorNote: "attributed to St. Augustine; no source in his writings",
+    related: ["The Nunc Dimittis", "Support Us All the Day Long", "Breathe in Me, O Holy Spirit"],
+    year: "In print by 1906–1913",
+    origin: "Devotional",
+    liturgical: "Night — the end of Compline",
+    body:
+      "Keep watch, dear Lord, with those who work, or watch, or weep this night, and give your " +
+      "angels charge over those who sleep. Tend the sick, Lord Christ; give rest to the weary, bless " +
+      "the dying, soothe the suffering, pity the afflicted, shield the joyous; and all for your " +
+      "love's sake. Amen.",
+    background:
+      "A prayer for everyone who is awake when you are going to sleep. Three kinds of people are " +
+      "still up — those working, those keeping watch, those weeping — and everyone else is handed to " +
+      "the angels. Then a row of short verbs, each for a different person: the sick, the weary, the " +
+      "dying, the suffering, the afflicted. And the last is the one nobody expects: shield the " +
+      "joyous. Happiness, too, needs protecting.\n\nIS IT AUGUSTINE'S?\n\nNo source in Augustine has " +
+      "been found. It is printed everywhere under his name, and the standard commentary on the " +
+      "American Prayer Book repeats that, but the trail goes back only to Selina Fitzherbert Fox's " +
+      "anthology A Chain of Prayer Across the Ages (1913), which prints it as his; a researcher who " +
+      "searched the complete works for its distinctive words — weep, angels, sleep, dying, afflicted " +
+      "— found nothing. The phrase \"wake, or watch, or weep\" is in print by 1906. Best treated as " +
+      "a traditional prayer of unknown author, in the same company as Breathe in Me, O Holy " +
+      "Spirit.\n\nTHE WORDING\n\nThe text above is the one in the Book of Common Prayer (1979), " +
+      "where it closes Compline. Catholic prayer books usually begin \"Watch, O Lord, with those who " +
+      "wake, or watch, or weep tonight\", and Fox's 1913 version is longer, with \"Thy\" before " +
+      "every group: Tend Thy sick ones, rest Thy weary ones.\n\nWHERE TO READ MORE\n\n**Liber " +
+      "locorum communium — \"Augustine or Pseudo-Augustine?\"**, which traces the attribution and " +
+      "the early " +
+      "printings.\nhttps://liberlocorumcommunium.blogspot.com/2019/05/keep-watch-dear-lord-with-those-who.html\n\n**The " +
+      "Book of Common Prayer (1979), Compline** — the page where it is " +
+      "printed.\nhttps://en.wikisource.org/wiki/Page:Book_of_common_prayer_(TEC,_1979).pdf/134",
+  },
+  {
+    title: "Grace Before Meals",
+    seedVersion: 7,
+    kind: "prayer",
+    tags: ["meals", "foundational", "family", "thanksgiving"],
+    source: "Benedictio mensae — the Church's table blessing; English as in Catholic prayer books since the nineteenth century",
+    author: "Traditional",
+    related: ["Grace After Meals", "Guardian Angel Prayer", "Prayer After Mass"],
+    year: "Medieval",
+    origin: "Roman liturgy",
+    liturgical: "Before meals",
+    originalLanguage: "Latin",
+    latinBody:
+      "Benedic, Domine, nos et haec tua dona, quae de tua largitate sumus sumpturi. Per Christum " +
+      "Dominum nostrum. Amen.\n\nAnte prandium:\nMensae caelestis participes faciat nos, Rex " +
+      "aeternae gloriae. Amen.\n\nAnte cenam:\nAd cenam vitae aeternae perducat nos, Rex aeternae " +
+      "gloriae. Amen.",
+    body:
+      "Bless us, O Lord, and these thy gifts, which we are about to receive from thy bounty. Through " +
+      "Christ our Lord. Amen.\n\nAt midday, add:\nMay the King of everlasting glory make us " +
+      "partakers of the heavenly table. Amen.\n\nIn the evening, add:\nMay the King of everlasting " +
+      "glory lead us to the supper of eternal life. Amen.",
+    background:
+      "One of the most-said prayers in Catholic family life, and older than it sounds. It asks for " +
+      "two blessings, not one: bless us, and bless these gifts — the people eating and the food " +
+      "alike — and it calls the food what it is, something received from a bounty, not " +
+      "earned.\n\nThe two short additions come from the Church's fuller table blessing, and they " +
+      "turn the meal forward: at midday, towards the heavenly table; in the evening, towards the " +
+      "supper of eternal life. Ordinary lunch and dinner become small rehearsals of the banquet the " +
+      "Prayer After Mass asks for.\n\nWHERE IT COMES FROM\n\nThe Latin is the core of the Benedictio " +
+      "mensae, the blessing at table in the Roman tradition, which in the Breviary is surrounded by " +
+      "psalm verses and the Our Father. Queens' College, Cambridge, whose history archive notes that " +
+      "the words \"Benedic, Domine, dona tua quae de tua largitate sumus sumpturi\" are recorded as " +
+      "a grace as early as the eighth century, uses a form of it before dinner, as do many Oxford " +
+      "and Cambridge colleges. The English is the version in Catholic prayer books such as the 1889 " +
+      "Manual of Prayers.\n\nWHERE TO READ MORE\n\n**Queens' College, Cambridge — The Graces**, the " +
+      "Latin college graces with translations and their " +
+      "history.\nhttps://history.queens.cam.ac.uk/being-here/graces\n\n**Benedictio Mensae** (Simon " +
+      "Fraser University, PDF) — the Latin and English before and after meals, with the midday and " +
+      "evening additions.\nhttps://www.sfu.ca/classics/latin/ecclesia/MealPrayers.pdf",
+  },
+  {
+    title: "Grace After Meals",
+    seedVersion: 7,
+    kind: "prayer",
+    tags: ["meals", "foundational", "family", "thanksgiving", "the faithful departed"],
+    source: "Benedictio mensae — the Church's thanksgiving after meals, with the traditional verses for benefactors and the dead; English as in Catholic prayer books since the nineteenth century",
+    author: "Traditional",
+    related: ["Grace Before Meals", "Prayer After Mass"],
+    year: "Medieval",
+    origin: "Roman liturgy",
+    liturgical: "After meals",
+    originalLanguage: "Latin",
+    latinBody:
+      "Agimus tibi gratias, omnipotens Deus, pro universis beneficiis tuis, qui vivis et regnas in " +
+      "saecula saeculorum. Amen.\n\nRetribuere dignare, Domine, omnibus nobis bona facientibus " +
+      "propter nomen tuum vitam aeternam. Amen.\n\nV. Benedicamus Domino.\nR. Deo " +
+      "gratias.\n\nFidelium animae per misericordiam Dei requiescant in pace. Amen.",
+    body:
+      "We give thee thanks, almighty God, for all thy benefits, who livest and reignest for ever and " +
+      "ever. Amen.\n\nVouchsafe, O Lord, to reward with eternal life all those who do us good for " +
+      "thy name's sake. Amen.\n\nV. Let us bless the Lord.\nR. Thanks be to God.\n\nMay the souls of " +
+      "the faithful departed, through the mercy of God, rest in peace. Amen.",
+    background:
+      "The meal ends where a Christian day ends: with thanks for everything, not just the food — pro " +
+      "universis beneficiis, for all your benefits — and then with other people.\n\nThe two " +
+      "traditional verses that follow widen the table. First the benefactors: those who do us good, " +
+      "including, quietly, whoever grew, bought and cooked what was just eaten. Then the dead, " +
+      "because a family table has always had empty places. Most households say only the first line; " +
+      "the fuller form is how religious houses and older prayer books end a meal.\n\nWHERE IT COMES " +
+      "FROM\n\nLike Grace Before Meals, it belongs to the Benedictio mensae of the Roman tradition. " +
+      "The English is the version in Catholic prayer books of the nineteenth century; the 1889 " +
+      "Manual of Prayers and the 1874 Key of Heaven both give the verse for benefactors and the " +
+      "prayer for the faithful departed after it.\n\nWHERE TO READ MORE\n\n**A Manual of Prayers for " +
+      "the Use of the Catholic Laity** (Baltimore, 1889) — grace before and after meals, with the " +
+      "verses that follow.\nhttps://archive.org/details/manualofprayersf00wood\n\n**Benedictio " +
+      "Mensae** (Simon Fraser University, PDF) — the Latin and " +
+      "English.\nhttps://www.sfu.ca/classics/latin/ecclesia/MealPrayers.pdf",
+  },
+  {
+    title: "Let Nothing Disturb You",
+    seedVersion: 8,
     kind: "prayer",
     tags: ["Carmelite", "surrender", "poem"],
     source: "Found written in St. Teresa's own breviary at her death",
     author: "St. Teresa of Ávila",
+    related: ["My Lord and My God"],
     authorNote: "disputed — some scholars argue St. John of the Cross wrote it in the margin of her breviary",
     year: "16th century (she died in 1582)",
     origin: "Carmelite",
@@ -4065,11 +4249,12 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Suscipe",
-    seedVersion: 7,
+    seedVersion: 9,
     kind: "prayer",
     tags: ["Ignatian", "self-offering"],
     source: "From the closing 'Contemplation to Attain the Love of God' in the Spiritual Exercises",
     author: "St. Ignatius of Loyola",
+    related: ["O Deus, Ego Amo Te", "Prayer of Abandonment"],
     authorNote: "the standard Latin text is a translation by André des Freux, S.J., not Ignatius's own wording",
     year: "Spiritual Exercises composed 1522–1548",
     origin: "Ignatian",
@@ -4101,6 +4286,803 @@ const SEED_LIBRARY_ENTRIES = [
       "universally used today isn't his own hand — it's a translation by his " +
       "fellow early Jesuit André des Freux, which became the standard, " +
       "'authoritative' text over Ignatius's own less fluent version.",
+  },
+  {
+    title: "Prayer of Abandonment",
+    seedVersion: 9,
+    kind: "prayer",
+    tags: ["abandonment", "trust", "surrender", "will of God"],
+    source: "Shortened from his 1896 meditation on Luke 23:46 by the first Little Sisters and Little Brothers of Jesus, 1940s–50s; translated afresh from the French for this library",
+    author: "St. Charles de Foucauld",
+    authorNote: "his words, shortened after his death; see background",
+    familiarVersion: "the usual English wording",
+    related: ["Day by Day", "Suscipe", "Act of Confidence in God", "My Lord and My God", "O My God, Trinity Whom I Adore"],
+    year: "1896 (the meditation); present form 1940s–50s",
+    origin: "Trappist, later hermit of the Sahara",
+    feastDay: "December 1",
+    originalLanguage: "French",
+    latinBody:
+      "Mon Père, je m'abandonne à toi, fais de moi ce qu'il te plaira. Quoi que tu fasses de moi, je " +
+      "te remercie. Je suis prêt à tout, j'accepte tout, pourvu que ta volonté se fasse en moi, en " +
+      "toutes tes créatures. Je ne désire rien d'autre, mon Dieu.\n\nJe remets mon âme entre tes " +
+      "mains. Je te la donne, mon Dieu, avec tout l'amour de mon cœur, parce que je t'aime, et que " +
+      "ce m'est un besoin d'amour de me donner, de me remettre entre tes mains sans mesure, avec une " +
+      "infinie confiance, car tu es mon Père.",
+    body:
+      "My Father, I abandon myself to you: do with me whatever you please. Whatever you do with me, " +
+      "I thank you. I am ready for anything, I accept everything, as long as your will is done in me " +
+      "and in all your creatures. I desire nothing else, my God.\n\nInto your hands I commend my " +
+      "soul. I give it to you, my God, with all the love of my heart, because I love you, and " +
+      "because it is a need of love in me to give myself, to put myself into your hands without " +
+      "measure, with infinite trust, for you are my Father.",
+    background:
+      "It was not written as a prayer for himself. In 1896, a Trappist monk at Akbès in Syria, " +
+      "Charles de Foucauld was writing meditations on the Gospels, and came to the last words of " +
+      "Jesus on the cross: \"Father, into your hands I commend my spirit\" (Luke 23:46). What he " +
+      "wrote is an attempt to enter that prayer — to say, with Christ and in Christ, what the Son " +
+      "says to the Father as he dies. That is why it begins \"My Father\", and why it ends not with " +
+      "a request but with a reason: for you are my Father.\n\nThe meditation itself is longer and " +
+      "more repetitive, the way a man writes when he is praying rather than composing:\n\n\"My " +
+      "Father, I put myself into your hands; my Father, I entrust myself to you; my Father, I " +
+      "abandon myself to you; my Father, do with me whatever pleases you; whatever you do with me, I " +
+      "thank you; thank you for everything; I am ready for everything; I accept everything; I thank " +
+      "you for everything. As long as your will is done in me, my God, as long as your will is done " +
+      "in all your creatures, in all your children, in all those whom your Heart loves, I desire " +
+      "nothing else, my God. I commend my soul into your hands; I give it to you, my God, with all " +
+      "the love of my heart, because I love you, and it is a need of love in me to give myself, to " +
+      "put myself into your hands without measure. I put myself into your hands with infinite trust, " +
+      "for you are my Father.\"\n\nAfter his death in 1916 the first communities founded on his " +
+      "spirituality — Little Sister Magdeleine Hutin's Little Sisters of Jesus, and the first Little " +
+      "Brothers — began to pray it, trimming the repetitions as they went. By the 1940s and 50s it " +
+      "had settled into the form above, which is the one now prayed. He was canonised on 15 May " +
+      "2022.\n\nIt sits naturally beside the Suscipe of St. Ignatius, which is also a handing-over " +
+      "of everything. The difference is the posture: Ignatius gives, Foucauld lets himself be " +
+      "given.\n\nTHE ENGLISH\n\nThe English most people know — \"Father, I abandon myself into your " +
+      "hands\" — is not reproduced here: it has no traceable translator, so its status cannot be " +
+      "checked. The translation above is new, made from the French.\n\nWHERE TO READ " +
+      "MORE\n\n**Charles de Foucauld's spiritual family — the prayer and its origin**, from the " +
+      "association of the communities that grew from " +
+      "him.\nhttps://www.charlesdefoucauld.org/en/priere.php\n\n**Prière d'abandon** (French " +
+      "Wikipedia), with the full text of the 1896 meditation and how the prayer was " +
+      "shortened.\nhttps://fr.wikipedia.org/wiki/Prière_d'abandon\n\n**Jean-François Six, Charles de " +
+      "Foucauld autrement** (Desclée de Brouwer, 2008) — a biography that prints the meditation (p. " +
+      "216).",
+  },
+  {
+    title: "My Lord and My God",
+    seedVersion: 8,
+    kind: "prayer",
+    tags: ["detachment", "surrender", "short prayer", "Switzerland"],
+    source: "His \"usual prayer\" (gewöhnliches Gebet), first written down c. 1500; quoted in the Catechism of the Catholic Church §226; translated afresh from the German for this library",
+    author: "St. Nicholas of Flüe",
+    authorNote: "recorded soon after his death; see background",
+    familiarVersion: "the Catechism's English (§226)",
+    related: ["Let Nothing Disturb You", "Prayer of Abandonment", "Suscipe"],
+    year: "15th century (recorded c. 1500)",
+    origin: "Swiss hermit — patron of Switzerland",
+    feastDay: "March 21",
+    originalLanguage: "German",
+    latinBody:
+      "Mein Herr und mein Gott, nimm alles von mir, was mich hindert zu dir.\n\nMein Herr und mein " +
+      "Gott, gib alles mir, was mich fördert zu dir.\n\nMein Herr und mein Gott, nimm mich mir und " +
+      "gib mich ganz zu eigen dir.",
+    body:
+      "My Lord and my God, take from me everything that keeps me from you.\n\nMy Lord and my God, " +
+      "give me everything that helps me on my way to you.\n\nMy Lord and my God, take me from myself " +
+      "and give me wholly to you, as your own.",
+    background:
+      "Three lines, and the whole spiritual life is in them: what has to go, what has to be given, " +
+      "and then the self handed over. Brother Klaus — Nicholas of Flüe (1417–1487) — was a Swiss " +
+      "farmer, soldier, magistrate, husband and father of ten, who in 1467 left home with his wife " +
+      "Dorothea's consent to live as a hermit in the Ranft gorge, a short walk from the family " +
+      "house. Tradition says he lived his last twenty years on no food but the Eucharist. His " +
+      "counsel to the quarrelling Swiss cantons at the Diet of Stans in 1481 is credited with " +
+      "preventing a civil war, which is why he is the patron of Switzerland. Pius XII canonised him " +
+      "in 1947.\n\nThe Catechism quotes it in its section on what it means to believe in one God: " +
+      "that faith in God alone means using created things only as far as they bring us to him, and " +
+      "letting them go as far as they turn us away (§226). The very next paragraph (§227) quotes " +
+      "Teresa of Ávila's \"Let nothing trouble you\" — which is also in this library.\n\nTHE OLDEST " +
+      "FORM\n\nThe earliest copies, from around 1500, give the same three petitions in a different " +
+      "order — the surrender first:\n\n\"O myn got unde min here nym mich mir und gyb mich gancz zcu " +
+      "eygen dyr. O myn got und myn here nym von myr alles das mich hynert gegen dyr. O myn got unde " +
+      "myn here gyb myr alles das mich furdert zu dyr. Amen.\"\n\nMy God and my Lord, take me from " +
+      "myself and give me wholly to you as your own. My God and my Lord, take from me everything " +
+      "that hinders me towards you. My God and my Lord, give me everything that furthers me towards " +
+      "you. Amen.\n\nThe familiar order, which came later, follows the classic three stages of the " +
+      "spiritual life — purification, illumination, union — and is easier to remember. The shrine's " +
+      "historians point out that the older order is truer to his own life: he gave himself to God " +
+      "first, set out as a pilgrim, failed, came back humbled, and only then found the way. Six " +
+      "manuscripts from about 1500–1530 and ten early prints from 1531–1586 carry it, all but one " +
+      "naming him. Heinrich Stirnimann OP's 1981 study did not rule out Klaus's own hand in its " +
+      "wording — while noting that only an older copy of the whole text could prove it.\n\nTHE " +
+      "ENGLISH\n\nThe familiar wording is the Catechism's — \"take from me everything that distances " +
+      "me from you\" — and that translation is in copyright, so it is not reproduced; the English " +
+      "above is new, made from the German.\n\nWHERE TO READ MORE\n\n**The shrine at Sachseln and " +
+      "Flüeli-Ranft — the origin of the prayer**, with both versions and the c. 1500 text (in " +
+      "German).\nhttps://bruderklaus.com/niklaus-von-fluee-dorothee-wyss/gebete/ursprung-des-bk-gebets/\n\n**Catechism " +
+      "of the Catholic Church §§222–227**, on what believing in one God asks of us; footnote 51 " +
+      "names him.\nhttps://www.vatican.va/archive/ENG0015/__P16.HTM\n\n**Nicholas of Flüe** " +
+      "(Wikipedia) — his life, the Ranft, and the Diet of " +
+      "Stans.\nhttps://en.wikipedia.org/wiki/Nicholas_of_Flüe",
+  },
+  {
+    title: "Act of Confidence in God",
+    seedVersion: 7,
+    kind: "prayer",
+    tags: ["trust", "hope", "confidence", "anxiety"],
+    source: "The close of his sermon \"De la confiance en Dieu\", preached in London before the Duchess of York, 1676–78 (Œuvres complètes, 1901, vol. IV, pp. 215–216); translated afresh from the French for this library",
+    author: "St. Claude La Colombière, S.J.",
+    authorNote: "the ending of a sermon, later prayed on its own; see background",
+    related: ["Litany of Trust", "Prayer of Abandonment", "Litany of the Sacred Heart", "Te Deum"],
+    year: "1676–1678",
+    origin: "Ignatian",
+    feastDay: "February 15",
+    originalLanguage: "French",
+    latinBody:
+      "Pour moi, mon Dieu, je suis si persuadé que vous veillez sur ceux qui espèrent en vous, et " +
+      "qu'on ne peut manquer de rien quand on attend de vous toutes choses, que j'ai résolu de vivre " +
+      "à l'avenir sans aucun souci et de me décharger sur vous de toutes mes inquiétudes : In pace " +
+      "in idipsum dormiam et requiescam, quoniam tu, Domine, singulariter in spe constituisti " +
+      "me.\n\nLes hommes peuvent me dépouiller, et des biens, et de l'honneur ; les maladies peuvent " +
+      "m'ôter les forces et les moyens de vous servir ; je puis même perdre votre grâce par le péché " +
+      "; mais jamais je ne perdrai mon espérance ; je la conserverai jusqu'au dernier moment de ma " +
+      "vie, et tous les démons de l'enfer feront à ce moment de vains efforts pour me l'arracher : " +
+      "In pace in idipsum dormiam et requiescam.\n\nLes autres peuvent attendre leur bonheur, ou de " +
+      "leurs richesses, ou de leurs talents ; les autres s'appuient, ou sur l'innocence de leur vie, " +
+      "ou sur la rigueur de leurs pénitences, ou sur le nombre de leurs aumônes, ou sur la ferveur " +
+      "de leurs prières : Tu, Domine, singulariter in spe constituisti me. Pour moi, Seigneur, toute " +
+      "ma confiance, c'est ma confiance même. Cette confiance ne trompa jamais personne : Nullus, " +
+      "nullus speravit in Domino, et confusus est.\n\nJe suis donc assuré que je serai éternellement " +
+      "heureux, parce que j'espère fermement de l'être et que c'est de vous, ô mon Dieu, que je " +
+      "l'espère : In te, Domine, speravi, non confundar in aeternum.\n\nJe connais, hélas ! je ne le " +
+      "connais que trop, que je suis fragile et changeant ; je sais ce que peuvent les tentations " +
+      "contre les vertus les mieux affermies ; j'ai vu tomber les astres du ciel et les colonnes du " +
+      "firmament. Mais tout cela ne peut m'effrayer tandis que j'espérerai ; je me tiens à couvert " +
+      "de tous les malheurs et je suis assuré d'espérer toujours, parce que j'espère encore cette " +
+      "invariable espérance.\n\nEnfin, je suis sûr que je ne puis trop espérer en vous et que je ne " +
+      "puis avoir moins que ce que j'aurai espéré de vous. Ainsi j'espère que vous me tiendrez dans " +
+      "les penchants les plus rapides, que vous me soutiendrez contre les plus furieux assauts et " +
+      "que vous ferez triompher ma faiblesse de mes plus redoutables ennemis. J'espère que vous " +
+      "m'aimerez toujours et que je vous aimerai aussi sans relâche ; et, pour porter tout d'un coup " +
+      "mon espérance aussi loin qu'elle peut aller, je vous espère vous-même de vous-même, ô mon " +
+      "Créateur, et pour le temps, et pour l'éternité ! Amen.",
+    body:
+      "As for me, my God, I am so convinced that you watch over those who hope in you, and that no " +
+      "one who looks to you for everything can lack anything, that I have resolved to live from now " +
+      "on without a care, and to lay all my worries on you: \"In peace I will lie down and sleep, " +
+      "for you alone, Lord, have made me dwell in hope.\"\n\nPeople may strip me of my goods and of " +
+      "my good name; illness may take away my strength and the means of serving you; I may even lose " +
+      "your grace by sin; but I will never lose my hope. I will keep it to the last moment of my " +
+      "life, and at that moment all the demons of hell will struggle in vain to tear it from me: " +
+      "\"In peace I will lie down and sleep.\"\n\nOthers may look for their happiness to their " +
+      "wealth or their gifts; others lean on the innocence of their lives, or the hardness of their " +
+      "penances, or the number of their alms, or the fervour of their prayers: \"You alone, Lord, " +
+      "have made me dwell in hope.\" As for me, Lord, my whole confidence is my confidence itself. " +
+      "This confidence has never yet failed anyone: \"No one, no one has hoped in the Lord and been " +
+      "put to shame.\"\n\nSo I am certain that I shall be happy for ever, because I firmly hope to " +
+      "be, and because it is from you, O my God, that I hope for it: \"In you, Lord, I have hoped; " +
+      "let me never be put to shame.\"\n\nI know — alas, I know only too well — that I am frail and " +
+      "changeable. I know what temptation can do against the most firmly rooted virtue; I have seen " +
+      "the stars of heaven fall, and the pillars of the firmament. But none of this can frighten me " +
+      "while I go on hoping. I keep myself sheltered from every misfortune, and I am sure of hoping " +
+      "always, because I hope also for this unchanging hope.\n\nIn short, I am sure that I cannot " +
+      "hope in you too much, and that I cannot receive less than I have hoped for from you. So I " +
+      "hope that you will hold me up on the steepest slopes, that you will sustain me against the " +
+      "fiercest attacks, and that you will make my weakness triumph over my most fearsome enemies. I " +
+      "hope that you will love me always, and that I in turn will love you without ceasing; and to " +
+      "carry my hope at one stroke as far as it can go, I hope for you yourself, from you yourself, " +
+      "O my Creator, for time and for eternity. Amen.",
+    background:
+      "The line everyone remembers is the fourth sentence: my whole confidence is my confidence " +
+      "itself. It sounds almost reckless, and is meant to. Others rest on their wealth, their " +
+      "talents, their innocence, their penances, their prayers; he rests on nothing he has done or " +
+      "is, only on the act of trusting God — which is itself God's gift, and so cannot " +
+      "fail.\n\nWHERE IT COMES FROM\n\nIt is not a composed prayer but the last page of a sermon, " +
+      "\"On confidence in God\", which he preached in London between 1676 and 1678, when he was " +
+      "preacher to Mary of Modena, the Duchess of York, at the Court of St. James's. The sermons " +
+      "were printed after his death as Sermons prêchez devant son Altesse Roïale Madame la Duchesse " +
+      "d'Yorck (1684); in the 1901 edition this is the sixty-eighth. At the end he turns from the " +
+      "congregation to God and speaks to him directly — and threads the speech with Latin verses " +
+      "from Scripture, which drop out of most versions now in circulation:\n\n\"In peace I will lie " +
+      "down and sleep, for you alone, Lord, have made me dwell in hope\" — Psalm 4:9–10 (Vulgate " +
+      "numbering).\n\"No one has hoped in the Lord and been put to shame\" — Sirach 2:11.\n\"In you, " +
+      "Lord, I have hoped; let me never be put to shame\" — Psalm 30:2 (Vulgate), which is also the " +
+      "last line of the Te Deum.\n\nThe French above follows the 1901 Grenoble edition of his " +
+      "complete works. Copies that circulate as the \"Acte de confiance\" leave the Latin out or put " +
+      "it into French, and retouch a few phrases.\n\nWHO HE WAS\n\nA French Jesuit (1641–1682). In " +
+      "1675 he was sent to Paray-le-Monial, where he became spiritual director to St. Margaret Mary " +
+      "Alacoque, and one of the first to be convinced that her visions of the Sacred Heart were " +
+      "genuine. The next year he went to London; in 1678, caught up in the panic of the Popish Plot, " +
+      "he was denounced, imprisoned, and in 1679 expelled from England with his health broken. He " +
+      "died at Paray in 1682 and was canonised by John Paul II in 1992.\n\nWHERE TO READ " +
+      "MORE\n\n**Œuvres complètes, vol. IV — Sermons preached before the Duchess of York** " +
+      "(Grenoble, 1901). The sermon \"De la confiance en Dieu\" ends on pp. " +
+      "215–216.\nhttps://archive.org/details/oeuvrescompletes0004vari_b0v6\n\n**The Sanctuary of the " +
+      "Sacred Heart, Paray-le-Monial — St. Claude La Colombière**, with the Act and his prayer \"The " +
+      "true friend\" (in " +
+      "French).\nhttps://sacrecoeur-paray.org/saint-claude-la-colombiere-fresque/\n\n**Claude La " +
+      "Colombière** (Wikipedia) — Paray, London and the Popish " +
+      "Plot.\nhttps://en.wikipedia.org/wiki/Claude_La_Colombière",
+  },
+  {
+    title: "Offering to Merciful Love",
+    seedVersion: 9,
+    kind: "prayer",
+    tags: ["self-offering", "merciful love", "holiness", "Carmelite"],
+    source: "Written 9 June 1895, Trinity Sunday; the text of her manuscript, translated afresh from the French for this library",
+    author: "St. Thérèse of Lisieux",
+    authorNote: "her own title: \"Offering of myself as a victim of holocaust to the merciful Love of God\"",
+    familiarVersion: "John Clarke's translation (ICS)",
+    related: ["Prayer of a Soul in Love", "My Vocation Is Love", "I Will Spend My Heaven Doing Good on Earth", "O My God, Trinity Whom I Adore", "Suscipe"],
+    year: "9 June 1895",
+    origin: "Carmelite",
+    feastDay: "October 1",
+    originalLanguage: "French",
+    latinBody:
+      "Ô mon Dieu ! Trinité bienheureuse, je désire vous aimer et vous faire aimer, travailler à la " +
+      "glorification de la Sainte Église en sauvant les âmes qui sont sur la terre et délivrant " +
+      "celles qui souffrent dans le purgatoire. Je désire accomplir parfaitement votre volonté et " +
+      "arriver au degré de gloire que vous m'avez préparé dans votre royaume, en un mot je désire " +
+      "être sainte mais je sens mon impuissance, et je vous demande, ô mon Dieu, d'être Vous-même ma " +
+      "Sainteté.\n\nPuisque vous m'avez aimée, jusqu'à me donner votre Fils unique pour être mon " +
+      "Sauveur et mon Époux, les trésors infinis de ses mérites sont à moi, je vous les offre avec " +
+      "bonheur, vous suppliant de ne me regarder qu'à travers la Face de Jésus et dans son cœur " +
+      "brûlant d'amour. Je vous offre encore tous les mérites des saints (qui sont au Ciel et sur la " +
+      "terre), leurs actes d'amour et ceux des saints Anges ; enfin je vous offre, ô Bienheureuse " +
+      "Trinité ! l'amour et les mérites de la Sainte Vierge, ma Mère chérie, c'est à elle que " +
+      "j'abandonne mon offrande, la priant de vous la présenter.\n\nSon Divin Fils, mon Époux " +
+      "Bien-Aimé, aux jours de sa vie mortelle, nous a dit : « Tout ce que vous demanderez à mon " +
+      "Père en mon nom, il vous le donnera. » Je suis donc certaine que vous exaucerez mes désirs. " +
+      "Je le sais, ô mon Dieu (plus vous voulez donner, plus vous faites désirer). Je sens en mon " +
+      "cœur des désirs immenses et c'est avec confiance que je vous demande de venir prendre " +
+      "possession de mon âme. Ah ! je ne puis recevoir la sainte Communion aussi souvent que je le " +
+      "désire, mais Seigneur, n'êtes-vous pas Tout-Puissant ?… Restez en moi comme au tabernacle, ne " +
+      "vous éloignez jamais de votre petite hostie…\n\nJe voudrais vous consoler de l'ingratitude " +
+      "des méchants et je vous supplie de m'ôter la liberté de vous déplaire ; si par faiblesse je " +
+      "tombe quelquefois, qu'aussitôt votre divin regard purifie mon âme, consumant toutes mes " +
+      "imperfections, comme le feu qui transforme toute chose en lui-même…\n\nJe vous remercie, ô " +
+      "mon Dieu ! de toutes les grâces que vous m'avez accordées, en particulier de m'avoir fait " +
+      "passer par le creuset de la souffrance. C'est avec joie que je vous contemplerai au dernier " +
+      "jour portant le sceptre de la Croix ; puisque vous avez daigné me donner en partage cette " +
+      "Croix si précieuse, j'espère au Ciel vous ressembler et voir briller sur mon corps glorifié " +
+      "les sacrés stigmates de votre Passion…\n\nAprès l'exil de la terre, j'espère aller jouir de " +
+      "vous dans la Patrie, mais je ne veux pas amasser de mérites pour le Ciel. Je veux travailler " +
+      "pour votre seul Amour, dans l'unique but de vous faire plaisir, de consoler votre Cœur Sacré " +
+      "et de sauver des âmes qui vous aimeront éternellement.\n\nAu soir de cette vie, je paraîtrai " +
+      "devant vous les mains vides, car je ne vous demande pas, Seigneur, de compter mes œuvres. " +
+      "Toutes nos justices ont des taches à vos yeux. Je veux donc me revêtir de votre propre " +
+      "Justice et recevoir de votre Amour la possession éternelle de Vous-même. Je ne veux point " +
+      "d'autre Trône et d'autre Couronne que Vous, ô mon Bien-Aimé !…\n\nÀ vos yeux le temps n'est " +
+      "rien, un seul jour est comme mille ans, vous pouvez donc en un instant me préparer à paraître " +
+      "devant vous…\n\nAfin de vivre dans un acte de parfait Amour, je m'offre comme victime " +
+      "d'holocauste à votre Amour miséricordieux, vous suppliant de me consumer sans cesse, laissant " +
+      "déborder en mon âme les flots de tendresse infinie qui sont renfermés en vous, et qu'ainsi je " +
+      "devienne Martyre de votre Amour, ô mon Dieu !…\n\nQue ce martyre, après m'avoir préparée à " +
+      "paraître devant vous, me fasse enfin mourir, et que mon âme s'élance sans retard dans " +
+      "l'éternel embrassement de votre Miséricordieux Amour…\n\nJe veux, ô mon Bien-Aimé, à chaque " +
+      "battement de mon cœur vous renouveler cette offrande un nombre infini de fois, jusqu'à ce " +
+      "que, les ombres étant évanouies, je puisse vous redire mon Amour dans un Face à Face Éternel.",
+    body:
+      "O my God, blessed Trinity, I desire to love you and to make you loved, to work for the glory " +
+      "of holy Church by saving the souls on earth and setting free those who suffer in purgatory. I " +
+      "desire to do your will perfectly and to reach the degree of glory you have prepared for me in " +
+      "your kingdom. In a word, I desire to be a saint; but I feel how powerless I am, and I ask " +
+      "you, O my God, to be yourself my holiness.\n\nSince you have loved me so much as to give me " +
+      "your only Son to be my Saviour and my Spouse, the infinite treasures of his merits are mine. " +
+      "I offer them to you gladly, begging you to look at me only through the Face of Jesus, and in " +
+      "his Heart burning with love. I offer you as well all the merits of the saints (those in " +
+      "heaven and those on earth), their acts of love, and those of the holy angels. Last of all I " +
+      "offer you, O blessed Trinity, the love and the merits of the Blessed Virgin, my dearest " +
+      "Mother. Into her hands I give my offering, and ask her to present it to you.\n\nHer divine " +
+      "Son, my beloved Spouse, told us in the days of his life on earth: \"Whatever you ask the " +
+      "Father in my name, he will give it to you.\" So I am certain that you will grant my desires. " +
+      "I know it, O my God: the more you want to give, the more you make us desire. I feel immense " +
+      "desires in my heart, and it is with confidence that I ask you to come and take possession of " +
+      "my soul. Ah, I cannot receive Holy Communion as often as I long to; but Lord, are you not " +
+      "almighty? Stay in me as in the tabernacle; never go away from your little host.\n\nI would " +
+      "like to console you for the ingratitude of the wicked, and I beg you to take from me the " +
+      "freedom to displease you. If through weakness I sometimes fall, let your divine glance at " +
+      "once purify my soul, burning away all my imperfections, like fire that turns everything into " +
+      "itself.\n\nI thank you, O my God, for all the graces you have given me, and above all for " +
+      "having made me pass through the crucible of suffering. With joy I shall look on you on the " +
+      "last day, bearing the sceptre of the Cross. Since you have deigned to give me this most " +
+      "precious Cross for my share, I hope to be like you in heaven, and to see the sacred wounds of " +
+      "your Passion shine on my glorified body.\n\nAfter this exile on earth I hope to go and enjoy " +
+      "you in our homeland; but I do not want to pile up merits for heaven. I want to work for your " +
+      "love alone, with the one aim of giving you joy, of consoling your Sacred Heart, and of saving " +
+      "souls who will love you for ever.\n\nWhen the evening of this life comes, I shall stand " +
+      "before you with empty hands, for I do not ask you, Lord, to count my works. All our justice " +
+      "is stained in your sight. So I want to be clothed in your own Justice, and to receive from " +
+      "your Love the everlasting possession of yourself. I want no other throne and no other crown " +
+      "but you, O my Beloved.\n\nIn your eyes time is nothing; a single day is like a thousand " +
+      "years. So in one instant you can make me ready to appear before you.\n\nSo that I may live in " +
+      "one act of perfect love, I offer myself as a victim of holocaust to your merciful Love, " +
+      "begging you to consume me without ceasing, letting the floods of infinite tenderness held " +
+      "within you overflow into my soul, so that I may become a martyr of your Love, O my " +
+      "God.\n\nMay this martyrdom, having made me ready to appear before you, at last make me die, " +
+      "and may my soul take flight without delay into the eternal embrace of your merciful " +
+      "Love.\n\nI want, O my Beloved, with every beat of my heart, to renew this offering to you an " +
+      "infinite number of times, until the shadows have faded and I can tell you my love again, face " +
+      "to face, for ever.",
+    background:
+      "The centre of it is one sentence, the ninth paragraph: I offer myself as a victim of " +
+      "holocaust to your merciful Love. The word needs explaining now. A holocaust, in the Old " +
+      "Testament, is the whole burnt offering — the sacrifice nothing is held back from, consumed " +
+      "entirely by the fire (Leviticus 1). In her day religious sometimes offered themselves as " +
+      "victims to God's justice, to take on the punishment owed for others' sins. Thérèse turns that " +
+      "round. Not justice but mercy; not punishment to be absorbed but a love that wants to give " +
+      "itself and finds too few people who will let it. She offers herself to be consumed by " +
+      "that.\n\nEverything else follows from her \"little way\". She cannot make herself holy, so " +
+      "she asks God to be her holiness. She will come before him at the end with empty hands, not " +
+      "because she has done nothing, but because she refuses to present him with an account.\n\nHOW " +
+      "IT WAS WRITTEN\n\nOn Trinity Sunday, 9 June 1895, during Mass, she offered herself in a few " +
+      "words. She then wrote this out — for herself and for her sister Céline, Sister Geneviève, " +
+      "expecting others to follow. It was read at the feet of the statue known as the Virgin of the " +
+      "Smile. Afterwards she wrote to her prioress, her sister Pauline: \"since that happy day, it " +
+      "seems to me that Love penetrates and surrounds me, that at every moment this merciful Love " +
+      "renews me\" (Manuscript A). She signed it with her full religious name, Marie Françoise " +
+      "Thérèse of the Child Jesus and of the Holy Face. The early editions add that after her death " +
+      "it was found in the book of the Gospels she carried on her heart. In 1923 the Church attached " +
+      "an indulgence to praying its last part.\n\nWHICH TEXT\n\nThe only public-domain English, T. " +
+      "N. Taylor's of 1912, translates the version printed in the first editions, which her sisters " +
+      "had lightly retouched: the Face of Jesus becomes his eyes, \"your little host\" becomes \"Thy " +
+      "little victim\", \"the freedom to displease you\" becomes \"liberty to sin\". The French and " +
+      "the English here follow her manuscript instead. The standard modern English translation, by " +
+      "John Clarke OCD, is still in copyright and is not reproduced here; it is included in his " +
+      "translation of Story of a Soul (ICS Publications).\n\nWHERE TO READ MORE\n\n**The Archives of " +
+      "the Carmel of Lisieux — Prayer 6**, with photographs of both sides of her " +
+      "manuscript.\nhttps://archives.carmeldelisieux.fr/archive/j-m-j-t/\n\n**Story of a Soul, tr. " +
+      "T. N. Taylor (1912)** — the public-domain English, from the retouched text; Manuscript A " +
+      "tells what the offering did in her.\nhttps://www.gutenberg.org/ebooks/16772\n\n**Story of a " +
+      "Soul, tr. John Clarke OCD** (ICS Publications) — the translation from her manuscripts, with " +
+      "the Offering included.",
+  },
+  {
+    title: "O My God, Trinity Whom I Adore",
+    seedVersion: 9,
+    kind: "prayer",
+    tags: ["Trinity", "contemplation", "indwelling", "Carmelite"],
+    source: "Written 21 November 1904 at the Carmel of Dijon; found untitled among her papers after her death",
+    author: "St. Elizabeth of the Trinity",
+    authorNote: "two English translations — choose above the text",
+    familiarVersion: "Aletheia Kane's translation (ICS)",
+    related: ["Radiating Christ", "Offering to Merciful Love", "Prayer of Abandonment", "Let Nothing Disturb You"],
+    year: "21 November 1904",
+    origin: "Carmelite",
+    feastDay: "November 8",
+    originalLanguage: "French",
+    latinBody:
+      "Ô mon Dieu, Trinité que j'adore, aidez-moi à m'oublier entièrement pour m'établir en vous, " +
+      "immobile et paisible comme si déjà mon âme était dans l'éternité. Que rien ne puisse troubler " +
+      "ma paix, ni me faire sortir de vous, ô mon Immuable, mais que chaque minute m'emporte plus " +
+      "loin dans la profondeur de votre Mystère.\n\nPacifiez mon âme, faites-en votre ciel, votre " +
+      "demeure aimée et le lieu de votre repos. Que je ne vous y laisse jamais seul, mais que je " +
+      "sois là tout entière, tout éveillée en ma foi, tout adorante, toute livrée à votre Action " +
+      "créatrice.\n\nÔ mon Christ aimé crucifié par amour, je voudrais être une épouse pour votre " +
+      "Cœur, je voudrais vous couvrir de gloire, je voudrais vous aimer… jusqu'à en mourir ! Mais je " +
+      "sens mon impuissance et je vous demande de me « revêtir de vous-même », d'identifier mon âme " +
+      "à tous les mouvements de votre âme, de me submerger, de m'envahir, de vous substituer à moi, " +
+      "afin que ma vie ne soit qu'un rayonnement de votre Vie. Venez en moi comme Adorateur, comme " +
+      "Réparateur et comme Sauveur.\n\nÔ Verbe éternel, Parole de mon Dieu, je veux passer ma vie à " +
+      "vous écouter, je veux me faire tout enseignable, afin d'apprendre tout de vous. Puis, à " +
+      "travers toutes les nuits, tous les vides, toutes les impuissances, je veux vous fixer " +
+      "toujours et demeurer sous votre grande lumière ; ô mon Astre aimé, fascinez-moi pour que je " +
+      "ne puisse plus sortir de votre rayonnement.\n\nÔ Feu consumant, Esprit d'amour, « survenez en " +
+      "moi » afin qu'il se fasse en mon âme comme une incarnation du Verbe : que je Lui sois une " +
+      "humanité de surcroît en laquelle Il renouvelle tout son Mystère. Et vous, ô Père, " +
+      "penchez-vous vers votre pauvre petite créature, « couvrez-la de votre ombre », ne voyez en " +
+      "elle que le « Bien-Aimé en lequel vous avez mis toutes vos complaisances ».\n\nÔ mes Trois, " +
+      "mon Tout, ma Béatitude, Solitude infinie, Immensité où je me perds, je me livre à vous comme " +
+      "une proie. Ensevelissez-vous en moi pour que je m'ensevelisse en vous, en attendant d'aller " +
+      "contempler en votre lumière l'abîme de vos grandeurs.",
+    body:
+      "O my God, Trinity whom I adore, help me to forget myself entirely, so that I may be settled " +
+      "in you, still and at peace, as if my soul were already in eternity. Let nothing trouble my " +
+      "peace or draw me out of you, O my Changeless One, but let every minute bear me further into " +
+      "the depths of your mystery.\n\nBring peace to my soul. Make it your heaven, your beloved " +
+      "home, the place where you rest. Let me never leave you there alone, but let me be there with " +
+      "all that I am, fully awake in my faith, all adoration, given over entirely to your creating " +
+      "work.\n\nO my beloved Christ, crucified for love, I would be a bride for your Heart; I would " +
+      "cover you with glory; I would love you… until I die of it. But I feel how powerless I am, and " +
+      "I ask you to \"clothe me with yourself\", to make my soul one with every movement of your " +
+      "soul, to flood me, to take hold of me, to put yourself in my place, so that my life may be " +
+      "nothing but the shining of your life. Come into me as the one who adores, the one who makes " +
+      "amends, the one who saves.\n\nO eternal Word, spoken by my God, I want to spend my life " +
+      "listening to you. I want to become utterly teachable, so as to learn everything from you. And " +
+      "then, through every night, every emptiness, every helplessness, I want to keep my eyes fixed " +
+      "on you always and stay beneath your great light. O my beloved Star, hold me so spellbound " +
+      "that I can never again leave your light.\n\nO consuming Fire, Spirit of love, \"come upon " +
+      "me\", so that in my soul there may be something like an incarnation of the Word: that I may " +
+      "be for him one more humanity, in which he renews all his mystery. And you, O Father, bend " +
+      "down over your poor little creature, \"cover her with your shadow\", and see in her only " +
+      "\"the Beloved in whom you are well pleased\".\n\nO my Three, my All, my Happiness, infinite " +
+      "Solitude, Immensity in which I lose myself, I give myself up to you as your prey. Bury " +
+      "yourself in me, so that I may be buried in you, until I go to see in your light the abyss of " +
+      "your greatness.",
+    bodyLabel: "New translation",
+    altTranslations: [
+      {
+        label: "Stanbrook, 1913",
+        body:
+          "O my God, Trinity Whom I adore! help me to become utterly forgetful of self, that I may " +
+          "establish myself in Thee, as changeless and as calm as though my soul were already in " +
+          "eternity. May nothing disturb my peace nor draw me forth from Thee, O my immutable Lord! but " +
+          "may I penetrate more deeply every moment into the depths of Thy Mystery.\n\nGive peace to my " +
+          "soul; make it Thy heaven, Thy cherished dwelling-place, Thy home of rest. Let me never leave " +
+          "Thee there alone, but keep me there all absorbed in Thee, in living faith, adoring Thee and " +
+          "wholly yielded up to Thy creative action.\n\nO my Christ Whom I love! crucified by love! fain " +
+          "would I be the bride of Thy heart; fain would I cover Thee with glory, and love Thee… until I " +
+          "die of very love! Yet I realize my weakness, and beg Thee to clothe me with Thyself, to " +
+          "identify my soul with all the movements of Thine own. Immerse me in Thyself; possess me " +
+          "wholly; substitute Thyself for me, that my life may be but a radiance of Thine own. Enter my " +
+          "soul as Adorer, as Restorer, as Saviour!\n\nO eternal Word, Utterance of my God! I long to " +
+          "pass my life in listening to Thee, to become docile, that I may learn all from Thee. Through " +
+          "all darkness, all privations, all helplessness, I crave to keep Thee ever with me and to " +
+          "dwell beneath Thy lustrous beams. O my beloved Star! So fascinate me that I cannot wander " +
+          "from Thy light!\n\nO \"consuming Fire!\" Spirit of Love! descend within me and reproduce in " +
+          "me, as it were, an incarnation of the Word, that I may be to Him another humanity wherein He " +
+          "renews all His mystery. And Thou, O Father, bend towards Thy poor little creature and " +
+          "overshadow her, beholding in her none other than Thy beloved Son, in Whom Thou hast set all " +
+          "Thy pleasure.\n\nO my \"Three,\" my all, my beatitude, infinite Solitude, Immensity wherein I " +
+          "lose myself! I yield myself to Thee as Thy prey. Merge Thyself in me, that I may be immerged " +
+          "in Thee until I depart to contemplate in Thy light the abyss of Thy greatness!",
+      },
+    ],
+    background:
+      "It moves through God one Person at a time, and then gathers them back. First the Trinity " +
+      "whole — \"help me to forget myself\". Then Christ, crucified, whom she wants to be clothed " +
+      "in. Then the Word, to whom she wants to listen through every night. Then the Spirit, the " +
+      "consuming Fire, asked to make in her \"something like an incarnation of the Word\". Then the " +
+      "Father, asked to see in her only his Son. And last, \"my Three, my All\" — the whole God " +
+      "again, into whom she gives herself up \"as a prey\".\n\nThe phrases in quotation marks in the " +
+      "French are Scripture she is praying back: \"clothe me with yourself\" (Romans 13:14), \"come " +
+      "upon me\" and \"cover her with your shadow\" (the angel's words to Mary, Luke 1:35), \"the " +
+      "Beloved in whom you are well pleased\" (Matthew 3:17).\n\nHOW IT WAS WRITTEN\n\nÉlisabeth " +
+      "Catez entered the Carmel of Dijon in 1901 and took the name Elizabeth of the Trinity. On 21 " +
+      "November 1904, the feast of the Presentation of Our Lady, a preached retreat ended and the " +
+      "community renewed their vows before the Blessed Sacrament. That evening she wrote this, in " +
+      "ink, on a sheet torn from a notebook, and told no one. Her sisters found it among her papers " +
+      "after her death from Addison's disease on 9 November 1906, at twenty-six. Pope Francis " +
+      "canonised her in 2016. It has since been translated into more than fifty languages.\n\nTHE " +
+      "TWO TRANSLATIONS\n\n\"New translation\" is made for this library from the French above. " +
+      "\"Stanbrook, 1913\" is the first English, by the Benedictine nuns of Stanbrook Abbey in The " +
+      "Praise of Glory, and is in the public domain. It was made from the early French edition of " +
+      "her Souvenirs, which printed some phrases differently from her manuscript, so the two do not " +
+      "always match word for word. The standard modern English, by Aletheia Kane OCD, is in " +
+      "copyright and is not reproduced here; it is in The Complete Works of Elizabeth of the " +
+      "Trinity, vol. 1 (ICS Publications).\n\nWHERE TO READ MORE\n\n**The Carmel of Dijon — the " +
+      "prayer**, with a commentary on how it moves through the three Persons (in " +
+      "French).\nhttps://elisabeth-dijon.org/fr/la-prière-o-mon-dieu,-trinité-que-j-adore.html\n\n**The " +
+      "Praise of Glory: Reminiscences of Sister Elizabeth of the Trinity** (Stanbrook, 1913) — the " +
+      "public-domain English, with her letters and last " +
+      "retreat.\nhttps://archive.org/details/praiseofgloryrem00eliziala\n\n**The Complete Works of " +
+      "Elizabeth of the Trinity, vol. 1** (ICS Publications) — the critical text in English, " +
+      "including this prayer.",
+  },
+  {
+    title: "Prayer of a Soul in Love",
+    seedVersion: 8,
+    kind: "prayer",
+    tags: ["confidence", "grace", "joy", "Carmelite"],
+    source: "Among his Sayings of Light and Love; Spanish from the Toledo critical edition of 1912 (P. Gerardo de San Juan de la Cruz), translated afresh for this library",
+    author: "St. John of the Cross",
+    authorNote: "\"Oración de alma enamorada\"",
+    familiarVersion: "Kavanaugh and Rodriguez's translation (ICS)",
+    related: ["Offering to Merciful Love", "Judged on Love Alone", "The Dark Night", "O Deus, Ego Amo Te"],
+    year: "1580s",
+    origin: "Carmelite",
+    feastDay: "December 14",
+    originalLanguage: "Spanish",
+    latinBody:
+      "Señor Dios, amado mío, si todavía te acuerdas de mis pecados para no hacer lo que te ando " +
+      "pidiendo, haz en ellos, Dios mío, tu voluntad, que es lo que yo más quiero; y ejercita tu " +
+      "bondad y misericordia, y serás conocido en ellos; y si es que esperas a mis obras, para por " +
+      "ese medio concederme mi ruego, dámelas tú y óbramelas; y las penas que tú quisieres aceptar, " +
+      "y hágase. Y si a las obras mías no esperas, ¿qué esperas, clementísimo Señor mío?, ¿por qué " +
+      "te tardas? Porque si en fin ha de ser gracia y misericordia la que en tu Hijo te pido, toma " +
+      "mi cornadillo, pues le quieres, y dame este bien, pues que tú también lo quieres.\n\n¿Quién " +
+      "se podrá librar de los modos y términos bajos, si no le levantas tú a ti en pureza de amor, " +
+      "Dios mío?\n\n¿Cómo se levantará a ti el hombre engendrado y criado en bajezas, si no le " +
+      "levantas tú, Señor, con la mano que le hiciste?\n\nNo me quitarás, Dios mío, lo que una vez " +
+      "me diste en tu único Hijo Jesucristo, en que me diste todo lo que quiero; por eso me holgaré " +
+      "que no te tardarás, si yo espero.\n\n¿Con qué dilaciones esperas, pues desde luego puedes " +
+      "amar a Dios en tu corazón?\n\nMíos son los cielos y mía es la tierra; mías son las gentes, " +
+      "los justos son míos y míos los pecadores; los ángeles son míos, y la Madre de Dios, y todas " +
+      "las cosas son mías; y el mismo Dios es mío y para mí; porque Cristo es mío y todo para mí. " +
+      "¿Pues qué pides y buscas, alma mía? Tuyo es todo esto, y todo es para ti.\n\nNo te pongas en " +
+      "menos ni repares en meajas que se caen de la mesa de tu Padre; sal fuera y gloríate en tu " +
+      "gloria; escóndete en ella y goza, y alcanzarás las peticiones de tu corazón.",
+    body:
+      "Lord God, my Beloved, if you still remember my sins, and so will not do what I keep asking of " +
+      "you, then do your will in them, my God, for that is what I want most; show your goodness and " +
+      "mercy in them, and you will be known through them. And if it is my works you are waiting for, " +
+      "to grant my request through them, then give them to me, and work them in me yourself, and " +
+      "send whatever sufferings you are willing to accept; and let it be done. But if you are not " +
+      "waiting for my works, what are you waiting for, most merciful Lord? Why do you delay? For if " +
+      "in the end it must be grace and mercy that I ask of you in your Son, take my mite, since you " +
+      "want it, and give me this good, since you want that too.\n\nWho can get free of low and " +
+      "narrow ways, unless you lift him up to yourself in purity of love, my God?\n\nHow will a man, " +
+      "begotten and brought up in lowliness, rise up to you, Lord, unless you lift him with the hand " +
+      "that made him?\n\nYou will not take from me, my God, what you once gave me in your only Son, " +
+      "Jesus Christ, in whom you gave me everything I desire. So I will be glad, for you will not " +
+      "delay if I hope.\n\nWhy wait any longer, when from this very moment you can love God in your " +
+      "heart?\n\nMine are the heavens and mine is the earth; mine are the nations; the just are " +
+      "mine, and mine the sinners; the angels are mine, and the Mother of God, and all things are " +
+      "mine; and God himself is mine and for me, because Christ is mine and all for me. What, then, " +
+      "do you ask for and look for, my soul? All of this is yours, and all of it is for you.\n\nDo " +
+      "not settle for less, or stoop for the crumbs that fall from your Father's table. Go out, and " +
+      "glory in your glory; hide yourself in it and rejoice, and you will be given what your heart " +
+      "asks.",
+    background:
+      "Most people know only the last two paragraphs — mine are the heavens, and mine is the earth — " +
+      "and quoted on their own they can sound like triumph. The whole prayer is a turning. It begins " +
+      "close to anxiety: if you still remember my sins, if you are waiting for my works, what are " +
+      "you waiting for? Why do you delay? Then, in the fourth paragraph, he remembers what has " +
+      "already been given — everything, once, in the Son — and the argument with God stops. The last " +
+      "three paragraphs are no longer addressed to God at all. He turns to his own soul and tells it " +
+      "to stop begging for crumbs.\n\nTwo words to notice. \"Take my mite\": cornadillo is a tiny " +
+      "copper coin, the widow's offering in the Temple (Mark 12:42) — his works, such as they are, " +
+      "handed over as worth next to nothing. And the last line, \"you will be given what your heart " +
+      "asks\", is Psalm 37:4 — in the Latin he knew, dabit tibi petitiones cordis tui.\n\nWHERE IT " +
+      "COMES FROM\n\nIt stands among the Sayings of Light and Love, short counsels he wrote for the " +
+      "people he directed; an early Carmelite account says he sent sayings like these with his " +
+      "letters to the nuns of Beas, who kept them. The prayer was first printed in the Latin edition " +
+      "of his works in 1639, and in Spanish only in 1693. Some later editions ran separate sayings " +
+      "into it — \"I knew you not, my Lord, because I still wanted to know and taste things\", which " +
+      "the 1912 edition prints as saying no. 30, is one — and that longer, padded text is the one " +
+      "David Lewis translated in 1864, the only public-domain English. So the English here is a new " +
+      "translation of the critical text.\n\nThérèse of Lisieux loved it: she mentions it twice in " +
+      "her letters, and the Lisieux commentators hear its list of what is \"mine\" — the saints, the " +
+      "angels, the Mother of God — behind the second paragraph of her Offering to Merciful Love. The " +
+      "standard modern English, by Kieran Kavanaugh OCD and Otilio Rodriguez OCD, is in copyright " +
+      "and not reproduced here; it is in The Collected Works of St. John of the Cross (ICS " +
+      "Publications), among the Sayings of Light and Love.\n\nWHERE TO READ MORE\n\n**Obras del " +
+      "místico doctor San Juan de la Cruz, vol. III** (Toledo, 1912) — the critical Spanish, with " +
+      "the editor's history of the " +
+      "Sayings.\nhttps://archive.org/details/obrasdelmisticod03john\n\n**The Complete Works of Saint " +
+      "John of the Cross, tr. David Lewis, vol. II** (1864) — the public-domain English, from the " +
+      "longer, padded text.\nhttps://archive.org/details/completeworksofs02johnuoft\n\n**The " +
+      "Collected Works of St. John of the Cross, tr. Kavanaugh and Rodriguez** (ICS Publications) — " +
+      "the standard modern English.",
+  },
+  {
+    title: "Breathe in Me, O Holy Spirit",
+    seedVersion: 7,
+    kind: "prayer",
+    tags: ["Holy Spirit", "holiness", "short prayer"],
+    source: "Circulates everywhere as St. Augustine's; no Latin original, and no early printing, has been traced",
+    author: "Traditional",
+    authorNote: "attributed to St. Augustine, with no source in his writings",
+    related: ["Come, Holy Spirit", "Our Heart Is Restless", "Late Have I Loved You"],
+    year: "Unknown",
+    origin: "Devotional",
+    body:
+      "Breathe in me, O Holy Spirit,\nthat my thoughts may all be holy.\nAct in me, O Holy " +
+      "Spirit,\nthat my work, too, may be holy.\nDraw my heart, O Holy Spirit,\nthat I love but what " +
+      "is holy.\nStrengthen me, O Holy Spirit,\nto defend all that is holy.\nGuard me, then, O Holy " +
+      "Spirit,\nthat I always may be holy. Amen.",
+    background:
+      "Five verbs, and they climb. Breathe — the Spirit's oldest image, the breath of God — reaches " +
+      "the thoughts. Act reaches the work of the hands. Draw reaches the heart and what it loves. " +
+      "Strengthen gives the courage to defend what is holy. And guard keeps all of it, to the " +
+      "end.\n\nIS IT AUGUSTINE'S?\n\nAlmost certainly not, or not in these words. It is printed " +
+      "under his name by dioceses, publishers and prayer sites, but no one cites a work of his it " +
+      "comes from, no Latin original has turned up, and no early printing has been traced. The " +
+      "English rhymes and scans as English verse, which is what you would expect of a prayer " +
+      "composed in English rather than translated. Augustine is the most misattributed writer in the " +
+      "Church — scholars have a name, Pseudo-Augustine, for the authors of the many works passed off " +
+      "under his — and this belongs on the same shelf as the Peace Prayer. It is a good prayer; it " +
+      "is just not his.\n\nWhat Augustine really wrote about the Spirit is harder and stranger. In " +
+      "the last book of the Confessions he says that everything is carried by its weight to its own " +
+      "place — fire upward, a stone downward — and then: \"My weight is my love; by it I am carried " +
+      "wherever I am carried. By your Gift we are set on fire and carried upward; we burn, and we " +
+      "go\" (Confessions XIII.9.10). The Gift is the Holy Spirit.\n\nWHERE TO READ " +
+      "MORE\n\n**Augustine, Confessions, book XIII** (Latin) — chapter 9 is the passage on love as " +
+      "weight and the Spirit as " +
+      "fire.\nhttps://www.thelatinlibrary.com/augustine/conf13.shtml\n\n**Pseudo-Augustine** " +
+      "(Wikipedia) — on the long tradition of works credited to him that he did not " +
+      "write.\nhttps://en.wikipedia.org/wiki/Pseudo-Augustine",
+  },
+  {
+    title: "Radiating Christ",
+    seedVersion: 7,
+    kind: "prayer",
+    tags: ["witness", "thanksgiving", "Missionaries of Charity", "Eucharist"],
+    source: "A composite: an opening of unknown authorship joined to Newman's meditation \"Jesus the Light of the Soul\" (Meditations and Devotions, 1893); prayed daily by the Missionaries of Charity",
+    author: "St. John Henry Newman",
+    authorNote: "the second half only — the first half's author is unknown; three versions above",
+    related: ["Some Definite Service", "Stay with Me, Lord", "O My God, Trinity Whom I Adore", "Small Things With Great Love"],
+    year: "1893 (Newman's part); combined form 20th century",
+    origin: "Oratorian",
+    body:
+      "Dear Jesus, help me to spread your fragrance wherever I go. Flood my soul with your spirit " +
+      "and life. Penetrate and possess my whole being so utterly that my life may only be a radiance " +
+      "of yours. Shine through me, and be so in me that every soul I come in contact with may feel " +
+      "your presence in my soul. Let them look up and see no longer me, but only Jesus.\n\nStay with " +
+      "me, and then I shall begin to shine as you shine, so to shine as to be a light to others. The " +
+      "light, O Jesus, will be all from you; none of it will be mine. It will be you shining on " +
+      "others through me. Let me thus praise you in the way you love best, by shining on those " +
+      "around me. Let me preach you without preaching, not by words but by my example, by the " +
+      "catching force, the sympathetic influence of what I do, the evident fullness of the love my " +
+      "heart bears to you. Amen.",
+    bodyLabel: "As usually prayed",
+    altTranslations: [
+      {
+        label: "Missionaries of Charity",
+        body:
+          "Dear Jesus, help us to spread your fragrance everywhere we go. Flood our souls with your " +
+          "spirit and life. Penetrate and possess our whole being so utterly that our lives may only be " +
+          "a radiance of yours. Shine through us and be so in us that every soul we come in contact with " +
+          "may feel your presence in our soul. Let them look up and see no longer us, but only " +
+          "Jesus.\n\nStay with us and then we shall begin to shine as you shine, so to shine as to be " +
+          "light to others. The light, O Jesus, will be all from you. None of it will be ours. It will " +
+          "be you shining on others through us. Let us thus praise you in the way you love best by " +
+          "shining on those around us. Let us preach you without preaching, not by words, but by our " +
+          "example; by the catching force, the sympathetic influence of what we do, the evident fullness " +
+          "of the love our hearts bear to you. Amen.",
+      },
+      {
+        label: "Newman's words, 1893",
+        body:
+          "Stay with me, and then I shall begin to shine as Thou shinest: so to shine as to be a light " +
+          "to others. The light, O Jesus, will be all from Thee. None of it will be mine. No merit to " +
+          "me. It will be Thou who shinest through me upon others. O let me thus praise Thee, in the way " +
+          "which Thou dost love best, by shining on all those around me. Give light to them as well as " +
+          "to me; light them with me, through me. Teach me to show forth Thy praise, Thy truth, Thy " +
+          "will. Make me preach Thee without preaching — not by words, but by my example and by the " +
+          "catching force, the sympathetic influence, of what I do — by my visible resemblance to Thy " +
+          "saints, and the evident fulness of the love which my heart bears to Thee.",
+      },
+    ],
+    background:
+      "One prayer with two authors, only one of whom is known.\n\nTHE SECOND HALF IS " +
+      "NEWMAN'S\n\nFrom \"Stay with me\" to the end, it is a lightly modernised excerpt from a " +
+      "meditation of his, \"Jesus the Light of the Soul\", published in Meditations and Devotions in " +
+      "1893, three years after his death. The choice above called \"Newman's words, 1893\" gives " +
+      "that paragraph as he wrote it — longer, and with one line the prayer drops: \"by my visible " +
+      "resemblance to Thy saints\". The paragraph just before it in the meditation explains the " +
+      "opening words. Newman has been begging Christ not to leave: \"Mane nobiscum, Domine, quoniam " +
+      "advesperascit\" — stay with us, Lord, for it is towards evening (Luke 24:29, the disciples at " +
+      "Emmaus). \"Stay with me\" is that plea continued.\n\nTHE FIRST HALF IS NOT\n\n\"Help me to " +
+      "spread your fragrance\", \"flood my soul\", \"penetrate and possess\" — none of it appears in " +
+      "Newman's writings, and no earlier source for it has been found. It does, strikingly, echo " +
+      "phrase for phrase a prayer written in 1904 by Elizabeth of the Trinity, also in this library: " +
+      "\"de me submerger, de m'envahir … afin que ma vie ne soit qu'un rayonnement de votre Vie\" — " +
+      "to flood me, to take hold of me, so that my life may be nothing but the shining of your life. " +
+      "That is a resemblance, not a proven source.\n\nHOW IT SPREAD\n\nMother Teresa loved it and " +
+      "changed the \"me\" to \"us\", and her Missionaries of Charity are reported to pray it " +
+      "together every day after Mass, as Newman's. That is almost certainly how the whole prayer " +
+      "came to carry his name.\n\nWHERE TO READ MORE\n\n**Newman, Meditations and Devotions** (1893) " +
+      "— \"Jesus the Light of the Soul\", in the Meditations on Christian " +
+      "Doctrine.\nhttps://archive.org/details/a600404300newmuoft\n\n**They Didn't Say It — \"Newman: " +
+      "Radiating Christ\"**, a fact-check of which parts are " +
+      "his.\nhttps://fauxtations.wordpress.com/2016/10/12/newman-radiating-christ/",
+  },
+  {
+    title: "O Deus, Ego Amo Te",
+    seedVersion: 7,
+    kind: "hymn",
+    tags: ["pure love", "the Cross", "contrition"],
+    source: "Latin hymn printed in the Cœleste Palmetum (Cologne, 1696), text as in Daniel's Thesaurus Hymnologicus II (1844); English by Gerard Manley Hopkins, S.J., published after his death",
+    author: "Unknown",
+    authorNote: "long attributed to St. Francis Xavier; see background",
+    related: ["Suscipe", "Prayer of a Soul in Love", "Offering to Merciful Love"],
+    year: "Spanish sonnet late 16th century; Latin by 1696",
+    origin: "Ignatian",
+    originalLanguage: "Latin",
+    latinBody:
+      "O Deus, ego amo te,\nNec amo te, ut salves me,\nAut quia non amantes te\nAeterno punis " +
+      "igne.\nTu, tu, mi Iesu, totum me\nAmplexus es in cruce;\nTulisti clavos, lanceam,\nMultamque " +
+      "ignominiam,\nInnumeros dolores,\nSudores, et angores,\nAc mortem, et haec propter me,\nAc pro " +
+      "me peccatore.\nCur igitur non amem te,\nO Iesu amantissime!\nNon, ut in coelo salves me,\nAut " +
+      "ne aeternum damnes me,\nNec praemii ullius spe;\nSed sicut tu amasti me,\nSic amo et amabo " +
+      "te,\nSolum, quia Rex meus es.",
+    body:
+      "O God, I love thee, I love thee —\nNot out of hope of heaven for me\nNor fearing not to love " +
+      "and be\nIn the everlasting burning.\nThou, thou, my Jesus, after me\nDidst reach thine arms " +
+      "out dying,\nFor my sake sufferedst nails and lance,\nMocked and marred countenance,\nSorrows " +
+      "passing number,\nSweat and care and cumber,\nYea and death, and this for me,\nAnd thou " +
+      "couldst see me sinning:\nThen I, why should not I love thee,\nJesu, so much in love with " +
+      "me?\nNot for heaven's sake; not to be\nOut of hell by loving thee;\nNot for any gains I " +
+      "see;\nBut just the way that thou didst me\nI do love and I will love thee:\nWhat must I love " +
+      "thee, Lord, for then?\nFor being my king and God. Amen.",
+    background:
+      "The whole hymn is one refusal and one reason. Not for heaven; not to escape hell; not for " +
+      "anything I can see I will gain. Only because you loved me first — and so, in the end, only " +
+      "because you are my King and God. It is the old distinction between loving God for what he " +
+      "gives and loving him for himself, and it is sharp enough that eighteenth-century theologians " +
+      "arguing about \"pure love\" used it as evidence against each other.\n\nWHERE IT COMES " +
+      "FROM\n\nBehind the Latin is a Spanish sonnet, anonymous, from the late sixteenth century, " +
+      "first printed in Antonio de Rojas's La vida del espíritu (Madrid, 1628):\n\n\"No me mueve, mi " +
+      "Dios, para quererte / el cielo que me tienes prometido, / ni me mueve el infierno tan temido " +
+      "/ para dejar por eso de ofenderte. / Tú me mueves, Señor, muéveme el verte / clavado en una " +
+      "cruz y escarnecido, / muéveme ver tu cuerpo tan herido, / muévenme tus afrentas y tu muerte. " +
+      "/ Muéveme, en fin, tu amor, y en tal manera, / que aunque no hubiera cielo, yo te amara, / y " +
+      "aunque no hubiera infierno, te temiera. / No me tienes que dar porque te quiera, / pues " +
+      "aunque lo que espero no esperara, / lo mismo que te quiero te quisiera.\"\n\nWhat moves me, " +
+      "my God, to love you is not the heaven you have promised me, nor does the hell so feared move " +
+      "me to stop offending you. You move me, Lord: it moves me to see you nailed to a cross and " +
+      "mocked, to see your body so wounded; your insults and your death move me. Your love moves me, " +
+      "in short, and so much that if there were no heaven I would still love you, and if there were " +
+      "no hell I would still fear you. You need give me nothing to make me love you; for even if I " +
+      "did not hope for what I hope for, I would love you just as I love you now.\n\nIt was turned " +
+      "into Latin several times — Joannes Nadasi's version of 1657 begins \"Non me movet, Domine\" — " +
+      "and this form, printed at Cologne in 1696, is the one that took hold. For three centuries " +
+      "both sonnet and hymn went under the name of Francis Xavier; the 1911 Catholic Encyclopedia " +
+      "still thought the sonnet fairly certainly his. Current scholarship credits him with " +
+      "neither.\n\nHOPKINS'S ENGLISH\n\nGerard Manley Hopkins made his translation as a Jesuit, and " +
+      "it seems to follow a Latin text with a final line the version above lacks — \"et solum quia " +
+      "Deus es\", and only because you are God — which is why his ends \"my king and God\". It was " +
+      "not in the first edition of his Poems (1918), whose editor, Robert Bridges, deliberately left " +
+      "out his translations; it was published later. It is also among the poems at the back of the " +
+      "Liturgy of the Hours. Printed copies differ in a word here and there.\n\nA different Latin " +
+      "hymn opens with the same line — \"O Deus, ego amo te, nam prior tu amasti me\" — and " +
+      "paraphrases the Suscipe of St. Ignatius.\n\nWHERE TO READ MORE\n\n**Catholic Encyclopedia " +
+      "(1911), \"O Deus Ego Amo Te\"** — the two Latin hymns, their printings and " +
+      "translations.\nhttps://www.newadvent.org/cathen/11206c.htm\n\n**G. M. Verd Conradi SJ, \"El " +
+      "soneto No me mueve, mi Dios, para quererte y su versión latina en los Países Bajos\"**, " +
+      "Archivo Teológico Granadino 69 (2006) — on the authorship and early spread (in " +
+      "Spanish).\nhttps://repositorio.uloyola.es/handle/20.500.12412/3505\n\n**Soneto a Cristo " +
+      "crucificado** (Spanish Wikipedia) — the sonnet and the attributions made over the " +
+      "centuries.\nhttps://es.wikipedia.org/wiki/Soneto_a_Cristo_crucificado",
+  },
+  {
+    title: "Day by Day",
+    seedVersion: 7,
+    kind: "prayer",
+    tags: ["thanksgiving", "discipleship", "England", "short prayer"],
+    source: "His deathbed words as recorded by his confessor Ralph Bocking OP (Acta Sanctorum, April vol. I); the \"day by day\" ending is a later English verse, joined to them by 1913",
+    author: "St. Richard of Chichester",
+    authorNote: "the first half only; see background",
+    related: ["Prayer of Abandonment", "Radiating Christ"],
+    year: "1253 (his words); present form by 1913",
+    origin: "English — Bishop of Chichester",
+    feastDay: "June 16",
+    body:
+      "Thanks be to thee, my Lord Jesus Christ, for all the benefits thou hast given me, for all the " +
+      "pains and insults which thou hast borne for me. O most merciful Redeemer, Friend and Brother, " +
+      "may I know thee more clearly, love thee more dearly, and follow thee more nearly, day by day.",
+    bodyLabel: "As prayed today",
+    altTranslations: [
+      {
+        label: "His own words, 1253",
+        body:
+          "I thank you, Lord Jesus Christ, for all the good things you have given me, and for the pains " +
+          "and insults you bore for me — so that the lament truly belonged to you: \"There is no sorrow " +
+          "like my sorrow.\" And you know, Lord, that if it pleased you, I would be ready to bear every " +
+          "insult and torment, and death, for you; and as you know this is true, have mercy on me, for " +
+          "to you I commend my soul.\n\nInto your hands, Lord, I commend my spirit.\n\nMary, mother of " +
+          "grace, mother of mercy, protect us from the enemy, and receive us at the hour of death.",
+      },
+    ],
+    background:
+      "The most-loved line — know thee more clearly, love thee more dearly, follow thee more nearly " +
+      "— is not his.\n\nWHAT HE SAID\n\nRichard, Bishop of Chichester, died at Dover on 3 April " +
+      "1253, where the Pope had sent him to preach a crusade. His confessor, the Dominican Ralph " +
+      "Bocking, wrote down what he prayed as he was dying, and the Bollandists printed it in the " +
+      "Acta Sanctorum:\n\n\"Gratias tibi ago, Domine Jesu Christe, de omnibus beneficiis quae mihi " +
+      "praestitisti, pro poenis et opprobriis quae pro me pertulisti, propter quae planctus ille " +
+      "lamentabilis tibi vere competebat, Non est dolor similis sicut dolor meus. Et tu nosti, " +
+      "Domine, quod si tibi placeret, omnia opprobria et tormenta atque mortem pro te paratus essem " +
+      "sustinere: et sicut tu scis hoc verum esse, miserere mei, quia tibi commendo animam " +
+      "meam.\"\n\nBocking adds that he kept repeating the psalm verse \"Into your hands, Lord, I " +
+      "commend my spirit\", turned in heart and voice to the Virgin — \"Mary, mother of grace, " +
+      "mother of mercy, protect us from the enemy and receive us at the hour of death\" — and told " +
+      "his chaplains not to stop saying those words in his ears. The choice above called \"His own " +
+      "words, 1253\" translates all three. \"There is no sorrow like my sorrow\" is Lamentations " +
+      "1:12, long read as the voice of Christ in his Passion.\n\nWHERE THE REST CAME FROM\n\nThe " +
+      "rhyming triplet has its own history, apart from him. It is in print from 1892 in several " +
+      "forms — \"Dear Lord, of thee three things I pray: to know thee more clearly, to love thee " +
+      "more dearly, to walk more nearly every day\" — with no name attached, or marked \"author " +
+      "unknown\". By 1913 it had been joined to the first sentence of Richard's prayer, with \"O " +
+      "most merciful Redeemer, Friend and Brother\" as the hinge, in G. R. Bullock-Webster's " +
+      "Churchman's Prayer Manual — and so it has been his ever since. In 1971 the triplet became the " +
+      "song \"Day by Day\" in the musical Godspell.\n\nWHERE TO READ MORE\n\n**Liber locorum " +
+      "communium — \"Pseudo-St. Richard of Chichester\"**, which quotes Bocking's Latin and traces " +
+      "the triplet to " +
+      "1892.\nhttps://liberlocorumcommunium.blogspot.com/2020/04/know-thee-more-clearly-love-thee-more.html\n\n**Richard " +
+      "of Chichester** (Wikipedia) — his life, the quarrel with Henry III, and the shrine at " +
+      "Chichester.\nhttps://en.wikipedia.org/wiki/Richard_of_Chichester",
   },
   {
     title: "Litany of Humility",
@@ -4157,12 +5139,12 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of Trust",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "litany",
     tags: ["trust", "surrender", "anxiety"],
     source: "Sisters of Life (sistersoflife.org)",
     author: "Sr. Faustina Maria Pia, S.V.",
-    related: ["Litany of Humility", "Jesus, I Trust in You"],
+    related: ["Act of Confidence in God", "Litany of Humility", "Jesus, I Trust in You"],
     year: "Contemporary (2010s); exact year of composition not widely documented",
     origin: "Sisters of Life",
     liturgical: "",
@@ -4326,12 +5308,12 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Memorare",
-    seedVersion: 7,
+    seedVersion: 9,
     kind: "prayer",
     tags: ["Marian", "intercession"],
     source: "Manuscript tradition traces to Nicolas Salicetus's Antidotarius animae (1489)",
     author: "Traditional",
-    related: ["The Measure of Love"],
+    related: ["The Measure of Love", "Sub Tuum Praesidium", "The Flying Novena"],
     relatedSaints: ["mary"],
     authorNote: "long misattributed to St. Bernard of Clairvaux",
     year: "Traceable to the 15th century as part of a longer prayer; popularized in its short form in the 17th century",
@@ -4363,6 +5345,154 @@ const SEED_LIBRARY_ENTRIES = [
       "200,000 leaflets of it to popularize the short form used today. " +
       "Later generations seem to have conflated the popularizing 'Bernard' " +
       "with the famous 12th-century saint of the same name.",
+  },
+  {
+    title: "Prayer for Good Humour",
+    seedVersion: 7,
+    kind: "prayer",
+    tags: ["joy", "humour", "health", "humility"],
+    source: "English verse, in print by 1937 as \"found on a tablet in Chester Cathedral\"; a card sold there credited Thomas Henry Basil Webb (1898–1917). Long attributed to St. Thomas More",
+    author: "Unknown",
+    authorNote: "long attributed to St. Thomas More; not in his works — see background",
+    familiarVersion: "the prose version quoted by Pope Francis",
+    related: ["A Joyful Heart", "The King's Good Servant, But God's First", "Pray, Hope, and Don't Worry"],
+    year: "Early twentieth century",
+    origin: "Devotional",
+    body:
+      "Give me a good digestion, Lord,\nAnd also something to digest;\nBut when and how that " +
+      "something comes\nI leave to Thee, Who knowest best.\n\nGive me a healthy body, Lord;\nGive me " +
+      "the sense to keep it so;\nAlso a heart that is not bored\nWhatever work I have to do.\n\nGive " +
+      "me a healthy mind, Good Lord,\nThat finds the good that dodges sight;\nAnd seeing sin, is not " +
+      "appalled,\nBut seeks a way to put it right.\n\nGive me a point of view, Good Lord,\nLet me " +
+      "know what is, and why.\nDon't let me worry overmuch\nAbout the thing that's known as " +
+      "\"I\".\n\nGive me a sense of humour, Lord,\nGive me the power to see a joke,\nTo get some " +
+      "happiness from life\nAnd pass it on to other folk.",
+    bodyLabel: "Chester Cathedral card",
+    altTranslations: [
+      {
+        label: "As printed in 1937",
+        body:
+          "Give me a good digestion, Lord,\nAnd also something to digest.\nGive me a healthy body, " +
+          "Lord,\nWith sense to keep it at its best.\n\nGive me a healthy mind, good Lord,\nTo keep the " +
+          "good and pure in sight,\nWhich seeing sin is not appalled,\nBut finds a way to set it " +
+          "right.\n\nGive me a mind that is not bored,\nThat does not whimper, whine or sigh,\nDon't let " +
+          "me worry overmuch,\nAbout the funny thing called I.\n\nGive me a sense of humor, Lord,\nGive " +
+          "me the grace to see a joke,\nTo get some happiness from life,\nAnd pass it on to other folk.",
+      },
+    ],
+    background:
+      "A prayer that starts with the stomach and ends with other people. Digestion, then health, " +
+      "then a mind that is not bored and a heart that does not whine — and at the centre, the real " +
+      "obstacle, \"the thing that's known as I\". The last verse gives humour its proper job: not to " +
+      "be funny, but to get some happiness from life and pass it on.\n\nIS IT THOMAS MORE'S?\n\nNo. " +
+      "More was famously witty, joked on the scaffold, and wrote real prayers in the Tower — which " +
+      "is how this one found its way to his name — but it is English rhyming verse of the early " +
+      "twentieth century, and it appears nowhere in his collected works. It was in print by 1937, " +
+      "when an American writer quoted it as \"found, I believe, on a tablet in Chester Cathedral, " +
+      "England\". In 1962 the Thomas More scholar Abbé Germain Marc'hadour, writing in Moreana on " +
+      "\"the most famous of More's spurious prayers\", reported a card sold by the cathedral " +
+      "crediting it to Thomas Henry Basil Webb, a young man who died in 1917. That attribution rests " +
+      "on the card; but it is the only name with any evidence behind it. Copies have always varied — " +
+      "the two above differ in almost every verse.\n\nTHE FAMILIAR VERSION\n\nMost people now know " +
+      "it as prose — \"Grant me, O Lord, good digestion, and also something to digest…\" — because " +
+      "Pope Francis recommended it in his exhortation on holiness, Gaudete et Exsultate (2018), in a " +
+      "footnote to the paragraph on humour, as \"the prayer attributed to Saint Thomas More\". That " +
+      "prose rendering is the Vatican's translation and is not reproduced here; it is at the link " +
+      "below.\n\nWHERE TO READ MORE\n\n**Pope Francis, Gaudete et Exsultate** — §126 on humour and " +
+      "holiness, with the prayer in footnote " +
+      "101.\nhttps://www.vatican.va/content/francesco/en/apost_exhortations/documents/papa-francesco_esortazione-ap_20180319_gaudete-et-exsultate.html\n\n**Liber " +
+      "locorum communium — \"Pseudo-Thomas More\"**, which quotes the 1937 printing and " +
+      "Marc'hadour's 1962 " +
+      "article.\nhttp://liberlocorumcommunium.blogspot.com/2019/01/pseudo-more.html",
+  },
+  {
+    title: "Prayer to St. Joseph for a Happy Death",
+    seedVersion: 8,
+    kind: "prayer",
+    tags: ["a good death", "St. Joseph", "the dying"],
+    source: "A traditional prayer of unknown origin, with the ejaculations indulgenced in the Raccolta (1910)",
+    author: "Traditional",
+    authorNote: "author unknown",
+    related: ["Litany of St. Joseph", "Support Us All the Day Long", "The Nunc Dimittis"],
+    relatedSaints: ["joseph"],
+    year: "Nineteenth century or earlier",
+    origin: "Devotional",
+    body:
+      "O Blessed Joseph, who yielded up thy last breath in the arms of Jesus and Mary, obtain for me " +
+      "this grace, O holy Joseph, that I may breathe forth my soul in praise, saying in spirit, if I " +
+      "am unable to do so in words: \"Jesus, Mary and Joseph, I give Thee my heart and my soul.\" " +
+      "Amen.\n\nJesus, Mary, Joseph, I give you my heart and my soul.\nJesus, Mary, Joseph, assist " +
+      "me in my last agony.\nJesus, Mary, Joseph, may I breathe forth my soul in peace with you.",
+    background:
+      "Why Joseph? The Gospels never mention his death. He is there at the finding in the Temple " +
+      "when Jesus is twelve, and gone by the time of the public ministry — at Cana, and at the " +
+      "Cross, only Mary is named. So the tradition drew the gentlest conclusion: that he died before " +
+      "Jesus left Nazareth, with his wife and his son beside him. No death could be better " +
+      "accompanied, and so he became the patron of a happy death; the Litany of St. Joseph, also in " +
+      "this library, calls him \"Patron of the dying\".\n\nThe prayer asks for something very " +
+      "specific and very honest: the grace to die in praise even if, at the end, I cannot speak — to " +
+      "say the words in spirit if not in words. The words it has in mind are the three short " +
+      "ejaculations printed after it. The Raccolta of 1910 lists them as \"Ejaculations for a Happy " +
+      "Death\", with an indulgence for saying them; they are the ones generations of Catholics were " +
+      "taught to say at a deathbed, or to have said for them.\n\nThe prayer itself is printed in " +
+      "many devotional books and websites without a source, and its origin has not been " +
+      "traced.\n\nWHERE TO READ MORE\n\n**The Raccolta** (1910) — no. 427, the Ejaculations for a " +
+      "Happy Death, among many prayers to St. " +
+      "Joseph.\nhttps://archive.org/details/theraccoltaorcol00unknuoft\n\n**Catholic Tradition — St. " +
+      "Joseph, prayers for the dying and the holy souls**, where this prayer appears with others of " +
+      "the same kind.\nhttps://www.catholictradition.org/Joseph/joseph7.htm",
+  },
+  {
+    title: "Sub Tuum Praesidium",
+    seedVersion: 7,
+    kind: "antiphon",
+    tags: ["Marian", "protection", "ancient", "Theotokos"],
+    source: "The oldest known prayer to Mary, preserved in Greek on Rylands Papyrus 470; Latin and English as in the Raccolta (1910)",
+    author: "Traditional",
+    authorNote: "anonymous, early Church; two English versions — choose above the text",
+    related: ["Memorare", "Salve Regina", "Hail Mary", "The Nunc Dimittis"],
+    year: "Early centuries — the papyrus is dated anywhere from the 3rd to the 7th century",
+    origin: "Patristic",
+    liturgical: "Compline — the Marian antiphon at the end of the day, outside Eastertide; Lenten Vespers in the Byzantine rite",
+    originalLanguage: "Latin",
+    latinBody:
+      "Sub tuum praesidium confugimus,\nsancta Dei Genetrix;\nnostras deprecationes ne despicias in " +
+      "necessitatibus;\nsed a periculis cunctis libera nos semper,\nVirgo gloriosa et benedicta.",
+    body:
+      "We fly to thy patronage,\nO holy Mother of God;\ndespise not our petitions in our " +
+      "necessities,\nbut deliver us always from all dangers,\nO glorious and blessed Virgin.",
+    bodyLabel: "Raccolta, 1910",
+    altTranslations: [
+      {
+        label: "New translation",
+        body:
+          "We take refuge under your protection,\nholy Mother of God;\ndo not scorn our prayers in our " +
+          "need,\nbut always free us from every danger,\nglorious and blessed Virgin.",
+      },
+    ],
+    background:
+      "Probably the oldest prayer to Mary that survives. It is older than the Hail Mary as a prayer, " +
+      "and it already calls her Theotokos, God-bearer — the title the Council of Ephesus defended in " +
+      "431.\n\nTHE PAPYRUS\n\nA small papyrus fragment from Egypt, now in the John Rylands Library " +
+      "in Manchester as Rylands Papyrus 470, carries this prayer in Greek. How old it is is " +
+      "disputed. Edgar Lobel dated the handwriting to the third century, which would put it before " +
+      "Ephesus; C. H. Roberts preferred the fourth; others, including a 2021 study, place it in the " +
+      "sixth or seventh. Early, at any rate — and kept not far away, in Manchester.\n\nThe Greek " +
+      "begins not with protection but with mercy:\n\nὙπὸ τὴν σὴν εὐσπλαγχνίαν καταφεύγομεν, Θεοτόκε. " +
+      "Τὰς ἡμῶν ἱκεσίας μὴ παρίδῃς ἐν περιστάσει, ἀλλ᾽ ἐκ κινδύνων λύτρωσαι ἡμᾶς, μόνη ἁγνή, μόνη " +
+      "εὐλογημένη.\n\nUnder your tender mercy we take refuge, Theotokos. Do not overlook our prayers " +
+      "in trouble, but rescue us from dangers, only pure one, only blessed one.\n\nThe Latin turned " +
+      "the mercy into a fortress — praesidium, a garrison, a guard — and that is the prayer the West " +
+      "has said since.\n\nWHERE IT IS SAID\n\nIn the Roman rite it may close Compline or Vespers as " +
+      "the Marian antiphon outside Eastertide, and it is the antiphon to the Nunc Dimittis in the " +
+      "Little Office of Our Lady. The Byzantine churches sing it at Vespers in Lent. In 2018 Pope " +
+      "Francis asked the whole Church to add it to the Rosary through October, with the prayer to " +
+      "St. Michael.\n\nTHE TRANSLATIONS\n\n\"Raccolta, 1910\" is the English most people know, from " +
+      "the Raccolta, in the public domain. \"New translation\" is made for this library from the " +
+      "Latin.\n\nWHERE TO READ MORE\n\n**Sub tuum praesidium** (Wikipedia) — the Greek, Latin and " +
+      "Slavonic texts, the papyrus and its " +
+      "dating.\nhttps://en.wikipedia.org/wiki/Sub_tuum_praesidium\n\n**The Raccolta** (1910) — no. " +
+      "184, with the Salve Regina.\nhttps://archive.org/details/theraccoltaorcol00unknuoft",
   },
   {
     title: "Pray, Hope, and Don't Worry",
@@ -4415,14 +5545,14 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Jesus, I Trust in You",
-    seedVersion: 7,
+    seedVersion: 8,
     occasion:
       "The words she reported being told to inscribe on the image of Divine Mercy, in a vision at Plock in February 1931.",
     kind: "quote",
     tags: ["trust", "Divine Mercy"],
     source: "Diariusz — Divine Mercy in My Soul (her Diary)",
     author: "St. Faustina Kowalska",
-    related: ["Litany of Trust"],
+    related: ["Litany of Trust", "The Chaplet of Divine Mercy"],
     year: "1930s",
     origin: "Divine Mercy devotion",
     liturgical: "",
@@ -4436,6 +5566,401 @@ const SEED_LIBRARY_ENTRIES = [
       "is, it's become one of the most widely repeated lines in modern Catholic devotion — the entire " +
       "Divine Mercy movement, and the Litany of Trust already in this library, both grow out of the same " +
       "basic act this sentence names.",
+  },
+  {
+    title: "The Chaplet of Divine Mercy",
+    seedVersion: 7,
+    kind: "prayer",
+    tags: ["Divine Mercy", "chaplet", "the dying", "three o'clock"],
+    source: "Diary of St. Faustina Kowalska, §§474–476 (Vilnius, 13–14 September 1935); translated afresh from the Polish for this library",
+    author: "St. Faustina Kowalska",
+    authorNote: "given to her in prayer, as she records it",
+    familiarVersion: "the Marian Fathers' translation of the Diary",
+    related: ["Jesus, I Trust in You", "Litany of Trust", "The Rosary", "Prayer to St. Joseph for a Happy Death"],
+    year: "1935",
+    origin: "Congregation of the Sisters of Our Lady of Mercy",
+    liturgical: "Any time; especially at three in the afternoon, and at the bedside of the dying",
+    body:
+      "On an ordinary rosary, begin with the Our Father, the Hail Mary and the Apostles' " +
+      "Creed.\n\nOn the Our Father beads:\nEternal Father, I offer you the Body and Blood, Soul and " +
+      "Divinity of your most beloved Son, our Lord Jesus Christ, as atonement for our sins and for " +
+      "those of the whole world.\n\nOn the Hail Mary beads:\nBy his sorrowful Passion, have mercy on " +
+      "us and on the whole world.\n\nTo close, three times:\nHoly God, Holy Mighty One, Holy " +
+      "Immortal One, have mercy on us and on the whole world.",
+    background:
+      "WHERE IT COMES FROM\n\nSister Faustina Kowalska records it in her Diary. On the evening of " +
+      "Friday, 13 September 1935, in her cell at Vilnius, she saw an angel sent to strike the earth " +
+      "in God's anger. Her own pleading, she writes, was nothing against it — until she found " +
+      "herself praying with words she heard inwardly, and the angel was powerless:\n\n\"Ojcze " +
+      "Przedwieczny, ofiaruję Ci Ciało i Krew, Duszę i Bóstwo najmilszego Syna Twojego, a Pana " +
+      "naszego Jezusa Chrystusa za grzechy nasze i świata całego; dla Jego bolesnej męki miej " +
+      "miłosierdzie dla nas.\"\n\nThe next morning, entering the chapel, she heard: \"This prayer is " +
+      "for appeasing my anger. You will say it for nine days on ordinary rosary beads\" — and then " +
+      "the order above, word for word (§476). A later entry adds a promise: \"Whoever recites it " +
+      "will receive great mercy at the hour of death. Priests will give it to sinners as a last " +
+      "plank of rescue.\"\n\nWHAT IT DOES\n\nIt is short, and it is an offering, not a request. The " +
+      "one praying holds up to the Father the whole of Christ — body and blood, soul and divinity, " +
+      "the same words the Church uses of the Eucharist — and asks mercy on that ground alone, and " +
+      "never only for us: always \"and on the whole world\". The closing prayer is not Faustina's " +
+      "own; it is the Trisagion, one of the oldest hymns of the Church, sung in the Byzantine " +
+      "liturgy and in Latin on Good Friday during the Reproaches.\n\nJohn Paul II canonised her on " +
+      "30 April 2000 and made the Sunday after Easter Divine Mercy Sunday. He died on 2 April 2005, " +
+      "the eve of that Sunday.\n\nTHE ENGLISH\n\nThe English everyone knows is from the Marian " +
+      "Fathers' translation of the Diary, Divine Mercy in My Soul, which is in copyright; the words " +
+      "above are a new translation from her Polish, and differ only slightly.\n\nWHERE TO READ " +
+      "MORE\n\n**The Diary, §§474–476, in Polish** — the vision of 13 September 1935 and the chaplet " +
+      "as she received " +
+      "it.\nhttp://mtrojnar.rzeszow.opoka.org.pl/siostra_faustyna/d_koron.htm\n\n**The Congregation " +
+      "of the Sisters of Our Lady of Mercy** — Faustina's own congregation, on the chaplet and the " +
+      "message (in several languages).\nhttps://www.faustyna.pl/zmbm/",
+  },
+  {
+    title: "The Seven Penitential Psalms",
+    seedVersion: 7,
+    kind: "prayer",
+    tags: ["penance", "Lent", "psalms", "contrition"],
+    source: "Psalms 6, 31, 37, 50, 101, 129 and 142 (Vulgate numbering; 6, 32, 38, 51, 102, 130 and 143 in the Hebrew) — Latin from the Clementine Vulgate, English from the Douay-Rheims (Challoner)",
+    author: "The Psalms",
+    authorNote: "traditionally ascribed to David",
+    related: ["Late Have I Loved You", "Our Heart Is Restless", "The Magnificat", "Act of Confidence in God"],
+    year: "Grouped as seven by the 6th century",
+    origin: "Biblical",
+    liturgical: "Lent, especially Fridays; before confession",
+    originalLanguage: "Latin",
+    latinBody:
+      "Psalmus 6\n\nDomine, ne in furore tuo arguas me, neque in ira tua corripias me.\nMiserere " +
+      "mei, Domine, quoniam infirmus sum; sana me, Domine, quoniam conturbata sunt ossa mea.\nEt " +
+      "anima mea turbata est valde; sed tu, Domine, usquequo?\nConvertere, Domine, et eripe animam " +
+      "meam; salvum me fac propter misericordiam tuam.\nQuoniam non est in morte qui memor sit tui; " +
+      "in inferno autem quis confitebitur tibi?\nLaboravi in gemitu meo; lavabo per singulas noctes " +
+      "lectum meum; lacrimis meis stratum meum rigabo.\nTurbatus est a furore oculus meus; " +
+      "inveteravi inter omnes inimicos meos.\nDiscedite a me omnes qui operamini iniquitatem, " +
+      "quoniam exaudivit Dominus vocem fletus mei.\nExaudivit Dominus deprecationem meam; Dominus " +
+      "orationem meam suscepit.\nErubescant, et conturbentur vehementer omnes inimici mei; " +
+      "convertantur, et erubescant valde velociter.\n\nPsalmus 31\n\nBeati quorum remissae sunt " +
+      "iniquitates, et quorum tecta sunt peccata.\nBeatus vir cui non imputavit Dominus peccatum, " +
+      "nec est in spiritu ejus dolus.\nQuoniam tacui, inveteraverunt ossa mea, dum clamarem tota " +
+      "die.\nQuoniam die ac nocte gravata est super me manus tua; conversus sum in aerumna mea, dum " +
+      "configitur spina.\nDelictum meum cognitum tibi feci, et injustitiam meam non abscondi. Dixi : " +
+      "Confitebor adversum me injustitiam meam Domino; et tu remisisti impietatem peccati mei.\nPro " +
+      "hac orabit ad te omnis sanctus in tempore opportuno. Verumtamen in diluvio aquarum multarum, " +
+      "ad eum non approximabunt.\nTu es refugium meum a tribulatione quae circumdedit me; exsultatio " +
+      "mea, erue me a circumdantibus me.\nIntellectum tibi dabo, et instruam te in via hac qua " +
+      "gradieris; firmabo super te oculos meos.\nNolite fieri sicut equus et mulus, quibus non est " +
+      "intellectus. In camo et freno maxillas eorum constringe, qui non approximant ad te.\nMulta " +
+      "flagella peccatoris; sperantem autem in Domino misericordia circumdabit.\nLaetamini in " +
+      "Domino, et exsultate, justi; et gloriamini, omnes recti corde.\n\nPsalmus 37\n\nDomine, ne in " +
+      "furore tuo arguas me, neque in ira tua corripias me;\nquoniam sagittae tuae infixae sunt " +
+      "mihi, et confirmasti super me manum tuam.\nNon est sanitas in carne mea, a facie irae tuae; " +
+      "non est pax ossibus meis, a facie peccatorum meorum :\nquoniam iniquitates meae supergressae " +
+      "sunt caput meum, et sicut onus grave gravatae sunt super me.\nPutruerunt et corruptae sunt " +
+      "cicatrices meae, a facie insipientiae meae.\nMiser factus sum et curvatus sum usque in finem; " +
+      "tota die contristatus ingrediebar.\nQuoniam lumbi mei impleti sunt illusionibus, et non est " +
+      "sanitas in carne mea.\nAfflictus sum, et humiliatus sum nimis; rugiebam a gemitu cordis " +
+      "mei.\nDomine, ante te omne desiderium meum, et gemitus meus a te non est absconditus.\nCor " +
+      "meum conturbatum est, dereliquit me virtus mea, et lumen oculorum meorum, et ipsum non est " +
+      "mecum.\nAmici mei et proximi mei adversum me appropinquaverunt, et steterunt; et qui juxta me " +
+      "erant, de longe steterunt, et vim faciebant qui quaerebant animam meam.\nEt qui inquirebant " +
+      "mala mihi, locuti sunt vanitates, et dolos tota die meditabantur.\nEgo autem, tamquam surdus, " +
+      "non audiebam; et sicut mutus non aperiens os suum.\nEt factus sum sicut homo non audiens, et " +
+      "non habens in ore suo redargutiones.\nQuoniam in te, Domine, speravi; tu exaudies me, Domine " +
+      "Deus meus.\nQuia dixi : Nequando supergaudeant mihi inimici mei; et dum commoventur pedes " +
+      "mei, super me magna locuti sunt.\nQuoniam ego in flagella paratus sum, et dolor meus in " +
+      "conspectu meo semper.\nQuoniam iniquitatem meam annuntiabo, et cogitabo pro peccato " +
+      "meo.\nInimici autem mei vivunt, et confirmati sunt super me : et multiplicati sunt qui " +
+      "oderunt me inique.\nQui retribuunt mala pro bonis detrahebant mihi, quoniam sequebar " +
+      "bonitatem.\nNe derelinquas me, Domine Deus meus; ne discesseris a me.\nIntende in adjutorium " +
+      "meum, Domine, Deus salutis meae.\n\nPsalmus 50\n\nMiserere mei, Deus, secundum magnam " +
+      "misericordiam tuam; et secundum multitudinem miserationum tuarum, dele iniquitatem " +
+      "meam.\nAmplius lava me ab iniquitate mea, et a peccato meo munda me.\nQuoniam iniquitatem " +
+      "meam ego cognosco, et peccatum meum contra me est semper.\nTibi soli peccavi, et malum coram " +
+      "te feci; ut justificeris in sermonibus tuis, et vincas cum judicaris.\nEcce enim in " +
+      "iniquitatibus conceptus sum, et in peccatis concepit me mater mea.\nEcce enim veritatem " +
+      "dilexisti; incerta et occulta sapientiae tuae manifestasti mihi.\nAsperges me hyssopo, et " +
+      "mundabor; lavabis me, et super nivem dealbabor.\nAuditui meo dabis gaudium et laetitiam, et " +
+      "exsultabunt ossa humiliata.\nAverte faciem tuam a peccatis meis, et omnes iniquitates meas " +
+      "dele.\nCor mundum crea in me, Deus, et spiritum rectum innova in visceribus meis.\nNe " +
+      "projicias me a facie tua, et spiritum sanctum tuum ne auferas a me.\nRedde mihi laetitiam " +
+      "salutaris tui, et spiritu principali confirma me.\nDocebo iniquos vias tuas, et impii ad te " +
+      "convertentur.\nLibera me de sanguinibus, Deus, Deus salutis meae, et exsultabit lingua mea " +
+      "justitiam tuam.\nDomine, labia mea aperies, et os meum annuntiabit laudem tuam.\nQuoniam si " +
+      "voluisses sacrificium, dedissem utique; holocaustis non delectaberis.\nSacrificium Deo " +
+      "spiritus contribulatus; cor contritum et humiliatum, Deus, non despicies.\nBenigne fac, " +
+      "Domine, in bona voluntate tua Sion, ut aedificentur muri Jerusalem.\nTunc acceptabis " +
+      "sacrificium justitiae, oblationes et holocausta; tunc imponent super altare tuum " +
+      "vitulos.\n\nPsalmus 101\n\nDomine, exaudi orationem meam, et clamor meus ad te veniat.\nNon " +
+      "avertas faciem tuam a me; in quacumque die tribulor, inclina ad me aurem tuam; in quacumque " +
+      "die invocavero te, velociter exaudi me.\nQuia defecerunt sicut fumus dies mei, et ossa mea " +
+      "sicut cremium aruerunt.\nPercussus sum ut foenum, et aruit cor meum, quia oblitus sum " +
+      "comedere panem meum.\nA voce gemitus mei adhaesit os meum carni meae.\nSimilis factus sum " +
+      "pellicano solitudinis; factus sum sicut nycticorax in domicilio.\nVigilavi, et factus sum " +
+      "sicut passer solitarius in tecto.\nTota die exprobrabant mihi inimici mei, et qui laudabant " +
+      "me adversum me jurabant :\nquia cinerem tamquam panem manducabam, et potum meum cum fletu " +
+      "miscebam;\na facie irae et indignationis tuae, quia elevans allisisti me.\nDies mei sicut " +
+      "umbra declinaverunt, et ego sicut foenum arui.\nTu autem, Domine, in aeternum permanes, et " +
+      "memoriale tuum in generationem et generationem.\nTu exsurgens misereberis Sion, quia tempus " +
+      "miserendi ejus, quia venit tempus;\nquoniam placuerunt servis tuis lapides ejus, et terrae " +
+      "ejus miserebuntur.\nEt timebunt gentes nomen tuum, Domine, et omnes reges terrae gloriam " +
+      "tuam;\nquia aedificavit Dominus Sion, et videbitur in gloria sua.\nRespexit in orationem " +
+      "humilium et non sprevit precem eorum.\nScribantur haec in generatione altera, et populus qui " +
+      "creabitur laudabit Dominum.\nQuia prospexit de excelso sancto suo, Dominus de caelo in terram " +
+      "aspexit;\nut audiret gemitus compeditorum, ut solveret filios interemptorum;\nut annuntient " +
+      "in Sion nomen Domini, et laudem ejus in Jerusalem,\nin conveniendo populos in unum, et reges " +
+      "ut serviant Domino.\nRespondit ei in via virtutis suae : Paucitatem dierum meorum nuntia mihi " +
+      ":\nne revoces me in dimidio dierum meorum, in generationem et generationem anni tui.\nInitio " +
+      "tu, Domine, terram fundasti, et opera manuum tuarum sunt caeli.\nIpsi peribunt, tu autem " +
+      "permanes; et omnes sicut vestimentum veterascent. Et sicut opertorium mutabis eos, et " +
+      "mutabuntur;\ntu autem idem ipse es, et anni tui non deficient.\nFilii servorum tuorum " +
+      "habitabunt; et semen eorum in saeculum dirigetur.\n\nPsalmus 129\n\nDe profundis clamavi ad " +
+      "te, Domine;\nDomine, exaudi vocem meam. Fiant aures tuae intendentes in vocem deprecationis " +
+      "meae.\nSi iniquitates observaveris, Domine, Domine, quis sustinebit?\nQuia apud te " +
+      "propitiatio est; et propter legem tuam sustinui te, Domine. Sustinuit anima mea in verbo " +
+      "ejus;\nsperavit anima mea in Domino.\nA custodia matutina usque ad noctem, speret Israel in " +
+      "Domino;\nquia apud Dominum misericordia, et copiosa apud eum redemptio.\nEt ipse redimet " +
+      "Israel ex omnibus iniquitatibus ejus.\n\nPsalmus 142\n\nDomine, exaudi orationem meam; " +
+      "auribus percipe obsecrationem meam in veritate tua; exaudi me in tua justitia.\nEt non intres " +
+      "in judicium cum servo tuo, quia non justificabitur in conspectu tuo omnis vivens.\nQuia " +
+      "persecutus est inimicus animam meam, humiliavit in terra vitam meam; collocavit me in " +
+      "obscuris, sicut mortuos saeculi.\nEt anxiatus est super me spiritus meus; in me turbatum est " +
+      "cor meum.\nMemor fui dierum antiquorum : meditatus sum in omnibus operibus tuis, in factis " +
+      "manuum tuarum meditabar.\nExpandi manus meas ad te; anima mea sicut terra sine aqua " +
+      "tibi.\nVelociter exaudi me, Domine; defecit spiritus meus. Non avertas faciem tuam a me, et " +
+      "similis ero descendentibus in lacum.\nAuditam fac mihi mane misericordiam tuam, quia in te " +
+      "speravi. Notam fac mihi viam in qua ambulem, quia ad te levavi animam meam.\nEripe me de " +
+      "inimicis meis, Domine; ad te confugi.\nDoce me facere voluntatem tuam, quia Deus meus es tu. " +
+      "Spiritus tuus bonus deducet me in terram rectam.\nPropter nomen tuum, Domine, vivificabis me; " +
+      "in aequitate tua, educes de tribulatione animam meam;\net in misericordia tua disperdes " +
+      "inimicos meos, et perdes omnes qui tribulant animam meam, quoniam ego servus tuus sum.",
+    body:
+      "Psalm 6\n\nO Lord, rebuke me not in thy indignation, nor chastise me in thy wrath.\nHave " +
+      "mercy on me, O Lord, for I am weak: heal me, O Lord, for my bones are troubled.\nAnd my soul " +
+      "is troubled exceedingly: but thou, O Lord, how long?\nTurn to me, O Lord, and deliver my " +
+      "soul: O save me for thy mercy's sake.\nFor there is no one in death, that is mindful of thee: " +
+      "and who shall confess to thee in hell?\nI have laboured in my groanings, every night I will " +
+      "wash my bed: I will water my couch with my tears.\nMy eye is troubled through indignation: I " +
+      "have grown old amongst all my enemies.\nDepart from me, all ye workers of iniquity: for the " +
+      "Lord hath heard the voice of my weeping.\nThe Lord hath heard my supplication: the Lord hath " +
+      "received my prayer.\nLet all my enemies be ashamed, and be very much troubled: let them be " +
+      "turned back, and be ashamed very speedily.\n\nPsalm 31 (32)\n\nBlessed are they whose " +
+      "iniquities are forgiven, and whose sins are covered.\nBlessed is the man to whom the Lord " +
+      "hath not imputed sin, and in whose spirit there is no guile.\nBecause I was silent my bones " +
+      "grew old; whilst I cried out all the day long.\nFor day and night thy hand was heavy upon me: " +
+      "I am turned in my anguish, whilst the thorn is fastened.\nI have acknowledged my sin to thee, " +
+      "and my injustice I have not concealed. I said I will confess against myself my injustice to " +
+      "the Lord: and thou hast forgiven the wickedness of my sin.\nFor this shall every one that is " +
+      "holy pray to thee in a seasonable time. And yet in a flood of many waters, they shall not " +
+      "come nigh unto him.\nThou art my refuge from the trouble which hath encompassed me: my joy, " +
+      "deliver me from them that surround me.\nI will give thee understanding, and I will instruct " +
+      "thee in this way, in which thou shalt go: I will fix my eyes upon thee.\nDo not become like " +
+      "the horse and the mule, who have no understanding. With bit and bridle bind fast their jaws, " +
+      "who come not near unto thee.\nMany are the scourges of the sinner, but mercy shall encompass " +
+      "him that hopeth in the Lord.\nBe glad in the Lord, and rejoice, ye just, and glory, all ye " +
+      "right of heart.\n\nPsalm 37 (38)\n\nRebuke me not, O Lord, in thy indignation; nor chastise " +
+      "me in thy wrath.\nFor thy arrows are fastened in me: and thy hand hath been strong upon " +
+      "me.\nThere is no health in my flesh, because of thy wrath: there is no peace for my bones, " +
+      "because of my sins.\nFor my iniquities are gone over my head: and as a heavy burden are " +
+      "become heavy upon me.\nMy sores are putrified and corrupted, because of my foolishness.\nI am " +
+      "become miserable, and am bowed down even to the end: I walked sorrowful all the day " +
+      "long.\nFor my loins are filled with illusions; and there is no health in my flesh.\nI am " +
+      "afflicted and humbled exceedingly: I roared with the groaning of my heart.\nLord, all my " +
+      "desire is before thee, and my groaning is not hidden from thee.\nMy heart is troubled, my " +
+      "strength hath left me, and the light of my eyes itself is not with me.\nMy friends and my " +
+      "neighbours have drawn near, and stood against me. And they that were near me stood afar " +
+      "off:\nAnd they that sought my soul used violence. And they that sought evils to me spoke vain " +
+      "things, and studied deceits all the day long.\nBut I, as a deaf man, heard not: and as a dumb " +
+      "man not opening his mouth.\nAnd I became as a man that heareth not: and that hath no reproofs " +
+      "in his mouth.\nFor in thee, O Lord, have I hoped: thou wilt hear me, O Lord my God.\nFor I " +
+      "said: Lest at any time my enemies rejoice over me: and whilst my feet are moved, they speak " +
+      "great things against me.\nFor I am ready for scourges: and my sorrow is continually before " +
+      "me.\nFor I will declare my iniquity: and I will think for my sin.\nBut my enemies live, and " +
+      "are stronger than I: and they that hate me wrongfully are multiplied.\nThey that render evil " +
+      "for good, have detracted me, because I followed goodness.\nForsake me not, O Lord my God: do " +
+      "not thou depart from me.\nAttend unto my help, O Lord, the God of my salvation.\n\nPsalm 50 " +
+      "(51)\n\nHave mercy on me, O God, according to thy great mercy. And according to the multitude " +
+      "of thy tender mercies blot out my iniquity.\nWash me yet more from my iniquity, and cleanse " +
+      "me from my sin.\nFor I know my iniquity, and my sin is always before me.\nTo thee only have I " +
+      "sinned, and have done evil before thee: that thou mayst be justified in thy words and mayst " +
+      "overcome when thou art judged.\nFor behold I was conceived in iniquities; and in sins did my " +
+      "mother conceive me.\nFor behold thou hast loved truth: the uncertain and hidden things of thy " +
+      "wisdom thou hast made manifest to me.\nThou shalt sprinkle me with hyssop, and I shall be " +
+      "cleansed: thou shalt wash me, and I shall be made whiter than snow.\nTo my hearing thou shalt " +
+      "give joy and gladness: and the bones that have been humbled shall rejoice.\nTurn away thy " +
+      "face from my sins, and blot out all my iniquities.\nCreate a clean heart in me, O God: and " +
+      "renew a right spirit within my bowels.\nCast me not away from thy face; and take not thy holy " +
+      "spirit from me.\nRestore unto me the joy of thy salvation, and strengthen me with a perfect " +
+      "spirit.\nI will teach the unjust thy ways: and the wicked shall be converted to " +
+      "thee.\nDeliver me from blood, O God, thou God of my salvation: and my tongue shall extol thy " +
+      "justice.\nO Lord, thou wilt open my lips: and my mouth shall declare thy praise.\nFor if thou " +
+      "hadst desired sacrifice, I would indeed have given it: with burnt offerings thou wilt not be " +
+      "delighted.\nA sacrifice to God is an afflicted spirit: a contrite and humbled heart, O God, " +
+      "thou wilt not despise.\nDeal favourably, O Lord, in thy good will with Sion; that the walls " +
+      "of Jerusalem may be built up.\nThen shalt thou accept the sacrifice of justice, oblations and " +
+      "whole burnt offerings: then shall they lay calves upon thy altar.\n\nPsalm 101 (102)\n\nHear, " +
+      "O Lord, my prayer: and let my cry come to thee.\nTurn not away thy face from me: in the day " +
+      "when I am in trouble, incline thy ear to me. In what day soever I shall call upon thee, hear " +
+      "me speedily.\nFor my days are vanished like smoke: and my bones are grown dry like fuel for " +
+      "the fire.\nI am smitten as grass, and my heart is withered: because I forgot to eat my " +
+      "bread.\nThrough the voice of my groaning, my bone hath cleaved to my flesh.\nI am become like " +
+      "to a pelican of the wilderness: I am like a night raven in the house.\nI have watched, and am " +
+      "become as a sparrow all alone on the housetop.\nAll the day long my enemies reproached me: " +
+      "and they that praised me did swear against me.\nFor I did eat ashes like bread, and mingled " +
+      "my drink with weeping.\nBecause of thy anger and indignation: for having lifted me up thou " +
+      "hast thrown me down.\nMy days have declined like a shadow, and I am withered like grass.\nBut " +
+      "thou, O Lord, endurest for ever: and thy memorial to all generations.\nThou shalt arise and " +
+      "have mercy on Sion: for it is time to have mercy on it, for the time is come.\nFor the stones " +
+      "thereof have pleased thy servants: and they shall have pity on the earth thereof.\nAnd the " +
+      "Gentiles shall fear thy name, O Lord, and all the kings of the earth thy glory.\nFor the Lord " +
+      "hath built up Sion: and he shall be seen in his glory.\nHe hath had regard to the prayer of " +
+      "the humble: and he hath not despised their petition.\nLet these things be written unto " +
+      "another generation: and the people that shall be created shall praise the Lord:\nBecause he " +
+      "hath looked forth from his high sanctuary: from heaven the Lord hath looked upon the " +
+      "earth.\nThat he might hear the groans of them that are in fetters: that he might release the " +
+      "children of the slain:\nThat they may declare the name of the Lord in Sion: and his praise in " +
+      "Jerusalem;\nWhen the people assemble together, and kings, to serve the Lord.\nHe answered him " +
+      "in the way of his strength : Declare unto me the fewness of my days.\nCall me not away in the " +
+      "midst of my days: thy years are unto generation and generation.\nIn the beginning, O Lord, " +
+      "thou foundedst the earth: and the heavens are the works of thy hands.\nThey shall perish but " +
+      "thou remainest: and all of them shall grow old like a garment: And as a vesture thou shalt " +
+      "change them, and they shall be changed.\nBut thou art always the selfsame, and thy years " +
+      "shall not fail.\nThe children of thy servants shall continue: and their seed shall be " +
+      "directed for ever.\n\nPsalm 129 (130)\n\nOut of the depths I have cried to thee, O " +
+      "Lord:\nLord, hear my voice. Let thy ears be attentive to the voice of my supplication.\nIf " +
+      "thou, O Lord, wilt mark iniquities: Lord, who shall stand it.\nFor with thee there is " +
+      "merciful forgiveness: and by reason of thy law, I have waited for thee, O Lord. My soul hath " +
+      "relied on his word:\nMy soul hath hoped in the Lord.\nFrom the morning watch even until " +
+      "night, let Israel hope in the Lord.\nBecause with the Lord there is mercy: and with him " +
+      "plentiful redemption.\nAnd he shall redeem Israel from all his iniquities.\n\nPsalm 142 " +
+      "(143)\n\nHear, O Lord, my prayer: give ear to my supplication in thy truth: hear me in thy " +
+      "justice.\nAnd enter not into judgment with thy servant: for in thy sight no man living shall " +
+      "be justified.\nFor the enemy hath persecuted my soul: he hath brought down my life to the " +
+      "earth. He hath made me to dwell in darkness as those that have been dead of old:\nAnd my " +
+      "spirit is in anguish within me: my heart within me is troubled.\nI remembered the days of " +
+      "old, I meditated on all thy works: I meditated upon the works of thy hands.\nI stretched " +
+      "forth my hands to thee: my soul is as earth without water unto thee.\nHear me speedily, O " +
+      "Lord: my spirit hath fainted away. Turn not away thy face from me, lest I be like unto them " +
+      "that go down into the pit.\nCause me to hear thy mercy in the morning; for in thee have I " +
+      "hoped. Make the way known to me, wherein I should walk: for I have lifted up my soul to " +
+      "thee.\nDeliver me from my enemies, O Lord, to thee have I fled:\nTeach me to do thy will, for " +
+      "thou art my God. Thy good spirit shall lead me into the right land:\nFor thy name's sake, O " +
+      "Lord, thou wilt quicken me in thy justice. Thou wilt bring my soul out of trouble:\nAnd in " +
+      "thy mercy thou wilt destroy my enemies. And thou wilt cut off all them that afflict my soul: " +
+      "for I am thy servant.",
+    background:
+      "Seven psalms of sorrow for sin, said together since the early Middle Ages. The name comes " +
+      "from Cassiodorus, whose sixth-century commentary on the Psalms groups them as the psalms of " +
+      "penitence. They are not all alike: Psalm 6 is a sick man's cry, Psalm 101 (102) a poor man's " +
+      "lament, Psalm 142 (143) a hunted man's plea — but in each, the trouble is read as the fruit " +
+      "of sin, and the answer as God's mercy.\n\nThe two everyone knows are in the middle. Psalm 50 " +
+      "(51), the Miserere, is David's after Nathan confronted him over Bathsheba: \"Have mercy on " +
+      "me, O God, according to thy great mercy… Create a clean heart in me, O God.\" Psalm 129 " +
+      "(130), the De profundis, is the Church's psalm for the dead: \"Out of the depths I have cried " +
+      "to thee, O Lord.\" The group ends not in despair but in Psalm 142 (143)'s \"Teach me to do " +
+      "thy will, for thou art my God\".\n\nAUGUSTINE'S LAST DAYS\n\nHis friend and biographer " +
+      "Possidius tells how Augustine, dying at Hippo in 430, taught that even good Christians and " +
+      "priests ought not to leave this life without fitting repentance, and did it himself: \"he " +
+      "commanded that the shortest penitential Psalms of David should be copied for him, and during " +
+      "the days of his sickness as he lay in bed he would look at these sheets as they hung upon the " +
+      "wall and read them; and he wept freely and constantly\" (Life of Augustine 31, tr. " +
+      "Weiskotten, 1919). For his last ten days he asked that no one come in except the doctors and " +
+      "whoever brought food, so that he could pray them undisturbed.\n\nHOW TO PRAY " +
+      "THEM\n\nTraditionally each psalm ends with the Glory be, and the seven are framed by an " +
+      "antiphon: Ne reminiscaris, Domine, delicta nostra — Remember not, Lord, our offences — and " +
+      "followed by the Litany of the Saints. Said whole they take about twenty minutes; one a day " +
+      "through a week of Lent works as well. The English is the Douay-Rheims, in the public domain; " +
+      "the psalm titles printed at the head of some psalms in the Bible are left out, as they are " +
+      "when the psalms are prayed.\n\nWHERE TO READ MORE\n\n**Possidius, The Life of Saint " +
+      "Augustine**, ch. 31 — his last days, in Latin and " +
+      "English.\nhttps://earlychurchtexts.com/public/possidius_augustine_last_days.htm\n\n**Psalm 50 " +
+      "(51), Douay-Rheims and Vulgate side by side** — with the Bible's own title and " +
+      "notes.\nhttps://www.drbo.org/chapter/21050.htm",
+  },
+  {
+    title: "The Nine Ways of Prayer of St. Dominic",
+    seedVersion: 7,
+    kind: "teaching",
+    tags: ["prayer", "the body", "Dominican", "postures"],
+    source: "De modo orandi — an anonymous thirteenth-century treatise from Bologna, drawing on those who knew him, including Sister Cecilia of St. Agnes; summarised here",
+    author: "St. Dominic",
+    authorNote: "described by an anonymous Dominican after his death",
+    familiarVersion: "the treatise itself, in English translation",
+    related: ["The Rosary", "Prayer Before Study", "The Seven Penitential Psalms"],
+    year: "13th century (Dominic died 1221)",
+    origin: "Dominican",
+    body:
+      "| | Posture | What it is for |\n| --- | --- | --- |\n| 1 | Bowing low before the altar | " +
+      "Reverence: humbling himself before Christ, as the servant before the master |\n| 2 | Lying " +
+      "face down on the ground | Humility and sorrow for sin |\n| 3 | Taking the discipline — " +
+      "striking himself with an iron chain | Penance, for his own sins and for others' |\n| 4 | " +
+      "Kneeling and rising, again and again, before the crucifix | Compassion, and pleading |\n| 5 | " +
+      "Standing upright, hands open before him like a book | Meditation, attentive and still |\n| 6 " +
+      "| Standing with arms stretched wide | Asking for God's power to act, when something great was " +
+      "needed |\n| 7 | Standing tall, hands joined and raised above the head | Being drawn up to " +
+      "God, close to ecstasy |\n| 8 | Sitting alone with a book of Scripture | Recollection: reading " +
+      "as if speaking with a friend |\n| 9 | Praying while walking on the road between towns | " +
+      "Keeping prayer alive on the journey, and for preaching |",
+    background:
+      "Dominic left almost no writings, so the people who watched him pray wrote down what they saw. " +
+      "What they saw was a man who prayed with his whole body. The anonymous treatise De modo orandi " +
+      "— \"on the manner of praying\" — describes nine postures he used, in roughly the order he " +
+      "moved through them, and the manuscripts illustrate each one with a picture of the saint alone " +
+      "before a crucifix.\n\nThe point of the treatise is not the gymnastics. It is that the body " +
+      "can teach the soul: bow and you become reverent, lie down and you become humble, stand with " +
+      "open hands and you begin to listen: the soul moves the body, and the body moves the soul in " +
+      "turn. Most of the nine need nothing but a quiet room; the third does not need to be " +
+      "imitated.\n\nThe table above is a summary in this library's own words, following the reading " +
+      "of the art historian William Hood, who argued that the treatise lies behind the postures in " +
+      "which Fra Angelico painted Dominic in the friars' cells at San Marco in Florence. The ninth " +
+      "way is disputed: the Latin conversatio can mean conversation, but the treatise's picture of " +
+      "Dominic walking apart from his companions on a journey has led others to read it as praying " +
+      "on the road.\n\nWHERE IT COMES FROM\n\nThe treatise was written in Bologna in the second half " +
+      "of the thirteenth century by a Dominican whose name is lost, drawing on the memories of those " +
+      "who had lived with Dominic — among them Sister Cecilia of the monastery of St. Agnes, who had " +
+      "known him. Three illustrated manuscripts survive; one is in the Vatican Library. English " +
+      "translations exist and are in copyright, so the text itself is not reproduced here.\n\nWHERE " +
+      "TO READ MORE\n\n**De Modo Orandi** (Wikipedia) — the treatise, its manuscripts and the nine " +
+      "postures.\nhttps://en.wikipedia.org/wiki/De_Modo_Orandi\n\n**William Hood, \"Saint Dominic's " +
+      "Manners of Praying: Gestures in Fra Angelico's Cell Frescoes at S. Marco\"**, The Art " +
+      "Bulletin 68 (1986).\nhttps://doi.org/10.2307/3050930",
+  },
+  {
+    title: "The Flying Novena",
+    seedVersion: 7,
+    kind: "prayer",
+    tags: ["Marian", "urgent need", "Memorare", "confidence"],
+    source: "Mother Teresa's practice, as described by Msgr. Leo Maasburg in Mother Teresa of Calcutta: A Personal Portrait",
+    author: "St. Teresa of Calcutta (Mother Teresa)",
+    authorNote: "her way of praying the Memorare, not a new prayer",
+    related: ["Memorare", "Sub Tuum Praesidium", "Small Things With Great Love"],
+    year: "Twentieth century",
+    origin: "Missionaries of Charity",
+    liturgical: "Any time — when help is needed quickly",
+    body:
+      "Pray the Memorare nine times, for what you need.\n\nRemember, O most gracious Virgin " +
+      "Mary,\nthat never was it known that anyone who fled to thy protection,\nimplored thy help, or " +
+      "sought thy intercession\nwas left unaided.\nInspired by this confidence,\nI fly unto thee, O " +
+      "Virgin of virgins, my Mother;\nto thee do I come, before thee I stand, sinful and " +
+      "sorrowful.\nO Mother of the Word Incarnate,\ndespise not my petitions,\nbut in thy mercy hear " +
+      "and answer me.\nAmen.\n\nThen pray it a tenth time, at once, in thanksgiving — as though the " +
+      "favour had already been granted.",
+    background:
+      "A novena is nine days of prayer, after the nine days the apostles waited with Mary for the " +
+      "Holy Spirit. Mother Teresa rarely had nine days. Her friend and spiritual adviser Msgr. Leo " +
+      "Maasburg calls this \"Mother Teresa's spiritual rapid-fire weapon\": the Memorare said nine " +
+      "times in a row, for a sick child, before an important meeting, when passports went missing, " +
+      "when the fuel was running low on a night journey.\n\nThe tenth is the whole character of it. " +
+      "She took heaven's help so much for granted, he writes, that she always added a tenth Memorare " +
+      "straight away, in thanksgiving for the favour received — before anything had happened.\n\nShe " +
+      "told a story of it herself. In Rome in the Holy Year of 1984, with crowds waiting for an " +
+      "open-air papal Mass in pouring rain, she had her sisters say a flying novena for fine " +
+      "weather. The rain got worse through the second Memorare and the seventh; at the eighth the " +
+      "umbrellas began to close; by the ninth they were all closed.\n\nThe Memorare itself — " +
+      "\"Remember, O most gracious Virgin Mary\" — has its own entry in this library, with its " +
+      "history.\n\nWHERE TO READ MORE\n\n**National Catholic Register — \"How to Pray Mother " +
+      "Teresa's Famous Flying Novena\"** (2019), quoting Maasburg's book and the Rome story as told " +
+      "by Fr. Brian Kolodiejchuk " +
+      "MC.\nhttps://www.ncregister.com/blog/how-to-pray-mother-teresa-s-famous-flying-novena-to-our-lady\n\n**Msgr. " +
+      "Leo Maasburg, Mother Teresa of Calcutta: A Personal Portrait** — the source of the practice " +
+      "and its stories.",
   },
   {
     title: "Begin by Descending",
@@ -5289,13 +6814,14 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Late Have I Loved You",
-    seedVersion: 7,
+    seedVersion: 8,
     occasion:
       "From Book X of the Confessions, looking back on the years in which he had searched for God everywhere except where God already was.",
     kind: "quote",
     tags: ["love", "conversion"],
     source: "Confessions, Book X, Chapter 27",
     author: "St. Augustine of Hippo",
+    related: ["The Seven Penitential Psalms"],
     year: "c. 397–400",
     origin: "Patristic",
     liturgical: "",
@@ -5417,47 +6943,429 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer Before Mass",
-    seedVersion: 7,
+    seedVersion: 10,
     kind: "prayer",
     tags: ["eucharist", "Mass", "preparation"],
-    source: "The CTS New Sunday Missal; traditionally titled Oratio Sancti Thomae Aquinatis ante Missam",
+    source: "Traditionally titled Oratio Sancti Thomae Aquinatis ante Missam; Latin as in the Missal and the Piae preces printed with his works; two English translations",
     author: "St. Thomas Aquinas, O.P.",
-    related: ["Tantum Ergo", "Panis Angelicus"],
-    authorNote: "English translations vary in wording slightly between missals",
-    year: "13th century (c. 1264, contemporaneous with his other Eucharistic works)",
+    authorNote: "traditional attribution; two English translations — choose above the text",
+    familiarVersion: "the English in current missals",
+    related: ["Prayer After Mass", "Adoro Te Devote", "Tantum Ergo", "Panis Angelicus"],
+    year: "13th century",
     origin: "Dominican",
     liturgical: "Before Mass / before receiving Communion",
     feastDay: "January 28",
     originalLanguage: "Latin",
     favorite: true,
     latinBody:
-      "Omnipotens sempiterne Deus, ecce, accedo ad sacramentum unigeniti Filii tui, Domini nostri Iesu " +
-      "Christi; accedo tamquam infirmus ad medicum vitae, immundus ad fontem misericordiae, caecus ad " +
-      "lumen claritatis aeternae, pauper et egenus ad Dominum caeli et terrae.\n\n" +
-      "Rogo ergo immensae largitatis tuae abundantiam, quatenus meam curare digneris infirmitatem, " +
-      "lavare foeditatem, illuminare caecitatem, ditare paupertatem, vestire nuditatem: ut panem " +
-      "Angelorum, Regem regum et Dominum dominantium, tanta suscipiam reverentia et humilitate, tanta " +
+      "Omnipotens sempiterne Deus, ecce accedo ad sacramentum unigeniti Filii tui, Domini nostri " +
+      "Iesu Christi. Accedo tamquam infirmus ad medicum vitae, immundus ad fontem misericordiae, " +
+      "caecus ad lumen claritatis aeternae, pauper et egenus ad Dominum caeli et terrae.\n\nRogo " +
+      "ergo immensae largitatis tuae abundantiam, quatenus meam curare digneris infirmitatem, lavare " +
+      "foeditatem, illuminare caecitatem, ditare paupertatem, vestire nuditatem: ut panem Angelorum, " +
+      "Regem regum et Dominum dominantium, tanta suscipiam reverentia et humilitate, tanta " +
       "contritione et devotione, tanta puritate et fide, tali proposito et intentione, sicut expedit " +
-      "saluti animae meae. Amen.",
+      "saluti animae meae.\n\nDa mihi, quaeso, Dominici Corporis et Sanguinis non solum suscipere " +
+      "sacramentum, sed etiam rem et virtutem sacramenti. O mitissime Deus, da mihi Corpus unigeniti " +
+      "Filii tui, Domini nostri Iesu Christi, quod traxit de Virgine Maria, sic suscipere, ut " +
+      "corpori suo mystico merear incorporari, et inter eius membra connumerari. O amantissime " +
+      "Pater, concede mihi dilectum Filium tuum, quem nunc velatum in via suscipere propono, " +
+      "revelata tandem facie perpetuo contemplari. Qui tecum vivit et regnat in unitate Spiritus " +
+      "Sancti Deus, per omnia saecula saeculorum. Amen.",
     body:
-      "Almighty and ever-living God, I draw near to the sacrament of your only-begotten Son, our Lord " +
-      "Jesus Christ. I come sick to the physician of life, unclean to the fountain of mercy, blind to " +
-      "the light of eternal brightness, poor and needy to the Lord of heaven and earth.\n\n" +
-      "So I ask you, most generous Lord: graciously heal my infirmity, wash me clean, illumine my " +
-      "blindness, enrich my poverty, and clothe my nakedness. May I receive the Bread of angels, the " +
-      "King of kings, and Lord of lords, with such reverence and humility, such contrition and " +
-      "devotion, such purity and faith, and such resolve and determination as may secure my soul's " +
-      "salvation. Amen.",
+      "Almighty and eternal God, see, I come to the sacrament of your only-begotten Son, our Lord " +
+      "Jesus Christ. I come as one who is sick to the physician of life, as one unclean to the " +
+      "fountain of mercy, as one blind to the light of eternal brightness, as one poor and needy to " +
+      "the Lord of heaven and earth.\n\nSo I ask the abundance of your boundless generosity to be " +
+      "pleased to heal my sickness, wash away my foulness, give light to my blindness, enrich my " +
+      "poverty and clothe my nakedness, so that I may receive the Bread of Angels, the King of kings " +
+      "and Lord of lords, with such reverence and humility, such contrition and devotion, such " +
+      "purity and faith, such purpose and intention, as will serve the salvation of my " +
+      "soul.\n\nGrant me, I pray, to receive not only the sacrament of the Lord's Body and Blood, " +
+      "but also its reality and its power. O most gentle God, grant me so to receive the Body of " +
+      "your only-begotten Son, our Lord Jesus Christ, which he took from the Virgin Mary, that I may " +
+      "be worthy to be made part of his mystical Body and counted among his members. O most loving " +
+      "Father, grant that your beloved Son, whom I now mean to receive veiled, on the way, I may at " +
+      "last see with his face unveiled, for ever: who lives and reigns with you in the unity of the " +
+      "Holy Spirit, God, for ever and ever. Amen.",
+    bodyLabel: "New translation",
+    altTranslations: [
+      {
+        label: "Manual of Prayers, 1889",
+        body:
+          "Almighty, Everlasting God, lo, I draw near to the Sacrament of Thine Only-begotten Son, our " +
+          "Lord Jesus Christ. As sick, I approach to the Physician of Life; unclean, to the Fountain of " +
+          "Mercy; blind, to the Light of eternal Brightness; poor and needy, to the Lord of heaven and " +
+          "earth.\n\nI implore Thee, therefore, out of the abundance of Thy boundless mercy, that Thou " +
+          "wouldst vouchsafe to heal my sickness, to wash my defilements, to enlighten my blindness, to " +
+          "enrich my poverty, and to clothe my nakedness; that I may receive the Bread of Angels, the " +
+          "King of kings, the Lord of lords, with such reverence and humility, such contrition and " +
+          "devotion, such purity and faith, such purpose and intention, as is expedient for the health " +
+          "of my soul.\n\nGrant, I beseech Thee, that I may receive not only the Sacrament of the Body " +
+          "and Blood of the Lord, but also the whole grace and virtue of that Sacrament. O most merciful " +
+          "God, grant me so to receive the Body of Thine Only-begotten Son, our Lord Jesus Christ, which " +
+          "He took of the Virgin Mary, that I may be found worthy to be incorporated into His mystical " +
+          "Body, and accounted among His members. And, O most loving Father, grant that whom now I " +
+          "purpose to receive under a veil I may at last behold with unveiled face, even Thy beloved " +
+          "Son. Who with Thee and the Holy Ghost ever liveth and reigneth, one God, world without end. " +
+          "Amen.",
+      },
+    ],
     background:
-      "One of a pair of prayers traditionally credited to Aquinas for framing the Mass — this one " +
-      "before, and a companion 'Prayer After Mass' giving thanks afterward (not included here). The " +
-      "Eucharist was the center of his own life and theology, not just his intellectual work: alongside " +
-      "the great Eucharistic hymns also in this library (Tantum Ergo, Panis Angelicus), tradition holds " +
-      "that during periods of difficult theological writing he would lean his head against the " +
-      "tabernacle in prayer for insight. The prayer's own structure moves through four honest images of " +
-      "need before Christ — sick before the physician, unclean before the fountain of mercy, blind " +
-      "before the light, poor before the Lord of all — before asking to be healed, cleansed, " +
-      "illumined, and enriched in each respect.",
+      "Four honest images of need before Christ — sick before the physician, unclean before the " +
+      "fountain of mercy, blind before the light, poor before the Lord of all — and then a request " +
+      "to be healed, cleansed, lit and enriched in each respect. The companion prayer for after " +
+      "Mass, also in this library, answers it: the one who came sick and blind gives thanks.\n\nTHE " +
+      "PART THAT IS OFTEN LEFT OUT\n\nMany printings stop at \"the salvation of my soul\". The " +
+      "prayer goes on, and the last paragraph is its theology. \"Not only the sacrament, but its " +
+      "reality and its power\" — rem et virtutem sacramenti — is the language Thomas uses in the " +
+      "Summa: the sacramentum is the sign, the res is what the sign brings about, and for the " +
+      "Eucharist that is the unity of the mystical Body. So the prayer asks to be made part of that " +
+      "Body, and then looks past it to the end: the Son received now veiled, \"on the way\" — in " +
+      "via, the pilgrim's word — seen at last with his face unveiled.\n\nWHERE IT COMES FROM\n\nThe " +
+      "Missal has long printed it under his name among the priest's prayers of preparation, and it " +
+      "is sixth among the Piae preces printed with his works. As with most devotional prayers " +
+      "credited to medieval saints, how much of that collection is from his own hand has been " +
+      "debated; Paul Murray OP argues for the tradition.\n\nTHE TWO TRANSLATIONS\n\n\"New " +
+      "translation\" is made for this library from the Latin. \"Manual of Prayers, 1889\" is the " +
+      "translation in the official prayer book of the Third Plenary Council of Baltimore, and is in " +
+      "the public domain; it renders res et virtus sacramenti as \"the whole grace and virtue of " +
+      "that Sacrament\". The English in current missals, including the Roman Missal and the CTS " +
+      "editions, is in copyright and is not reproduced here.\n\nWHERE TO READ MORE\n\n**A Manual of " +
+      "Prayers for the Use of the Catholic Laity** (Baltimore, 1889) — the prayer book of the Third " +
+      "Plenary Council of Baltimore; the public-domain English " +
+      "above.\nhttps://archive.org/details/manualofprayersf00wood\n\n**Piae preces** — the short " +
+      "prayers printed with his works: the Before Mass prayer is no. 6, the After Mass prayer no. " +
+      "8.\nhttps://catholiclibrary.org/library/view?docId=%2FMedieval-OR%2FThomasAquinasSPiaePreces.00000430.la.html&chunk.id=00000015\n\n**Paul " +
+      "Murray OP, Aquinas at Prayer: The Bible, Mysticism and Poetry** (Bloomsbury, 2013) — on the " +
+      "prayers attributed to Thomas and the case for their " +
+      "authenticity.\nhttps://books.google.com/books?id=EXYQAAAAQBAJ",
+  },
+  {
+    title: "Prayer After Mass",
+    seedVersion: 9,
+    kind: "prayer",
+    tags: ["eucharist", "Mass", "thanksgiving"],
+    source: "Traditionally titled Oratio Sancti Thomae Aquinatis post Missam; Latin as in the Missal, also among the Piae preces printed with his works; two English translations",
+    author: "St. Thomas Aquinas, O.P.",
+    authorNote: "traditional attribution; two English translations — choose above the text",
+    familiarVersion: "the Roman Missal's English (ICEL)",
+    related: ["Prayer Before Mass", "Adoro Te Devote", "Anima Christi", "Stay with Me, Lord"],
+    year: "13th century",
+    origin: "Dominican",
+    liturgical: "After Mass / thanksgiving after Communion",
+    feastDay: "January 28",
+    originalLanguage: "Latin",
+    latinBody:
+      "Gratias tibi ago, Domine, sancte Pater, omnipotens aeterne Deus, qui me peccatorem, indignum " +
+      "famulum tuum, nullis meis meritis, sed sola dignatione misericordiae tuae satiare dignatus es " +
+      "pretioso Corpore et Sanguine Filii tui Domini nostri Iesu Christi.\n\nEt precor, ut haec " +
+      "sancta communio non sit mihi reatus ad poenam, sed intercessio salutaris ad veniam. Sit mihi " +
+      "armatura fidei et scutum bonae voluntatis. Sit vitiorum meorum evacuatio, concupiscentiae et " +
+      "libidinis exterminatio, caritatis et patientiae, humilitatis et oboedientiae, omniumque " +
+      "virtutum augmentatio; contra insidias inimicorum omnium, tam visibilium quam invisibilium, " +
+      "firma defensio; motuum meorum, tam carnalium quam spiritualium, perfecta quietatio; in te uno " +
+      "ac vero Deo firma adhaesio; atque finis mei felix consummatio.\n\nEt precor te, ut ad illud " +
+      "ineffabile convivium me peccatorem perducere digneris, ubi tu cum Filio tuo et Spiritu " +
+      "Sancto, Sanctis tuis es lux vera, satietas plena, gaudium sempiternum, iucunditas consummata " +
+      "et felicitas perfecta. Per Christum Dominum nostrum. Amen.",
+    body:
+      "I give you thanks, Lord, holy Father, almighty and eternal God, who, not for any merit of " +
+      "mine but only out of the kindness of your mercy, have been pleased to feed me, a sinner and " +
+      "your unworthy servant, with the precious Body and Blood of your Son, our Lord Jesus " +
+      "Christ.\n\nAnd I pray that this holy Communion may not be a charge against me that ends in " +
+      "punishment, but an intercession that saves me and wins me pardon. May it be to me the armour " +
+      "of faith and the shield of good will. May it empty me of my vices and root out lust and evil " +
+      "desire; may it increase charity and patience, humility and obedience, and every virtue; may " +
+      "it be a firm defence against the snares of all my enemies, seen and unseen; the perfect " +
+      "stilling of all my impulses, of the flesh and of the spirit; a firm holding fast to you, the " +
+      "one true God; and the happy completion of my life's end.\n\nAnd I pray you to be pleased to " +
+      "bring me, a sinner, to that banquet past all speech, where you, with your Son and the Holy " +
+      "Spirit, are to your saints true light, full satisfaction, everlasting joy, gladness made " +
+      "complete, and perfect happiness. Through Christ our Lord. Amen.",
+    bodyLabel: "New translation",
+    altTranslations: [
+      {
+        label: "Manual of Prayers, 1889",
+        body:
+          "I render thanks to Thee, O Lord, Holy Father, Everlasting God, who hast vouchsafed, not for " +
+          "any merits of mine, but of Thy great mercy only, to feed me a sinner, Thine unworthy servant, " +
+          "with the precious Body and Blood of Thy Son, our Lord Jesus Christ;\n\nand I pray that this " +
+          "Holy Communion may not be for my judgment and condemnation, but for my pardon and salvation. " +
+          "Let it be unto me an armor of faith and a shield of good purpose, a riddance of all vices, " +
+          "and a rooting out of all evil desires; an increase of love and patience, of humility and " +
+          "obedience, and of all virtues; a firm defence against the wiles of all my enemies, visible " +
+          "and invisible; a perfect quieting of all my impulses, fleshly and spiritual; a cleaving unto " +
+          "Thee, the one true God; and a blessed consummation of my end when Thou dost call.\n\nAnd I " +
+          "pray that Thou wouldst vouchsafe to bring me a sinner to that unspeakable Feast where Thou, " +
+          "with Thy Son and Thy Holy Spirit, art to Thy holy ones true light, fulness of blessedness, " +
+          "everlasting joy, and perfect happiness. Through the same Christ our Lord. Amen.",
+      },
+    ],
+    background:
+      "The companion to the Prayer Before Mass, and it answers it. Before, he comes sick to the " +
+      "physician, unclean to the fountain, blind to the light, poor to the Lord of all. After, " +
+      "having received, he asks what the Communion is to be for: armour and shield, the emptying of " +
+      "vice and the growth of every virtue, a defence, a stilling of the passions, a firm adherence " +
+      "to God — and then the end of the road, the banquet where the saints are fed without " +
+      "veils.\n\nThe opening sets the tone the whole prayer keeps: nullis meis meritis, sed sola " +
+      "dignatione misericordiae tuae — through no merit of mine, only the kindness of your mercy. It " +
+      "is thanksgiving that begins by refusing any credit.\n\nWHERE IT COMES FROM\n\nThe Missal has " +
+      "long printed it under his name among the priest's prayers of thanksgiving, and the 1910 " +
+      "Raccolta lists it, as Gratias tibi ago, among the indulgenced prayers of thanksgiving for " +
+      "priests. The Latin also stands eighth among the Piae preces printed with his works. As with " +
+      "most devotional prayers credited to medieval saints, how much of that collection is from his " +
+      "own hand has been debated; Paul Murray OP argues for the tradition.\n\nTHE TWO " +
+      "TRANSLATIONS\n\n\"New translation\" is made for this library from the Latin. \"Manual of " +
+      "Prayers, 1889\" is the translation in the official prayer book of the Third Plenary Council " +
+      "of Baltimore, and is in the public domain. The English in the current Roman Missal, printed " +
+      "in its appendix of prayers of thanksgiving after Mass, is in copyright and is not reproduced " +
+      "here.\n\nWHERE TO READ MORE\n\n**A Manual of Prayers for the Use of the Catholic Laity** " +
+      "(Baltimore, 1889) — the prayer book of the Third Plenary Council of Baltimore; the " +
+      "public-domain English above.\nhttps://archive.org/details/manualofprayersf00wood\n\n**Piae " +
+      "preces, no. 8** — the Latin as printed with his " +
+      "works.\nhttps://catholiclibrary.org/library/view?docId=%2FMedieval-OR%2FThomasAquinasSPiaePreces.00000430.la.html&chunk.id=00000019\n\n**Paul " +
+      "Murray OP, Aquinas at Prayer: The Bible, Mysticism and Poetry** (Bloomsbury, 2013) — on the " +
+      "prayers attributed to Thomas and the case for their " +
+      "authenticity.\nhttps://books.google.com/books?id=EXYQAAAAQBAJ",
+  },
+  {
+    title: "Adoro Te Devote",
+    seedVersion: 8,
+    kind: "hymn",
+    tags: ["eucharist", "adoration", "benediction", "faith"],
+    source: "Latin as in the Roman Missal of 1570 and the Piae preces printed with his works; English by Edward Caswall (Lyra Catholica, 1849) and a new translation",
+    author: "St. Thomas Aquinas, O.P.",
+    authorNote: "once doubted, now generally accepted; two English translations — choose above the text",
+    familiarVersion: "Hopkins's “Godhead here in hiding”",
+    related: ["Tantum Ergo", "Panis Angelicus", "O Salutaris Hostia", "Prayer After Mass", "Prayer Before Mass"],
+    year: "13th century",
+    origin: "Dominican",
+    liturgical: "Adoration of the Blessed Sacrament / thanksgiving after Communion",
+    feastDay: "January 28",
+    originalLanguage: "Latin",
+    latinBody:
+      "Adoro te devote, latens Deitas,\nQuae sub his figuris vere latitas:\nTibi se cor meum totum " +
+      "subiicit,\nQuia te contemplans totum deficit.\n\nVisus, tactus, gustus in te fallitur,\nSed " +
+      "auditu solo tuto creditur;\nCredo quidquid dixit Dei Filius:\nNil hoc verbo Veritatis " +
+      "verius.\n\nIn cruce latebat sola Deitas,\nAt hic latet simul et humanitas;\nAmbo tamen " +
+      "credens atque confitens,\nPeto quod petivit latro paenitens.\n\nPlagas, sicut Thomas, non " +
+      "intueor;\nDeum tamen meum te confiteor;\nFac me tibi semper magis credere,\nIn te spem " +
+      "habere, te diligere.\n\nO memoriale mortis Domini!\nPanis vivus, vitam praestans " +
+      "homini!\nPraesta meae menti de te vivere,\nEt te illi semper dulce sapere.\n\nPie pellicane, " +
+      "Iesu Domine,\nMe immundum munda tuo sanguine,\nCuius una stilla salvum facere\nTotum mundum " +
+      "quit ab omni scelere.\n\nIesu, quem velatum nunc aspicio,\nOro fiat illud quod tam sitio;\nUt " +
+      "te revelata cernens facie,\nVisu sim beatus tuae gloriae. Amen.",
+    body:
+      "I adore you devoutly, hidden Godhead,\ntruly hidden beneath these forms.\nMy whole heart " +
+      "surrenders itself to you,\nfor in contemplating you it wholly fails.\n\nSight, touch and " +
+      "taste are deceived in you;\nhearing alone can safely be believed.\nI believe whatever the Son " +
+      "of God has said:\nnothing is truer than this word of Truth.\n\nOn the cross the Godhead alone " +
+      "was hidden,\nbut here the manhood too lies hidden.\nYet believing and confessing both,\nI ask " +
+      "for what the repentant thief asked.\n\nI do not see the wounds, as Thomas did,\nyet I confess " +
+      "that you are my God.\nMake me believe in you more and more,\nhope in you, and love you.\n\nO " +
+      "memorial of the Lord's death,\nliving Bread that gives life to man,\ngrant my mind to live on " +
+      "you,\nand always to taste how sweet you are.\n\nLoving Pelican, Lord Jesus,\ncleanse me, who " +
+      "am unclean, in your Blood,\nof which a single drop has power\nto save the whole world from " +
+      "all its sin.\n\nJesus, whom I now see veiled,\nI pray that what I thirst for may come to " +
+      "be:\nthat seeing your face unveiled,\nI may be blessed with the sight of your glory. Amen.",
+    bodyLabel: "New translation",
+    altTranslations: [
+      {
+        label: "Caswall, 1849",
+        body:
+          "O Godhead hid, devoutly I adore Thee,\nWho truly art within the forms before me;\nTo Thee my " +
+          "heart I bow with bended knee,\nAs failing quite in contemplating Thee.\n\nSight, touch, and " +
+          "taste in Thee are each deceiv'd;\nThe ear alone most safely is believ'd:\nI believe all the " +
+          "Son of God has spoken;\nThan Truth's own word there is no truer token.\n\nGod only on the " +
+          "Cross lay hid from view;\nBut here lies hid at once the Manhood too:\nAnd I, in both " +
+          "professing my belief,\nMake the same prayer as the repentant thief.\n\nThy wounds, as Thomas " +
+          "saw, I do not see;\nYet Thee confess my Lord and God to be:\nMake me believe Thee ever more " +
+          "and more;\nIn Thee my hope, in Thee my love to store.\n\nO thou Memorial of our Lord's own " +
+          "dying!\nO living Bread, to mortals life supplying!\nMake Thou my soul henceforth on Thee to " +
+          "live;\nEver a taste of Heavenly sweetness give.\n\nO loving Pelican! O Jesu, Lord!\nUnclean I " +
+          "am, but cleanse me in thy blood;\nOf which a single drop, for sinners spilt,\nCan purge the " +
+          "entire world from all its guilt.\n\nJesu! whom for the present veil'd I see,\nWhat I so " +
+          "thirst for, oh, vouchsafe to me:\nThat I may see thy countenance unfolding,\nAnd may be blest " +
+          "thy glory in beholding.",
+      },
+    ],
+    background:
+      "A hymn about the one sense that can be trusted. Sight, touch and taste all report bread; only " +
+      "hearing — the word Christ spoke, This is my Body — tells the truth, and faith comes by " +
+      "hearing. So the second stanza turns on a pun that holds the whole poem: nothing is truer than " +
+      "the word of Truth, because Truth himself is speaking.\n\nThen two witnesses from the Passion " +
+      "and after it. The good thief saw only a dying man and asked to be remembered in his kingdom; " +
+      "Thomas saw the wounds and said \"my Lord and my God\". On the cross the Godhead was hidden; " +
+      "here even the manhood is hidden — so the one who adores has less to go on than either, and " +
+      "asks for the faith of both.\n\nThe pelican is an old Christian image of Christ: the bird was " +
+      "believed to wound its own breast to feed its young on its blood.\n\nWHERE IT COMES " +
+      "FROM\n\nUnlike Tantum Ergo and Panis Angelicus, it was not written for the liturgy of Corpus " +
+      "Christi and appears in no liturgical book of its time; the likeliest reading is that Thomas " +
+      "wrote it for his own prayer at Mass. Its authorship was doubted by some scholars in the last " +
+      "century, but Paul Murray OP, surveying the evidence, concludes that there can no longer be " +
+      "serious doubt. A 1489 prayer book prints it as a prayer of St. Thomas for the elevation of " +
+      "the Host; the Roman Missal of 1570 took it in among the priest's prayers of thanksgiving, and " +
+      "the Catechism quotes it (§1381). It is eleventh among the Piae preces printed with his " +
+      "works.\n\nTwo textual notes. The medieval manuscripts begin \"latens veritas\" — hidden Truth " +
+      "— and the hymnologist Daniel preferred it, \"for veritas is Christ\"; the printed books " +
+      "settled on \"latens Deitas\". And some collections drawing on the French breviaries, such as " +
+      "Newman's Hymni Ecclesiae, replace the pelican with \"O fons puritatis\", O fountain of purity " +
+      "— which is why some English versions have no pelican at all.\n\nTHE TRANSLATIONS\n\n\"New " +
+      "translation\" is made for this library, line for line from the Latin. \"Caswall, 1849\" is " +
+      "Edward Caswall's, from his Lyra Catholica, and is in the public domain. The best-known " +
+      "English, Gerard Manley Hopkins's \"Godhead here in hiding, whom I do adore\", is not " +
+      "reproduced here: Hopkins left several drafts, made (according to the Dictionary of Hymnology) " +
+      "from a French variant of the Latin, and the copies in circulation disagree with one another. " +
+      "It is in the Oxford editions of his poems.\n\nWHERE TO READ MORE\n\n**Edward Caswall, Lyra " +
+      "Catholica** (1849) — his translations of the Breviary and Missal hymns, including this one " +
+      "under Benediction.\nhttps://archive.org/details/LyraCatholica1849\n\n**Adoro te devote** " +
+      "(Wikipedia) — the text, its variants, and its liturgical " +
+      "history.\nhttps://en.wikipedia.org/wiki/Adoro_te_devote\n\n**Paul Murray OP, Aquinas at " +
+      "Prayer: The Bible, Mysticism and Poetry** (Bloomsbury, 2013) — on the prayers attributed to " +
+      "Thomas and the case for their authenticity.\nhttps://books.google.com/books?id=EXYQAAAAQBAJ",
+  },
+  {
+    title: "O Salutaris Hostia",
+    seedVersion: 7,
+    kind: "hymn",
+    tags: ["eucharist", "benediction", "adoration"],
+    source: "The last two stanzas of his hymn Verbum supernum prodiens, for Lauds of Corpus Christi; English by Edward Caswall (Lyra Catholica, 1849) and a new translation",
+    author: "St. Thomas Aquinas, O.P.",
+    authorNote: "two English translations — choose above the text",
+    related: ["Tantum Ergo", "Adoro Te Devote", "The Divine Praises", "Panis Angelicus"],
+    year: "c. 1264",
+    origin: "Dominican",
+    liturgical: "Benediction of the Blessed Sacrament — sung as the Host is exposed",
+    feastDay: "January 28",
+    originalLanguage: "Latin",
+    latinBody:
+      "O salutaris Hostia,\nQuae caeli pandis ostium:\nBella premunt hostilia,\nDa robur, fer " +
+      "auxilium.\n\nUni trinoque Domino\nSit sempiterna gloria,\nQui vitam sine termino\nNobis donet " +
+      "in patria. Amen.",
+    body:
+      "O saving Victim,\nwho open wide the gate of heaven:\nhostile armies press upon us;\ngive " +
+      "strength, bring help.\n\nTo the Lord, three and one,\nbe everlasting glory;\nmay he give us " +
+      "life without end\nin our true homeland. Amen.",
+    bodyLabel: "New translation",
+    altTranslations: [
+      {
+        label: "Caswall, 1849",
+        body:
+          "O saving Victim! opening wide\nThe gate of Heav'n to man below!\nOur foes press on from every " +
+          "side;—\nThine aid supply, thy strength bestow.\n\nTo thy great Name be endless " +
+          "praise,\nImmortal Godhead, One in Three!\nOh, grant us endless length of days,\nIn our true " +
+          "native land, with Thee!",
+      },
+    ],
+    background:
+      "The hymn that opens Benediction, sung as the Host is placed in the monstrance — just as " +
+      "Tantum Ergo, also in this library, is sung near its end. Between them the whole rite is now " +
+      "here.\n\nHostia means both the victim of a sacrifice and, from that, the Host. The play in " +
+      "the first two lines is Thomas's: hostia opens the ostium, the door of heaven, while hostilia " +
+      "— the armies of the enemy — press in from outside.\n\nWHERE IT COMES FROM\n\nThese are the " +
+      "last two stanzas of Verbum supernum prodiens, the hymn Thomas wrote for Lauds in the Office " +
+      "of Corpus Christi when Urban IV extended the feast to the whole Church in 1264. The stanza " +
+      "just before it is one of the most compressed he ever wrote, four gifts in four lines:\n\nSe " +
+      "nascens dedit socium,\nConvescens in edulium,\nSe moriens in pretium,\nSe regnans dat in " +
+      "praemium.\n\nBy being born he gave himself as our companion; at table, as our food; by dying, " +
+      "as our ransom; reigning, he gives himself as our reward.\n\nThe last stanza, Uni trinoque " +
+      "Domino, is the doxology of the Roman Breviary. Some older collections, such as Newman's Hymni " +
+      "Ecclesiae, print a different one.\n\nTHE TRANSLATIONS\n\n\"New translation\" is literal, made " +
+      "for this library. \"Caswall, 1849\" is Edward Caswall's singing version, from Lyra Catholica, " +
+      "in the public domain. The 1911 Catholic Encyclopedia counted about twenty-five English verse " +
+      "translations; at Benediction it has usually been sung in Latin.\n\nWHERE TO READ " +
+      "MORE\n\n**Catholic Encyclopedia (1911), \"O Salutaris Hostia\"** — its place in Benediction " +
+      "and its history.\nhttps://www.newadvent.org/cathen/11334a.htm\n\n**Edward Caswall, Lyra " +
+      "Catholica** (1849) — the whole of Verbum supernum in English, under Corpus " +
+      "Christi.\nhttps://archive.org/details/LyraCatholica1849\n\n**Verbum supernum prodiens** " +
+      "(Wikipedia) — the full Latin hymn.\nhttps://en.wikipedia.org/wiki/Verbum_supernum_prodiens",
+  },
+  {
+    title: "Prayer Before Study",
+    seedVersion: 9,
+    kind: "prayer",
+    tags: ["study", "work", "wisdom", "writing"],
+    source: "Creator ineffabilis — ninth of the Piae preces printed with his works; appended by Pius XI to his encyclical Studiorum Ducem (1923); two English translations",
+    author: "St. Thomas Aquinas, O.P.",
+    authorNote: "the prayer he was \"accustomed to use\", in Pius XI's words; two English translations — choose above the text",
+    familiarVersion: "the English printed with Studiorum Ducem",
+    related: ["Ask Grace, Not Learning", "Adoro Te Devote", "The Nine Choirs of Angels"],
+    year: "13th century",
+    origin: "Dominican",
+    liturgical: "Before study, writing, preaching or teaching",
+    feastDay: "January 28",
+    originalLanguage: "Latin",
+    latinBody:
+      "Creator ineffabilis, qui de thesauris sapientiae tuae tres Angelorum hierarchias designasti, " +
+      "et eas super caelum empyreum miro ordine collocasti, atque universi partes elegantissime " +
+      "disposuisti: tu, inquam, qui verus fons luminis et sapientiae diceris, ac supereminens " +
+      "principium, infundere digneris super intellectus mei tenebras tuae radium claritatis, " +
+      "duplices, in quibus natus sum, a me removens tenebras, peccatum scilicet et " +
+      "ignorantiam.\n\nTu, qui linguas infantium facis disertas, linguam meam erudias, atque in " +
+      "labiis meis gratiam tuae benedictionis infunde.\n\nDa mihi intelligendi acumen, retinendi " +
+      "capacitatem, addiscendi modum et facilitatem, interpretandi subtilitatem, loquendi gratiam " +
+      "copiosam. Ingressum instruas, progressum dirigas, egressum compleas: tu, qui es verus Deus et " +
+      "homo, qui vivis et regnas in saecula saeculorum. Amen.",
+    body:
+      "Creator past all telling, who out of the treasures of your wisdom appointed three hierarchies " +
+      "of angels, set them in wonderful order above the highest heaven, and arranged every part of " +
+      "the universe with such beauty: you who are called the true fountain of light and wisdom, and " +
+      "their first source above all, be pleased to pour a ray of your brightness on the darkness of " +
+      "my understanding, and take from me the double darkness into which I was born, sin and " +
+      "ignorance.\n\nYou who make the tongues of little children eloquent, train my tongue, and pour " +
+      "on my lips the grace of your blessing.\n\nGive me sharpness to understand, a memory that " +
+      "holds, method and ease in learning, subtlety in interpreting, and a full grace in speaking. " +
+      "Instruct my beginning, direct my progress, bring my ending to completion: you who are true " +
+      "God and true man, who live and reign for ever and ever. Amen.",
+    bodyLabel: "New translation",
+    altTranslations: [
+      {
+        label: "Raccolta, 1910",
+        body:
+          "Ineffable Creator, who, of the treasures of Thy wisdom hast formed the nine choirs of Angels, " +
+          "and set them on high above the heavens in a wonderful order, and hast exquisitely fashioned " +
+          "and knit together all parts of the universe; do Thou, who art the true fountain and one " +
+          "principle of light and wisdom, deign to shed the brightness of Thy light upon the darkness of " +
+          "my understanding, and thus to disperse the twofold darkness of sin and ignorance wherein I " +
+          "was born.\n\nO Thou, who makest eloquent the tongues of babes, instruct my tongue, and pour " +
+          "forth on my lips the grace of Thy blessing.\n\nGrant me acuteness in understanding what I " +
+          "read, power to retain it, subtlety to discern its true meaning, and clearness and ease in " +
+          "expressing it. Do Thou order my beginnings, direct and further my progress, complete and " +
+          "bless my ending; Thou who art true God and true Man, who livest and reignest world without " +
+          "end. Amen.",
+      },
+    ],
+    background:
+      "It asks for the whole arc of a piece of work, in the order it actually happens: " +
+      "understanding, memory, a method of learning, the subtlety to interpret, the grace to say it — " +
+      "and then, in three short clauses, a beginning, a middle and an end. Ingressum instruas, " +
+      "progressum dirigas, egressum compleas.\n\nIt begins far away from the desk, with the order of " +
+      "the angels and the arrangement of the universe, because the prayer is really about light: the " +
+      "God who set everything in order is the fountain of light and wisdom, and study is asking to " +
+      "be lit from the same source. The darkness to be removed is double — ignorance, which study " +
+      "can help, and sin, which it cannot.\n\nWHERE IT COMES FROM\n\nIt is ninth among the Piae " +
+      "preces printed with his works. In 1923, for the six-hundredth anniversary of his " +
+      "canonisation, Pius XI ended his encyclical Studiorum Ducem by appending it — \"the form of " +
+      "prayer which the Saint himself was accustomed to use\" — and asked that it be spread widely, " +
+      "especially among students. Note what that does and does not say: that Thomas used it, not " +
+      "that he wrote it. The Raccolta of 1910 marks it for use \"before writing, preaching, " +
+      "etc.\"\n\nThe same Raccolta gives a second prayer of his \"to be said before study or " +
+      "class\", Concede mihi, indulgenced by Leo XIII in 1879: \"Merciful God, grant that I may " +
+      "eagerly desire, carefully search out, truthfully acknowledge, and ever perfectly fulfil all " +
+      "things which are pleasing to Thee, to the praise and glory of Thy Name. Amen.\"\n\nTHE TWO " +
+      "TRANSLATIONS\n\n\"New translation\" is made for this library from the Latin. \"Raccolta, " +
+      "1910\" is from the English Raccolta of that year and is in the public domain; it is freer — " +
+      "the \"three hierarchies\" of angels become \"nine choirs\", and \"understanding\" becomes " +
+      "\"understanding what I read\".\n\nThe English most often printed is the translation that " +
+      "accompanies Studiorum Ducem; its translator cannot be identified, so it is not reproduced " +
+      "here. It can be read at the link below.\n\nWHERE TO READ MORE\n\n**Pius XI, Studiorum Ducem** " +
+      "(1923) — the encyclical on St. Thomas, with the prayer appended at the " +
+      "end.\nhttps://www.papalencyclicals.net/pius11/p11studi.htm\n\n**The Raccolta** (1910) — both " +
+      "study prayers, Latin and English, nos. 51 and " +
+      "52.\nhttps://archive.org/details/theraccoltaorcol00unknuoft\n\n**Piae preces, no. 9** — the " +
+      "Latin as printed with his " +
+      "works.\nhttps://catholiclibrary.org/library/view?docId=%2FMedieval-OR%2FThomasAquinasSPiaePreces.00000430.la.html&chunk.id=00000021",
   },
   {
     title: "The Greatest of All Romances",
@@ -5731,12 +7639,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of St. Joseph",
-    seedVersion: 7,
+    seedVersion: 9,
     kind: "litany",
     tags: ["St. Joseph", "vocation", "work", "protection", "discernment"],
     source: "Approved for public use by Pope St. Pius X, 1909; seven invocations added by Pope Francis, 1 May 2021",
     author: "Traditional / Anonymous",
-    related: ["Litany of the Undiscovered Spouse", "Litany of the Most Precious Blood", "Litany of Loreto", "Litany of the Saints"],
+    related: ["Litany of the Undiscovered Spouse", "Litany of the Most Precious Blood", "Litany of Loreto", "Litany of the Saints", "Prayer to St. Joseph for a Happy Death"],
+    relatedSaints: ["joseph"],
     authorNote: "no single author — the invocations accumulated over centuries and were formally fixed in 1909",
     year: "Approved 1909; current form since 2021",
     origin: "Approved devotional litany",
@@ -6512,13 +8421,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Rosary",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "prayer",
     tags: ["Marian", "Rosary", "meditation", "daily"],
     source: "Structure of the Rosary; the Luminous Mysteries added by John Paul II, Rosarium Virginis Mariae, 2002",
     author: "Traditional / Anonymous",
     authorNote: "the Dominican attribution to St. Dominic is devotional tradition, not documented history",
-    related: ["Hail Mary", "Our Father", "Glory Be", "Salve Regina", "Apostles' Creed", "Litany of Loreto"],
+    related: ["Hail Mary", "Our Father", "Glory Be", "Salve Regina", "Apostles' Creed", "Litany of Loreto", "The Nine Ways of Prayer of St. Dominic"],
     relatedSaints: ["mary", "dominic"],
     year: "Developed 12th–16th century; current form since 2002",
     origin: "Dominican",
@@ -6576,13 +8485,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Come, Holy Spirit",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "prayer",
     tags: ["Holy Spirit", "invocation", "before work"],
     source: "The Church's standard invocation of the Holy Spirit — versicle, response and collect",
     author: "Traditional / Anonymous",
     authorNote: "the Church's own formula, said before councils, synods, study and any serious undertaking",
-    related: ["Prayer to the Holy Spirit", "Veni Creator Spiritus", "A Visit of the Holy Spirit", "The Seven Gifts of the Holy Spirit"],
+    related: ["Breathe in Me, O Holy Spirit", "Prayer to the Holy Spirit", "Veni Creator Spiritus", "A Visit of the Holy Spirit", "The Seven Gifts of the Holy Spirit"],
     year: "Collect in use by the medieval period",
     origin: "Roman liturgy",
     liturgical: "Pentecost; before any deliberation, study or work",
@@ -6683,13 +8592,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Divine Praises",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "prayer",
     tags: ["reparation", "Benediction", "eucharist"],
     source: "Written in Italian by Luigi Felici, S.J., 1797, as reparation for blasphemy",
     author: "Fr. Luigi Felici, S.J.",
     authorNote: "not a saint — an ordinary Jesuit priest; later invocations added by successive popes",
-    related: ["Tantum Ergo", "Panis Angelicus", "Litany of the Most Precious Blood", "Te Deum"],
+    related: ["Tantum Ergo", "Panis Angelicus", "Litany of the Most Precious Blood", "Te Deum", "O Salutaris Hostia"],
     year: "1797; last addition 1964",
     origin: "Jesuit; now part of Benediction",
     liturgical: "Said after Benediction of the Blessed Sacrament",
@@ -6703,7 +8612,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Golden Arrow",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "prayer",
     tags: ["reparation", "Passion", "holy name", "blasphemy", "Carmelite", "Holy Face"],
     source: "Given at Tours in 1843; the central prayer of the devotion to the Holy Face",
@@ -6720,17 +8629,54 @@ const SEED_LIBRARY_ENTRIES = [
     body:
       "May the most holy, most sacred, most adorable,\nmost incomprehensible and unutterable Name of God\nbe for ever praised, blessed, loved, adored and glorified\nin heaven, on earth, and under the earth,\nby all the creatures of God,\nand by the Sacred Heart of Our Lord Jesus Christ\nin the Most Holy Sacrament of the Altar. Amen.",
     background:
-      "Given at Tours in 1843 to Sister Marie de Saint-Pierre (1816-1848), a Discalced Carmelite who entered the monastery there at twenty-three and died at thirty-one. She recorded a series of communications about a devotion to the Holy Face, and this prayer is the heart of it. Our Lord is said to have called it the Golden Arrow, and to have said that whoever prayed it would wound Him delightfully, and heal the wounds inflicted by the malice of sinners.\n\nThat image is the whole point of the prayer, and it is worth pausing on. Blasphemy is described in these accounts as a poisoned arrow; the answer given is not a shield but another arrow, made of gold. Reparation here is not defence or protest. It is the offering of the opposite thing.\n\nNotice that the prayer contains no petition. It asks for nothing at all. Every word of it is praise of the Name — which is precise, because the offence it answers is the abuse of the Name. It sets right the specific thing that was put wrong, and it does so by blessing rather than by complaining.\n\nTwo things it is for, in the contemporary accounts: blasphemy, and the profanation of Sunday. Some later English versions add 'the Communists' to that list, which is anachronistic — the revelations date from 1843, five years before the Communist Manifesto, and the target in the original setting is the anticlericalism of post-revolutionary France. The devotion does not need the update.\n\nThe devotion spread through Leo Dupont, a layman of Tours known afterwards as the Holy Man of Tours, who kept a lamp burning before an image of the Holy Face for thirty years. Leo XIII approved the Archconfraternity of the Holy Face in 1885. Pius XII established the feast in 1958, and put it on Shrove Tuesday — the day before Lent begins, and traditionally the loudest day of the year.\n\nOn the text: it is translated from French and the English wording varies between printings. Some have 'ineffable' where this has 'unutterable', and 'So be it' for 'Amen'. Nothing turns on the difference.\n\nThree further prayers of the same devotion are usually printed alongside this one, including an offering of the Holy Face to the Eternal Father. They are not reproduced here because the wording I could verify was not consistent enough to be worth fixing in this library.",
+      "Given at Tours in 1843 to Sister Marie de Saint-Pierre (1816-1848), a Discalced Carmelite who " +
+      "entered the monastery there at twenty-three and died at thirty-one. She recorded a series of " +
+      "communications about a devotion to the Holy Face, and this prayer is the heart of it. Our " +
+      "Lord is said to have called it the Golden Arrow, and to have said that whoever prayed it " +
+      "would wound Him delightfully, and heal the wounds inflicted by the malice of sinners.\n\nThat " +
+      "image is the whole point of the prayer, and it is worth pausing on. Blasphemy is described in " +
+      "these accounts as a poisoned arrow; the answer given is not a shield but another arrow, made " +
+      "of gold. Reparation here is not defence or protest. It is the offering of the opposite " +
+      "thing.\n\nNotice that the prayer contains no petition. It asks for nothing at all. Every word " +
+      "of it is praise of the Name — which is precise, because the offence it answers is the abuse " +
+      "of the Name. It sets right the specific thing that was put wrong, and it does so by blessing " +
+      "rather than by complaining.\n\nTwo things it is for, in the contemporary accounts: blasphemy, " +
+      "and the profanation of Sunday. Some later English versions add 'the Communists' to that list, " +
+      "which is anachronistic — the revelations date from 1843, five years before the Communist " +
+      "Manifesto, and the target in the original setting is the anticlericalism of " +
+      "post-revolutionary France. The devotion does not need the update.\n\nThe devotion spread " +
+      "through Leo Dupont, a layman of Tours known afterwards as the Holy Man of Tours, who kept a " +
+      "lamp burning before an image of the Holy Face for thirty years. Leo XIII approved the " +
+      "Archconfraternity of the Holy Face in 1885. Pius XII established the feast in 1958, and put " +
+      "it on Shrove Tuesday — the day before Lent begins, and traditionally the loudest day of the " +
+      "year.\n\nOn the text: it is translated from French and the English wording varies between " +
+      "printings. Some have 'ineffable' where this has 'unutterable', and 'So be it' for 'Amen'. " +
+      "Nothing turns on the difference.\n\nThree further prayers of the same devotion are usually " +
+      "printed alongside this one, including an offering of the Holy Face to the Eternal Father. " +
+      "They are not reproduced here because the wording I could verify was not consistent enough to " +
+      "be worth fixing in this library.\n\nA PRIVATE REVELATION\n\nThe prayer comes from what Sister " +
+      "Marie de Saint-Pierre reported was said to her, and so it belongs with private revelations. " +
+      "The Church's approval of the devotion means that nothing in it is contrary to faith or morals " +
+      "and that it may be practised; it does not oblige anyone to believe it. As the Catechism puts " +
+      "it, the role of private revelations is \"not to improve or complete Christ's definitive " +
+      "Revelation, but to help live more fully by it in a certain period of history\" (CCC 67). The " +
+      "prayer itself — pure praise of the Name — needs no revelation to be good.\n\nWHERE TO READ " +
+      "MORE\n\n**Marie of St Peter** (Wikipedia) — her life and the revelations at " +
+      "Tours.\nhttps://en.wikipedia.org/wiki/Marie_of_St_Peter\n\n**Leo Dupont** (Wikipedia) — the " +
+      "\"Holy Man of Tours\" who spread the " +
+      "devotion.\nhttps://en.wikipedia.org/wiki/Leo_Dupont\n\n**Holy Face of Jesus** (Wikipedia) — " +
+      "the devotion as a whole, from Tours to its " +
+      "approval.\nhttps://en.wikipedia.org/wiki/Holy_Face_of_Jesus",
   },
   {
     title: "The Seven Sorrows of Mary",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "teaching",
     tags: ["Marian", "Passion", "sorrow"],
     source: "Servite devotion; feast of Our Lady of Sorrows, 15 September",
     author: "Traditional / Anonymous",
     authorNote: "propagated by the Servite Order, founded at Florence in 1233",
-    related: ["The Stations of the Cross", "Salve Regina", "The Miracle Prayer", "Litany of Loreto", "Stabat Mater"],
+    related: ["The Stations of the Cross", "Salve Regina", "The Miracle Prayer", "Litany of Loreto", "Stabat Mater", "The Nunc Dimittis"],
     relatedSaints: ["mary", "peregrine-laziosi"],
     year: "Devotion from the 13th–14th century",
     origin: "Servite (Order of the Servants of Mary)",
@@ -6765,13 +8711,13 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The O Antiphons",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "antiphon",
     tags: ["Advent", "Messianic titles", "liturgy"],
     source: "Antiphons of the Magnificat at Vespers, 17-23 December",
     author: "Traditional / Anonymous",
     authorNote: "in use by the 8th century, probably older",
-    related: ["The Angelus", "Alma Redemptoris Mater", "Come, Holy Spirit"],
+    related: ["The Angelus", "Alma Redemptoris Mater", "Come, Holy Spirit", "The Magnificat"],
     year: "In use by the 8th century",
     origin: "Roman liturgy",
     liturgical: "17-23 December, the last week of Advent",
@@ -6807,6 +8753,220 @@ const SEED_LIBRARY_ENTRIES = [
       "We praise Thee, O God: we acknowledge Thee to be the Lord.\nAll the earth doth worship Thee, the Father everlasting.\nTo Thee all Angels cry aloud: the Heavens and all the Powers therein;\nTo Thee Cherubim and Seraphim continually do cry:\nHoly, Holy, Holy, Lord God of Hosts.\nHeaven and earth are full of the majesty of Thy glory.\n\nThe glorious company of the Apostles praise Thee.\nThe goodly fellowship of the Prophets praise Thee.\nThe noble army of Martyrs praise Thee.\nThe holy Church throughout all the world doth acknowledge Thee.\n\n(The hymn continues; the opening is given here.)",
     background:
       "The Church's great hymn of thanksgiving - sung after a papal election, at a canonisation, at the close of a council, on the last night of the year, and whenever something has gone well enough to warrant it. In the Office it closes the Office of Readings on Sundays and feasts.\n\nThe legend is charming and false: that Ambrose and Augustine improvised it antiphonally at Augustine's baptism in 387, each supplying alternate lines. Scholars now credit Nicetas of Remesiana, a bishop in what is now Serbia, who died around 414. Both saints are in this library, which is why the story is worth flagging - it is repeated as fact constantly.\n\nOnly the opening is given here. The full hymn runs to about thirty lines and shifts partway from praise into petition ('Vouchsafe, O Lord, to keep us this day without sin'), which is why it works as both a hymn and, at its close, a plea.",
+  },
+  {
+    title: "The Magnificat",
+    seedVersion: 7,
+    kind: "hymn",
+    tags: ["canticle", "Gospel", "Vespers", "Marian"],
+    source: "Luke 1:46–55 — Latin from the Clementine Vulgate; English from the Douay-Rheims (Challoner) and a new translation; the Gloria Patri is added in the Office",
+    author: "The Blessed Virgin Mary",
+    authorNote: "two English translations — choose above the text",
+    familiarVersion: "the Liturgy of the Hours English (ICEL)",
+    related: ["The Benedictus", "The Nunc Dimittis", "The O Antiphons", "Hail Mary"],
+    year: "Luke's Gospel, c. AD 80–90",
+    origin: "Biblical",
+    liturgical: "Vespers (Evening Prayer), every day",
+    originalLanguage: "Latin",
+    latinBody:
+      "Magnificat anima mea Dominum,\net exsultavit spiritus meus in Deo salutari meo,\nquia " +
+      "respexit humilitatem ancillae suae;\necce enim ex hoc beatam me dicent omnes " +
+      "generationes,\nquia fecit mihi magna qui potens est,\net sanctum nomen eius,\net misericordia " +
+      "eius a progenie in progenies\ntimentibus eum.\n\nFecit potentiam in brachio suo,\ndispersit " +
+      "superbos mente cordis sui;\ndeposuit potentes de sede,\net exaltavit humiles;\nesurientes " +
+      "implevit bonis,\net divites dimisit inanes.\nSuscepit Israel puerum suum,\nrecordatus " +
+      "misericordiae suae,\nsicut locutus est ad patres nostros,\nAbraham et semini eius in " +
+      "saecula.\n\nGloria Patri, et Filio, et Spiritui Sancto.\nSicut erat in principio, et nunc, et " +
+      "semper,\net in saecula saeculorum. Amen.",
+    body:
+      "My soul magnifies the Lord,\nand my spirit rejoices in God my Saviour,\nbecause he has looked " +
+      "upon the lowliness of his handmaid;\nfrom this day all generations will call me blessed,\nfor " +
+      "the Mighty One has done great things for me,\nand holy is his name.\nHis mercy is from age to " +
+      "age\non those who fear him.\n\nHe has shown strength with his arm,\nand scattered the proud " +
+      "in the imagining of their hearts;\nhe has pulled the mighty from their thrones\nand raised up " +
+      "the humble;\nhe has filled the hungry with good things\nand sent the rich away empty.\nHe has " +
+      "upheld Israel his servant,\nremembering his mercy,\nas he spoke to our fathers,\nto Abraham " +
+      "and his offspring for ever.\n\nGlory be to the Father, and to the Son, and to the Holy " +
+      "Spirit,\nas it was in the beginning, is now, and ever shall be,\nworld without end. Amen.",
+    bodyLabel: "New translation",
+    altTranslations: [
+      {
+        label: "Douay-Rheims",
+        body:
+          "My soul doth magnify the Lord.\nAnd my spirit hath rejoiced in God my Saviour.\nBecause he " +
+          "hath regarded the humility of his handmaid;\nfor behold from henceforth all generations shall " +
+          "call me blessed.\nBecause he that is mighty, hath done great things to me;\nand holy is his " +
+          "name.\nAnd his mercy is from generation unto generations,\nto them that fear him.\n\nHe hath " +
+          "shewed might in his arm:\nhe hath scattered the proud in the conceit of their heart.\nHe hath " +
+          "put down the mighty from their seat,\nand hath exalted the humble.\nHe hath filled the hungry " +
+          "with good things;\nand the rich he hath sent empty away.\nHe hath received Israel his " +
+          "servant,\nbeing mindful of his mercy:\nAs he spoke to our fathers,\nto Abraham and to his " +
+          "seed for ever.\n\nGlory be to the Father, and to the Son, and to the Holy Ghost.\nAs it was " +
+          "in the beginning, is now, and ever shall be,\nworld without end. Amen.",
+      },
+    ],
+    background:
+      "Mary's song at the Visitation. Elizabeth has just called her blessed, and Mary answers by " +
+      "turning the blessing towards God: it is not that she is great, but that he has looked at her " +
+      "smallness. Then the song widens from one young woman to the whole of history — the proud " +
+      "scattered, the mighty pulled down, the hungry fed, the rich sent away — and all of it in the " +
+      "past tense, as though already done.\n\nIt is built out of the Old Testament, above all the " +
+      "song of Hannah after Samuel's birth: \"My heart hath rejoiced in the Lord… The bow of the " +
+      "mighty is overcome, and the weak are girt with strength… the hungry are filled… He raiseth up " +
+      "the needy from the dust\" (1 Samuel 2:1–8, Douay-Rheims).\n\nThe Church has sung it at " +
+      "Vespers every evening for well over a thousand years; everyone stands for it, and in the old " +
+      "Office the altar was incensed. In Advent the O Antiphons, also in this library, are sung " +
+      "before and after it.\n\nAMBROSE ON IT\n\n\"Let the soul of Mary be in each of us, to magnify " +
+      "the Lord; let the spirit of Mary be in each of us, to rejoice in God. If according to the " +
+      "flesh there is one mother of Christ, according to faith Christ is the fruit of all.\" — St. " +
+      "Ambrose, Commentary on Luke II.26, as quoted by St. Thomas Aquinas in the Catena " +
+      "aurea.\n\nTHE TRANSLATIONS\n\n\"New translation\" is made for this library from the Latin " +
+      "beside it. \"Douay-Rheims\" is the classic Catholic English Bible in Bishop Challoner's " +
+      "revision, in the public domain. The version in the English Liturgy of the Hours is in " +
+      "copyright and is not reproduced here. The Gloria Patri at the end is not part of Luke; the " +
+      "Office adds it to every canticle and psalm.\n\nWHERE TO READ MORE\n\n**Luke 1, Douay-Rheims " +
+      "and Vulgate side by side** — the whole " +
+      "Visitation.\nhttps://www.drbo.org/chapter/49001.htm\n\n**St. Thomas Aquinas, Catena aurea on " +
+      "Luke 1** (Latin) — the Fathers on each verse, Ambrose and Bede among " +
+      "them.\nhttps://www.corpusthomisticum.org/clc012.html",
+  },
+  {
+    title: "The Benedictus",
+    seedVersion: 7,
+    kind: "hymn",
+    tags: ["canticle", "Gospel", "Lauds", "morning"],
+    source: "Luke 1:68–79 — Latin from the Clementine Vulgate; English from the Douay-Rheims (Challoner) and a new translation; the Gloria Patri is added in the Office",
+    author: "St. Zechariah",
+    authorNote: "father of John the Baptist; two English translations — choose above the text",
+    familiarVersion: "the Liturgy of the Hours English (ICEL)",
+    related: ["The Magnificat", "The Nunc Dimittis", "The O Antiphons"],
+    year: "Luke's Gospel, c. AD 80–90",
+    origin: "Biblical",
+    liturgical: "Lauds (Morning Prayer), every day",
+    originalLanguage: "Latin",
+    latinBody:
+      "Benedictus Dominus Deus Israel,\nquia visitavit et fecit redemptionem plebis suae,\net erexit " +
+      "cornu salutis nobis\nin domo David pueri sui,\nsicut locutus est per os sanctorum,\nqui a " +
+      "saeculo sunt, prophetarum eius,\nsalutem ex inimicis nostris,\net de manu omnium qui oderunt " +
+      "nos;\nad faciendam misericordiam cum patribus nostris,\net memorari testamenti sui " +
+      "sancti,\niusiurandum quod iuravit ad Abraham patrem nostrum,\ndaturum se nobis,\nut sine " +
+      "timore, de manu inimicorum nostrorum liberati,\nserviamus illi\nin sanctitate et iustitia " +
+      "coram ipso,\nomnibus diebus nostris.\n\nEt tu, puer, propheta Altissimi vocaberis:\npraeibis " +
+      "enim ante faciem Domini parare vias eius,\nad dandam scientiam salutis plebi eius\nin " +
+      "remissionem peccatorum eorum,\nper viscera misericordiae Dei nostri,\nin quibus visitavit nos " +
+      "oriens ex alto,\nilluminare his qui in tenebris et in umbra mortis sedent,\nad dirigendos " +
+      "pedes nostros in viam pacis.\n\nGloria Patri, et Filio, et Spiritui Sancto.\nSicut erat in " +
+      "principio, et nunc, et semper,\net in saecula saeculorum. Amen.",
+    body:
+      "Blessed be the Lord, the God of Israel,\nfor he has visited his people and brought about " +
+      "their redemption,\nand has raised up a horn of salvation for us\nin the house of David his " +
+      "servant,\nas he spoke by the mouth of his holy prophets\nfrom ages past:\nsalvation from our " +
+      "enemies\nand from the hand of all who hate us;\nto show mercy to our fathers\nand to remember " +
+      "his holy covenant,\nthe oath he swore to Abraham our father,\nto grant us\nthat, rescued from " +
+      "the hand of our enemies,\nwe might serve him without fear\nin holiness and justice in his " +
+      "sight\nall our days.\n\nAnd you, child, will be called prophet of the Most High,\nfor you " +
+      "will go before the face of the Lord to prepare his ways,\nto give his people knowledge of " +
+      "salvation\nin the forgiveness of their sins,\nthrough the tender mercy of our God,\nby which " +
+      "the Dawn from on high has visited us,\nto shine on those who sit in darkness and in the " +
+      "shadow of death,\nand to guide our feet into the way of peace.\n\nGlory be to the Father, and " +
+      "to the Son, and to the Holy Spirit,\nas it was in the beginning, is now, and ever shall " +
+      "be,\nworld without end. Amen.",
+    bodyLabel: "New translation",
+    altTranslations: [
+      {
+        label: "Douay-Rheims",
+        body:
+          "Blessed be the Lord God of Israel;\nbecause he hath visited and wrought the redemption of his " +
+          "people:\nAnd hath raised up an horn of salvation to us,\nin the house of David his " +
+          "servant:\nAs he spoke by the mouth of his holy prophets,\nwho are from the " +
+          "beginning:\nSalvation from our enemies,\nand from the hand of all that hate us:\nTo perform " +
+          "mercy to our fathers,\nand to remember his holy testament,\nThe oath, which he swore to " +
+          "Abraham our father,\nthat he would grant to us,\nThat being delivered from the hand of our " +
+          "enemies,\nwe may serve him without fear,\nIn holiness and justice before him,\nall our " +
+          "days.\n\nAnd thou, child, shalt be called the prophet of the Highest:\nfor thou shalt go " +
+          "before the face of the Lord to prepare his ways:\nTo give knowledge of salvation to his " +
+          "people,\nunto the remission of their sins:\nThrough the bowels of the mercy of our God,\nin " +
+          "which the Orient from on high hath visited us:\nTo enlighten them that sit in darkness, and " +
+          "in the shadow of death:\nto direct our feet into the way of peace.\n\nGlory be to the Father, " +
+          "and to the Son, and to the Holy Ghost.\nAs it was in the beginning, is now, and ever shall " +
+          "be,\nworld without end. Amen.",
+      },
+    ],
+    background:
+      "The first words of a man who had been silent for months. Zechariah, a priest, had doubted the " +
+      "angel who told him that his old wife Elizabeth would bear a son, and was struck dumb until " +
+      "the child was born. At the naming, when he wrote \"John is his name\", his tongue was loosed, " +
+      "and this is what he said (Luke 1:57–79).\n\nIt falls in two halves. The first blesses God for " +
+      "what he has done for Israel, and is full of the old promises — David, the prophets, the oath " +
+      "to Abraham. The second turns to the baby: you, child, will go before the Lord. And its image " +
+      "for Christ is sunrise — oriens ex alto, the Dawn from on high, the same title the O Antiphons " +
+      "sing on 21 December, O Oriens — which is why the Church sings it at dawn, at Lauds, every " +
+      "morning.\n\n\"Horn of salvation\": in Scripture a horn is strength, the power of a charging " +
+      "animal. \"Bowels of mercy\" in the Douay-Rheims is literal; the Latin and Greek place " +
+      "tenderness in the inward parts, where English puts it in the heart.\n\nTHE " +
+      "TRANSLATIONS\n\n\"New translation\" is made for this library from the Latin beside it. " +
+      "\"Douay-Rheims\" is the classic Catholic English Bible in Bishop Challoner's revision, in the " +
+      "public domain. The version in the English Liturgy of the Hours is in copyright and is not " +
+      "reproduced here. The Gloria Patri at the end is added in the Office.\n\nWHERE TO READ " +
+      "MORE\n\n**Luke 1, Douay-Rheims and Vulgate side by side** — Zechariah's story from the Temple " +
+      "to the naming.\nhttps://www.drbo.org/chapter/49001.htm\n\n**St. Thomas Aquinas, Catena aurea " +
+      "on Luke 1** (Latin) — the Fathers on each " +
+      "verse.\nhttps://www.corpusthomisticum.org/clc012.html",
+  },
+  {
+    title: "The Nunc Dimittis",
+    seedVersion: 8,
+    kind: "hymn",
+    tags: ["canticle", "Gospel", "Compline", "night"],
+    source: "Luke 2:29–32 — Latin from the Clementine Vulgate; English from the Douay-Rheims (Challoner) and a new translation; the Gloria Patri is added in the Office",
+    author: "St. Simeon",
+    authorNote: "the old man in the Temple; two English translations — choose above the text",
+    familiarVersion: "the Liturgy of the Hours English (ICEL)",
+    related: ["The Magnificat", "The Benedictus", "The Seven Sorrows of Mary", "Watch, O Lord"],
+    year: "Luke's Gospel, c. AD 80–90",
+    origin: "Biblical",
+    liturgical: "Compline (Night Prayer), every night; the Presentation of the Lord, 2 February",
+    originalLanguage: "Latin",
+    latinBody:
+      "Nunc dimittis servum tuum, Domine,\nsecundum verbum tuum in pace:\nquia viderunt oculi mei " +
+      "salutare tuum,\nquod parasti ante faciem omnium populorum:\nlumen ad revelationem " +
+      "gentium,\net gloriam plebis tuae Israel.\n\nGloria Patri, et Filio, et Spiritui " +
+      "Sancto.\nSicut erat in principio, et nunc, et semper,\net in saecula saeculorum. Amen.",
+    body:
+      "Now, Lord, you are dismissing your servant in peace,\naccording to your word;\nfor my eyes " +
+      "have seen your salvation,\nwhich you have prepared before the face of all peoples:\na light " +
+      "for revelation to the Gentiles,\nand the glory of your people Israel.\n\nGlory be to the " +
+      "Father, and to the Son, and to the Holy Spirit,\nas it was in the beginning, is now, and ever " +
+      "shall be,\nworld without end. Amen.",
+    bodyLabel: "New translation",
+    altTranslations: [
+      {
+        label: "Douay-Rheims",
+        body:
+          "Now thou dost dismiss thy servant, O Lord,\naccording to thy word in peace;\nBecause my eyes " +
+          "have seen thy salvation,\nWhich thou hast prepared before the face of all peoples:\nA light " +
+          "to the revelation of the Gentiles,\nand the glory of thy people Israel.\n\nGlory be to the " +
+          "Father, and to the Son, and to the Holy Ghost.\nAs it was in the beginning, is now, and ever " +
+          "shall be,\nworld without end. Amen.",
+      },
+    ],
+    background:
+      "The shortest of the three, and the one said at the end of the day. Simeon was an old man in " +
+      "Jerusalem to whom the Holy Spirit had promised that he would not die before he had seen the " +
+      "Lord's Christ. When Mary and Joseph brought the forty-day-old child to the Temple, he took " +
+      "him in his arms and said this (Luke 2:25–35).\n\nDimittis is the word for releasing a servant " +
+      "from duty, or a sentry from his watch. The watch is over; he has seen what he was waiting " +
+      "for, and can go. That is why the Church gives it to Compline, the last prayer before sleep — " +
+      "every night a small rehearsal of dying in peace, with Christ already seen. It is also why a " +
+      "light is lit: \"a light for revelation to the Gentiles\" gave the feast of the Presentation, " +
+      "2 February, its candles and its old English name, Candlemas.\n\nLuke goes straight on from " +
+      "these words to Simeon's warning to Mary, that a sword would pierce her own soul — the first " +
+      "of her Seven Sorrows.\n\nTHE TRANSLATIONS\n\n\"New translation\" is made for this library " +
+      "from the Latin beside it. \"Douay-Rheims\" is the classic Catholic English Bible in Bishop " +
+      "Challoner's revision, in the public domain. The version in the English Liturgy of the Hours " +
+      "is in copyright and is not reproduced here. The Gloria Patri at the end is added in the " +
+      "Office.\n\nWHERE TO READ MORE\n\n**Luke 2, Douay-Rheims and Vulgate side by side** — the " +
+      "Presentation, Simeon and Anna.\nhttps://www.drbo.org/chapter/49002.htm",
   },
   {
     title: "Stabat Mater",
@@ -6919,7 +9079,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Cardinal Virtues",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "teaching",
     tags: ["virtue", "the soul", "examination", "catechetical", "self-knowledge"],
     source: "CCC 1805-1809; St. Thomas, Summa I-II q. 61; Wisdom 8:7",
@@ -6936,11 +9096,185 @@ const SEED_LIBRARY_ENTRIES = [
     body:
       "THE FOUR\n\n\"Four virtues play a pivotal role and accordingly are called 'cardinal.'\" (CCC 1805) The word is from cardo, a hinge: not the four greatest virtues, but the four everything else turns on.\n\n| Virtue | The Catechism |\n| --- | --- |\n| Prudence // CCC 1806 | \"The virtue that disposes practical reason to discern our true good in every circumstance and to choose the right means of achieving it.\" |\n| Justice // CCC 1807 | \"The moral virtue that consists in the constant and firm will to give their due to God and neighbour.\" |\n| Fortitude // CCC 1808 | \"The moral virtue that ensures firmness in difficulties and constancy in the pursuit of the good.\" |\n| Temperance // CCC 1809 | \"The moral virtue that moderates the attraction of pleasures and provides balance in the use of created goods.\" |\n\nScripture names all four in one breath: \"she teacheth temperance, and prudence, and justice, and fortitude, which are such things as men can have nothing more profitable in life.\" (Wisdom 8:7)\n\nWHERE EACH ONE LIVES\n\nFour virtues because there are four things in a man that can go right or wrong. St. Thomas assigns each to its own power (I-II q. 61 a. 2):\n\n| Power | Virtue | What it is for |\n| --- | --- | --- |\n| Reason itself // the power \"which is rational in its essence\" | Prudence | Seeing what is actually to be done here, in this case, now |\n| The will | Justice | Rendering what is owed |\n| The irascible appetite // what rises to meet difficulty | Fortitude | Standing when standing is hard |\n| The concupiscible appetite // what is drawn to pleasure | Temperance | Wanting rightly, in measure |\n\nThat is why they cannot be swapped or averaged. A brave man who wants wrongly is not partly temperate; the fault is in a different room of the house.\n\nHOW THEY DIFFER FROM FAITH, HOPE AND CHARITY\n\nThese four can be built. They are acquired by repetition, the way any skill is: you become just by doing just things, and each act makes the next easier. A pagan can have them, and many did.\n\nThe theological virtues cannot be built. They have God as their object and their origin, and they are infused or not there at all.\n\nBoth are needed and neither substitutes. Grace does not make prudence unnecessary; charity does not tell you what to do on Tuesday. And the seven gifts of the Holy Spirit sit above both, because even the infused virtues, worked at humanly, still move at the pace of the one working them.\n\nWHERE TO READ MORE\n\n**The Catechism, 1805-1809** — The four, each defined in a sentence.\nhttps://www.vatican.va/content/catechism/en/part_three/section_one/chapter_one/article_7/i_the_human_virtues.html\n\n**St. Thomas, Summa I-II q. 61** — Article 2 seats each virtue in its own power — which is the part that makes the four non-interchangeable.\nhttps://www.newadvent.org/summa/2061.htm\n\n**Wisdom 8, Douay-Rheims** — Verse 7, where Scripture names all four together.\nhttps://www.drbo.org/chapter/25008.htm",
     background:
-      "These four are older than Christianity. Plato has them, the Stoics organise a whole ethics around them, and Ambrose - who gave them the name cardinal in Latin - took them over deliberately rather than inventing a rival set. The tradition has never been embarrassed by that. It reads Wisdom 8:7 as the point where they are already inside Scripture.\n\nWhat Christianity did was subordinate rather than replace. Left to themselves the four cardinal virtues make a good man and stop there; a good man is not the same as a saint, and no amount of temperance reaches God. So the tradition keeps them, ranks them below faith, hope and charity, and then says something more surprising: charity re-forms them from inside, so that justice done for love of God is not the same act as justice done for its own sake, even when it looks identical from outside.\n\nThe order among the four matters too. Prudence comes first, not because it is the noblest but because the other three cannot act without it: courage that does not know what is worth standing for is recklessness, and justice that misreads the case does harm. Prudence is not caution. It is the ability to see what is really the case and what should be done about it - which is why it is seated in reason and why it is the virtue most easily faked.",
+      "These four are older than Christianity. Plato has them, the Stoics organise a whole ethics " +
+      "around them, and Ambrose - who gave them the name cardinal in Latin - took them over " +
+      "deliberately rather than inventing a rival set. The tradition has never been embarrassed by " +
+      "that. It reads Wisdom 8:7 as the point where they are already inside Scripture.\n\nWhat " +
+      "Christianity did was subordinate rather than replace. Left to themselves the four cardinal " +
+      "virtues make a good man and stop there; a good man is not the same as a saint, and no amount " +
+      "of temperance reaches God. So the tradition keeps them, ranks them below faith, hope and " +
+      "charity, and then says something more surprising: charity re-forms them from inside, so that " +
+      "justice done for love of God is not the same act as justice done for its own sake, even when " +
+      "it looks identical from outside.\n\nThe order among the four matters too. Prudence comes " +
+      "first, not because it is the noblest but because the other three cannot act without it: " +
+      "courage that does not know what is worth standing for is recklessness, and justice that " +
+      "misreads the case does harm. Prudence is not caution. It is the ability to see what is really " +
+      "the case and what should be done about it - which is why it is seated in reason and why it is " +
+      "the virtue most easily faked.\n\nSt. Thomas's definition is exact. Prudence is recta ratio " +
+      "agibilium, \"right reason about things to be done\", and he sets it against art, recta ratio " +
+      "factibilium, \"right reason of things to be made\" (I-II q. 57 a. 4). Art is judged by the " +
+      "thing made, so a fine craftsman can be a bad man. Prudence is judged by the one acting, and " +
+      "\"presupposes the rectitude\" of his desires — so nobody can be prudent and bad at once.",
+  },
+  {
+    title: "The Nine Choirs of Angels",
+    seedVersion: 7,
+    kind: "teaching",
+    tags: ["angels", "creation", "hierarchy", "catechetical"],
+    source: "Pseudo-Dionysius, The Celestial Hierarchy; St. Gregory the Great, Homily 34 on the Gospels; St. Thomas, Summa I q. 108; CCC 328–336",
+    author: "Pseudo-Dionysius, with St. Gregory the Great and St. Thomas Aquinas",
+    authorNote: "a theological tradition, not a defined doctrine — see background",
+    related: ["Prayer to St. Michael the Archangel", "Guardian Angel Prayer", "Prayer Before Study", "Te Deum"],
+    relatedSaints: ["thomas-aquinas", "gregory-the-great"],
+    year: "c. 500 (Dionysius); 13th century (Aquinas)",
+    origin: "Patristic and scholastic",
+    body:
+      "THREE HIERARCHIES, NINE CHOIRS\n\nEvery name comes from Scripture; the arrangement comes from " +
+      "a writer of about 500 who called himself Dionysius. St. Thomas explains the logic (I q. 108 " +
+      "a. 6): the first hierarchy looks at God himself, the second at how creation is to be ordered, " +
+      "the third at carrying that order out.\n\n| Hierarchy | Choir | What the name means |\n| --- | " +
+      "--- | --- |\n| First — facing God | Seraphim // Isaiah 6:2 | Fire. \"Borne inflexibly towards " +
+      "God\", burning and giving light to others (I q. 108 a. 5 ad 5) |\n| | Cherubim // Genesis " +
+      "3:24; Ezekiel 10 | Excellence of knowledge |\n| | Thrones // Colossians 1:16 | Raised up, " +
+      "like a seat: they know the patterns of God's works directly |\n| Second — ordering creation | " +
+      "Dominations // Colossians 1:16 | Freedom and lordship — \"the desire and participation of the " +
+      "true dominion which belongs to God\" |\n| | Virtues // Ephesians 1:21 | Strength: \"a certain " +
+      "virile and immovable strength\" |\n| | Powers // Colossians 1:16 | Order: receiving and " +
+      "passing on God's action in due order |\n| Third — carrying it out | Principalities // " +
+      "Colossians 1:16 | Rule: in Gregory's words, they \"preside over the good spirits themselves\" " +
+      "|\n| | Archangels // 1 Thessalonians 4:16; Jude 9 | \"Angel princes\": princes to the angels, " +
+      "angels to the principalities |\n| | Angels | \"Messenger\": the ones who bring things to us " +
+      "directly |\n\nGREGORY'S ORDER\n\nSt. Gregory the Great knew the same nine but ranked two " +
+      "differently, and read the names by what the angels do rather than what they are: \"angels are " +
+      "so called as announcing the least things; and the archangels in the greatest; by the virtues " +
+      "miracles are wrought; by the powers hostile powers are repulsed; and the principalities " +
+      "preside over the good spirits themselves.\" St. Thomas lays the two lists side by side and " +
+      "finds support for each in St. Paul.\n\n| | Dionysius | Gregory |\n| --- | --- | --- |\n| 4 | " +
+      "Dominations | Dominations |\n| 5 | Virtues | Principalities |\n| 6 | Powers | Powers |\n| 7 | " +
+      "Principalities | Virtues |\n| 8 | Archangels | Archangels |",
+    background:
+      "WHAT THE CHURCH ACTUALLY TEACHES\n\nThat angels exist is a truth of faith: \"the witness of " +
+      "Scripture is as clear as the unanimity of Tradition\" (CCC 328). The Catechism then quotes " +
+      "Augustine: \"'Angel' is the name of their office, not of their nature. If you seek the name " +
+      "of their nature, it is 'spirit'; if you seek the name of their office, it is 'angel'\" (CCC " +
+      "329). What it does not do is define how many ranks there are or how they are ordered. The " +
+      "nine choirs are the great theological tradition about the angels, held by Gregory, Thomas and " +
+      "most of the Church since — not a dogma.\n\nWHO DIONYSIUS WAS\n\nFor a thousand years the " +
+      "Celestial Hierarchy was read as the work of Dionysius the Areopagite, the Athenian whom St. " +
+      "Paul converted on the Areopagus (Acts 17:34) — which gave it almost apostolic weight. It is " +
+      "now agreed to be the work of a Greek-speaking Christian writing around the year 500, probably " +
+      "in Syria, who took that name. The attribution was false; the influence was real. Gregory, " +
+      "Thomas, Dante and the whole medieval picture of heaven depend on him.\n\nThe same order runs " +
+      "through the Prayer Before Study in this library, which begins with the God who \"appointed " +
+      "three hierarchies of angels\".\n\nWHERE TO READ MORE\n\n**St. Thomas Aquinas, Summa " +
+      "Theologiae I q. 108** — the angelic hierarchies and orders, article by " +
+      "article.\nhttps://www.newadvent.org/summa/1108.htm\n\n**Catechism of the Catholic Church " +
+      "§§328–336** — on the angels.\nhttps://www.vatican.va/archive/ENG0015/__P1A.HTM",
+  },
+  {
+    title: "The Seven Sacraments",
+    seedVersion: 7,
+    kind: "teaching",
+    tags: ["sacraments", "grace", "catechetical", "the Church"],
+    source: "CCC 1210–1211; Compendium 224, 250; St. Thomas, Summa III qq. 60, 62, 65; Council of Trent, Session VII (1547)",
+    author: "The Catechism, with St. Thomas Aquinas",
+    authorNote: "the analogy with the life of the body is St. Thomas's, and the Catechism adopts it",
+    related: ["Prayer Before Mass", "Prayer After Mass", "Adoro Te Devote", "The Precepts of the Church"],
+    relatedSaints: ["thomas-aquinas"],
+    year: "Defined as seven at Florence (1439) and Trent (1547); the analogy 13th century",
+    origin: "Catechetical",
+    body:
+      "WHAT A SACRAMENT IS\n\nA sign — but a particular kind. St. Thomas: a sacrament is \"the sign " +
+      "of a holy thing so far as it makes men holy\" (III q. 60 a. 2). Other signs point; these do " +
+      "what they point to. Because Christ acts through them, \"to use the common expression, 'they " +
+      "effect what they signify'\" (III q. 62 a. 1 ad 1). The Compendium puts it in one line: " +
+      "\"efficacious signs of grace perceptible to the senses\" (224).\n\nSEVEN, BECAUSE A LIFE HAS " +
+      "SEVEN NEEDS\n\nWhy seven? St. Thomas answers from the life of the body (III q. 65 a. 1), and " +
+      "the Catechism takes his answer as its own plan: the sacraments \"give birth and increase, " +
+      "healing and mission to the Christian's life of faith\" (CCC 1210).\n\n| Sacrament | In the " +
+      "life of the body | Against what (St. Thomas) | The Catechism's group |\n| --- | --- | --- | " +
+      "--- |\n| Baptism | Being born — \"a spiritual regeneration\" | The absence of spiritual life " +
+      "| Initiation |\n| Confirmation | Growing to full strength | The weakness of the newly born | " +
+      "Initiation |\n| The Eucharist | Nourishment, which keeps life and strength going | The soul's " +
+      "proneness to sin | Initiation |\n| Penance | Healing, which restores health | Sin committed " +
+      "after Baptism | Healing |\n| Anointing of the Sick | Restoring former vigour; \"prepares man " +
+      "for final glory\" | The remnants of sin | Healing |\n| Holy Orders | Receiving power to rule " +
+      "the community and act for it publicly | Division in the community | Communion and mission " +
+      "|\n| Matrimony | Continuing the community by birth | Concupiscence, and the dwindling of the " +
+      "people | Communion and mission |\n\nThe first five perfect a person; the last two perfect the " +
+      "community. And at the centre of all seven is the Eucharist, \"the Sacrament of sacraments\": " +
+      "\"all the other sacraments are ordered to it as to their end\" (CCC 1211, quoting St. Thomas, " +
+      "III q. 65 a. 3).",
+    background:
+      "The number was not always fixed. The early Church spoke of many \"sacraments\" and " +
+      "\"mysteries\"; it was in the twelfth century that theologians settled on seven, the Council " +
+      "of Florence taught them in 1439, and the Council of Trent defined in 1547, against the " +
+      "Reformers, that there are neither more nor fewer. The list of names above is the one every " +
+      "catechism since has used.\n\nWhat St. Thomas added was not the number but a reason for it " +
+      "that anyone can feel. A life needs to begin, to grow, to be fed, to be healed, to be restored " +
+      "at the end; a community needs leaders and needs to go on. Grace, he says, is given the same " +
+      "shape as nature, because it is the same person who is being saved.\n\nThe English quoted from " +
+      "the Summa is the 1920 translation by the Fathers of the English Dominican Province, in the " +
+      "public domain; the Catechism and Compendium are quoted briefly, by paragraph.\n\nWHERE TO " +
+      "READ MORE\n\n**St. Thomas Aquinas, Summa Theologiae III q. 65 a. 1** — \"Whether there should " +
+      "be seven sacraments\".\nhttps://www.newadvent.org/summa/4065.htm\n\n**Catechism of the " +
+      "Catholic Church §§1210–1211** — the seven, and how they fit " +
+      "together.\nhttps://www.vatican.va/archive/ENG0015/__P3E.HTM\n\n**Compendium of the Catechism, " +
+      "§§224–356** — the sacraments in question and " +
+      "answer.\nhttps://www.vatican.va/archive/compendium_ccc/documents/archive_2005_compendium-ccc_en.html",
+  },
+  {
+    title: "The Precepts of the Church",
+    seedVersion: 7,
+    kind: "teaching",
+    tags: ["the Church", "obligation", "examination", "catechetical"],
+    source: "Compendium of the Catechism 431–432; CCC 2041–2043; Code of Canon Law, cann. 222, 920, 989, 1246–1251",
+    author: "The Catechism",
+    authorNote: "the minimum, not the measure — see background",
+    related: ["The Seven Sacraments", "Fasting Cleanses the Soul", "Act of Contrition", "The Works of Mercy"],
+    year: "Catechism of the Catholic Church (1992); Compendium (2005)",
+    origin: "Catechetical",
+    body:
+      "THE FIVE\n\n| | The precept | In canon law |\n| --- | --- | --- |\n| 1 | Attend Mass on " +
+      "Sundays and holy days of obligation, and keep those days free of the work and activities that " +
+      "would get in the way of keeping them holy | cann. 1246–1248 |\n| 2 | Confess your sins, in " +
+      "the sacrament of Reconciliation, at least once a year | can. 989 |\n| 3 | Receive the " +
+      "Eucharist at least during the Easter season | can. 920 |\n| 4 | Abstain from meat and fast on " +
+      "the days the Church appoints | cann. 1249–1251 |\n| 5 | Help to provide for the material " +
+      "needs of the Church, each according to your ability | can. 222 |\n\nWHAT THEY ARE " +
+      "FOR\n\n\"The indispensable minimum in the spirit of prayer, the sacramental life, moral " +
+      "commitment and growth in love of God and neighbour\" (Compendium 431). A floor, not a " +
+      "ceiling: what a Catholic life cannot drop below, not what it is aiming at.\n\nAN OLDER " +
+      "LIST\n\nThe Baltimore Catechism taught six \"commandments of the Church\":\n\n1. To hear Mass " +
+      "on Sundays and holydays of obligation.\n2. To fast and abstain on the days appointed.\n3. To " +
+      "confess at least once a year.\n4. To receive the Holy Eucharist during the Easter time.\n5. " +
+      "To contribute to the support of our pastors.\n6. Not to marry persons who are not Catholics, " +
+      "or who are related to us within the third degree of kindred, nor privately without witnesses, " +
+      "nor to solemnize marriage at forbidden times.",
+    background:
+      "The precepts are not a second set of Ten Commandments, and they are not optional extras " +
+      "either. The Catechism places them inside the moral life as its minimum: the least the Church " +
+      "can ask of its members and still call their life Catholic — Sunday, confession, Easter " +
+      "Communion, penance, generosity.\n\nTWO NUMBERINGS\n\nThe lists have moved over time, which is " +
+      "why they do not always match. The Baltimore Catechism had six, including the marriage laws. " +
+      "The older English text of the Catechism, which is still the one on the Vatican's website, " +
+      "gives a fourth precept of keeping holy days of obligation, a fifth of fasting and abstinence, " +
+      "and mentions support of the Church separately. The revised Catechism and the Compendium of " +
+      "2005 give the five above, with support for the Church as the fifth precept. The substance is " +
+      "the same.\n\nIN ENGLAND AND WALES\n\nSome precepts are applied by each bishops' conference. " +
+      "In England and Wales, Friday abstinence from meat was restored as a year-round practice in " +
+      "2011, and some holy days of obligation are transferred to the nearest Sunday; the national " +
+      "bishops' conference publishes the current list.\n\nWHERE TO READ MORE\n\n**Compendium of the " +
+      "Catechism, §§431–432** — the precepts in their current " +
+      "form.\nhttps://www.vatican.va/archive/compendium_ccc/documents/archive_2005_compendium-ccc_en.html\n\n**Catechism " +
+      "of the Catholic Church §§2041–2043** (1994 English) — with the canon law " +
+      "references.\nhttps://www.vatican.va/archive/ENG0015/__P75.HTM\n\n**A Catechism of Christian " +
+      "Doctrine (the Baltimore Catechism), No. 1** — questions 389 and " +
+      "following.\nhttps://www.gutenberg.org/ebooks/14551",
   },
   {
     title: "The Seven Capital Sins",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "teaching",
     tags: ["examination", "self-examination", "conscience", "self-knowledge", "temptation", "humility", "virtue", "the soul"],
     source: "St. Gregory the Great, Moralia in Job XXXI; St. Thomas, Summa I-II q. 84; Galatians 5:19-21",
@@ -6955,7 +9289,53 @@ const SEED_LIBRARY_ENTRIES = [
     originalLanguage: "",
     favorite: false,
     body:
-      "WHAT \"CAPITAL\" MEANS\n\nNot the worst sins. The word is from caput, a head: a capital sin is one others come out of. St. Thomas: \"a capital vice is one from which other vices arise, chiefly by being their final cause\" - it stands to the rest \"what the head is to an animal, what the root is to a plant\" (I-II q. 84 a. 3).\n\nSo this is not a league table of wickedness. Murder is worse than gluttony and is not on the list. The list answers a different question: if you want to know where your sins are coming from, look here.\n\nTHE SEVEN\n\nGregory's own enumeration, in Book XXXI of the Moralia, runs: inanis gloria, invidia, ira, tristitia, avaritia, ventris ingluvies, luxuria.\n\n| Gregory's name | Usually now |\n| --- | --- |\n| Vainglory // inanis gloria | Pride, in the popular list |\n| Envy // invidia | Envy |\n| Anger // ira | Wrath |\n| Melancholy // tristitia | Sloth, or acedia |\n| Avarice // avaritia | Greed |\n| Gluttony // ventris ingluvies | Gluttony |\n| Lust // luxuria | Lust |\n\nSt. Thomas gives the same seven and names Gregory as his authority (I-II q. 84 a. 4).\n\nWHERE PRIDE IS\n\nNot on the list - and this is the part most often lost. For Gregory pride is not one of the seven; it is the root they all grow from. He calls it the queen of the vices, who once she has taken a heart hands it over to the seven as to her generals, each leading its own army.\n\nThat arrangement says something the flat modern list cannot. Pride is not a sin among sins to be worked on alongside gluttony. It is the condition that makes the others possible, which is why humility is not one virtue among others either, and why a man can correct six of the seven and be further from God than when he started.\n\nTHE OTHER LIST\n\nSt. Paul had already put one alongside the fruits of the Spirit, in the same passage: \"Now the works of the flesh are manifest, which are fornication, uncleanness, immodesty, luxury, idolatry, witchcrafts, enmities, contentions, emulations, wraths, quarrels, dissensions, sects, envies, murders, drunkenness, revellings, and such like.\" (Galatians 5:19-21)\n\nSeventeen, and then \"and such like\" - Paul is not counting. Set against the twelve fruits three verses later, the contrast is not sin-by-sin but soil-by-soil: two lists of what grows, depending on what governs.\n\nWHERE TO READ MORE\n\n**St. Thomas, Summa I-II q. 84** — Article 3 on what 'capital' means, article 4 for the enumeration and the citation of Gregory.\nhttps://www.newadvent.org/summa/2084.htm\n\n**St. Gregory the Great, Moralia in Job, Book XXXI** — The source of the sevenfold list, and of pride standing outside it as their root.\nhttp://www.lectionarycentral.com/GregoryMoralia/Book31.html\n\n**Galatians 5:19-21, Douay-Rheims** — Paul's seventeen works of the flesh, three verses before the twelve fruits.\nhttps://www.drbo.org/chapter/55005.htm",
+      "WHAT \"CAPITAL\" MEANS\n\nNot the worst sins. The word is from caput, a head: a capital sin " +
+      "is one others come out of. St. Thomas: \"a capital vice is one from which other vices arise, " +
+      "chiefly by being their final cause\" - it stands to the rest \"what the head is to an animal, " +
+      "what the root is to a plant\" (I-II q. 84 a. 3).\n\nSo this is not a league table of " +
+      "wickedness. Murder is worse than gluttony and is not on the list. The list answers a " +
+      "different question: if you want to know where your sins are coming from, look here.\n\nTHE " +
+      "SEVEN\n\nGregory's own enumeration, in Book XXXI of the Moralia, runs: inanis gloria, " +
+      "invidia, ira, tristitia, avaritia, ventris ingluvies, luxuria.\n\n| Gregory's name | Usually " +
+      "now |\n| --- | --- |\n| Vainglory // inanis gloria | Pride, in the popular list |\n| Envy // " +
+      "invidia | Envy |\n| Anger // ira | Wrath |\n| Melancholy // tristitia | Sloth, or acedia |\n| " +
+      "Avarice // avaritia | Greed |\n| Gluttony // ventris ingluvies | Gluttony |\n| Lust // " +
+      "luxuria | Lust |\n\nSt. Thomas gives the same seven and names Gregory as his authority (I-II " +
+      "q. 84 a. 4).\n\nWHERE PRIDE IS\n\nNot on the list - and this is the part most often lost. For " +
+      "Gregory pride is not one of the seven; it is the root they all grow from. He calls it the " +
+      "queen of the vices, who once she has taken a heart hands it over to the seven as to her " +
+      "generals, each leading its own army.\n\nThat arrangement says something the flat modern list " +
+      "cannot. Pride is not a sin among sins to be worked on alongside gluttony. It is the condition " +
+      "that makes the others possible, which is why humility is not one virtue among others either, " +
+      "and why a man can correct six of the seven and be further from God than when he " +
+      "started.\n\nTHE OTHER LIST\n\nSt. Paul had already put one alongside the fruits of the " +
+      "Spirit, in the same passage: \"Now the works of the flesh are manifest, which are " +
+      "fornication, uncleanness, immodesty, luxury, idolatry, witchcrafts, enmities, contentions, " +
+      "emulations, wraths, quarrels, dissensions, sects, envies, murders, drunkenness, revellings, " +
+      "and such like.\" (Galatians 5:19-21)\n\nSeventeen, and then \"and such like\" - Paul is not " +
+      "counting. Set against the twelve fruits three verses later, the contrast is not sin-by-sin " +
+      "but soil-by-soil: two lists of what grows, depending on what governs.\n\nTHE CONTRARY " +
+      "VIRTUES\n\nEach root has a remedy, and the catechisms taught them as pairs. The Baltimore " +
+      "Catechism: \"Humility is opposed to pride; generosity to covetousness; chastity to lust; " +
+      "meekness to anger; temperance to gluttony; brotherly love to envy, and diligence to " +
+      "sloth.\"\n\n| Capital sin | Contrary virtue |\n| --- | --- |\n| Pride | Humility |\n| " +
+      "Covetousness | Generosity |\n| Lust | Chastity |\n| Anger | Meekness |\n| Gluttony | " +
+      "Temperance |\n| Envy | Brotherly love |\n| Sloth | Diligence |\n\nDANTE'S MOUNTAIN\n\nDante " +
+      "built Purgatory on this list: a mountain of seven terraces, climbed from the bottom — pride, " +
+      "envy, wrath, sloth, avarice, gluttony, lust. The order is a theology of love. The first three " +
+      "are love twisted against others, sloth is love too weak, and the last three are love of good " +
+      "things grown excessive; so pride, the heaviest, is purged first and lowest, and lust, nearest " +
+      "to love rightly ordered, last and closest to heaven.\n\nWHERE TO READ MORE\n\n**St. Thomas, " +
+      "Summa I-II q. 84** — Article 3 on what 'capital' means, article 4 for the enumeration and the " +
+      "citation of Gregory.\nhttps://www.newadvent.org/summa/2084.htm\n\n**St. Gregory the Great, " +
+      "Moralia in Job, Book XXXI** — The source of the sevenfold list, and of pride standing outside " +
+      "it as their root.\nhttp://www.lectionarycentral.com/GregoryMoralia/Book31.html\n\n**Galatians " +
+      "5:19-21, Douay-Rheims** — Paul's seventeen works of the flesh, three verses before the twelve " +
+      "fruits.\nhttps://www.drbo.org/chapter/55005.htm\n\n**A Catechism of Christian Doctrine (the " +
+      "Baltimore Catechism), No. 3** — question 317, the virtues opposed to the capital " +
+      "sins.\nhttps://www.gutenberg.org/ebooks/14553\n\n**Purgatorio** (Wikipedia) — the seven " +
+      "terraces and the theology of love behind their " +
+      "order.\nhttps://en.wikipedia.org/wiki/Purgatorio",
     background:
       "The list comes out of the desert. Evagrius of Pontus, in the fourth century, catalogued eight evil thoughts that assail a monk - the same material, differently cut, with vainglory and pride counted separately and acedia given its full weight as the noonday devil. Cassian brought the eight west. Gregory the Great, at the end of the sixth century, reorganised them into seven under pride, and that is the shape that lasted.\n\nIt is worth knowing that the list has moved. What Gregory calls tristitia - a heaviness, a sadness at spiritual good - became acedia and then sloth, and sloth in English drifted towards mere laziness, which is not what any of them meant. And vainglory quietly became pride in popular usage, which flattened Gregory's whole structure by demoting the root to one branch among seven.\n\nThe purpose of the list was practical, not taxonomic. It is a tool for the examination of conscience, and specifically for the question a bare list of sins cannot answer: not what did I do, but what in me keeps producing this. That is why the capital sins are traditionally paired with contrary virtues rather than merely forbidden - the remedy for a root is not vigilance but a different planting.",
   },
@@ -7582,19 +9962,24 @@ function routeFromHash() {
     if (entry) return openLibraryReader(entry.id);
   }
   if (head === "s" && rest && typeof saintBySlug === "function" && saintBySlug(rest)) {
-    switchTab("saints");
+    switchTab("saints", false);
     return openSaintReader(rest);
   }
   if (TAB_ROUTES.includes(head)) return setView(head);
   return setView("library");
 }
 
-function switchTab(tab) {
+// Pass writeHash = false when a more specific route is about to be written
+// straight after (opening a saint's dossier). Two hash writes in a row fire
+// two hashchange events, but the writingHash flag only swallows one — the
+// second re-ran the router, which wrote both again, and the view bounced
+// between the Saints list and the dossier.
+function switchTab(tab, writeHash = true) {
   $$(".tab").forEach((t) => t.classList.toggle("active", t.dataset.tab === tab));
   $$(".tabpanel").forEach((p) => p.classList.toggle("active", p.dataset.tab === tab));
   // The "next" marker depends on the clock, so recompute on every visit.
   if (tab === "day") renderDay();
-  setHash("#/" + tab);
+  if (writeHash) setHash("#/" + tab);
 }
 
 // --- Day: the shape of an ordinary day -------------------------------------
@@ -7719,8 +10104,9 @@ async function buildLibraryBodyIndex() {
   await Promise.all(
     missing.map(async (e) => {
       try {
-        const { body, background, latinBody } = await getLibraryEntryText(e.id);
-        state.libraryBodyIndex[e.id] = [body, background, latinBody].filter(Boolean).join(" \n ").toLowerCase();
+        const { body, background, latinBody, altTranslations } = await getLibraryEntryText(e.id);
+        const alts = (altTranslations || []).map((t) => t.body);
+        state.libraryBodyIndex[e.id] = [body, background, latinBody, ...alts].filter(Boolean).join(" \n ").toLowerCase();
       } catch {
         state.libraryBodyIndex[e.id] = "";
       }
@@ -7858,6 +10244,7 @@ function activeFilterList() {
   if (state.filterLiturgical) list.push({ type: "liturgical", value: "", label: "Season: " + state.filterLiturgical });
   if (state.filterFavoritesOnly) list.push({ type: "favorites", value: "", label: "★ Favourites" });
   if (state.filterBilingualOnly) list.push({ type: "bilingual", value: "", label: "Bilingual" });
+  if (state.filterFamiliarMissing) list.push({ type: "familiar", value: "", label: "Familiar version not included" });
   return list;
 }
 
@@ -7870,6 +10257,7 @@ function removeActiveFilter(type, value) {
   else if (type === "liturgical") state.filterLiturgical = null;
   else if (type === "favorites") state.filterFavoritesOnly = false;
   else if (type === "bilingual") state.filterBilingualOnly = false;
+  else if (type === "familiar") state.filterFamiliarMissing = false;
   renderLibraryList();
 }
 
@@ -8043,6 +10431,7 @@ function renderLibraryList() {
   renderAuthorSelect();
   $("#filter-favorites-only").checked = state.filterFavoritesOnly;
   $("#filter-bilingual-only").checked = state.filterBilingualOnly;
+  $("#filter-familiar-missing").checked = state.filterFamiliarMissing;
 
   const hasAnyFilter =
     !!state.finderRestrict ||
@@ -8052,7 +10441,8 @@ function renderLibraryList() {
     state.filterOrigin ||
     state.filterLiturgical ||
     state.filterFavoritesOnly ||
-    state.filterBilingualOnly;
+    state.filterBilingualOnly ||
+    state.filterFamiliarMissing;
   $("#btn-clear-tag-filter").classList.toggle("hidden", !hasAnyFilter);
   renderTodayShelf(hasAnyFilter || !!q);
 
@@ -8065,6 +10455,7 @@ function renderLibraryList() {
     if (state.filterLiturgical && e.liturgical !== state.filterLiturgical) return false;
     if (state.filterFavoritesOnly && !e.favorite) return false;
     if (state.filterBilingualOnly && !e.originalLanguage) return false;
+    if (state.filterFamiliarMissing && !e.familiarVersion) return false;
     if (!q) return true;
     return (
       e.title.toLowerCase().includes(q) ||
@@ -8103,6 +10494,7 @@ function renderLibraryList() {
       }
       <div class="meta">
         <span class="badge-kind">${e.kind}</span>
+        ${e.familiarVersion ? `<span class="badge-familiar" title="Not included: ${escapeHtml(e.familiarVersion)}">Familiar version not included</span>` : ""}
         ${e.source ? `<span>${escapeHtml(e.source)}</span>` : ""}
         ${e.tags
           .map(
@@ -8126,7 +10518,7 @@ function renderLibraryList() {
   $$(".byline-name.has-dossier", list).forEach((el) =>
     el.addEventListener("click", (e) => {
       e.stopPropagation();
-      switchTab("saints");
+      switchTab("saints", false);
       openSaintReader(el.dataset.slug);
     })
   );
@@ -8246,7 +10638,7 @@ async function openLibraryReader(id) {
   const dossierLink = $(".reader-author-link", $("#reader-attribution"));
   if (dossierLink) {
     dossierLink.addEventListener("click", () => {
-      switchTab("saints");
+      switchTab("saints", false);
       openSaintReader(dossierLink.dataset.slug);
     });
   }
@@ -8260,9 +10652,15 @@ async function openLibraryReader(id) {
   }
 
   const metaParts = [];
+  // Said up front, not left to the background: the version someone knows
+  // best (a copyrighted missal or modern translation, or a text whose copies
+  // disagree) is deliberately absent, and they should not wonder why.
+  const familiarHtml = entry.familiarVersion
+    ? `<div class="reader-familiar"><span class="badge-familiar">Familiar version not included: ${escapeHtml(entry.familiarVersion)} — see background</span></div>`
+    : "";
   if (entry.source) metaParts.push(escapeHtml(entry.source));
   if (entry.tags.length) metaParts.push(entry.tags.map((t) => "#" + escapeHtml(t)).join(" "));
-  $("#reader-meta").innerHTML = metaParts.join('<span class="dot">·</span>');
+  $("#reader-meta").innerHTML = familiarHtml + metaParts.join('<span class="dot">·</span>');
 
   $("#reader-text").textContent = "Loading…";
   $("#reader-occasion-wrap").classList.toggle("hidden", !entry.occasion);
@@ -8270,8 +10668,15 @@ async function openLibraryReader(id) {
   $("#reader-background-wrap").classList.add("hidden");
   setView("library-reader");
 
-  const { body, background, latinBody, spanishBody } = await getLibraryEntryText(id);
+  const { body, background, latinBody, spanishBody, bodyLabel, altTranslations } =
+    await getLibraryEntryText(id);
   readerTexts.en = body;
+  // Only an entry with a second English translation gets a choice; the
+  // default is always the entry's own body.
+  readerTexts.versions = (altTranslations || []).length
+    ? [{ label: bodyLabel || "This translation", body }, ...altTranslations]
+    : [];
+  state.readerVersion = 0;
   readerTexts.es = spanishBody || "";
   readerTexts.original = latinBody || "";
   readerTexts.originalLanguage = entry.originalLanguage || "Latin";
@@ -8326,7 +10731,7 @@ async function openLibraryReader(id) {
 // no longer resolves is dropped silently rather than rendering a dead chip.
 // Which texts the open entry has, so the language bar and the body render can
 // be redrawn on toggle without refetching. Populated in openLibraryReader().
-const readerTexts = { en: "", es: "", original: "", originalLanguage: "Latin" };
+const readerTexts = { en: "", es: "", original: "", originalLanguage: "Latin", versions: [] };
 
 // Language bar: Latin (or whatever the original is) stays visible whenever the
 // entry has one — the toggle only decides WHICH vernacular sits beside it.
@@ -8335,8 +10740,12 @@ function renderReaderLangBar() {
   const bar = $("#reader-lang-bar");
   const hasEs = !!readerTexts.es;
   const hasOrig = !!readerTexts.original;
-  bar.classList.toggle("hidden", !hasEs && !hasOrig);
-  if (!hasEs && !hasOrig) return;
+  const hasVersions = readerTexts.versions.length > 1;
+  bar.classList.toggle("hidden", !hasEs && !hasOrig && !hasVersions);
+  if (!hasEs && !hasOrig && !hasVersions) {
+    bar.innerHTML = ""; // don't leave the previous entry's buttons behind
+    return;
+  }
 
   const langBtns = hasEs
     ? `<span class="lang-group">
@@ -8347,7 +10756,25 @@ function renderReaderLangBar() {
   const origBtn = hasOrig
     ? `<button class="lang-btn orig-toggle${state.readerShowOriginal ? " active" : ""}" data-orig="1">${escapeHtml(readerTexts.originalLanguage)}</button>`
     : "";
-  bar.innerHTML = langBtns + origBtn;
+  // The translation choice only means something while English is showing.
+  const versionBtns =
+    hasVersions && state.readerLang !== "es"
+      ? `<span class="lang-group version-group" role="group" aria-label="Translation">${readerTexts.versions
+          .map(
+            (v, i) =>
+              `<button class="lang-btn${state.readerVersion === i ? " active" : ""}" data-version="${i}">${escapeHtml(v.label)}</button>`
+          )
+          .join("")}</span>`
+      : "";
+  bar.innerHTML = langBtns + versionBtns + origBtn;
+
+  $$(".lang-btn[data-version]", bar).forEach((b) =>
+    b.addEventListener("click", () => {
+      state.readerVersion = Number(b.dataset.version);
+      renderReaderLangBar();
+      renderReaderBody();
+    })
+  );
 
   $$(".lang-btn[data-lang]", bar).forEach((b) =>
     b.addEventListener("click", () => {
@@ -8445,7 +10872,9 @@ function renderSectionBar() {
 
 // Draws the body for the current language selection.
 function renderReaderBody() {
-  let vernacular = state.readerLang === "es" && readerTexts.es ? readerTexts.es : readerTexts.en;
+  const version = readerTexts.versions[state.readerVersion];
+  const english = version ? version.body : readerTexts.en;
+  let vernacular = state.readerLang === "es" && readerTexts.es ? readerTexts.es : english;
   const showOrig = readerTexts.original && state.readerShowOriginal;
   // Section filtering applies only when there is no side-by-side original:
   // the two columns must stay aligned paragraph for paragraph.
@@ -8712,6 +11141,7 @@ async function openLibraryEditor(id) {
   form.reset();
   $("#btn-library-delete").classList.toggle("hidden", !id);
   $("#library-editor-title-heading").textContent = id ? "Edit entry" : "New library entry";
+  state.editingTextExtras = {};
 
   if (id) {
     const entry = state.libraryEntries.find((e) => e.id === id);
@@ -8732,7 +11162,8 @@ async function openLibraryEditor(id) {
     $("#lib-body-latin").value = "";
     $("#lib-body").disabled = true;
     updateFeastDayVisibility();
-    getLibraryEntryText(id).then(({ body, background, latinBody }) => {
+    getLibraryEntryText(id).then(({ body, background, latinBody, spanishBody, bodyLabel, altTranslations }) => {
+      state.editingTextExtras = { spanishBody, bodyLabel, altTranslations };
       $("#lib-body").value = body;
       $("#lib-background").value = background;
       $("#lib-body-latin").value = latinBody;
@@ -8767,6 +11198,15 @@ async function onSaveLibraryEntry(e) {
       // save wipes the cross-links and resets the seed marker, which would
       // then re-seed over this very edit on the next load.
       seedVersion: existingEntry.seedVersion || 1,
+      // No inputs for these either. The localStorage backend overwrites a
+      // field passed as undefined, so leaving them out deleted an entry's
+      // Spanish text, its occasion note and any alternative translations on
+      // the first edit.
+      occasion: existingEntry.occasion || "",
+      familiarVersion: existingEntry.familiarVersion || "",
+      spanishBody: state.editingTextExtras.spanishBody || "",
+      bodyLabel: state.editingTextExtras.bodyLabel || "",
+      altTranslations: state.editingTextExtras.altTranslations || [],
       title: $("#lib-title").value.trim() || "Untitled",
       kind: $("#lib-kind").value,
       tags,
@@ -9010,14 +11450,16 @@ function updateSaintsFilterBadge() {
 // falls today, hidden entirely on days when none does.
 function renderTodaysSaintBanner() {
   const banner = $("#saints-today-banner");
-  const todays = window.SAINTS.filter((s) => daysUntilFeast(s.dates.feast) === 0);
+  const now = new Date();
+  const mmddToday = `${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  const todays = buildFeastDayIndex(now.getFullYear())[mmddToday] || [];
   if (todays.length === 0) {
     banner.classList.add("hidden");
     banner.innerHTML = "";
     return;
   }
   const names = todays
-    .map((s) => `<span class="todays-saint-name" data-slug="${s.slug}">${escapeHtml(s.name)}</span>`)
+    .map(({ saint: s, title }) => `<span class="todays-saint-name" data-slug="${s.slug}">${escapeHtml(title || s.name)}</span>`)
     .join(" and ");
   banner.innerHTML = `<span class="todays-saint-label">Today is the feast of</span> ${names}`;
   banner.classList.remove("hidden");
@@ -9096,20 +11538,44 @@ function shiftCalendarMonth(delta) {
   renderSaintsCalendar();
 }
 
-// Groups every saint with a fixed feast by "MM-DD" once per render, so each
-// day cell is an O(1) lookup instead of scanning all 76 saints per day.
-function buildFeastDayIndex() {
+// Every day in `year` on which a saint is kept: the main feast, plus each
+// altFeast — a fixed "MM-DD", or a date that moves with Easter ("easter+N",
+// e.g. Mary, Mother of the Church on the Monday after Pentecost, easter+50).
+// An altFeast carries an optional short `title` for the calendar chip, which
+// matters for Our Lady: thirty-odd feasts that would otherwise all read
+// "The Blessed Virgin Mary".
+function saintFeastDays(s, year) {
+  const days = [];
+  if (s.dates.feast) days.push({ mmdd: s.dates.feast, title: null });
+  (s.dates.altFeasts || []).forEach((af) => {
+    let mmdd = /^\d{2}-\d{2}$/.test(af.date || "") ? af.date : null;
+    const rule = /^easter\+(\d+)$/.exec(af.movable || "");
+    if (!mmdd && rule) {
+      const d = easterSunday(year);
+      d.setDate(d.getDate() + Number(rule[1]));
+      mmdd = `${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    }
+    if (!mmdd || mmdd === s.dates.feast) return;
+    days.push({ mmdd, title: af.title || null });
+  });
+  return days;
+}
+
+// Groups every saint's feast days by "MM-DD" once per render, so each day cell
+// is an O(1) lookup instead of scanning every saint per day.
+function buildFeastDayIndex(year) {
   const idx = {};
   window.SAINTS.forEach((s) => {
-    if (!s.dates.feast) return;
-    (idx[s.dates.feast] = idx[s.dates.feast] || []).push(s);
+    saintFeastDays(s, year).forEach(({ mmdd, title }) => {
+      (idx[mmdd] = idx[mmdd] || []).push({ saint: s, title });
+    });
   });
   return idx;
 }
 
 function renderSaintsCalendar() {
-  const idx = buildFeastDayIndex();
   const y = state.calendarYear, m = state.calendarMonth;
+  const idx = buildFeastDayIndex(y);
   $("#calendar-month-label").textContent = `${CALENDAR_MONTH_NAMES[m]} ${y}`;
 
   const firstOfMonth = new Date(y, m, 1);
@@ -9123,11 +11589,11 @@ function renderSaintsCalendar() {
   for (let i = 0; i < startWeekday; i++) cells += `<div class="calendar-cell empty"></div>`;
   for (let day = 1; day <= daysInMonth; day++) {
     const mmdd = `${String(m + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-    let saints = idx[mmdd] || [];
-    if (tier !== "all") saints = saints.filter((s) => s.listTier === tier);
+    let feasts = idx[mmdd] || [];
+    if (tier !== "all") feasts = feasts.filter((f) => f.saint.listTier === tier);
     const isToday = isCurrentMonth && today.getDate() === day;
-    const chips = saints
-      .map((s) => `<span class="calendar-saint-chip${s.listTier ? " tier-" + s.listTier : ""}" data-slug="${s.slug}">${escapeHtml(s.name.replace(/^St\.?\s+/, ""))}</span>`)
+    const chips = feasts
+      .map(({ saint: s, title }) => `<span class="calendar-saint-chip${s.listTier ? " tier-" + s.listTier : ""}${title ? " alt-feast" : ""}" data-slug="${s.slug}">${escapeHtml(title || s.name.replace(/^St\.?\s+/, ""))}</span>`)
       .join("");
     cells += `<div class="calendar-cell${isToday ? " today" : ""}"><div class="calendar-day-num">${day}</div>${chips}</div>`;
   }
@@ -10345,7 +12811,7 @@ function renderSaintDossier(s) {
       .join("")
   );
 
-  const altFeasts = (d.altFeasts || []).map((af) => `${af.label} — ${af.calendar}`);
+  const altFeasts = (d.altFeasts || []).map((af) => [af.title, af.label, af.calendar].filter((v, i, a) => v && a.indexOf(v) === i).join(" — "));
   const landmarksBirthYear = extractYear(d.born);
   const datesSection = section(
     "Dates & calendar",

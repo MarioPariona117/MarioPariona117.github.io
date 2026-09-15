@@ -212,6 +212,20 @@ window.PLACE_COORDS = {
   "hippo-regius": [36.90, 7.77],
   madauros: [36.20, 7.85],
   carthage: [36.85, 10.32],
+
+  // Switzerland
+  flueli: [46.89, 8.23],
+  ranft: [46.88, 8.25],
+
+  // France (added with the Part 1 authors)
+  "saint-symphorien-d-ozon": [45.63, 4.86],
+  "paray-le-monial": [46.45, 4.12],
+  avord: [47.03, 2.65],
+  dijon: [47.32, 5.04],
+
+  // England (added with the Part 2 authors)
+  droitwich: [52.27, -2.15],
+  dover: [51.13, 1.31],
 };
 
 // SAINT_PLACES: slug -> { born, died, stops? }. `born`/`died` are set for
@@ -487,6 +501,10 @@ window.SAINT_PLACES = {
   // at Rome, which the dossier lists first, with the label carrying the doubt.
   helena: { born: { key: "drepanum", label: "Drepanum, Bithynia (later Helenopolis)" }, died: { key: "rome", label: "Rome or Nicomedia — sources vary" } },
   "colette-of-corbie": { born: { key: "corbie", label: "Corbie, Picardy" }, died: { key: "ghent", label: "Ghent" } },
+  "nicholas-of-flue": { born: { key: "flueli", label: "Flüeli, Obwalden" }, died: { key: "ranft", label: "The Ranft, Sachseln" } },
+  "claude-la-colombiere": { born: { key: "saint-symphorien-d-ozon", label: "Saint-Symphorien-d'Ozon" }, died: { key: "paray-le-monial", label: "Paray-le-Monial" } },
+  "elizabeth-of-the-trinity": { born: { key: "avord", label: "Avord, near Bourges" }, died: { key: "dijon", label: "Carmel of Dijon" } },
+  "richard-of-chichester": { born: { key: "droitwich", label: "Near Droitwich, Worcestershire" }, died: { key: "dover", label: "Maison Dieu, Dover" } },
 };
 
 
