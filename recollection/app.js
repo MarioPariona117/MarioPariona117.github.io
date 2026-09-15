@@ -13274,6 +13274,9 @@ const FINDER_MAX_TAG_STEPS = 3;
 const finderState = {
   answers: [], // [{ stepLabel, optionLabel, ids }]
   showingAll: false,
+  // Which fixed step to ask first. Usually the occasion, but sometimes you
+  // already know you want a quote, not a prayer, and only then the topic.
+  firstStep: "Occasion",
 };
 
 const hasTag = (entry, names) =>
@@ -13391,6 +13394,7 @@ const FINDER_STEPS = [
           hasTag(e, [
             "passion", "cross", "good friday", "sacred heart", "precious blood",
             "sorrow", "reparation", "way of the cross", "holy week",
+            "the cross", "divine mercy", "three o'clock",
           ]) || mentions(e, ["crucifix", "the cross", "calvary", "passion"]),
       },
       {
@@ -13404,7 +13408,7 @@ const FINDER_STEPS = [
         hint: "Examining conscience, sorrow, conversion",
         keywords: ["confession", "penance", "repentance", "conversion", "reconciliation"],
         match: (e) =>
-          hasTag(e, ["confession", "penance", "repentance", "self-examination", "conversion", "fasting"]) ||
+          hasTag(e, ["confession", "penance", "repentance", "self-examination", "conversion", "fasting", "contrition"]) ||
           mentions(e, ["confession", "conscience", "reconciliation", "penance"]),
       },
       {
@@ -13423,6 +13427,7 @@ const FINDER_STEPS = [
           hasTag(e, [
             "anxiety", "suffering", "death", "courage", "protection", "exorcism",
             "peace", "hope", "trust", "perseverance", "guardian angel",
+            "the dying", "a good death",
           ]),
       },
       {
@@ -13521,21 +13526,32 @@ function dynamicTagStep(candidates, usedTags) {
 
 // Builds the step to show for the current candidate set, with the coverage
 // sweep applied. Returns null when there is nothing useful left to ask.
+function finderStepOrder() {
+  const first = FINDER_STEPS.filter((s) => s.label === finderState.firstStep);
+  return first.concat(FINDER_STEPS.filter((s) => s.label !== finderState.firstStep));
+}
+
 function buildFinderStep(candidates) {
-  const depth = finderState.answers.length;
+  const answered = new Set(finderState.answers.map((a) => a.stepLabel));
   const usedTags = new Set(
     finderState.answers.flatMap((a) => (a.tag ? [a.tag] : []))
   );
 
-  let step =
-    depth < FINDER_STEPS.length
-      ? FINDER_STEPS[depth]
-      : depth < FINDER_STEPS.length + FINDER_MAX_TAG_STEPS
-      ? dynamicTagStep(candidates, usedTags)
-      : null;
+  // Fixed steps are picked by what has been answered rather than by position,
+  // so their order can be swapped, and a fixed step with only one possible
+  // answer is skipped instead of ending the finder early. Theme steps follow.
+  for (const fixed of finderStepOrder()) {
+    if (answered.has(fixed.label)) continue;
+    const built = bucketFinderStep(fixed, candidates);
+    if (built) return built;
+  }
+  const themeAnswers = finderState.answers.filter((a) => !FINDER_STEPS.some((f) => f.label === a.stepLabel));
+  if (themeAnswers.length >= FINDER_MAX_TAG_STEPS) return null;
+  const themed = dynamicTagStep(candidates, usedTags);
+  return themed ? bucketFinderStep(themed, candidates) : null;
+}
 
-  if (!step) return null;
-
+function bucketFinderStep(step, candidates) {
   // A candidate goes into EVERY option it matches, not just the first. The
   // Hail Mary is both a Marian prayer and one of the basics; someone looking
   // for either should find it. So several routes can lead to the same entry,
@@ -13613,6 +13629,7 @@ function finderCandidates() {
 function openFinder() {
   state.finderRestrict = null;
   finderState.answers = [];
+  finderState.firstStep = "Occasion";
   finderState.showingAll = false;
   setView("finder");
   renderFinder();
@@ -13671,6 +13688,16 @@ function renderFinder() {
 
   if (!done) {
     $("#finder-question").textContent = step.question;
+    // Before anything is answered, a toggle picks which question comes first.
+    const order = $("#finder-order");
+    order.classList.toggle("hidden", finderState.answers.length > 0);
+    $$(".finder-order-btn", order).forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.first === step.label);
+      btn.onclick = () => {
+        finderState.firstStep = btn.dataset.first;
+        renderFinder();
+      };
+    });
     $("#finder-options").innerHTML = step.options
       .map(
         (opt, i) => `

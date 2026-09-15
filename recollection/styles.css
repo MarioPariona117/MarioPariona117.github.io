@@ -1311,6 +1311,32 @@ body.public-mode .tabpanel[data-tab="journal"] { display: none !important; }
   text-align: center;
 }
 
+.finder-order {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: 620px;
+  margin: 0 auto 1rem;
+}
+.finder-order-label { font-size: 0.78rem; color: var(--muted); margin-right: 0.15rem; }
+.finder-order-btn {
+  background: transparent;
+  border: 1px solid rgba(var(--gold-rgb), 0.35);
+  color: var(--gold);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.finder-order-btn:hover { background: rgba(var(--gold-rgb), 0.12); }
+.finder-order-btn.active {
+  background: rgba(var(--gold-rgb), 0.22);
+  border-color: var(--gold);
+  font-weight: 600;
+}
+
 .finder-options {
   max-width: 620px;
   margin: 0 auto;
