@@ -946,6 +946,7 @@ async function onSignedIn() {
 const SEED_LIBRARY_ENTRIES = [
   {
     title: "All the Way to Heaven Is Heaven",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From her letters, written to popes, mercenaries, prisoners and her own family — generally to tell someone that the situation they were trying to get past was the place they were being met.",
@@ -970,6 +971,7 @@ const SEED_LIBRARY_ENTRIES = [
   // ── Saint quotes, batch 4: Fathers, Doctors, martyrs, moderns ──────────
   {
     title: "Gaze, Consider, Contemplate",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written in 1235 to Agnes of Prague, a Bohemian princess who had refused an imperial marriage to found a poor monastery, and had asked Clare how one becomes like Christ.",
@@ -994,6 +996,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Love That Cannot Suffer",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Attributed within the Poor Clare tradition; the particular occasion is not recorded.",
@@ -1013,6 +1016,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Each of Your Saints Reflects a Virtue",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written in her Diary in the 1930s, as she worked out which of Christ's qualities she was placed to show — the reasoning that became the Divine Mercy devotion.",
@@ -1036,6 +1040,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Spirit of Faith With Which It Is Undertaken",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written from the Indies in the 1540s to Jesuits in Europe who felt their teaching work was trivial beside his missionary journeys. His answer removes the glamour from his own position deliberately.",
@@ -1059,6 +1064,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "First Learn to Suffer",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written in letters by a young woman with spinal tuberculosis who had lost both parents by nineteen and been refused entry to the convent she wanted because of her health. She died at twenty-five.",
@@ -1080,6 +1086,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "When in Rome",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Ambrose's answer to St. Monica, newly arrived in Milan and troubled that the local fasting customs differed from those in Africa. Augustine recorded it in Letter 54 to Januarius.",
@@ -1106,6 +1113,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "We Hear Him When We Read",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From De Officiis Ministrorum, written in the 380s as instruction for his clergy in Milan. The Catechism quotes it at paragraph 2653, in the section on lectio divina.",
@@ -1129,6 +1137,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Wheat of God",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written under guard around the year 107, in transit to Rome and the arena, to a Christian community that was preparing to use its influence to have him released. The letter asks them to stop.",
@@ -1152,6 +1161,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Eighty and Six Years",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said around the year 155 to the proconsul at Smyrna, who had offered him an easy way out: swear by Caesar's fortune, curse Christ, and go home. He was an old man and the crowd would have accepted it.",
@@ -1174,6 +1184,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Man Fully Alive",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written c. 180 against Gnostics who held that matter and bodies were a mistake to escape from — which is why the glory of God is located in a living human being, flesh included.",
@@ -1197,6 +1208,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Bread You Do Not Use",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Preached during a famine in Cappadocia in the late 360s, while Basil was selling his inheritance, running soup kitchens and building a hospital complex outside Caesarea large enough to be called a new city.",
@@ -1221,6 +1233,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "What Has Not Been Assumed",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written c. 382 in Letter 101 to Cledonius, to settle the teaching of Apollinarius, who held that in Christ the divine Word replaced the human mind.",
@@ -1244,6 +1257,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Scripture Grows With the Reader",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From the Moralia in Job, begun as informal talks to his brethren and completed while governing a Rome collapsing under plague and Lombard invasion.",
@@ -1265,6 +1279,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "You Are Not Like Us",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Recorded among the sayings of Abba Antony in the Egyptian desert in the fourth century, in a collection otherwise relentless about self-deception and about not judging one's neighbour.",
@@ -1292,6 +1307,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Ask Grace, Not Learning",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "The closing instruction of The Journey of the Mind to God, written in 1259 on Mount La Verna, where Francis had received the stigmata thirty-five years earlier. Bonaventure went there to think about what had happened to a man who was not a scholar.",
@@ -1315,6 +1331,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer Purifies, Reading Instructs",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From the Sentences, written c. 620 by the last of the Latin Fathers, who spent his life trying to preserve learning in a Spain that had stopped producing it.",
@@ -1340,6 +1357,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "A Feather on the Breath of God",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "How she described herself when asked by what authority a woman was preaching, composing, prescribing medicine and writing to popes and emperors.",
@@ -1357,6 +1375,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Let Your Actions Speak",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his sermons. Anthony was the Franciscans' first theology lecturer, appointed by Francis himself with a note approving it provided study did not extinguish prayer.",
@@ -1380,6 +1399,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Excuses for Sins",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Attributed within the Dominican tradition; no particular occasion is recorded. Albert taught Aquinas and wrote on logic, botany, zoology, minerals and astronomy — he knew how readily intelligence supplies whatever it is asked for.",
@@ -1403,6 +1423,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The King's Good Servant, But God's First",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said on the scaffold at Tower Hill on 6 July 1535, by a former Lord Chancellor convicted on perjured evidence about a private conversation, after years of refusing to attack the king's marriage or to swear to it.",
@@ -1427,6 +1448,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "For the Faith of Christ's Church",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said on the scaffold at Tower Hill on 22 June 1535 by the only English bishop who refused the oath — 65 years old, imprisoned fourteen months, and so weak he had to be carried part of the way.",
@@ -1450,6 +1472,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "We Lepers",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "The opening of a sermon at Kalaupapa in 1885. For eleven years he had begun 'my brethren' or 'you lepers'; that Sunday he said 'we', because he had contracted the disease. The congregation understood at once.",
@@ -1473,6 +1496,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Choose the Child",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said to her surgeons in 1962, in the second month of her fourth pregnancy, when a fibroma was found on her uterus. Gianna was a paediatrician and understood the options and the odds as well as they did.",
@@ -1498,6 +1522,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "What They Wrongly Believe",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written in 1938 as the preface to a book of answers to objections, telling Catholics to stop treating opposition as malice.",
@@ -1521,6 +1546,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Measured by the Perfect",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "quote",
     tags: ["humility", "self-knowledge", "conscience", "examination", "virtue"],
@@ -1542,6 +1568,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Not of Obligation, But of Love",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his 1980 autobiography, describing the daily hour before the Blessed Sacrament he kept for over sixty years from his ordination in 1919. He was found dead in his private chapel.",
@@ -1564,6 +1591,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "All or Nothing",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "How a Derry teenager who had begun getting television work talked about vocation, and about the half-measures she thought were the real danger. She was killed at 33 in the 2016 Ecuador earthquake, teaching guitar to children.",
@@ -1587,6 +1615,7 @@ const SEED_LIBRARY_ENTRIES = [
   // ── Saint quotes, batch 3 ──────────────────────────────────────────────
   {
     title: "My Highway to Heaven",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said by a Milanese schoolboy who had built a website cataloguing reported Eucharistic miracles, and who went to Mass daily. He died of leukaemia at fifteen in 2006.",
@@ -1607,6 +1636,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Originals and Photocopies",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "An adolescent's observation about the conformity he watched around him at school in Milan, from someone who limited himself to an hour of video games a week as a decision made in advance.",
@@ -1627,6 +1657,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Verso l'Alto",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written on the back of a photograph of himself climbing in the Alps, a few weeks before he died of polio in July 1925, aged 24 — probably caught from one of the poor of Turin he visited secretly.",
@@ -1649,6 +1680,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Not Living, But Existing",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written in letters to friends in Mussolini's Italy, where his Catholic student activism had become dangerous. He was once beaten by Blackshirts and refused to give his father's name to be released.",
@@ -1673,6 +1705,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "May God Put Me There",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Answered under interrogation at Rouen on 24 February 1431. Her judges had asked whether she knew she was in God's grace — a question with no safe answer, since yes was presumption and no a confession against her voices. She was nineteen and could not read.",
@@ -1698,6 +1731,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "I Was Born to Do This",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "None — Joan's trial is one of the best-recorded events of the fifteenth century and this sentence is nowhere in it. It is a modern compression, popular in film.",
@@ -1722,6 +1756,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Nothing Is Far From God",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said at Ostia in 387, when her sons were anxious that she would die away from home and not be buried beside her husband in North Africa.",
@@ -1741,6 +1776,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Remember Me at the Altar",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Her last request, made at Ostia a fortnight before she died in 387, discarding the burial place she had already prepared for herself in Africa.",
@@ -1765,6 +1801,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Even Sweeping",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From the Dominican accounts of his life in Lima. Barred by the law of the time from full membership of the order because of his birth, Martin entered as a lay helper and did the kitchen, laundry and infirmary work for decades — the list in the sentence is his own timetable.",
@@ -1790,6 +1827,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Some Definite Service",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written privately in 1848, three years after a conversion that cost him Oxford, his fellowship, most of his friends and his standing in English public life — and while the Catholic authorities he had joined still regarded him with suspicion.",
@@ -1820,6 +1858,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "To Live Is to Change",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From the Essay on the Development of Christian Doctrine, written in 1845 while he was becoming a Catholic. He stopped mid-revision to be received into the Church.",
@@ -1845,6 +1884,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Lead, Kindly Light",
+    added: "2026-09-01",
     seedVersion: 9,
     occasion:
       "Written in June 1833 in a becalmed orange boat between Palermo and Marseilles, after a near-fatal illness in Sicily. Newman was 32 and twelve years from becoming a Catholic; by his own account he did not know what he was being led toward.",
@@ -1889,6 +1929,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Whoever Seeks Truth Seeks God",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written in a letter of 1928 by a former atheist who had been Husserl's assistant, and who had read Teresa of Avila's autobiography in a single night and said at dawn: this is the truth.",
@@ -1913,6 +1954,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "We Are Going for Our People",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said to her sister Rosa as the SS took them from the Carmel at Echt on 2 August 1942, in reprisal for the Dutch bishops' public protest against the deportation of Jews. Both were gassed at Auschwitz within the week.",
@@ -1936,6 +1978,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "God Does Not Want It",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said during an attempted rape at Nettuno on 5 July 1902, by an eleven-year-old girl to a twenty-year-old neighbour, who then stabbed her fourteen times.",
@@ -1957,6 +2000,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "I Want Him With Me in Heaven",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said on her deathbed on 6 July 1902, before her attacker had shown any repentance. He remained unrepentant through his trial and for years in prison; he later confessed, and was present at her canonisation in 1950.",
@@ -1982,6 +2026,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Death Rather Than Sin",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Chosen as one of four written resolutions by a boy of seven on the day of his first communion, and recorded by Don Bosco, who knew him. He died at fourteen.",
@@ -2004,6 +2049,7 @@ const SEED_LIBRARY_ENTRIES = [
   // ── Saint quotes, batch 2 ──────────────────────────────────────────────
   {
     title: "The Soul That Walks in Love",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From the Sayings of Light and Love, short maxims John wrote for the direction of individual souls in his care, c. 1585.",
@@ -2024,6 +2070,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Then the Impossible",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "None — no medieval source carries it, and its three-step build is the shape of modern motivational writing rather than thirteenth-century Italian spirituality.",
@@ -2047,6 +2094,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Idleness Is the Enemy of the Soul",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "The opening words of chapter 48 of the Rule, c. 530, introducing the hours of daily manual labour — Benedict's answer to the question of how a monk's day should be shaped.",
@@ -2068,6 +2116,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Key to God's Heart",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Reported across compilations of his spiritual direction. Padre Pio spent much of his life hearing confessions, sometimes sixteen hours a day, which is the setting in which he thought about both resistance and an unlocked door at once.",
@@ -2092,6 +2141,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Say the Rosary",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said to the boys of the Oratory in Turin — many of them illiterate, most without families — which is why it is built as three questions with one answer a boy could remember without a book.",
@@ -2117,6 +2167,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Cheerfulness Strengthens the Heart",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From the maxims collected by his Oratorian companions in sixteenth-century Rome, where Philip's insistence on cheerfulness in the middle of the Counter-Reformation struck many as unserious.",
@@ -2140,6 +2191,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "A Joyful Heart",
+    added: "2026-09-01",
     seedVersion: 8,
     occasion:
       "From the same collected maxims. Philip spent his life deliberately producing cheerfulness in others — breaking up excessive piety with jokes and absurd errands — rather than demanding it of them.",
@@ -2162,6 +2214,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Small Things With Great Love",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said repeatedly, in varying words, to people who told her they admired her work and wished they could do something comparable. It is a refusal of the premise as much as an encouragement.",
@@ -2185,6 +2238,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "No Time to Love Them",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said in talks and interviews to audiences who came expecting a message about charity and got an argument about where their attention was going.",
@@ -2206,6 +2260,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Straw Scattered Here and There",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Preached to the people of Ars, a village that had largely stopped coming to church, arguing for prayer in common. Vianney was a farmer's son and nearly all his images come from things his parishioners handled daily.",
@@ -2231,6 +2286,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "He Who Prays Is Saved",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "The thesis of The Great Means of Salvation (1759), written against Jansenism — which taught a God stingy with grace and salvation for the few. The severity is aimed at that, not at the reader.",
@@ -2255,6 +2311,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "A Resting Place",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From the Sermons on the Song of Songs, eighty-six talks given to his own monks at Clairvaux on the first two chapters of a love poem.",
@@ -2278,6 +2335,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Good Intentions",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Unknown — the proverb circulated independently in the Middle Ages and cannot be located in any passage of Bernard's, though it travels under his name.",
@@ -2300,6 +2358,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "I Want to Take His Place",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said at Auschwitz in late July 1941. Ten men had been selected to die by starvation after an escape from Block 14; one of them, Franciszek Gajowniczek, cried out about his wife and children. Kolbe stepped out of the ranks to offer himself instead, and the commandant accepted.",
@@ -2321,6 +2380,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "No One Can Change Truth",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his years running the largest Catholic publishing operation in Poland — a monastery-city at Niepokalanow with its own presses and a daily paper. The Gestapo shut it in 1941.",
@@ -2345,6 +2405,7 @@ const SEED_LIBRARY_ENTRIES = [
   // ── Saint quotes, batch 1: top favourites ──────────────────────────────
   {
     title: "No Hands But Yours",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Nobody knows — which is the point. It cannot be placed in Teresa's life because it is not hers; the earliest traces are English and modern.",
@@ -2373,6 +2434,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Not to Think Much But to Love Much",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written c. 1577 for the nuns of her own reform, who were anxious that their distracted prayer meant they were failing at it. Teresa had herself found prayer dry and difficult for nearly twenty years before this.",
@@ -2394,6 +2456,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Judged on Love Alone",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written for the friars and nuns of the Discalced reform, who had given up everything measurable — property, family, reputation — and needed telling what would actually be counted. John had recently been imprisoned by his own brothers in religion for pursuing that reform.",
@@ -2416,6 +2479,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Where There Is No Love, Put Love",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written on 6 July 1591 to Madre María de la Encarnación, who was distressed that John had just been stripped of office and might be expelled from the order he helped found. This is his instruction on how to treat the men doing it. He died five months later.",
@@ -2440,6 +2504,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "My Vocation Is Love",
+    added: "2026-09-01",
     seedVersion: 8,
     occasion:
       "Written in September 1896 for her sister Marie, who had asked her to put down her 'little doctrine'. Thérèse was 23, already ill, and had been tormented by wanting to be missionary, priest, martyr and doctor at once while knowing she would be none of them.",
@@ -2466,6 +2531,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "All I Have Written Seems as Straw",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said in December 1273 to his secretary Br. Reginald of Piperno, who had pressed him for weeks to explain why he had stopped writing mid-sentence. Something had happened at Mass on 6 December that Thomas would not describe. He died three months later.",
@@ -2491,6 +2557,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "No Explanation Is Necessary",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "No occasion — it is not his. Its earliest appearance is as an epigraph in Franz Werfel's 1941 novel The Song of Bernadette, in the novelist's own voice.",
@@ -2518,6 +2585,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "But Not Yet",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "A prayer Augustine had actually prayed as a young man in Carthage, recorded against himself some fifteen years later in the Confessions (c. 397-400) as an example of a will divided against itself.",
@@ -2546,6 +2614,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Use Words If Necessary",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "None — it is not his. Francis preached in the open air in up to five towns a day and walked into a Sultan's camp to preach; the saying first appears in print in the 1990s.",
@@ -2573,6 +2642,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "That You Are and Nothing More",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written in the 1220s for his own friars, in a short chapter of the Admonitions aimed at the servant of God who is praised and begins to believe it.",
@@ -2597,6 +2667,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "When We Pray, When We Read",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Jerome wrote to Eustochium in 384, urging a young Roman noblewoman toward the ascetic life — 'You pray: you speak to the Bridegroom. You read: he speaks to you.' The smoothed wording everyone quotes is St. Alphonsus Liguori's paraphrase, made some fourteen centuries later.",
@@ -2629,6 +2700,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Devil Can Imitate Everything",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Recorded among the sayings of the Egyptian desert monks, attributed to 'the fathers' collectively rather than to any one of them. It circulates widely under St. Moses the Black's name; that attribution is modern and unsupported.",
@@ -2670,6 +2742,7 @@ const SEED_LIBRARY_ENTRIES = [
     // Seven parts, one per member — the numbered body drives the reader's
     // one-at-a-time navigation, same mechanism as the hourly prayers.
     title: "Rhythmica Oratio — the Members of the Crucified Christ",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["contemplation", "Passion", "Lent", "Cistercian", "suffering", "love"],
@@ -2735,6 +2808,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer to St. Michael the Archangel",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "prayer",
     tags: ["protection", "exorcism", "guardian angel", "courage"],
@@ -2781,6 +2855,7 @@ const SEED_LIBRARY_ENTRIES = [
     // The body is a numbered sequence; the reader detects that and offers
     // one-at-a-time navigation over it. See splitNumberedParts().
     title: "Hourly Prayers of St. John Chrysostom",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["hourly", "contemplation", "daily", "arrow prayers", "Patristic", "repentance"],
@@ -2841,6 +2916,7 @@ const SEED_LIBRARY_ENTRIES = [
     // Kept as one entry rather than two: they are a single practice, and you
     // want the closing prayer already in front of you when the half-hour ends.
     title: "Preces for Mental Prayer",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: [
@@ -2890,6 +2966,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Nicene Creed",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["creed", "foundational", "Trinity", "Mass"],
@@ -2981,6 +3058,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Morning Offering",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["morning", "daily"],
@@ -3017,6 +3095,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Stay with Me, Lord",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["eucharist", "communion"],
@@ -3057,6 +3136,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer to the Holy Spirit",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["Holy Spirit", "Dominican"],
@@ -3093,6 +3173,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Love Undefiled",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["eucharist", "Trinity", "Dominican"],
@@ -3130,6 +3211,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Seven Mansions",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "teaching",
     tags: ["the soul", "contemplation", "mental prayer", "self-knowledge", "Carmelite"],
@@ -3151,6 +3233,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Vine of Your Own Soul",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "teaching",
     tags: ["virtue", "the soul", "charity", "work", "daily", "catechetical"],
@@ -3172,6 +3255,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Cell of Self-Knowledge",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "teaching",
     tags: ["self-knowledge", "humility", "the soul", "mental prayer", "examination", "contemplation"],
@@ -3193,6 +3277,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Bridge",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "teaching",
     tags: ["the soul", "Passion", "contemplation", "virtue", "self-knowledge", "catechetical"],
@@ -3214,6 +3299,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Angelus",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["Incarnation", "Marian", "morning", "noon", "evening"],
@@ -3258,6 +3344,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Tantum Ergo",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "hymn",
     tags: ["eucharist", "benediction", "adoration"],
@@ -3327,6 +3414,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Panis Angelicus",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "hymn",
     tags: ["eucharist", "Corpus Christi"],
@@ -3370,6 +3458,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Anima Christi",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "prayer",
     tags: ["eucharist", "Ignatian", "communion"],
@@ -3430,6 +3519,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "St. Benedict Medal Prayer",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["protection", "Benedictine", "exorcism"],
@@ -3471,6 +3561,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Salve Regina",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "antiphon",
     tags: ["Marian", "Compline", "antiphon"],
@@ -3531,6 +3622,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Alma Redemptoris Mater",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "antiphon",
     tags: ["Marian", "Compline", "antiphon", "Advent"],
@@ -3570,6 +3662,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Ave Regina Caelorum",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "antiphon",
     tags: ["Marian", "Compline", "antiphon", "Lent"],
@@ -3611,6 +3704,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Regina Caeli",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "antiphon",
     tags: ["Marian", "Compline", "antiphon", "Easter"],
@@ -3647,6 +3741,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Our Father",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["foundational", "biblical"],
@@ -3709,6 +3804,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Hail Mary",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "prayer",
     relatedSaints: ["mary"],
@@ -3765,6 +3861,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Glory Be",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["doxology", "foundational"],
@@ -3801,6 +3898,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Apostles' Creed",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["creed", "foundational"],
@@ -3883,6 +3981,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Act of Contrition",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["confession", "penance"],
@@ -3917,6 +4016,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Act of Faith",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["foundational", "catechetical"],
@@ -3948,6 +4048,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Act of Hope",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["foundational", "catechetical"],
@@ -3977,6 +4078,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Act of Charity",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["foundational", "catechetical"],
@@ -4008,6 +4110,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Guardian Angel Prayer",
+    added: "2026-09-01",
     seedVersion: 9,
     kind: "prayer",
     tags: ["guardian angel", "children", "catechetical"],
@@ -4044,6 +4147,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Support Us All the Day Long",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "prayer",
     tags: ["evening", "rest", "a good death", "work"],
@@ -4089,6 +4193,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Watch, O Lord",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "prayer",
     tags: ["night", "intercession", "the sick", "the dying"],
@@ -4128,6 +4233,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Grace Before Meals",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "prayer",
     tags: ["meals", "foundational", "family", "thanksgiving"],
@@ -4169,6 +4275,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Grace After Meals",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "prayer",
     tags: ["meals", "foundational", "family", "thanksgiving", "the faithful departed"],
@@ -4207,6 +4314,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Let Nothing Disturb You",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "prayer",
     tags: ["Carmelite", "surrender", "poem"],
@@ -4249,6 +4357,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Suscipe",
+    added: "2026-09-01",
     seedVersion: 9,
     kind: "prayer",
     tags: ["Ignatian", "self-offering"],
@@ -4289,6 +4398,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer of Abandonment",
+    added: "2026-09-14",
     seedVersion: 9,
     kind: "prayer",
     tags: ["abandonment", "trust", "surrender", "will of God"],
@@ -4350,6 +4460,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "My Lord and My God",
+    added: "2026-09-14",
     seedVersion: 8,
     kind: "prayer",
     tags: ["detachment", "surrender", "short prayer", "Switzerland"],
@@ -4407,6 +4518,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Act of Confidence in God",
+    added: "2026-09-14",
     seedVersion: 7,
     kind: "prayer",
     tags: ["trust", "hope", "confidence", "anxiety"],
@@ -4506,6 +4618,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Offering to Merciful Love",
+    added: "2026-09-14",
     seedVersion: 9,
     kind: "prayer",
     tags: ["self-offering", "merciful love", "holiness", "Carmelite"],
@@ -4639,6 +4752,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "O My God, Trinity Whom I Adore",
+    added: "2026-09-14",
     seedVersion: 9,
     kind: "prayer",
     tags: ["Trinity", "contemplation", "indwelling", "Carmelite"],
@@ -4761,6 +4875,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer of a Soul in Love",
+    added: "2026-09-15",
     seedVersion: 8,
     kind: "prayer",
     tags: ["confidence", "grace", "joy", "Carmelite"],
@@ -4847,6 +4962,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Breathe in Me, O Holy Spirit",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "prayer",
     tags: ["Holy Spirit", "holiness", "short prayer"],
@@ -4885,6 +5001,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Radiating Christ",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "prayer",
     tags: ["witness", "thanksgiving", "Missionaries of Charity", "Eucharist"],
@@ -4960,6 +5077,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "O Deus, Ego Amo Te",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "hymn",
     tags: ["pure love", "the Cross", "contrition"],
@@ -5028,6 +5146,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Day by Day",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "prayer",
     tags: ["thanksgiving", "discipleship", "England", "short prayer"],
@@ -5086,6 +5205,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of Humility",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "litany",
     tags: ["humility", "self-examination"],
@@ -5139,6 +5259,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of Trust",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "litany",
     tags: ["trust", "surrender", "anxiety"],
@@ -5196,6 +5317,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of Chastity",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "litany",
     tags: ["chastity", "purity", "identity"],
@@ -5266,6 +5388,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Peace Prayer of St. Francis",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["peace"],
@@ -5308,6 +5431,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Memorare",
+    added: "2026-09-01",
     seedVersion: 9,
     kind: "prayer",
     tags: ["Marian", "intercession"],
@@ -5348,6 +5472,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer for Good Humour",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "prayer",
     tags: ["joy", "humour", "health", "humility"],
@@ -5407,6 +5532,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer to St. Joseph for a Happy Death",
+    added: "2026-09-15",
     seedVersion: 8,
     kind: "prayer",
     tags: ["a good death", "St. Joseph", "the dying"],
@@ -5444,6 +5570,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Sub Tuum Praesidium",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "antiphon",
     tags: ["Marian", "protection", "ancient", "Theotokos"],
@@ -5496,6 +5623,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Pray, Hope, and Don't Worry",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "His standard reply in spiritual direction, given in letters and in the confessional to people who came to San Giovanni Rotondo in distress.",
@@ -5519,6 +5647,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Same Father Who Cares for You Today",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his letters of spiritual direction, written for lay people — merchants, wives, courtiers — who had asked how to live devoutly without leaving their ordinary state of life.",
@@ -5545,6 +5674,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Jesus, I Trust in You",
+    added: "2026-09-01",
     seedVersion: 8,
     occasion:
       "The words she reported being told to inscribe on the image of Divine Mercy, in a vision at Plock in February 1931.",
@@ -5569,6 +5699,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Chaplet of Divine Mercy",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "prayer",
     tags: ["Divine Mercy", "chaplet", "the dying", "three o'clock"],
@@ -5616,6 +5747,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Seven Penitential Psalms",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "prayer",
     tags: ["penance", "Lent", "psalms", "contrition"],
@@ -5876,6 +6008,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Nine Ways of Prayer of St. Dominic",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "teaching",
     tags: ["prayer", "the body", "Dominican", "postures"],
@@ -5924,6 +6057,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Flying Novena",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "prayer",
     tags: ["Marian", "urgent need", "Memorare", "confidence"],
@@ -5964,6 +6098,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Begin by Descending",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Preached to his congregation at Hippo, where Augustine was working through the ambition of people who wanted spiritual progress the way they wanted advancement.",
@@ -5989,6 +6124,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Humility Is Nothing But Truth",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his conferences to the Daughters of Charity, the community he founded with St. Louise de Marillac to serve the sick poor of Paris.",
@@ -6013,6 +6149,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Most Powerful Weapon",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From the same conferences to the Daughters of Charity — spoken to women doing unglamorous work among the poor, for whom pride was the live temptation.",
@@ -6037,6 +6174,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Suffering Accepted Produces a Good Crop",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written in Story of a Soul, her autobiography, composed under obedience in the last years of a life spent largely in illness.",
@@ -6062,6 +6200,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "No Other Ladder",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From the sayings of a young woman in colonial Lima who imposed severe penances on herself and cared for the sick and the indigenous poor in her family's house. She died at 31.",
@@ -6086,6 +6225,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "To Unleash Love in the Human Person",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his teaching on the Good Samaritan, developed at length in the 1984 apostolic letter Salvifici Doloris on the Christian meaning of suffering.",
@@ -6113,6 +6253,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Don't Let Your Life Be Sterile",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From The Way, a book of short points published in 1939 and written for young lay people in Spain, aimed at ordinary work and study rather than religious life.",
@@ -6139,6 +6280,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Patience Is the Companion of Wisdom",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From Augustine's writing on patience — a short treatise arguing that endurance is not passive but a form of understanding.",
@@ -6162,6 +6304,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "On Terms of Friendship With God",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From her Life, written under obedience for her confessors, describing what mental prayer had actually been for her over some twenty difficult years.",
@@ -6185,6 +6328,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "A Sea of Love",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his catechetical instructions to the people of Ars, a village he found largely indifferent and spent forty years re-converting.",
@@ -6208,6 +6352,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Our Heart Is Restless",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "The opening paragraph of the Confessions, written c. 397-400 — the first thing Augustine says to God after a life spent looking elsewhere.",
@@ -6231,6 +6376,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Love Proves Itself By Deeds",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written in Story of a Soul, as she worked out how a cloistered Carmelite with no great works available to her could love in any way that counted.",
@@ -6257,6 +6403,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Be Not Afraid",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said at the Mass inaugurating his pontificate in St. Peter's Square on 22 October 1978 — the first Polish pope, elected from behind the Iron Curtain, addressing a Church and a continent that had reason to be afraid.",
@@ -6281,6 +6428,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Have Courage",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his letters of spiritual direction to people who wrote to him about temptation and spiritual dryness.",
@@ -6305,6 +6453,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Gloomy Saints",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Teresa's remark, of a piece with her practical distrust of piety that made people miserable — she was founding houses across Spain against considerable opposition at the time.",
@@ -6328,6 +6477,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Not to Become a Saint",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "The closing line of Leon Bloy's 1912 novel The Woman Who Was Poor. Bloy was a layman and a novelist, not a saint — included here because the sentence is one of the sharpest in modern Catholic writing.",
@@ -6352,6 +6502,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Miss No Single Opportunity",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written in Story of a Soul, describing the 'little way' she had worked out for a life in which no large sacrifices were on offer.",
@@ -6377,6 +6528,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Little Duty of Each Moment",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From The Way (1939), addressed to students and young professionals who assumed sanctity required a different life from the one they had.",
@@ -6402,6 +6554,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "I Will Spend My Heaven Doing Good on Earth",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said in the last months of her life, in 1897, to the sisters attending her as she was dying of tuberculosis at 24.",
@@ -6425,6 +6578,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Go and Set the World Aflame",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "His parting words to Francis Xavier, sending him to the Indies in 1541 — a journey from which Xavier never returned.",
@@ -6449,6 +6603,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Set Fire to All Italy",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written in Letter 368 to Stefano Maconi, a young Sienese nobleman she was urging toward monastic life. The famous universal version is a later paraphrase.",
@@ -6473,6 +6628,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Be Who God Meant You to Be",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said by John Paul II at World Youth Day in Rome in 2000, as his own rendering of St. Catherine of Siena's letter to Stefano Maconi. The official text notes it as a paraphrase.",
@@ -6500,6 +6656,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "To Speak Well, Love Well",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his letters and instruction on preaching — de Sales held that persuasion was a function of affection rather than of technique.",
@@ -6523,6 +6680,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Love Until It Hurts",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said in talks and interviews, usually to audiences who had told her they found her work admirable but extreme.",
@@ -6546,6 +6704,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer Is the Oxygen of the Soul",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his spiritual direction; the image recurs across his letters rather than belonging to one of them.",
@@ -6568,6 +6727,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Humbled to Be an Example",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his letters of direction, addressed to people struggling with the humiliations of ordinary life rather than chosen penances.",
@@ -6592,6 +6752,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Nothing Is So Strong as Gentleness",
+    added: "2026-09-02",
     seedVersion: 7,
     kind: "quote",
     tags: ["humility", "charity", "gentleness", "meekness", "strength", "self-knowledge"],
@@ -6613,6 +6774,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "To Know That You Died for Him",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From the Confessions, in the long meditation on what it means to be sought by God before one has begun looking.",
@@ -6636,6 +6798,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Goodwill Compensates for the Lack of Success",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Written to his companions from Somasca, where Jerome Emiliani ran orphanages and hospitals for children left destitute by war, plague and famine in northern Italy. He died in 1537 of a disease caught from the sick he was nursing.",
@@ -6661,6 +6824,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Do Your Best and Leave the Rest",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his letters of spiritual direction, written for lay people prone to scrupulosity about their own efforts.",
@@ -6685,6 +6849,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Work as if Everything Depended on You",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "The wording comes from Gabriel Hevenesi's Scintillae Ignatianae (1705), a collection summarising Ignatian principles some 150 years after Ignatius died. The ordering is often reversed in circulation.",
@@ -6712,6 +6877,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "God Does Not Require Us to Succeed",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "Said to co-workers and volunteers discouraged by the scale of what they were facing in Calcutta.",
@@ -6734,6 +6900,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Every Saint Became a Saint Through Mental Prayer",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his writing on prayer, of a piece with the argument of The Great Means of Salvation that mental prayer is the ordinary channel of grace rather than an advanced option.",
@@ -6760,6 +6927,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Escape from Your Everyday Business",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["contemplation"],
@@ -6787,6 +6955,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Fasting Cleanses the Soul",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From Augustine's preaching on fasting to his congregation at Hippo, most of whom were doing it as a matter of course in Lent.",
@@ -6814,6 +6983,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Late Have I Loved You",
+    added: "2026-09-01",
     seedVersion: 8,
     occasion:
       "From Book X of the Confessions, looking back on the years in which he had searched for God everywhere except where God already was.",
@@ -6842,6 +7012,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer Before the Crucifix",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["Franciscan", "faith", "hope", "charity"],
@@ -6871,6 +7042,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Do Not Extinguish the Spirit of Prayer",
+    added: "2026-09-04",
     seedVersion: 7,
     kind: "quote",
     tags: ["work", "study", "contemplation", "daily", "Franciscan", "mental prayer"],
@@ -6892,6 +7064,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Not So Much Praying as Become Prayer",
+    added: "2026-09-04",
     seedVersion: 7,
     kind: "quote",
     tags: ["contemplation", "mental prayer", "Franciscan", "self-knowledge", "catechetical"],
@@ -6913,6 +7086,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Lenten Prayer of St. Ephrem",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["Lent", "repentance", "humility"],
@@ -6943,6 +7117,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer Before Mass",
+    added: "2026-09-01",
     seedVersion: 10,
     kind: "prayer",
     tags: ["eucharist", "Mass", "preparation"],
@@ -7043,6 +7218,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer After Mass",
+    added: "2026-09-15",
     seedVersion: 9,
     kind: "prayer",
     tags: ["eucharist", "Mass", "thanksgiving"],
@@ -7131,6 +7307,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Adoro Te Devote",
+    added: "2026-09-15",
     seedVersion: 8,
     kind: "hymn",
     tags: ["eucharist", "adoration", "benediction", "faith"],
@@ -7227,6 +7404,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "O Salutaris Hostia",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "hymn",
     tags: ["eucharist", "benediction", "adoration"],
@@ -7283,14 +7461,15 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Prayer Before Study",
-    seedVersion: 9,
+    added: "2026-09-15",
+    seedVersion: 10,
     kind: "prayer",
     tags: ["study", "work", "wisdom", "writing"],
     source: "Creator ineffabilis — ninth of the Piae preces printed with his works; appended by Pius XI to his encyclical Studiorum Ducem (1923); two English translations",
     author: "St. Thomas Aquinas, O.P.",
     authorNote: "the prayer he was \"accustomed to use\", in Pius XI's words; two English translations — choose above the text",
     familiarVersion: "the English printed with Studiorum Ducem",
-    related: ["Ask Grace, Not Learning", "Adoro Te Devote", "The Nine Choirs of Angels"],
+    related: ["Ask Grace, Not Learning", "Adoro Te Devote", "The Nine Choirs of Angels", "Prayer for the Virtues"],
     year: "13th century",
     origin: "Dominican",
     liturgical: "Before study, writing, preaching or teaching",
@@ -7368,7 +7547,88 @@ const SEED_LIBRARY_ENTRIES = [
       "works.\nhttps://catholiclibrary.org/library/view?docId=%2FMedieval-OR%2FThomasAquinasSPiaePreces.00000430.la.html&chunk.id=00000021",
   },
   {
+    title: "Prayer for the Virtues",
+    added: "2026-09-16",
+    seedVersion: 1,
+    kind: "prayer",
+    tags: ["virtue", "humility", "self-examination", "perseverance", "discipline"],
+    source: "O Deus omnipotens — printed among the prayers of St. Thomas Aquinas, Parma edition of 1869",
+    author: "Unknown",
+    authorNote: "handed down with St. Thomas's prayers; Corpus Thomisticum prints it as by an unknown author — see background",
+    occasion:
+      "A prayer for growth in virtue, and an examination of conscience in the form of a petition — it asks for the four cardinal virtues by name, one clause each.",
+    related: ["The Cardinal Virtues", "The Theological Virtues", "Prayer Before Study"],
+    relatedSaints: ["thomas-aquinas"],
+    year: "medieval; printed in 1869",
+    origin: "Dominican tradition",
+    liturgical: "",
+    feastDay: "",
+    originalLanguage: "Latin",
+    latinBody:
+      "O Deus omnipotens, omnia sciens, principio et fine carens, qui es virtutum donator et " +
+      "conservator, digneris me stabilire solido fidei fundamento, et tueri inexpugnabili spei " +
+      "clypeo, atque decorare nuptiali charitatis vestimento;\n\nda mihi per justitiam tibi subesse, " +
+      "per prudentiam insidias Diaboli cavere, per temperantiam medium tenere, per fortitudinem " +
+      "adversa patienter tolerare;\n\nda bonum quod non habeo, ab habentibus humiliter quaerere; " +
+      "malum culpae quod feci, veraciter accusare, malum poenae quod sustineo, aequanimiter ferre: " +
+      "bono proximi non invidere; de bonis tuis semper gratias agere:\n\nhabitu, incessu, et motu " +
+      "disciplinam semper servare; linguam a vaniloquio restringere, pedes a discursu cohibere: " +
+      "oculos a vago visu comprimere; aures a rumoribus separare: vultum humiliter inclinare: mentem " +
+      "in caelestia levare: transitoria contemnere: te tantummodo desiderare; carnem domare: " +
+      "conscientiam expurgare; sanctos honorare: te digne laudare: in bono proficere; et bonos actus " +
+      "fine sancto terminare.\n\nPlanta in me, domine, virtutes, ut circa divina sim devotus, circa " +
+      "humana officia providus, circa usum proprii corporis nulli onerosus. Da mihi, domine, " +
+      "ferventem contritionem, puram confessionem, perfectam satisfactionem.\n\nOrdinare me digneris " +
+      "interius per bonam vitam; ut faciam quod deceat, et quod mihi proficiat ad meritum, et " +
+      "reliquis proximis ad exemplum.\n\nDa mihi ut nunquam ea quae fiunt insipienter appetam: et " +
+      "quae fiunt accidiose fastidiam; ne contingat inchoanda ante tempus appetere, aut inchoata " +
+      "ante consummationem deserere. Amen.",
+    body:
+      "Almighty God, who know all things, who have neither beginning nor end, giver and keeper of " +
+      "every virtue: set me firm on the solid foundation of faith, guard me behind the shield of " +
+      "hope that cannot be broken, and clothe me in the wedding garment of charity;\n\ngrant me by " +
+      "justice to be subject to you, by prudence to beware the snares of the devil, by temperance to " +
+      "keep the middle way, by fortitude to bear hardship patiently;\n\ngrant me to ask humbly, from " +
+      "those who have it, for the good I lack; to accuse myself truthfully of the wrong I have done; " +
+      "to carry evenly the punishment I bear; not to grudge my neighbour his good; and to thank you " +
+      "always for yours:\n\nto keep order always in how I dress, walk and carry myself; to hold my " +
+      "tongue from empty talk, my feet from wandering, my eyes from roving, my ears from gossip; to " +
+      "bow my face humbly and lift my mind to the things of heaven; to think little of what passes " +
+      "and to want you alone; to master my flesh, to cleanse my conscience, to honour your saints, " +
+      "to praise you worthily, to grow in what is good, and to bring good deeds to a holy " +
+      "end.\n\nPlant your virtues in me, Lord, that I may be devout in what belongs to God, prudent " +
+      "in the duties of daily life, and a burden to no one in the use of my own body. Give me, Lord, " +
+      "burning contrition, honest confession, and full amends.\n\nOrder me within by a good life, so " +
+      "that I may do what befits me, what counts for me towards merit, and what serves as an example " +
+      "to those around me.\n\nGrant that I may never want what is done foolishly, nor stomach what is " +
+      "done half-heartedly; that I may neither reach for things before their time, nor abandon what " +
+      "I have begun before it is finished. Amen.",
+    background:
+      "It asks for the four cardinal virtues by name, one clause each, and does it in the order a " +
+      "man meets them: justice, which puts him under God; prudence, which sees the trap coming; " +
+      "temperance, which keeps to the middle; fortitude, which stays standing. The three " +
+      "theological virtues come first, as foundation, shield and wedding garment — faith to stand " +
+      "on, hope to hide behind, charity to be dressed in.\n\nWhat follows is unusually physical for a " +
+      "prayer about virtue. Having asked for the great interior things, it goes straight to the " +
+      "tongue, the feet, the eyes, the ears and the face — as though virtue were mostly a matter of " +
+      "what a man does with his body in an ordinary afternoon. It ends on the two failures of " +
+      "timing: starting before the time and quitting before the end.\n\nWHO WROTE IT\n\nIt is printed " +
+      "among the prayers of St. Thomas Aquinas, and prayer books give it under his name. The " +
+      "critical editions are more careful: Corpus Thomisticum publishes the Latin from the Parma " +
+      "edition of 1869 under Ignotus Auctor — unknown author. Among scholars of his prayers, Paul " +
+      "Murray has treated it as possibly genuine and Martin Grabmann judged it not his. Medieval, " +
+      "then, and handed down in his company, but not certainly his.\n\nOn the cardinal virtues " +
+      "themselves, and why there are exactly four, see the teaching entry.\n\nTHE TRANSLATION\n\nThe " +
+      "English here is made for this library from the Latin. The versions circulating online are " +
+      "recent and under copyright, so none is reproduced.\n\nWHERE TO READ MORE\n\n**Corpus " +
+      "Thomisticum — O Deus omnipotens** — the Latin, from the Parma edition of " +
+      "1869.\nhttps://www.corpusthomisticum.org/x02.html\n\n**The Catechism, 1805-1809** — the four " +
+      "cardinal virtues, each defined in a " +
+      "sentence.\nhttps://www.vatican.va/content/catechism/en/part_three/section_one/chapter_one/article_7/i_the_human_virtues.html",
+  },
+  {
     title: "The Greatest of All Romances",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "quote",
     tags: ["love", "desire", "vocation", "contemplation"],
@@ -7390,6 +7650,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "There Is Nothing So Great as the Eucharist",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "quote",
     tags: ["eucharist", "Mass", "adoration", "charity", "catechetical"],
@@ -7411,6 +7672,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "He Would Die of Love",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "quote",
     tags: ["Mass", "eucharist", "contemplation", "priesthood", "catechetical"],
@@ -7432,6 +7694,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Measure of Love",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From On Loving God, written for Haimeric, chancellor of the Roman Church, who had asked Bernard why and how God should be loved.",
@@ -7462,6 +7725,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "A Visit of the Holy Spirit",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his catechetical instructions at Ars, teaching villagers to recognise grace in ordinary interior movements rather than in extraordinary events.",
@@ -7487,6 +7751,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Intrepid Eagle",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his catechetical instructions at Ars — an image drawn, like most of his, from birds and animals his farming parishioners saw every day.",
@@ -7510,6 +7775,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The First Moment of the Day",
+    added: "2026-09-01",
     seedVersion: 7,
     occasion:
       "From his instructions at Ars on how the day should begin, given to people whose work started before dawn.",
@@ -7536,6 +7802,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Night Prayer",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["evening", "protection"],
@@ -7566,6 +7833,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Tu scendi dalle stelle (You Come Down from the Stars)",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "hymn",
     tags: ["Christmas", "Nativity"],
@@ -7609,6 +7877,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Christ in the Beggar",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "quote",
     tags: ["charity", "eucharist", "justice", "the poor"],
@@ -7639,6 +7908,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of St. Joseph",
+    added: "2026-09-01",
     seedVersion: 9,
     kind: "litany",
     tags: ["St. Joseph", "vocation", "work", "protection", "discernment"],
@@ -7725,6 +7995,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of the Undiscovered Spouse",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "litany",
     tags: ["spouse", "discernment", "singleness", "marriage", "waiting"],
@@ -7814,6 +8085,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "You — What Have You Done?",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "quote",
     tags: ["chastity", "purity", "mortification", "examination"],
@@ -7850,6 +8122,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "O Mad Lover",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "quote",
     tags: ["love", "Dominican", "Trinity"],
@@ -7884,6 +8157,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Miracle Prayer",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["healing", "repentance", "surrender", "conversion"],
@@ -7928,6 +8202,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "I Cannot, I Must Not, I Will Not",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "quote",
     tags: ["conscience", "courage", "martyrdom", "obedience"],
@@ -7962,6 +8237,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of the Most Precious Blood",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "litany",
     tags: ["Precious Blood", "redemption", "eucharist", "approved"],
@@ -8039,6 +8315,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of Loreto",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "litany",
     tags: ["Marian", "approved", "intercession"],
@@ -8151,6 +8428,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of the Saints",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "litany",
     tags: ["approved", "intercession", "communion of saints"],
@@ -8307,6 +8585,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of the Holy Name of Jesus",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "litany",
     tags: ["Holy Name", "approved", "Jesus"],
@@ -8421,6 +8700,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Rosary",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "prayer",
     tags: ["Marian", "Rosary", "meditation", "daily"],
@@ -8464,6 +8744,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Stations of the Cross",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "prayer",
     tags: ["Passion", "Lent", "meditation", "Way of the Cross"],
@@ -8485,6 +8766,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Come, Holy Spirit",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "prayer",
     tags: ["Holy Spirit", "invocation", "before work"],
@@ -8507,6 +8789,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Veni Creator Spiritus",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "hymn",
     tags: ["Holy Spirit", "Pentecost", "ordination"],
@@ -8529,6 +8812,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Seven Last Words",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["Passion", "Good Friday", "meditation"],
@@ -8551,6 +8835,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Five Wounds",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["Passion", "devotion", "reparation"],
@@ -8572,6 +8857,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Four Last Things",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["death", "judgment", "heaven", "hell", "examination"],
@@ -8592,6 +8878,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Divine Praises",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "prayer",
     tags: ["reparation", "Benediction", "eucharist"],
@@ -8612,6 +8899,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Golden Arrow",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "prayer",
     tags: ["reparation", "Passion", "holy name", "blasphemy", "Carmelite", "Holy Face"],
@@ -8670,6 +8958,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Seven Sorrows of Mary",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "teaching",
     tags: ["Marian", "Passion", "sorrow"],
@@ -8691,6 +8980,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Litany of the Sacred Heart",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "litany",
     tags: ["Sacred Heart", "approved", "reparation"],
@@ -8711,6 +9001,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The O Antiphons",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "antiphon",
     tags: ["Advent", "Messianic titles", "liturgy"],
@@ -8733,6 +9024,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Te Deum",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "hymn",
     tags: ["thanksgiving", "praise", "liturgy"],
@@ -8756,6 +9048,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Magnificat",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "hymn",
     tags: ["canticle", "Gospel", "Vespers", "Marian"],
@@ -8832,6 +9125,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Benedictus",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "hymn",
     tags: ["canticle", "Gospel", "Lauds", "morning"],
@@ -8915,6 +9209,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Nunc Dimittis",
+    added: "2026-09-15",
     seedVersion: 8,
     kind: "hymn",
     tags: ["canticle", "Gospel", "Compline", "night"],
@@ -8970,6 +9265,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Stabat Mater",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "hymn",
     tags: ["Marian", "Passion", "sorrow", "Lent"],
@@ -8993,6 +9289,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Seven Gifts of the Holy Spirit",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["Holy Spirit", "virtue", "catechetical"],
@@ -9014,6 +9311,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Twelve Fruits of the Holy Spirit",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["Holy Spirit", "virtue", "catechetical", "examination"],
@@ -9035,6 +9333,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Three Powers of the Soul",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["the soul", "self-knowledge", "meditation", "catechetical", "Patristic"],
@@ -9057,6 +9356,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Theological Virtues",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["virtue", "the soul", "faith", "hope", "charity", "catechetical", "examination"],
@@ -9079,13 +9379,14 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Cardinal Virtues",
-    seedVersion: 8,
+    added: "2026-09-01",
+    seedVersion: 9,
     kind: "teaching",
     tags: ["virtue", "the soul", "examination", "catechetical", "self-knowledge"],
     source: "CCC 1805-1809; St. Thomas, Summa I-II q. 61; Wisdom 8:7",
     author: "The Catechism, with St. Thomas Aquinas",
     authorNote: "the four are named together in Wisdom 8:7 and were common property of the philosophers before that",
-    related: ["The Theological Virtues", "The Three Powers of the Soul", "The Eleven Passions", "The Seven Capital Sins", "The Beatitudes"],
+    related: ["Prayer for the Virtues", "The Theological Virtues", "The Three Powers of the Soul", "The Eleven Passions", "The Seven Capital Sins", "The Beatitudes"],
     relatedSaints: ["thomas-aquinas", "ambrose", "augustine"],
     year: "Wisdom 8:7; the scholastic treatment 13th century",
     origin: "Biblical",
@@ -9118,6 +9419,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Nine Choirs of Angels",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "teaching",
     tags: ["angels", "creation", "hierarchy", "catechetical"],
@@ -9173,6 +9475,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Seven Sacraments",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "teaching",
     tags: ["sacraments", "grace", "catechetical", "the Church"],
@@ -9225,6 +9528,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Precepts of the Church",
+    added: "2026-09-15",
     seedVersion: 7,
     kind: "teaching",
     tags: ["the Church", "obligation", "examination", "catechetical"],
@@ -9274,6 +9578,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Seven Capital Sins",
+    added: "2026-09-01",
     seedVersion: 8,
     kind: "teaching",
     tags: ["examination", "self-examination", "conscience", "self-knowledge", "temptation", "humility", "virtue", "the soul"],
@@ -9341,6 +9646,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Eleven Passions",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["the soul", "self-knowledge", "temptation", "examination", "love", "virtue", "peace"],
@@ -9362,6 +9668,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Four Senses of Scripture",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["Scripture", "reading", "contemplation", "catechetical", "study"],
@@ -9383,6 +9690,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Ladder of Monks",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["reading", "prayer", "contemplation", "meditation", "study", "the soul"],
@@ -9404,6 +9712,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Reading Puts Food in the Mouth",
+    added: "2026-09-03",
     seedVersion: 7,
     occasion:
       "From the letter that gave lectio divina its four steps. Guigo has just defined the four rungs; this is the image he reaches for to explain why they are one process and not four options.",
@@ -9463,6 +9772,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "One Drop of the Heavenly Joy",
+    added: "2026-09-03",
     seedVersion: 7,
     kind: "prayer",
     tags: ["contemplation", "humility", "desire", "reading", "Carthusian"],
@@ -9521,6 +9831,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Three Ways",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["the soul", "contemplation", "virtue", "self-knowledge", "examination"],
@@ -9542,6 +9853,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Dark Night",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["suffering", "contemplation", "the soul", "trust", "self-knowledge", "prayer"],
@@ -9563,6 +9875,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Consolation and Desolation",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["discernment", "the soul", "trust", "temptation", "self-knowledge", "prayer"],
@@ -9584,6 +9897,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Examen",
+    added: "2026-09-02",
     seedVersion: 7,
     kind: "teaching",
     tags: ["examination", "self-examination", "conscience", "self-knowledge", "Ignatian", "the soul"],
@@ -9605,6 +9919,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Seven Petitions",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "teaching",
     tags: ["prayer", "foundational", "catechetical", "the soul", "virtue"],
@@ -9626,6 +9941,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Three Kinds of Humility",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "teaching",
     tags: ["humility", "vocation", "discernment", "self-knowledge", "Ignatian", "virtue"],
@@ -9647,6 +9963,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Two Standards",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "teaching",
     tags: ["humility", "discernment", "temptation", "self-knowledge", "Ignatian", "examination"],
@@ -9668,6 +9985,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "Acedia, the Noonday Devil",
+    added: "2026-09-08",
     seedVersion: 7,
     kind: "teaching",
     tags: ["acedia", "sloth", "perseverance", "daily", "self-knowledge", "examination", "desert fathers"],
@@ -9689,6 +10007,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "How the Gifts, Fruits, Beatitudes, Virtues and Powers of the Soul Fit Together",
+    added: "2026-09-02",
     seedVersion: 7,
     kind: "teaching",
     tags: ["catechetical", "the soul", "virtue", "study", "self-knowledge"],
@@ -9710,6 +10029,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Three Stages of Temptation",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["temptation", "self-knowledge", "the soul", "chastity", "examination", "conscience"],
@@ -9731,6 +10051,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Two Portions of the Soul",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["the soul", "self-knowledge", "temptation", "suffering", "conscience"],
@@ -9752,6 +10073,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Works of Mercy",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["charity", "justice", "the poor", "examination"],
@@ -9773,6 +10095,7 @@ const SEED_LIBRARY_ENTRIES = [
   },
   {
     title: "The Beatitudes",
+    added: "2026-09-01",
     seedVersion: 7,
     kind: "teaching",
     tags: ["Sermon on the Mount", "biblical", "holiness"],
@@ -10139,6 +10462,29 @@ function allAuthors(entries) {
   return Array.from(counts.entries()).sort((a, b) => a[0].localeCompare(b[0]));
 }
 
+// When an entry entered the library, taken from the seed definitions rather
+// than from storage: `modifiedTime` is only when THIS device last wrote the
+// entry, so every seeded entry shares the timestamp of the first load, and
+// re-seeding a correction (a seedVersion bump) would shove an old prayer to
+// the top of "Recently added". An entry Mario writes himself has no seed, and
+// falls back to when it was saved.
+const SEED_ADDED_DATES = new Map(
+  SEED_LIBRARY_ENTRIES.filter((e) => e.added).map((e) => [e.title, e.added])
+);
+
+function entryAddedDate(entry) {
+  return SEED_ADDED_DATES.get(entry.title) || (entry.modifiedTime || "").slice(0, 10);
+}
+
+const ADDED_MONTHS = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"];
+
+function formatAddedDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+  if (!m) return "";
+  return `${Number(m[3])} ${ADDED_MONTHS[Number(m[2]) - 1]} ${m[1]}`;
+}
+
 function sortLibraryEntries(entries) {
   const sorted = entries.slice();
   if (state.sortBy === "title") {
@@ -10146,7 +10492,11 @@ function sortLibraryEntries(entries) {
   } else if (state.sortBy === "kind") {
     sorted.sort((a, b) => (a.kind === b.kind ? a.title.localeCompare(b.title) : a.kind.localeCompare(b.kind)));
   } else {
-    sorted.sort((a, b) => (a.modifiedTime < b.modifiedTime ? 1 : -1));
+    sorted.sort((a, b) => {
+      const da = entryAddedDate(a), db = entryAddedDate(b);
+      if (da !== db) return da < db ? 1 : -1;
+      return a.modifiedTime < b.modifiedTime ? 1 : -1;
+    });
   }
   return sorted;
 }
@@ -10660,6 +11010,8 @@ async function openLibraryReader(id) {
     : "";
   if (entry.source) metaParts.push(escapeHtml(entry.source));
   if (entry.tags.length) metaParts.push(entry.tags.map((t) => "#" + escapeHtml(t)).join(" "));
+  const added = formatAddedDate(entryAddedDate(entry));
+  if (added) metaParts.push(`<span class="reader-added">Added ${escapeHtml(added)}</span>`);
   $("#reader-meta").innerHTML = familiarHtml + metaParts.join('<span class="dot">·</span>');
 
   $("#reader-text").textContent = "Loading…";
