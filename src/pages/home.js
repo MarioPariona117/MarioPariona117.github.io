@@ -2,7 +2,7 @@ import React from "react";
 import { Typography, Box, Button, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import { projectItems } from "../components/items/projectItems";
-import backgroundImage from "../assets/background.avif";
+import backgroundImage from "../assets/hero.jpg";
 import ProjectTab from "../components/ProjectTab";
 import { palette } from "../styles/theme";
 import "../styles/App1.css";
@@ -31,9 +31,9 @@ const Home = () => {
           px: { xs: 3, sm: 6 },
           py: { xs: 5, sm: 7 },
           border: `1px solid ${palette.hairline}`,
-          backgroundImage: `linear-gradient(180deg, rgba(255,250,240,0.90), rgba(239,227,205,0.94)), url(${backgroundImage})`,
+          backgroundImage: `linear-gradient(180deg, rgba(255,250,240,0.55), rgba(239,227,205,0.70)), url(${backgroundImage})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundPosition: 'center 40%',
           textAlign: 'center',
         }}
       >
@@ -68,8 +68,9 @@ const Home = () => {
             mb: 3.5,
           }}
         >
-          I work on machine-learning systems. At the moment that means a computer vision
-          system and the data pipeline behind it, at a company in Cambridge. Before that
+          I build software — mostly performance-sensitive systems and machine learning.
+          At the moment that means a computer vision system and the data pipeline behind
+          it, at a company in Cambridge. Before that
           I read Computer Science at Cambridge, where my dissertation on reinforcement
           learning for Blokus was supervised by Dr Petar Veličković and awarded a First.
         </Typography>
