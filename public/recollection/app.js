@@ -2095,10 +2095,11 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "Idleness Is the Enemy of the Soul",
     added: "2026-09-01",
-    seedVersion: 7,
+    seedVersion: 8,
+    related: ["Whatever Good Work You Begin", "Prayer to St. Joseph for Work", "Acedia, the Noonday Devil"],
     occasion:
       "The opening words of chapter 48 of the Rule, c. 530, introducing the hours of daily manual labour — Benedict's answer to the question of how a monk's day should be shaped.",
-    kind: "quote", tags: ["work", "Benedictine", "daily", "perseverance"],
+    kind: "quote", tags: ["work", "Benedictine", "daily", "perseverance", "procrastination"],
     source: "Rule of St. Benedict, ch. 48", author: "St. Benedict of Nursia",
     year: "c. 530", origin: "Benedictine", liturgical: "", feastDay: "11 July", favorite: false,
     body: "Idleness is the enemy of the soul.",
@@ -7087,9 +7088,10 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "Lenten Prayer of St. Ephrem",
     added: "2026-09-01",
-    seedVersion: 7,
+    seedVersion: 8,
+    related: ["Deus in Adiutorium", "Acedia, the Noonday Devil"],
     kind: "prayer",
-    tags: ["Lent", "repentance", "humility"],
+    tags: ["Lent", "repentance", "humility", "procrastination"],
     source: "Byzantine Rite Lenten liturgy — oldest surviving Greek texts in 9th–10th century euchologia (service books)",
     author: "St. Ephrem the Syrian",
     authorNote: "attributed; the earliest surviving liturgical text postdates his life by 500+ years",
@@ -7462,14 +7464,14 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "Prayer Before Study",
     added: "2026-09-15",
-    seedVersion: 10,
+    seedVersion: 11,
     kind: "prayer",
     tags: ["study", "work", "wisdom", "writing"],
     source: "Creator ineffabilis — ninth of the Piae preces printed with his works; appended by Pius XI to his encyclical Studiorum Ducem (1923); two English translations",
     author: "St. Thomas Aquinas, O.P.",
     authorNote: "the prayer he was \"accustomed to use\", in Pius XI's words; two English translations — choose above the text",
     familiarVersion: "the English printed with Studiorum Ducem",
-    related: ["Ask Grace, Not Learning", "Adoro Te Devote", "The Nine Choirs of Angels", "Prayer for the Virtues"],
+    related: ["Ask Grace, Not Learning", "Adoro Te Devote", "The Nine Choirs of Angels", "Prayer for the Virtues", "Actiones Nostras"],
     year: "13th century",
     origin: "Dominican",
     liturgical: "Before study, writing, preaching or teaching",
@@ -7625,6 +7627,323 @@ const SEED_LIBRARY_ENTRIES = [
       "1869.\nhttps://www.corpusthomisticum.org/x02.html\n\n**The Catechism, 1805-1809** — the four " +
       "cardinal virtues, each defined in a " +
       "sentence.\nhttps://www.vatican.va/content/catechism/en/part_three/section_one/chapter_one/article_7/i_the_human_virtues.html",
+  },
+  {
+    title: "Actiones Nostras",
+    added: "2026-09-18",
+    seedVersion: 1,
+    kind: "prayer",
+    tags: ["work", "study", "daily", "perseverance", "procrastination"],
+    source: "Collect of Thursday after Ash Wednesday, Roman Missal; in the Raccolta from the 12th edition (1849)",
+    author: "Traditional / Anonymous",
+    occasion: "Said before beginning a piece of work — the classic prayer for the moment of starting.",
+    related: ["Dirigere et Sanctificare", "Deus in Adiutorium", "Prayer to St. Joseph for Work", "Whatever Good Work You Begin", "Prayer Before Study"],
+    relatedSaints: ["benedict"],
+    familiarVersion: "the Liturgy of the Hours' English (ICEL)",
+    year: "medieval; in the Missal by the Middle Ages",
+    origin: "Roman Missal",
+    liturgical: "Collect, Thursday after Ash Wednesday; said at the little hours and before work",
+    feastDay: "",
+    originalLanguage: "Latin",
+    latinBody:
+      "Actiones nostras, quaesumus Domine, aspirando praeveni et adiuvando prosequere: ut cuncta " +
+      "nostra oratio et operatio a te semper incipiat, et per te coepta finiatur. Per Christum " +
+      "Dominum nostrum. Amen.",
+    body:
+      "Direct, we beseech thee, O Lord, all our actions by thy holy inspirations, and carry them on " +
+      "by thy gracious assistance, that every prayer and work of ours may begin always from thee, " +
+      "and by thee be happily ended. Through Christ our Lord. Amen.",
+    background:
+      "The whole prayer turns on two verbs. Praeveni — go before me, get there first; and prosequere " +
+      "— follow after, keep going. Grace ahead of the work and grace alongside it. What it asks for " +
+      "is not help with the task but a beginning that comes from God and an ending that is actually " +
+      "reached: coepta finiatur, that what was begun be finished.\n\nThat makes it the prayer for " +
+      "the moment before starting, which is the moment at which most work is lost. Note that it says " +
+      "oratio et operatio, prayer and work, in one breath and under one grace — the same pairing the " +
+      "monastic tradition lives on.\n\nWHERE IT COMES FROM\n\nIt is the Collect of Thursday after Ash " +
+      "Wednesday in the Roman Missal, and it is used at the little hours of the day. It enters the " +
+      "Raccolta at the 12th edition (1849) as a prayer to be said before any action, and it survives " +
+      "in the Liturgy of the Hours.\n\nTHE TRANSLATION\n\nThe English here is the old Raccolta " +
+      "rendering, which is in the public domain. The version most people now meet is the Liturgy of " +
+      "the Hours' English, which is under copyright and is not reproduced.\n\nWHERE TO READ " +
+      "MORE\n\n**Catholic Culture — Actiones Nostras** — the Latin and English, with its place in the " +
+      "Missal and the Hours.\nhttps://www.catholicculture.org/culture/liturgicalyear/prayers/view.cfm?id=1443",
+  },
+  {
+    title: "Dirigere et Sanctificare",
+    added: "2026-09-18",
+    seedVersion: 1,
+    kind: "prayer",
+    tags: ["morning", "daily", "work", "perseverance", "procrastination"],
+    source: "The prayer of the hour of Prime, Roman Breviary",
+    author: "Traditional / Anonymous",
+    occasion: "At the start of the day, before the day's work — Prime was the hour the monks said it and then went out to work.",
+    related: ["Actiones Nostras", "Deus in Adiutorium", "Morning Offering", "Prayer to St. Joseph for Work"],
+    relatedSaints: ["benedict"],
+    year: "in the Roman Breviary; Prime is in the Rule, c. 530",
+    origin: "Roman Breviary — the hour of Prime",
+    liturgical: "Prime",
+    feastDay: "",
+    originalLanguage: "Latin",
+    latinBody:
+      "Dirigere et sanctificare, regere et gubernare dignare, Domine Deus, Rex caeli et terrae, " +
+      "hodie corda et corpora nostra, sensus, sermones et actus nostros in lege tua, et in operibus " +
+      "mandatorum tuorum: ut hic et in aeternum, te auxiliante, salvi et liberi esse mereamur, " +
+      "Salvator mundi: Qui vivis et regnas in saecula saeculorum. Amen.",
+    body:
+      "Deign to direct and sanctify, to rule and govern this day our hearts and our bodies, Lord " +
+      "God, King of heaven and earth, our senses, our words and our acts, in your law and in the " +
+      "works of your commandments: that here and for ever, by your help, we may deserve to be saved " +
+      "and set free, O Saviour of the world, who live and reign for ever and ever. Amen.",
+    background:
+      "Prime was the hour said at the start of the working day, and this is its prayer — which is " +
+      "why it asks for the ordinary furniture of a day rather than for great things: hearts and " +
+      "bodies, senses, words, acts. Four verbs pile up at the front, direct and sanctify, rule and " +
+      "govern, and then the word that fixes it in place: hodie. Today. Not the general run of " +
+      "days.\n\nIt asks to be saved and set free in the same clause — salvi et liberi. The freedom in " +
+      "question is not freedom from work but freedom in it.\n\nThe Rule puts Prime at the beginning of " +
+      "the work; the hours after it are the ones acedia attacks, which is why this prayer and the " +
+      "Deus in adiutorium belong together.\n\nTHE TRANSLATION\n\nMade here from the " +
+      "Latin.\n\nWHERE TO READ MORE\n\n**Prime (liturgy)** — the shape of the hour and where this " +
+      "prayer sits in it.\nhttps://en.wikipedia.org/wiki/Prime_(liturgy)",
+  },
+  {
+    title: "Deus in Adiutorium",
+    added: "2026-09-18",
+    seedVersion: 1,
+    kind: "prayer",
+    tags: ["acedia", "perseverance", "daily", "desert fathers", "work", "procrastination"],
+    source: "Psalm 69:2 (Ps 70:1 in the Hebrew numbering); the opening versicle of every hour of the Divine Office",
+    author: "Traditional / Anonymous",
+    authorNote: "prescribed as a formula for continual prayer by St. John Cassian, Conferences X",
+    occasion: "The prayer for the moment you stall — short enough to say at the desk, and given by the desert fathers for exactly that use.",
+    related: ["Acedia, the Noonday Devil", "Actiones Nostras", "Lenten Prayer of St. Ephrem", "Suscipe Me, Domine", "Dirigere et Sanctificare"],
+    relatedSaints: ["benedict"],
+    year: "the psalm verse; as a formula, 4th-5th century",
+    origin: "Desert fathers; the Divine Office",
+    liturgical: "The opening of every hour of the Divine Office",
+    feastDay: "",
+    originalLanguage: "Latin",
+    latinBody:
+      "Deus, in adiutorium meum intende.\nDomine, ad adiuvandum me festina.\n\nGloria Patri, et " +
+      "Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula " +
+      "saeculorum. Amen.",
+    body:
+      "O God, come to my assistance.\nO Lord, make haste to help me.\n\nGlory be to the Father, and " +
+      "to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, " +
+      "world without end. Amen.",
+    background:
+      "Six words, and the most-said verse in the Church: St. Benedict puts it at the opening of " +
+      "every hour, so a monk says it a dozen times a day, every day, for life.\n\nIts origin is older " +
+      "and more pointed than the Office. In the tenth Conference, Abba Isaac hands this single verse " +
+      "to the monk as the formula for continual prayer — to be said in every condition, in " +
+      "temptation, in weariness, in joy, until it runs underneath everything else. Cassian says it " +
+      "does not allow the one troubled by acedia and anxiety of mind to despair of a remedy, which " +
+      "is the desert's own diagnosis of the state you are in when you cannot start.\n\nWHY IT WORKS " +
+      "AS A SHORT PRAYER\n\nIt is a cry for help and nothing else. It does not require composure, a " +
+      "posture, or five minutes you do not have; it can be said in the second of noticing that you " +
+      "have stopped. That is not a devotional concession — it is the form the tradition chose on " +
+      "purpose, because the moment of attack is not the moment for a long prayer.\n\nWHERE TO READ " +
+      "MORE\n\n**Cassian, Conferences X** — Abba Isaac on this verse, at " +
+      "length.\nhttps://www.newadvent.org/fathers/350810.htm\n\n**Catholic Encyclopedia — Deus in " +
+      "adiutorium meum intende** — its history in the Office.\nhttps://www.newadvent.org/cathen/04761a.htm",
+  },
+  {
+    title: "Suscipe Me, Domine",
+    added: "2026-09-18",
+    seedVersion: 1,
+    kind: "prayer",
+    tags: ["perseverance", "Benedictine", "vocation", "hope", "surrender", "procrastination"],
+    source: "Psalm 118:116; prescribed at monastic profession in the Rule of St. Benedict, ch. 58",
+    author: "Traditional / Anonymous",
+    occasion: "For staying with something already begun — sung by a monk at the moment he binds himself for life, and sung over him again at his burial.",
+    related: ["Deus in Adiutorium", "Whatever Good Work You Begin", "Idleness Is the Enemy of the Soul", "Actiones Nostras"],
+    relatedSaints: ["benedict"],
+    year: "the psalm verse; in the Rule, c. 530",
+    origin: "Benedictine",
+    liturgical: "Monastic profession, and the burial of a monk",
+    feastDay: "11 July",
+    originalLanguage: "Latin",
+    latinBody:
+      "Suscipe me, Domine, secundum eloquium tuum, et vivam: et ne confundas me ab exspectatione " +
+      "mea.\n\nGloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et " +
+      "semper, et in saecula saeculorum. Amen.",
+    body:
+      "Receive me, Lord, according to your word, and I shall live; and do not disappoint me in my " +
+      "hope.\n\nGlory be to the Father, and to the Son, and to the Holy Spirit. As it was in the " +
+      "beginning, is now, and ever shall be, world without end. Amen.",
+    background:
+      "Chapter 58 of the Rule sets the scene exactly. The novice writes his petition in his own " +
+      "hand, lays it on the altar, and begins this verse himself; the whole community takes it up " +
+      "and sings it back three times with the Gloria; then he prostrates himself at the feet of each " +
+      "brother and asks their prayers. From that day he is counted one of the " +
+      "community.\n\nThe same verse is sung over him at his burial. The vowed life opens and closes " +
+      "on one sentence, and the sentence is not a promise he makes but a request that he be " +
+      "held.\n\nWHY IT IS A PRAYER FOR PERSEVERANCE\n\nExspectatio is what a man is waiting for, and " +
+      "what he has staked on the waiting. Do not let me be shamed in it — do not let this turn out " +
+      "to have been a mistake. It is the prayer for the point where something long has stopped being " +
+      "exciting and has not yet been finished, which is the point at which things get " +
+      "abandoned.\n\nTHE TRANSLATION\n\nMade here from the Latin of the Rule. The Douay renders the " +
+      "psalm verse: \"Uphold me according to thy word, and I shall live: and let me not be " +
+      "confounded in my expectation.\"\n\nWHERE TO READ MORE\n\n**The Rule, chapter 58** — the rite of " +
+      "profession, in full.\nhttps://archive.osb.org/rb/text/toc.html\n\n**The Rule in Latin** — " +
+      "Prologue and chapter 58.\nhttps://www.thelatinlibrary.com/benedict.html",
+  },
+  {
+    title: "Prayer to St. Joseph for Work",
+    added: "2026-09-18",
+    seedVersion: 1,
+    kind: "prayer",
+    tags: ["work", "St. Joseph", "perseverance", "daily", "self-examination", "procrastination"],
+    source: "Composed by Pope St. Pius X",
+    author: "Pope St. Pius X",
+    occasion: "Before a day's work, or before a task being put off — it names the specific ways work goes wrong rather than asking for help in general.",
+    related: ["Litany of St. Joseph", "Prayer to St. Joseph for a Happy Death", "Actiones Nostras", "Idleness Is the Enemy of the Soul", "No One Promised You Tomorrow"],
+    relatedSaints: ["joseph"],
+    year: "early 20th century",
+    origin: "Papal — Pius X",
+    liturgical: "",
+    feastDay: "1 May (St. Joseph the Worker); 19 March",
+    originalLanguage: "",
+    body:
+      "O glorious St. Joseph, model of all who are devoted to labour, obtain for me the grace to " +
+      "work in a spirit of penance, for the expiation of my many sins; to work conscientiously, " +
+      "putting the call of duty above my natural inclinations; to work with gratitude and joy, " +
+      "counting it an honour to employ and develop by my labour the gifts I have received from God; " +
+      "to work with order, peace, moderation and patience, never shrinking from it through weariness " +
+      "or difficulty; to work above all with purity of intention, and with detachment from self, " +
+      "keeping always before my eyes death and the account I must render of time lost, of talents " +
+      "wasted, of good left undone, and of empty complacency in success, so fatal to the work of " +
+      "God.\n\nAll for Jesus, all for Mary, all after your example, O Patriarch Joseph. Amen.",
+    background:
+      "Most prayers about work ask for help with the work. This one asks for help with the worker, " +
+      "and it is unusually specific about how a man goes wrong: he follows his inclinations instead " +
+      "of his duty, he gives up at the point of weariness or difficulty, and he works for the look " +
+      "of the thing. Each of those is named and asked against in turn.\n\nThe hardest clause is the " +
+      "last. The account to be rendered is not only of sins committed but of time lost, talents " +
+      "wasted, and good left undone — which is exactly the shape of the failure that procrastination " +
+      "produces, and the reason it is a matter for confession and not only for " +
+      "temperament.\n\nJoseph is the model because the Gospels record no word of his and a great deal " +
+      "of his obedience: he is a man known entirely by what he did when told.\n\nWHERE TO READ " +
+      "MORE\n\n**Catholic Culture — Prayer to St. Joseph for working people**, with its attribution " +
+      "to Pius X.\nhttps://www.catholicculture.org/culture/liturgicalyear/prayers/view.cfm?id=226",
+  },
+  {
+    title: "Whatever Good Work You Begin",
+    added: "2026-09-18",
+    seedVersion: 1,
+    kind: "quote",
+    tags: ["work", "Benedictine", "perseverance", "daily", "procrastination"],
+    source: "Rule of St. Benedict, Prologue 4",
+    author: "St. Benedict of Nursia",
+    occasion: "The fourth sentence of the Rule — what Benedict says to do before anything else begins.",
+    related: ["Idleness Is the Enemy of the Soul", "Actiones Nostras", "Suscipe Me, Domine", "Deus in Adiutorium"],
+    relatedSaints: ["benedict"],
+    year: "c. 530",
+    origin: "Benedictine",
+    liturgical: "",
+    feastDay: "11 July",
+    originalLanguage: "Latin",
+    latinBody:
+      "In primis, ut quidquid agendum inchoas bonum, ab eo perfici instantissima oratione deposcas.",
+    body:
+      "First of all, whatever good work you begin, beg him with most insistent prayer to bring it to completion.",
+    background:
+      "It is the fourth thing Benedict says in the whole Rule, before obedience, before the " +
+      "timetable, before anything about monks — and what it governs is not the doing but the " +
+      "beginning.\n\nNotice what is asked for. Not help, not success: perfici, that it be finished. " +
+      "The assumption behind the sentence is that the natural end of a good work begun is that it " +
+      "quietly stops, and that this is worth praying against every single time. Instantissima " +
+      "oratione — with the most insistent prayer; the superlative is Benedict's.\n\nThis is the seed " +
+      "of Actiones nostras, which asks the same thing in liturgical form: that what is begun in God " +
+      "be finished by him.",
+  },
+  {
+    title: "No One Promised You Tomorrow",
+    added: "2026-09-18",
+    seedVersion: 2,
+    kind: "quote",
+    tags: ["repentance", "perseverance", "acedia", "death", "conversion", "procrastination"],
+    source: "St. Augustine, Enarratio in Psalmum 101 (English Psalm 102), sermon I, 10",
+    author: "St. Augustine of Hippo",
+    occasion: "Against putting off what is already known to be right — the delay that always has a reason.",
+    related: ["The Raven's Voice", "Acedia, the Noonday Devil", "Late Have I Loved You", "Prayer to St. Joseph for Work", "The Four Last Things"],
+    relatedSaints: ["augustine"],
+    year: "c. 395-420",
+    origin: "Patristic",
+    liturgical: "",
+    feastDay: "28 August",
+    originalLanguage: "Latin",
+    latinBody:
+      "Ergo iam bene vive. Cras, inquit, bene vivam. Indulgentiam tibi Deus promisit; crastinum diem tibi nemo promisit.",
+    body:
+      "Now therefore live well. \"Tomorrow,\" he replies, \"I will live well.\" God has promised the pardon; no one promised you tomorrow.",
+    background:
+      "Augustine is preaching on the psalm, and the argument just before this is worth having whole. " +
+      "God promised forgiveness so that no one would be ruined by despair, and left the day of death " +
+      "uncertain so that no one would be ruined by presumption. The two together, he says, are fixed " +
+      "\"with the utmost providence, both as a refuge for the returning, and a terror to the " +
+      "loitering.\"\n\nThen the exchange above, which needs no commentary. The delay is not a denial " +
+      "of anything; it concedes the whole case and moves it one day. That is the form " +
+      "procrastination actually takes, in work as in conversion — not I will not, but not " +
+      "now.\n\nThe pun is stronger in Latin, where cras is tomorrow, and Augustine hears it as the cry " +
+      "of a bird: preaching on the next psalm he says the delayers have the raven\u2019s voice in them, " +
+      "cras, cras. See The Raven\u2019s Voice. St. Expeditus is shown treading on such a bird, holding " +
+      "a cross that reads hodie \u2014 today.\n\nA NOTE ON THE NUMBERING\n\nThis is the tenth section of " +
+      "the first sermon on Psalm 101 in the Latin numbering of the Psalter, which is Psalm 102 in " +
+      "most English Bibles \u2014 the translation linked below is titled by the English " +
+      "number.\n\nWHERE TO READ MORE\n\n**Exposition on Psalm 102, section 10** \u2014 the English " +
+      "translation.\nhttps://www.newadvent.org/fathers/1801102.htm\n\n**In Psalmum 101 enarratio I** " +
+      "\u2014 the Latin.\nhttps://www.augustinus.it/latino/esposizioni_salmi/esposizione_salmo_122_testo.htm",
+  },
+  {
+    title: "The Raven's Voice",
+    added: "2026-09-18",
+    seedVersion: 1,
+    kind: "quote",
+    tags: ["procrastination", "conversion", "repentance", "acedia", "death"],
+    source: "St. Augustine, Enarratio in Psalmum 102 (English Psalm 103), 13",
+    author: "St. Augustine of Hippo",
+    occasion: "Preached on the verse that God is long-suffering and of great mercy — and on what men do with the time that mercy gives them.",
+    related: ["No One Promised You Tomorrow", "Acedia, the Noonday Devil", "Prayer to St. Joseph for Work", "Whatever Good Work You Begin"],
+    relatedSaints: ["augustine"],
+    year: "c. 395-420",
+    origin: "Patristic",
+    liturgical: "",
+    feastDay: "28 August",
+    originalLanguage: "Latin",
+    latinBody:
+      "Sunt enim qui praeparant conversionem, et differunt, et fit in illis vox corvina: Cras, cras. " +
+      "Corvus de arca missus, non est reversus. Non quaerit Deus dilationem in voce corvina, sed " +
+      "confessionem in gemitu columbino. Missa columba reversa est.\n\nQuamdiu: Cras, cras? Observa " +
+      "ultimum cras: quia ignoras quod sit ultimum cras, sufficiat quod vixisti usque ad hodiernum " +
+      "peccator.",
+    body:
+      "For there are some who prepare to turn, and put it off, and in them there sounds the raven's " +
+      "voice: Tomorrow, tomorrow. The raven sent out from the ark did not come back. God does not " +
+      "want delay in the raven's voice, but confession in the moaning of the dove. The dove, sent " +
+      "out, returned.\n\nHow long, tomorrow, tomorrow? Watch for the last tomorrow: since you do not " +
+      "know which tomorrow is the last, let it be enough that you have lived a sinner up until " +
+      "today.",
+    background:
+      "The pun does not survive into English, and it is the whole thing: cras is Latin for tomorrow, " +
+      "and it is also what a raven sounds like. The man who keeps saying \"tomorrow\" is not " +
+      "reasoning, he is making a bird noise \u2014 and Augustine's congregation, who heard both every " +
+      "day, would have laughed before they winced.\n\nThe two birds are from the ark. Noah sends out " +
+      "the raven and it never comes back; he sends the dove and it returns. So the delayer's voice " +
+      "is the bird that leaves and does not return, and repentance is the one that " +
+      "comes home.\n\nWhat makes it more than a joke is what it is preached on. The verse is that God " +
+      "is long-suffering and of great mercy, and the sermon's argument is that the mercy is what " +
+      "creates the opportunity to postpone: God spares you, and you take the sparing as permission " +
+      "to put it off. Right before this Augustine imagines the calculation being made out loud \u2014 " +
+      "today is finishing, and I shall be the same tomorrow, for tomorrow will not be the last \u2014 " +
+      "and then: suddenly his anger comes.\n\nThe same image is why St. Expeditus, patron against " +
+      "procrastination, is painted treading on a crow with a cross in his hand reading hodie, " +
+      "today.\n\nA NOTE ON THE NUMBERING\n\nThis is the exposition of Psalm 102 in the Latin numbering " +
+      "of the Psalter, which is Psalm 103 in most English Bibles, at section 13 on verse " +
+      "8.\n\nWHERE TO READ MORE\n\n**Exposition on Psalm 103, section 13** \u2014 the English " +
+      "translation.\nhttps://www.newadvent.org/fathers/1801103.htm\n\n**In Psalmum 102 enarratio** " +
+      "\u2014 the Latin.\nhttps://www.augustinus.it/latino/esposizioni_salmi/esposizione_salmo_124_testo.htm",
   },
   {
     title: "The Greatest of All Romances",
@@ -7909,12 +8228,12 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "Litany of St. Joseph",
     added: "2026-09-01",
-    seedVersion: 9,
+    seedVersion: 10,
     kind: "litany",
     tags: ["St. Joseph", "vocation", "work", "protection", "discernment"],
     source: "Approved for public use by Pope St. Pius X, 1909; seven invocations added by Pope Francis, 1 May 2021",
     author: "Traditional / Anonymous",
-    related: ["Litany of the Undiscovered Spouse", "Litany of the Most Precious Blood", "Litany of Loreto", "Litany of the Saints", "Prayer to St. Joseph for a Happy Death"],
+    related: ["Litany of the Undiscovered Spouse", "Litany of the Most Precious Blood", "Litany of Loreto", "Litany of the Saints", "Prayer to St. Joseph for a Happy Death", "Prayer to St. Joseph for Work"],
     relatedSaints: ["joseph"],
     authorNote: "no single author — the invocations accumulated over centuries and were formally fixed in 1909",
     year: "Approved 1909; current form since 2021",
@@ -9986,13 +10305,13 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "Acedia, the Noonday Devil",
     added: "2026-09-08",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "teaching",
-    tags: ["acedia", "sloth", "perseverance", "daily", "self-knowledge", "examination", "desert fathers"],
+    tags: ["acedia", "sloth", "perseverance", "daily", "self-knowledge", "examination", "desert fathers", "procrastination"],
     source: "St. John Cassian, Institutes, Book X; the diagnosis is Evagrius's",
     author: "St. John Cassian",
     authorNote: "Cassian brought Evagrius's list of eight thoughts into the Latin West",
-    related: ["The Seven Capital Sins", "Consolation and Desolation", "The Examen", "The Dark Night", "The Eleven Passions"],
+    related: ["The Seven Capital Sins", "Consolation and Desolation", "The Examen", "The Dark Night", "The Eleven Passions", "Deus in Adiutorium", "No One Promised You Tomorrow", "Idleness Is the Enemy of the Soul"],
     relatedSaints: ["gregory-the-great"],
     year: "c. 420",
     origin: "Desert Fathers, via Gaul",
@@ -10275,10 +10594,80 @@ function setHash(hash) {
 
 const TAB_ROUTES = ["day", "library", "journal", "saints"];
 
+// --- Filters in the URL ----------------------------------------------------
+//
+// A filtered library is a place, not a mood: "the procrastination shelf" or
+// "everything of Teresa's" should survive a reload, a back button and being
+// sent to someone. So the library's whole filter state lives in the hash as a
+// query string. It is written with replaceState rather than by assigning to
+// location.hash — typing in the search box would otherwise push a history
+// entry per keystroke, and the back button would walk back through the word.
+
+function libraryFilterParams() {
+  const p = new URLSearchParams();
+  if (state.searchQuery.trim()) p.set("q", state.searchQuery.trim());
+  if (state.filterKind !== "all") p.set("kind", state.filterKind);
+  [...state.filterTags].forEach((t) => p.append("tag", t));
+  if (state.filterAuthor) p.set("author", state.filterAuthor);
+  if (state.filterOrigin) p.set("origin", state.filterOrigin);
+  if (state.filterLiturgical) p.set("use", state.filterLiturgical);
+  if (state.filterFavoritesOnly) p.set("fav", "1");
+  if (state.filterBilingualOnly) p.set("bilingual", "1");
+  if (state.filterFamiliarMissing) p.set("familiar", "missing");
+  if (state.sortBy !== "recent") p.set("sort", state.sortBy);
+  return p.toString();
+}
+
+function libraryHash() {
+  const q = libraryFilterParams();
+  return "#/library" + (q ? "?" + q : "");
+}
+
+function syncLibraryHash() {
+  if (state.view !== "library" && state.view !== "library-filters") return;
+  // The finder's restriction is a set of ids, not a filter anyone could read
+  // or retype, so a finder-narrowed list is deliberately not linkable.
+  if (state.finderRestrict) return;
+  const h = libraryHash();
+  if (location.hash !== h) history.replaceState(null, "", h);
+}
+
+function applyLibraryParams(query) {
+  const p = new URLSearchParams(query || "");
+  state.searchQuery = p.get("q") || "";
+  state.filterKind = p.get("kind") || "all";
+  state.filterTags = new Set(p.getAll("tag"));
+  state.filterAuthor = p.get("author");
+  state.filterOrigin = p.get("origin");
+  state.filterLiturgical = p.get("use");
+  state.filterFavoritesOnly = p.get("fav") === "1";
+  state.filterBilingualOnly = p.get("bilingual") === "1";
+  state.filterFamiliarMissing = p.get("familiar") === "missing";
+  state.sortBy = ["title", "kind"].includes(p.get("sort")) ? p.get("sort") : "recent";
+  state.finderRestrict = null;
+  // The controls are not redrawn from state on every render, so a filter
+  // arriving by URL has to be written into them by hand.
+  $("#library-search").value = state.searchQuery;
+  $("#library-sort").value = state.sortBy;
+  $("#filter-favorites-only").checked = state.filterFavoritesOnly;
+  $("#filter-bilingual-only").checked = state.filterBilingualOnly;
+  $("#filter-familiar-missing").checked = state.filterFamiliarMissing;
+}
+
 function routeFromHash() {
-  const raw = decodeURIComponent((location.hash || "").replace(/^#\/?/, ""));
+  const full = (location.hash || "").replace(/^#\/?/, "");
+  const qAt = full.indexOf("?");
+  const query = qAt >= 0 ? full.slice(qAt + 1) : "";
+  const raw = decodeURIComponent(qAt >= 0 ? full.slice(0, qAt) : full);
   const head = raw.split("/")[0];
   const rest = raw.split("/").slice(1).join("/");
+
+  if (head === "library") {
+    applyLibraryParams(query);
+    setView("library");
+    renderLibraryList();
+    return;
+  }
 
   if (head === "e" && rest) {
     const entry = entryBySlug(rest);
@@ -10302,7 +10691,7 @@ function switchTab(tab, writeHash = true) {
   $$(".tabpanel").forEach((p) => p.classList.toggle("active", p.dataset.tab === tab));
   // The "next" marker depends on the clock, so recompute on every visit.
   if (tab === "day") renderDay();
-  if (writeHash) setHash("#/" + tab);
+  if (writeHash) setHash(tab === "library" ? libraryHash() : "#/" + tab);
 }
 
 // --- Day: the shape of an ordinary day -------------------------------------
@@ -10823,6 +11212,7 @@ function renderLibraryList() {
     entries.length === 1 ? "Show 1 entry" : `Show ${entries.length} entries`;
   renderActiveFilterChips();
   updateFilterBadge();
+  syncLibraryHash();
 
   renderHourBanner(); // async, fire-and-forget — it manages its own visibility
 
@@ -13803,6 +14193,15 @@ const FINDER_STEPS = [
             "vocation", "discernment", "marriage", "spouse", "singleness",
             "waiting", "work", "identity",
           ]),
+      },
+      {
+        // The library gained a run of prayers for beginning and staying at
+        // work (Sept 2026); before this option they were only reachable under
+        // "When things are hard", which is not what it feels like.
+        label: "When you cannot get started", icon: "sprout",
+        hint: "Procrastination, sloth, staying with it",
+        keywords: ["procrastination", "sloth", "acedia", "work", "perseverance"],
+        match: (e) => hasTag(e, ["procrastination", "acedia", "sloth"]),
       },
       {
         label: "The faith itself", icon: "book",
