@@ -12400,7 +12400,13 @@ const WORLD_MAP_SCALE = WORLD_MAP_W / 800;
 const TILE_SIZE = 256;
 const TILE_MAX_Z = 19; // CARTO serves past this, but street level is plenty here
 const MERCATOR_MAX_LAT = 85.0511; // where Mercator y goes infinite
-const TILE_URL = "https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png";
+// Since late August 2026 CARTO serves only a watermarked "API KEY REQUIRED"
+// tile without a key. This key is free (non-commercial, 5M tiles/month) and
+// restricted by Referer to mariopariona117.github.io, so it is safe to ship
+// in public code — and it means Online mode works on the live site only: a
+// file:// page sends no Referer and gets refused (the offline map is unaffected).
+const CARTO_BASEMAPS_KEY = "cb1_3xqm_1_5a5d409be01316a5b3947578";
+const TILE_URL = `https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=${CARTO_BASEMAPS_KEY}`;
 const TILE_ATTRIBUTION = "© OpenStreetMap contributors © CARTO";
 
 function tilesOn() {
