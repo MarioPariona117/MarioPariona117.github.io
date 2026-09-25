@@ -71,6 +71,7 @@ window.PLACE_COORDS = {
 
   // Belgium
   ghent: [51.05, 3.72],
+  leuven: [50.88, 4.70],
 
   // Italy
   rome: [41.90, 12.50],
@@ -165,6 +166,12 @@ window.PLACE_COORDS = {
 
   // USA
   "new-york": [40.71, -74.01],
+  "el-paso-illinois": [40.74, -89.02],
+  peoria: [40.69, -89.59],
+  "saint-paul": [44.95, -93.09],
+  "washington-dc": [38.91, -77.04],
+  "rochester-ny": [43.16, -77.61],
+  "saint-louis": [38.63, -90.20],
   emmitsburg: [39.71, -77.32],
   philadelphia: [39.95, -75.17],
   bensalem: [40.10, -74.95],
@@ -432,6 +439,24 @@ window.SAINT_PLACES = {
       { key: "grottella", label: "Grottella — early friary life" },
       { key: "assisi", label: "Assisi — years of confinement" },
       { key: "osimo", label: "Osimo — final years, died 1663" },
+    ],
+  },
+
+  "fulton-sheen": {
+    born: { key: "el-paso-illinois", label: "El Paso, Illinois" },
+    died: { key: "new-york", label: "New York" },
+    stops: [
+      { key: "el-paso-illinois", label: "El Paso, Illinois — born, 1895" },
+      { key: "peoria", label: "Peoria — boyhood on the family farm; ordained, 1919" },
+      { key: "saint-paul", label: "St. Paul, Minnesota — seminary" },
+      { key: "leuven", label: "Louvain — doctorate and the Cardinal Mercier Prize, 1923–25" },
+      { key: "peoria", label: "Peoria — the curacy that tested his obedience, c. 1926" },
+      { key: "washington-dc", label: "Washington, D.C. — Catholic University, teaching philosophy until 1950" },
+      { key: "new-york", label: "New York — The Catholic Hour, Life Is Worth Living, auxiliary bishop, 1930–66" },
+      { key: "rochester-ny", label: "Rochester — Bishop, 1966–69" },
+      { key: "new-york", label: "New York — died in his private chapel, 1979" },
+      { key: "peoria", label: "Peoria — his tomb, since 2019" },
+      { key: "saint-louis", label: "St. Louis — beatified, 2026" },
     ],
   },
 

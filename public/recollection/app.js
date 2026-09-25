@@ -1523,12 +1523,12 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "What They Wrongly Believe",
     added: "2026-09-01",
-    seedVersion: 7,
+    seedVersion: 8,
     occasion:
       "Written in 1938 as the preface to a book of answers to objections, telling Catholics to stop treating opposition as malice.",
     kind: "quote", tags: ["catechetical", "faith", "charity", "conversion"],
-    source: "Radio Replies, vol. 1 — preface", author: "Ven. Fulton J. Sheen",
-    year: "1938", origin: "Modern papal teaching", liturgical: "", feastDay: "", favorite: false,
+    source: "Radio Replies, vol. 1 — preface", author: "Bl. Fulton J. Sheen",
+    year: "1938", origin: "American", liturgical: "", feastDay: "", favorite: false,
     body:
       "There are not more than a hundred people in the world\n" +
       "who truly hate the Catholic Church,\n" +
@@ -1547,12 +1547,12 @@ const SEED_LIBRARY_ENTRIES = [
   {
     title: "Measured by the Perfect",
     added: "2026-09-08",
-    seedVersion: 7,
+    seedVersion: 8,
     kind: "quote",
     tags: ["humility", "self-knowledge", "conscience", "examination", "virtue"],
-    source: "Ven. Fulton J. Sheen — the thought is in Way to Inner Peace; the exact wording is not traceable",
-    author: "Ven. Fulton J. Sheen",
-    authorNote: "Venerable until 24 September 2026, when he is to be beatified",
+    source: "Bl. Fulton J. Sheen — the thought is in Way to Inner Peace; the exact wording is not traceable",
+    author: "Bl. Fulton J. Sheen",
+    authorNote: "Beatified 24 September 2026",
     related: ["Humility Is Nothing But Truth", "What They Wrongly Believe", "Not of Obligation, But of Love", "The Three Kinds of Humility", "The Cell of Self-Knowledge"],
     relatedSaints: ["fulton-sheen"],
     year: "20th century",
@@ -1564,17 +1564,17 @@ const SEED_LIBRARY_ENTRIES = [
     body:
       "The good man is never sure he is good because he measures himself by the Perfect; the evil man is quite sure he is good because he measures himself by himself.\n\nWHAT IS DOCUMENTED\n\nThe same thought, in wording that can be traced to his own book:\n\n\"The humble man knows himself as he really is, for he judges himself as he judges time, by a standard outside himself, namely, God and His Moral Law.\"\n\nAnd its opposite, from the same passage: \"A proud man thinks himself better than he is, and when criticized always believes his neighbour is jealous or has a grudge against him.\"\n\n— Way to Inner Peace\n\nWHERE TO READ MORE\n\n**Way to Inner Peace** — the short chapters on humility and self-knowledge are where this line of thought lives.\n\n**Documented quotations**, with sources where they exist.\nhttps://en.wikiquote.org/wiki/Fulton_J._Sheen",
     background:
-      "Two notes on this one, one about the wording and one about the name.\n\nThe wording. The sentence above circulates widely and reads exactly like him — the antithesis, the reversal in the second half, the sting kept for last are all his manner. But I could not trace this precise sentence to a book. What is traceable is the same argument in Way to Inner Peace, quoted above: the humble man judges himself \"by a standard outside himself\", the proud man does not. So the thought is documented and the sentence is not, which is a common situation with Sheen: he published dozens of books and gave hundreds of broadcast talks, many transcribed loosely or paraphrased by listeners, so a line can be genuinely his and still be unfindable. Treat the wording as received rather than quoted.\n\nThe name. He is Venerable, not Blessed — until 24 September 2026, when he is to be beatified at The Dome at America's Center in St. Louis. After that date \"Bl. Fulton Sheen\" becomes correct and this note becomes obsolete.\n\nThe claim itself is worth more than its provenance. It explains why moral confidence is so poor a sign of moral quality: the man with the higher standard has more to fall short of, and knows it. Which is also the reason the tradition treats scrupulosity and complacency as errors of the same kind — both are measurements taken against the wrong thing.",
+      "Two notes on this one, one about the wording and one about the name.\n\nThe wording. The sentence above circulates widely and reads exactly like him — the antithesis, the reversal in the second half, the sting kept for last are all his manner. But I could not trace this precise sentence to a book. What is traceable is the same argument in Way to Inner Peace, quoted above: the humble man judges himself \"by a standard outside himself\", the proud man does not. So the thought is documented and the sentence is not, which is a common situation with Sheen: he published dozens of books and gave hundreds of broadcast talks, many transcribed loosely or paraphrased by listeners, so a line can be genuinely his and still be unfindable. Treat the wording as received rather than quoted.\n\nThe name. He was beatified on 24 September 2026 at The Dome at America's Center in St. Louis, so he is \"Bl. Fulton Sheen\" and not \"St.\" — the cause is open, not finished, and canonization would need a second miracle.\n\nThe claim itself is worth more than its provenance. It explains why moral confidence is so poor a sign of moral quality: the man with the higher standard has more to fall short of, and knows it. Which is also the reason the tradition treats scrupulosity and complacency as errors of the same kind — both are measurements taken against the wrong thing.",
   },
   {
     title: "Not of Obligation, But of Love",
     added: "2026-09-01",
-    seedVersion: 7,
+    seedVersion: 8,
     occasion:
       "From his 1980 autobiography, describing the daily hour before the Blessed Sacrament he kept for over sixty years from his ordination in 1919. He was found dead in his private chapel.",
     kind: "quote", tags: ["adoration", "eucharist", "prayer", "daily"],
     source: "Treasure in Clay: The Autobiography of Fulton J. Sheen",
-    author: "Ven. Fulton J. Sheen", year: "1980", origin: "Modern papal teaching",
+    author: "Bl. Fulton J. Sheen", year: "1980", origin: "American",
     liturgical: "Before the Blessed Sacrament", feastDay: "", favorite: false,
     body:
       "The Holy Hour.\n" +
@@ -12213,7 +12213,13 @@ function renderSaintsList() {
   syncSaintsFilterChipActiveState();
   updateSaintsFilterBadge();
 
-  const q = state.saintsSearchQuery.trim().toLowerCase();
+  // Accent- and case-insensitive, so "avila" finds Ávila and "flue" finds
+  // Flüe. Every field is read defensively: one malformed record used to
+  // throw here and silently kill the whole search.
+  const fold = (t) => String(t || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const q = fold(state.saintsSearchQuery.trim());
+  // Match at the start of a word, so "flue" finds Flüe but not "influence".
+  const qRe = q ? new RegExp("(^|[^a-z0-9])" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")) : null;
   let saints = window.SAINTS.filter((s) => {
     const personal = saintPersonal(s.slug);
     if (state.saintsFilterStatus !== "all" && personal.status !== state.saintsFilterStatus) return false;
@@ -12221,12 +12227,16 @@ function renderSaintsList() {
     if (state.saintsFilterTier !== "all" && s.listTier !== state.saintsFilterTier) return false;
     if (state.saintsFilterCause !== "all" && (s.causeStage || "saint") !== state.saintsFilterCause) return false;
     if (!q) return true;
-    return (
-      s.name.toLowerCase().includes(q) ||
-      (s.identity.birthName || "").toLowerCase().includes(q) ||
-      (s.identity.epithets || []).some((e) => e.toLowerCase().includes(q)) ||
-      (s.cult.patronages || []).some((p) => p.of.toLowerCase().includes(q) || (p.why || "").toLowerCase().includes(q))
-    );
+    const id = s.identity || {};
+    const haystack = [
+      s.name, s.sortName, id.birthName, id.religiousName, id.originalName,
+      ...(id.epithets || []), ...(id.titles || []),
+      ...((s.cult && s.cult.patronages) || []).flatMap((p) => (typeof p === "string" ? [p] : [p.of, p.why])),
+      ...((s.cult && s.cult.invokedAgainst) || []),
+      // Feast titles too, so "walsingham" or "guadalupe" finds Mary.
+      ...((s.dates && s.dates.altFeasts) || []).flatMap((af) => [af.title, af.calendar]),
+    ];
+    return haystack.some((t) => qRe.test(fold(t)));
   });
   saints = sortSaintsList(saints);
 
@@ -13341,7 +13351,23 @@ function renderWriting(w) {
   return `<strong>${escapeHtml(w.title)}</strong>${real(w.original) ? ` <em>(${escapeHtml(w.original)})</em>` : ""}${bits ? ` — ${escapeHtml(bits)}` : ""}${w.note ? `<br>${escapeHtml(w.note)}` : ""}${real(w.translation) ? `<div class="saint-source">Translation: ${escapeHtml(w.translation)}${real(w.publisher) ? " — " + escapeHtml(w.publisher) : ""}</div>` : ""}${real(w.free) ? `<div class="saint-source">Free: ${escapeHtml(w.free)}</div>` : ""}`;
 }
 
+// The miracles a cause actually rested on — which cure was approved for
+// beatification and which for canonization — kept apart from `miracles`,
+// which is about wonders in the life. `process` says how the cause ran, so
+// a pre-congregation saint or an untraced older bull reads as an honest
+// "none required" / "not traced yet" rather than as a silent gap.
+function renderCauseMiracles(cm) {
+  if (!cm || (!cm.process && !(cm.items || []).length)) return "";
+  const item = (m) => {
+    const head = [m.stage, m.who].filter(real).join(" — ");
+    const meta = [m.where, m.when].filter(real).join(", ");
+    return `<strong>${escapeHtml(head)}</strong>${meta ? ` <em>(${escapeHtml(meta)})</em>` : ""}${m.legend ? ` <span class="legend-flag">legend/tradition</span>` : ""}<br>${escapeHtml(m.what)}${real(m.approved) ? `<div class="saint-source">Approved: ${escapeHtml(m.approved)}</div>` : ""}${m.source ? `<div class="saint-source">— ${escapeHtml(m.source)}</div>` : ""}`;
+  };
+  return `<div class="saint-about-group"><span class="saint-field-label">Miracles for the cause</span>${cm.process ? `<div class="saint-field">${escapeHtml(cm.process)}</div>` : ""}${bulletList(cm.items, item)}</div>`;
+}
+
 function renderPatronage(p) {
+  if (typeof p === "string") return `<strong>${escapeHtml(p)}</strong>`;
   return `<strong>${escapeHtml(p.of)}</strong>${p.why ? ` — ${escapeHtml(p.why)}` : ""}`;
 }
 
@@ -13370,6 +13396,19 @@ function extractYear(str) {
   return m ? parseInt(m[1], 10) : null;
 }
 
+// Sort key only — reads "c. 7–5 BC" as -7 and "AD 30 or 33" as 30, which
+// extractYear (3-4 digits) can't. Kept out of extractYear so BC dates don't
+// start feeding age labels and the atlas birth-year range.
+function timelineSortYear(str) {
+  if (!str) return null;
+  const t = String(str);
+  const bc = t.match(/(\d{1,4})[^\d]*?\bBC/);
+  if (bc) return -parseInt(bc[1], 10);
+  const ad = t.match(/\bAD\s*(\d{1,4})/);
+  if (ad) return parseInt(ad[1], 10);
+  return extractYear(t);
+}
+
 // Merges narrative.timeline into a single chronological life-timeline,
 // synthesising Born/Death bookends from dates.born/dates.died when they
 // aren't already the first/last entries (the six full dossiers already
@@ -13379,22 +13418,22 @@ function extractYear(str) {
 function buildSaintTimeline(s) {
   const d = s.dates;
   const birthYear = extractYear(d.born);
-  const entries = (s.narrative.timeline || []).map((t) => ({ label: t.year, year: extractYear(t.year), event: t.event }));
+  const entries = (s.narrative.timeline || []).map((t) => ({ label: t.year, year: extractYear(t.year), sortYear: timelineSortYear(t.year), event: t.event }));
 
   const hasBorn = entries.some((e) => /\bborn\b/i.test(e.event));
   const hasDied = entries.some((e) => /\b(died|dies|death|martyred)\b/i.test(e.event));
   if (!hasBorn && d.born) {
-    entries.unshift({ label: d.born, year: birthYear, event: `Born${d.bornPlace ? " at " + d.bornPlace : ""}` });
+    entries.unshift({ label: d.born, year: birthYear, sortYear: timelineSortYear(d.born), event: `Born${d.bornPlace ? " at " + d.bornPlace : ""}` });
   }
   if (!hasDied && d.died) {
-    entries.push({ label: d.died, year: extractYear(d.died), event: `Dies${d.diedPlace ? " at " + d.diedPlace : ""}${d.deathManner ? " — " + d.deathManner : ""}` });
+    entries.push({ label: d.died, year: extractYear(d.died), sortYear: timelineSortYear(d.died), event: `Dies${d.diedPlace ? " at " + d.diedPlace : ""}${d.deathManner ? " — " + d.deathManner : ""}` });
   }
 
   entries.sort((a, b) => {
-    if (a.year == null && b.year == null) return 0;
-    if (a.year == null) return 1;
-    if (b.year == null) return -1;
-    return a.year - b.year;
+    if (a.sortYear == null && b.sortYear == null) return 0;
+    if (a.sortYear == null) return 1;
+    if (b.sortYear == null) return -1;
+    return a.sortYear - b.sortYear;
   });
 
   entries.forEach((e) => {
@@ -13429,6 +13468,14 @@ function renderTimelineUI(entries) {
 // `render`, if given, is a per-item HTML renderer (renderWriting,
 // renderPatronage, etc.) whose output must NOT be escaped again — only
 // pass plain strings (no render fn) when items are themselves raw text.
+// The two devotion lists are always shown, so a saint with nothing recorded
+// says so rather than silently dropping the heading — an empty list means
+// "not researched yet", never "they had none".
+function renderDevotionsGroup(label, items) {
+  if (items && items.length) return renderAboutGroup(label, items);
+  return `<div class="saint-about-group"><span class="saint-field-label">${escapeHtml(label)}</span><div class="saint-field saint-field-empty">Not recorded yet for this saint.</div></div>`;
+}
+
 function renderAboutGroup(label, items, render) {
   if (!items || items.length === 0) return "";
   return `<div class="saint-about-group"><span class="saint-field-label">${escapeHtml(label)}</span>${bulletList(items, render)}</div>`;
@@ -13540,7 +13587,9 @@ function renderSaintDossier(s) {
 
   const noteBlock = s.note ? `<div class="saint-note-flag">⚠ ${escapeHtml(s.note)}</div>` : "";
 
-  const yourLayer = renderYourLayerBlock(s);
+  // Hidden for now (Mario, 25 Sept 2026). The stored relationship,
+  // familiarity, notes and study log are untouched — flip this back to show it.
+  const yourLayer = SHOW_SAINT_YOUR_LAYER ? renderYourLayerBlock(s) : "";
 
   const identitySection = section(
     "Identity",
@@ -13596,6 +13645,7 @@ function renderSaintDossier(s) {
       renderAboutGroup("Anecdotes", n.anecdotes, renderAnecdote) +
       renderAboutGroup("Mystical phenomena", n.phenomena) +
       fieldLine("Miracles", n.miracles) +
+      renderCauseMiracles(n.causeMiracles) +
       fieldLine("Sufferings", n.sufferings) +
       fieldLine("Death", n.death) +
       fieldLine("Last words", n.lastWords)
@@ -13606,7 +13656,7 @@ function renderSaintDossier(s) {
     fieldLine("Charism", sp.charism) +
       renderAboutGroup("Key teachings", sp.teachings) +
       renderAboutGroup("Method", sp.method ? [sp.method] : null) +
-      renderAboutGroup("Own devotions", sp.devotions) +
+      renderDevotionsGroup("Devotions they kept", sp.devotions) +
       fieldLine("School", sp.school) +
       renderAboutGroup("Influenced by", sp.influencedBy) +
       renderAboutGroup("Influenced", sp.influenced) +
@@ -13650,7 +13700,7 @@ function renderSaintDossier(s) {
       fieldLine("Relics", cult.relics) +
       (cult.incorrupt ? `<div class="saint-field"><span class="saint-field-label">Incorrupt</span> Yes</div>` : "") +
       renderAboutGroup("Shrines", cult.shrines) +
-      renderAboutGroup("Devotions", cult.devotions) +
+      renderDevotionsGroup("Devotions to them", cult.devotions) +
       fieldLine("Customs", cult.customs) +
       renderAboutGroup("Foundations", cult.foundations)
   );
@@ -13722,6 +13772,8 @@ function renderSourcesSection(slug) {
     .join("");
   return section("Sources", `<ul class="saint-list saint-sources-list">${items}</ul>`);
 }
+
+const SHOW_SAINT_YOUR_LAYER = false;
 
 function renderYourLayerBlock(s) {
   const personal = saintPersonal(s.slug);

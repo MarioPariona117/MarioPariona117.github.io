@@ -683,6 +683,7 @@ textarea.body-field { min-height: 220px; font-family: Palatino, Georgia, serif; 
 .legend-flag.documented { background: rgba(122,144,170,0.15); color: var(--body); border-color: rgba(122,144,170,0.35); }
 
 .saint-about-group { margin-bottom: 0.9rem; }
+.saint-field-empty { color: var(--muted); font-style: italic; }
 .saint-about-group:last-child { margin-bottom: 0; }
 
 .related-saint-chip { cursor: pointer; }
