@@ -15,6 +15,21 @@
 // Anecdotes carry `legend: true` when the story is traditional/pious rather
 // than documented — the app shows that distinction rather than hiding it.
 //
+// Every full dossier also carries `narrative.causeMiracles` (added 24 Sept
+// 2026) — the specific miracles the cause rested on, NOT the general
+// `miracles` field about wonders in the life:
+//   causeMiracles: {
+//     process: "how the cause actually ran — modern two-miracle process,
+//               martyr (no miracle for beatification), pre-1634 dossier,
+//               pre-congregation cult — and what hasn't been traced yet",
+//     items: [{ stage: "Beatification" | "Canonization" | …, who, where,
+//               when, what, approved: "date, by whom", source, legend }],
+//   }
+// Name a miracle in `items` only when it has been checked against a citable
+// page (the decree, the bull, the postulation, reliable reporting); if it
+// can't be traced, say so in `process` rather than inventing a plausible
+// cure. Writing a new full dossier is not finished until this is filled.
+//
 // Feast days are MM-DD strings on the current General Roman Calendar unless
 // noted; `altFeasts` carries pre-1969, Eastern, national and order calendars.
 
@@ -73,6 +88,7 @@ function core(o) {
       timeline: [],
       anecdotes: o.anecdotes || [],
       phenomena: o.phenomena || [],
+      causeMiracles: o.causeMiracles || null,
       sufferings: "",
       death: "",
       lastWords: o.lastWords || "",
@@ -257,6 +273,10 @@ window.SAINTS = [
     ],
 
     miracles: "The canonization process gathered a large dossier of cures. More striking to her contemporaries was the incorruption of her body and the perfume reported at the tomb.",
+    causeMiracles: {
+      process: "Before Urban VIII's decrees (1625–34) and Benedict XIV's treatise on canonization (1734–38) fixed the modern rules, a cause was argued from a large dossier of cures gathered at sworn local inquiries — often including wonders from the saint's own lifetime — and the bull named a selection rather than two pre-set 'approved miracles'. Teresa's beatification (1614) and canonization (1622) rested on a very large dossier of cures and on the incorruption of her body; the specific miracles named in the bull have not been traced here.",
+      items: [],
+    },
 
     sufferings: "Twenty years of arid, disappointing prayer. Confessors who told her she was deceived by the devil. Chronic illness: the paralysis of her twenties, lifelong nausea (she induced vomiting daily for years to function), kidney stones, a badly-set broken arm. The 1575–80 persecution, when the Carmelite general ordered her confined, John of the Cross was jailed, and the reform nearly died.",
 
@@ -490,6 +510,10 @@ window.SAINTS = [
     phenomena: ["Ecstasies, sometimes shared — he and Teresa were reportedly seen in simultaneous rapture during a conversation about the Trinity at Ávila", "Levitation", "Odour of sanctity and a light reported at his death", "Incorruption of the body when first exhumed"],
 
     miracles: "Numerous cures reported at Úbeda and Segovia in the years after his death; a substantial dossier at both beatification and canonization.",
+    causeMiracles: {
+      process: "Sworn diocesan inquiries were held at eleven places he had lived, from Medina del Campo to Úbeda (1614–18), and the apostolic process ran 1627–30. The bull of beatification (1675) speaks only generally of 'the miracles which, through his intercession, were affirmed to have been wrought by God'; the specific cases approved for beatification and for canonization (1726) have not been traced here.",
+      items: [],
+    },
 
     sufferings: "Destitute childhood; the death of a brother from hunger; nine months' imprisonment with regular public floggings, dysentery and lice; and at the end, disgrace within the order he had founded, with a campaign underway to expel him. He died under a cloud.",
 
@@ -726,7 +750,16 @@ window.SAINTS = [
 
     phenomena: ["The 'smile of the Virgin' — her cure in May 1883 before the statue now called Our Lady of the Smile, kept at the Carmel", "No stigmata, levitations, visions or public miracles in life — deliberately so; this is part of her significance"],
 
-    miracles: "Vast numbers reported after her death, from the moment *Story of a Soul* circulated. The two miracles for beatification were cures at Lisieux and in Belgium; for canonization, cures of tuberculosis and of blindness.",
+    miracles: "Vast numbers reported after her death, from the moment *Story of a Soul* circulated. The four cures formally approved for her cause are listed separately below.",
+    causeMiracles: {
+      process: "Modern process, among the fastest of its era: two miracles for beatification and two more for canonization, all four cures of organic disease.",
+      items: [
+        { stage: "Beatification", who: "Sr. Louise of St. Germain, Daughters of the Cross", where: "Ustaritz, France", when: "1916", what: "A grave haemorrhagic ulcer of the stomach, from which she had suffered since 1913; three doctors testified to the cure.", approved: "Before the beatification of 29 April 1923, by Pius XI", source: "Vehementer exultamus hodie (bull of canonization, 1925); Archives of the Carmel of Lisieux", legend: false },
+        { stage: "Beatification", who: "Charles Anne, a young seminarian", where: "Lisieux, France", when: "1906", what: "Pulmonary tuberculosis at the cavitary stage, with haemoptysis — 'galloping' consumption with little hope of recovery. Cured after two novenas to Thérèse; the cavities were no longer found.", approved: "Before the beatification of 29 April 1923, by Pius XI", source: "Vehementer exultamus hodie; Archives of the Carmel of Lisieux", legend: false },
+        { stage: "Canonization", who: "Sr. Gabriella Trimusi, Poor Daughters of the Sacred Hearts", where: "Parma, Italy", when: "13 June 1923", what: "Tuberculous disease of the left knee from 1913, spreading to the spine. On the last day of a novena she knelt in chapel without thinking and felt no pain: 'I am cured, I am cured!'", approved: "19 March 1925, by Pius XI", source: "Vehementer exultamus hodie", legend: false },
+        { stage: "Canonization", who: "Maria Pellemans", where: "Schaerbeek, Brussels (cured at Lisieux)", when: "March 1923", what: "Pulmonary tuberculosis from 1919, followed by tuberculous gastritis and enteritis; a pilgrimage to Lourdes in 1920 had not helped. Kneeling at Thérèse's tomb at Lisieux, she was suddenly restored to health.", approved: "19 March 1925, by Pius XI", source: "Vehementer exultamus hodie", legend: false },
+      ],
+    },
 
     sufferings: "Her mother's death at four; separation from Pauline; scrupulosity so severe it nearly broke her; her father's dementia and confinement in an asylum, which she felt as a public humiliation; tuberculosis borne for eighteen months without morphine, with gangrene of the intestines at the end; and the trial of faith, which she considered the worst of it.",
 
@@ -955,6 +988,10 @@ window.SAINTS = [
     phenomena: ["Levitation reported at Naples and Paris", "The crucifix at Naples that spoke to him", "The vision of 6 December 1273", "Dictating to three or four secretaries on different subjects at once — attested by his socius Reginald"],
 
     miracles: "The canonization inquiry at Naples in 1319 gathered a large number of cures. John XXII, told that miracles were lacking, is said to have replied that there were as many miracles as there were articles in the Summa.",
+    causeMiracles: {
+      process: "A medieval process: sworn inquiries at Naples (1319) and Fossanova (1321) collected cures at his tomb and relics. John XXII canonized him in 1323. Told that there were few miracles, the Pope is said to have answered that Thomas had worked as many miracles as he had written articles — the Summa's argument itself being treated as the wonder.",
+      items: [],
+    },
 
     sufferings: "A year's imprisonment by his own family. The mendicant controversy at Paris, in which secular masters tried to have friars expelled from the university. The Averroist controversy and, in 1277, the posthumous condemnation at Paris of a list of propositions including some of his own — revoked in 1325, two years after his canonization.",
 
@@ -1190,6 +1227,10 @@ window.SAINTS = [
     phenomena: ["The invisible stigmata (Pisa, 1375)", "The mystical espousal and the ring", "The exchange of hearts — she reported that Christ took her heart and gave her his own", "Inedia — for the last years she lived on virtually nothing but the Eucharist, a phenomenon her contemporaries fought about and modern historians still argue over", "Ecstasies in which she dictated letters", "Levitation reported during Mass"],
 
     miracles: "Cures, prophecy, and reading hearts are all attested during her life. The canonization dossier gathered by Pius II drew heavily on Raymond's *Legenda*.",
+    causeMiracles: {
+      process: "A pre-1588 papal canonization by Pius II (1461), eighty years after her death, argued largely from Raymond of Capua's Legenda and the testimony gathered for the Process of Venice (1411–16). There was no separate beatification step, and no modern count of approved miracles applies.",
+      items: [],
+    },
 
     sufferings: "Household persecution as a teenager; slander of unchastity, more than once, including from a woman she was nursing; scepticism and hostility from clergy who did not want to be corrected by a young laywoman; near-assassination by a mob in Florence in 1378; and at the end, the Schism, which she experienced as the tearing apart of the body she loved.",
 
@@ -1436,6 +1477,10 @@ window.SAINTS = [
     phenomena: ["No stigmata, levitations or visions of the usual kind. The Ostia experience is the one genuinely mystical episode he records, and he describes it as shared, brief, and immediately lost."],
 
     miracles: "He was initially sceptical of contemporary miracles and changed his mind late in life; *City of God* XXII.8 catalogues cures at the shrine of St. Stephen in Africa that he had personally verified — one of the earliest attempts at documenting miracle claims with evidence.",
+    causeMiracles: {
+      process: "Pre-congregation: venerated as a saint from his death, with no process and no approved miracles. The relevant fact runs the other way — he himself documented cures at the shrine of St. Stephen and had the testimonies written down and read out publicly (City of God XXII.8).",
+      items: [],
+    },
 
     sufferings: "Seventeen years of interior division before his conversion; the dismissal of the woman he loved; the death of Adeodatus in adolescence; the death of Monica; the Donatist schism, which included armed attacks and an ambush he escaped only because his guide took a wrong turning; and at the end, the collapse of Roman Africa and the sight of his churches burning.",
 
@@ -1644,6 +1689,10 @@ window.SAINTS = [
 
     phenomena: ["The stigmata, received on La Verna in September 1224 — the first documented case in Christian history, witnessed by Brother Leo, who wrote of it in his own hand on a scrap of parchment Francis had given him"],
     miracles: "Numerous healing miracles are recorded by Thomas of Celano and in the canonization process, but Francis's own writings barely mention the miraculous at all — his own emphasis, and the Church's, falls far more on his poverty and his conformity to Christ than on wonders.",
+    causeMiracles: {
+      process: "A papal canonization under Gregory IX, less than two years after his death. The miracles were gathered quickly rather than by a formal modern process, and at the ceremony itself (16 July 1228) they were read aloud to the Pope and the people; Thomas of Celano's First Life, written for the occasion, sets them out by kind — the crippled, the blind, the deaf, the possessed.",
+      items: [],
+    },
     sufferings: "Near-total blindness from trachoma in his last years; the stigmata's open wounds, which bled for the rest of his life; extreme fasting that likely damaged his health permanently.",
     death: "Died at sunset on 3 October 1226 at the Porziuncola, having asked to be laid naked on the bare earth as he had lived; Brother Elias announced the death publicly only after concealing the stigmata had become impossible.",
     lastWords: "Added the final verse on 'Sister Bodily Death' to the Canticle of the Creatures shortly before dying, and reportedly asked the friars to sing it with him.",
@@ -1815,6 +1864,10 @@ window.SAINTS = [
 
     phenomena: ["The vision by the river Cardoner near Manresa, which Ignatius said taught him more spiritually than all the rest of his life's learning combined, though he never fully described its content"],
     miracles: "",
+    causeMiracles: {
+      process: "Before Urban VIII's decrees (1625–34) and Benedict XIV's treatise on canonization (1734–38) fixed the modern rules, a cause was argued from a large dossier of cures gathered at sworn local inquiries — often including wonders from the saint's own lifetime — and the bull named a selection rather than two pre-set 'approved miracles'. The 1622 canonization was among the first to follow a separate beatification (1609). The specific miracles named in the bull have not been traced here.",
+      items: [],
+    },
     sufferings: "Chronic stomach ailments and poor health in his last years, likely worsened by the extreme penances of his Manresa period, which he later concluded had been excessive.",
     death: "Died alone, without last rites, in his room in Rome on 31 July 1556 — his secretary had asked if he should fetch a priest for the sacraments and Ignatius said there was no urgency; he died within hours.",
     lastWords: "",
@@ -1970,6 +2023,10 @@ window.SAINTS = [
 
     phenomena: ["Seeing Scholastica's soul ascend to heaven as a dove at the moment of her death, while he was praying at a window of Monte Cassino, far away", "A vision, near the end of his life, in which he saw the entire world 'gathered up, as it were, under a single ray of the sun'"],
     miracles: "Gregory the Great's Dialogues record numerous miracles of healing, restoring a broken sieve, and prophecy, including a rebuke and prediction of a shortened, violent reign delivered to the Ostrogothic king Totila.",
+    causeMiracles: {
+      process: "Pre-congregation: his cult was immemorial and never passed through a process. What we have instead is Gregory the Great's Dialogues, Book II — a collection of miracles, not a juridical record.",
+      items: [],
+    },
     sufferings: "",
     death: "Died c. 547 (traditionally 21 March), standing in the chapel at Monte Cassino supported by his monks, having just received Communion, six days after asking that his grave be opened.",
     lastWords: "",
@@ -2136,6 +2193,13 @@ window.SAINTS = [
 
     phenomena: ["The visible stigmata, borne for fifty years and vanishing at death", "Reports of bilocation", "Reports of reading penitents' consciences in confession", "The 'perfume' associated with his wounds and presence"],
     miracles: "A very large body of reported healings is attached to his intercession, both during his life and after his death; two miracles of healing were formally approved for his beatification and canonization by the Congregation for the Causes of Saints.",
+    causeMiracles: {
+      process: "Modern process: one approved miracle for beatification and a second, later one for canonization, each examined by the Congregation's medical board and theologians before papal approval.",
+      items: [
+        { stage: "Beatification", who: "Consiglia De Martino, a married mother of three", where: "Salerno, Italy", when: "31 October – 3 November 1995", what: "A traumatic rupture of the thoracic duct, which filled her neck with about two litres of lymphatic fluid; scheduled for surgery, she was found healed within days, after prayer to Padre Pio. The medical board found the healing scientifically inexplicable (30 April 1998).", approved: "21 December 1998, by John Paul II", source: "Congregation for the Causes of Saints; Voce di Padre Pio", legend: false },
+        { stage: "Canonization", who: "Matteo Pio Colella, aged seven", where: "San Giovanni Rotondo, Italy", when: "January 2000", what: "Fulminant meningitis with the failure of most of his organs; he was in a coma and not expected to live, and recovered completely. The medical board unanimously found the cure quick, complete, lasting and scientifically inexplicable (22 November 2001).", approved: "By John Paul II, clearing the canonization of 16 June 2002", source: "Congregation for the Causes of Saints; Catholic News Agency", legend: false },
+      ],
+    },
     sufferings: "Chronic poor health from youth; the fifty years of open, bleeding stigmata wounds, treated and bandaged daily; the years of ecclesiastical suspicion and restriction in the 1920s–30s, which he bore without public complaint.",
     death: "Died in his cell at San Giovanni Rotondo on 23 September 1968, aged 81, after repeating the names of Jesus and Mary; the stigmata's wounds were found to have completely healed and vanished.",
     lastWords: "Reportedly 'Gesù, Maria' (Jesus, Mary), repeated as he died.",
@@ -2301,6 +2365,10 @@ window.SAINTS = [
 
     phenomena: ["The decades-long nightly disturbances attributed to 'the grappin'", "Reports of reading penitents' hidden sins and circumstances before confession began"],
     miracles: "Numerous healings were attributed to his intercession both during his life and after death, examined in the beatification and canonization processes.",
+    causeMiracles: {
+      process: "Modern process. The records of the cause list about 38 healings attributed to him, twelve of them of children, examined by medical commissions; which of these were the ones formally approved for the beatification (1905) and canonization (1925) has not been traced here.",
+      items: [],
+    },
     sufferings: "Severe self-imposed fasting (at times reduced to almost nothing but boiled potatoes) and minimal sleep over decades, which damaged his health; three decades of the reported 'grappin' harassment; the sheer physical toll of 16–18-hour confessional days in old age.",
     death: "Died at Ars on 4 August 1859, aged 73, worn out after 41 years in the same parish.",
     lastWords: "",
@@ -2476,6 +2544,15 @@ window.SAINTS = [
 
     phenomena: ["Several hundred recorded dreams throughout his adult life, some concerning the practical future of his congregation, and a small number — notably a long dream concerning the Church's future trials — treated by later commentators as strikingly prophetic, though never formally adjudicated by the Church as such"],
     miracles: "Miracles of healing attributed to his intercession were examined and approved in the beatification and canonization processes.",
+    causeMiracles: {
+      process: "Modern process: two miracles for beatification (approved together) and two more for canonization.",
+      items: [
+        { stage: "Beatification", who: "Teresa Callegari, aged 23", where: "Castel San Giovanni, Piacenza, Italy", when: "17 July 1921", what: "Acute post-infectious polyarthritis after influenzal pneumonia (1918), with further lesions that had left her bedridden and wasted for about two years. At the end of a novena she rose and walked.", approved: "19 March 1929, by Pius XI", source: "Parrocchia di Pontenure (2024), citing the decree", legend: false },
+        { stage: "Beatification", who: "Sr. Provina Negro, Daughters of Mary Help of Christians", where: "Giaveno, Piedmont, Italy", when: "—", what: "A round ulcer of the stomach, suffered since 1905 with loss of appetite and prostration; the decree calls the healing 'instantaneous and perfect'.", approved: "19 March 1929, by Pius XI", source: "Parrocchia di Pontenure; Italian Wikipedia", legend: false },
+        { stage: "Canonization", who: "Anna Maccolini", where: "—", when: "After December 1930", what: "Severe phlebitis of the left leg and thigh, on top of an influenzal bronchopneumonia that ran from October 1930 to February 1931; healed perfectly and instantaneously.", approved: "By Pius XI, before the canonization of 1 April 1934", source: "Pius XI, Geminata laetitia (decretal letter of canonization, 1 April 1934)", legend: false },
+        { stage: "Canonization", who: "Caterina Pilenga, née Lanfranchi", where: "—", when: "—", what: "Severe chronic arthritis of the knees and feet, with organic lesions; healed perfectly and instantaneously.", approved: "By Pius XI, before the canonization of 1 April 1934", source: "Pius XI, Geminata laetitia", legend: false },
+      ],
+    },
     sufferings: "Chronic overwork and exhaustion from decades of constant travel, fundraising, and administration on behalf of a rapidly multiplying congregation, which visibly damaged his health well before his death.",
     death: "Died at Valdocco, Turin, on 31 January 1888, aged 72, after a life of relentless labour on behalf of poor and abandoned youth; his funeral drew such enormous crowds that Turin's streets had to be closed.",
     lastWords: "",
@@ -2628,6 +2705,12 @@ window.SAINTS = [
 
     phenomena: ["The catacomb experience of fire, 1544, and the subsequent physical swelling near his heart, said to have been confirmed by two broken ribs found at his death", "Reports of visible levitation during Mass, witnessed by members of his community"],
     miracles: "Numerous healing miracles were examined and approved in his canonization process.",
+    causeMiracles: {
+      process: "Before Urban VIII's decrees (1625–34) and Benedict XIV's treatise on canonization (1734–38) fixed the modern rules, a cause was argued from a large dossier of cures gathered at sworn local inquiries — often including wonders from the saint's own lifetime — and the bull named a selection rather than two pre-set 'approved miracles'. Philip Neri's processes, opened within weeks of his death in 1595, are unusually well preserved and full of eyewitness testimony, including wonders from his lifetime.",
+      items: [
+        { stage: "Testified to in the canonization process", who: "Paolo Massimo, aged 14, son of Fabrizio Massimo", where: "Palazzo Massimo, Rome", when: "16 March 1583", what: "Philip arrived after the boy had died, called him by name, and Paolo came back to life, spoke with him, made his confession, and — told he could live or go — chose to go, and died again. The Massimo family still opens the chapel of the palace to the public every 16 March. A miracle in his lifetime, not after death; Benedict XIV later cited it in his treatise on canonization.", approved: "Presented in the process that ended in canonization by Gregory XV, 12 March 1622", source: "Roberto de Mattei, 'The Miracle of the Palazzo Massimo'; Benedict XIV, De servorum Dei beatificatione", legend: false },
+      ],
+    },
     sufferings: "Chronic poor health in his last decades, including what modern readers would likely recognize as a serious cardiac condition.",
     death: "Died just after midnight on 26 May 1595 in Rome, having heard confessions as usual that evening and told his community he expected to die that night.",
     lastWords: "",
@@ -2793,6 +2876,13 @@ window.SAINTS = [
 
     phenomena: ["No public mystical phenomena of the visionary kind; instead, decades of profound and largely concealed interior spiritual darkness, documented in her private letters and assessed by her spiritual directors using categories drawn from St. John of the Cross's 'dark night of the soul'"],
     miracles: "Two miracles of healing were investigated and approved for her beatification (2003) and canonization (2016) respectively, both involving unexplained recoveries attributed to her intercession.",
+    causeMiracles: {
+      process: "Modern process, fast-tracked: John Paul II waived the five-year wait after her death, but not the miracles — one for beatification, one for canonization.",
+      items: [
+        { stage: "Beatification", who: "Monica Besra", where: "West Bengal, India", when: "5 September 1998 — the first anniversary of Mother Teresa's death", what: "A large abdominal tumour (about 16 cm) that disappeared within hours after the sisters laid a Miraculous Medal on it. The case was disputed by her own doctors and by critics, who attributed the recovery to treatment.", approved: "20 December 2002, by John Paul II", source: "National Catholic Register; NPR", legend: false },
+        { stage: "Canonization", who: "Marcílio Haddad Andrino, an engineer", where: "Santos, Brazil", when: "9 December 2008", what: "Multiple brain abscesses with hydrocephalus; he fell into a coma and was being taken into emergency surgery when he woke, free of pain, and recovered completely.", approved: "17 December 2015, by Pope Francis", source: "National Catholic Register; NPR", legend: false },
+      ],
+    },
     sufferings: "Chronic poor health in her later decades, including heart problems; beneath the public radiance, an interior spiritual darkness lasting from shortly after 1946 nearly to her death.",
     death: "Died of heart failure at the Missionaries of Charity motherhouse in Calcutta on 5 September 1997, having stepped down as Superior General only weeks earlier.",
     lastWords: "",
@@ -2959,6 +3049,12 @@ window.SAINTS = [
 
     phenomena: [],
     miracles: "Miracles attributed to his intercession were examined and approved in his beatification and canonization processes.",
+    causeMiracles: {
+      process: "Beatified 1662 and canonized 1665 by the same pope, Alexander VII. The Catholic Encyclopedia records that the miracles attested in the process included the raising to life of two drowned persons and cures of the blind and paralysed; which specific cases the bulls name has not been verified here.",
+      items: [
+        { stage: "Attested in the process (stage not confirmed)", who: "Jérôme Genin, a young man", where: "Near Annecy, Savoy", when: "1623", what: "Drowned in the river and left on the bottom for hours before the body was recovered; he revived, saying he had called on Francis de Sales as he fell and seen him bless him. Two days later, on pilgrimage to the tomb at Annecy, the injuries from the accident vanished. Very likely one of the two drownings the Catholic Encyclopedia mentions — but that link is inferred, not confirmed.", approved: "", source: "1000 Raisons de Croire; Catholic Encyclopedia (1909), 'St. Francis de Sales'", legend: true },
+      ],
+    },
     sufferings: "A lifelong tendency toward apoplexy/stroke, exacerbated by decades of relentless overwork in preaching, writing, and diplomatic travel.",
     death: "Died of a stroke at Lyon on 28 December 1622, aged 55, while returning from a pastoral and diplomatic mission away from his own diocese.",
     lastWords: "",
@@ -3129,6 +3225,12 @@ window.SAINTS = [
 
     phenomena: [],
     miracles: "Miracles attributed to his intercession were examined and approved in his beatification and canonization processes.",
+    causeMiracles: {
+      process: "Two miracles were recognised for the canonization (1839). Only one of them could be traced here; the beatification miracles (1816) have not been verified yet.",
+      items: [
+        { stage: "Canonization", who: "Antonia Tarzia, a 22-year-old mother", where: "Catanzaro, Calabria, Italy", when: "August 1817", what: "Crushing injuries to the chest and abdomen, a fractured femur and gangrene; she recovered. One of the two miracles recognised for the canonization.", approved: "By Gregory XVI, before the canonization of 26 May 1839", source: "Domenico Condito, local-history account (2025) — a secondary source; not yet checked against the decree", legend: false },
+      ],
+    },
     sufferings: "Decades of severe arthritis leaving him bent nearly double in his final years; profound spiritual desolation and scrupulosity in his last decade.",
     death: "Died at Pagani on 1 August 1787, aged ninety, after decades of physical infirmity and a painful final decade including the 1780 rule controversy.",
     lastWords: "",
@@ -3295,6 +3397,10 @@ window.SAINTS = [
 
     phenomena: [],
     miracles: "Miracles attributed to his intercession were recorded in the process leading to his 1174 canonization.",
+    causeMiracles: {
+      process: "A twelfth-century papal canonization by Alexander III (1174), argued from the Vita Prima — whose later books are largely a record of his miracles — rather than by a modern process. No separate beatification.",
+      items: [],
+    },
     sufferings: "Chronic digestive damage from extreme early asceticism at Cîteaux, which affected his health for the rest of his life; the emotional and reputational weight of the Second Crusade's failure in his final years.",
     death: "Died at Clairvaux on 20 August 1153, aged about 62–63, worn down by decades of poor health and still actively governing his abbey to the end.",
     lastWords: "",
@@ -3461,6 +3567,10 @@ window.SAINTS = [
 
     phenomena: ["Reportedly hundreds of witnessed levitations over more than three decades, some lasting minutes or longer, occurring both in private prayer and public liturgy — among the most extensively attested phenomena of this specific kind in the Church's history, precisely because so many independent witnesses across so many years and locations reported them"],
     miracles: "Miracles of healing were examined and approved in his beatification and canonization processes, alongside the extensive levitation testimony itself.",
+    causeMiracles: {
+      process: "The processes (diocesan from 1664, apostolic 1688–90) gathered testimony from living witnesses — about seventy levitations among it. The notable procedural fact: Prospero Lambertini, as Promoter of the Faith (the 'devil's advocate'), examined and was persuaded by the evidence, and as Benedict XIV beatified Joseph in 1753. The specific cures approved for beatification and for canonization (1767) have not been traced here.",
+      items: [],
+    },
     sufferings: "Decades of administrative confinement and exclusion from ordinary public priestly ministry, imposed not as punishment for wrongdoing but to manage the disruption caused by his own mystical phenomena.",
     death: "Died at Osimo on 18 September 1663, aged sixty, after decades spent largely away from public view.",
     lastWords: "",
@@ -3605,13 +3715,13 @@ window.SAINTS = [
     beatified: null,
     canonized: null,
     landmarks: [
-      { date: "c. 5 BC", event: "The Annunciation at Nazareth (Luke 1:26-38)" },
-      { date: "c. 5 BC", event: "The Visitation to Elizabeth; the Magnificat (Luke 1:39-56)" },
-      { date: "c. 4 BC", event: "The birth of Christ at Bethlehem; the shepherds; the presentation in the Temple and Simeon's prophecy of the sword" },
-      { date: "c. AD 8", event: "The finding of the twelve-year-old Jesus in the Temple — the last scene of his hidden life" },
-      { date: "c. AD 30", event: "The wedding at Cana; her last recorded words" },
-      { date: "c. AD 33", event: "Standing at the Cross; entrusted to the beloved disciple (John 19:25-27)" },
-      { date: "c. AD 33", event: "In the upper room with the apostles before Pentecost (Acts 1:14)" },
+      { date: "c. 7–5 BC", event: "The Annunciation at Nazareth (Luke 1:26-38)" },
+      { date: "c. 7–5 BC", event: "The Visitation to Elizabeth; the Magnificat (Luke 1:39-56)" },
+      { date: "c. 6–4 BC", event: "The birth of Christ at Bethlehem, before the death of Herod the Great (c. 4 BC); the shepherds; the presentation in the Temple and Simeon's prophecy of the sword" },
+      { date: "c. AD 6–8", event: "The finding of the twelve-year-old Jesus in the Temple — the last scene of his hidden life" },
+      { date: "c. AD 28–30", event: "The wedding at Cana; her last recorded words" },
+      { date: "AD 30 or 33", event: "Standing at the Cross; entrusted to the beloved disciple (John 19:25-27) — for his age at death, see \"The age of Christ\" in her Story" },
+      { date: "AD 30 or 33", event: "In the upper room with the apostles before Pentecost (Acts 1:14)" },
     ],
   },
 
@@ -3638,15 +3748,15 @@ window.SAINTS = [
   narrative: {
     summary: "The Mother of God: a girl of Nazareth whose 'be it done to me' is the hinge of the Incarnation, who appears in Scripture perhaps a dozen times, speaks seven, and whose last recorded words point away from herself.",
 
-    story: "Everything the Church holds about Mary follows from one thing, and it is not a claim about her: it is a claim about her Son. She is called Mother of God because the child she bore is God — the title was defined at Ephesus in 431 to settle a dispute about Christ, not about her, and the crowds who acclaimed the definition understood that a lesser title for the mother would have meant a lesser claim about the child.\n\nThe Gospels give her very little space and use it precisely. She is asked, and consents. She goes into the hill country to help her cousin and sings a song about God overturning the social order. She bears the child in a stable, hears from Simeon that a sword will pass through her own soul, loses the boy for three days, and is told at Cana that his hour has not yet come — and then tells the servants to do whatever he says. She stands at the Cross when almost everyone else has gone. She is in the upper room when the Spirit comes. Then the record stops.\n\nWhat the tradition added afterwards was not stories but conclusions. If she is the mother of the Holy One, then sin never had her — the Immaculate Conception, defined in 1854, meaning that she was preserved from original sin from the first instant of her existence, by her Son's merits applied in advance. If she is the mother of the risen Lord, then death does not hold her body — the Assumption, defined in 1950. Neither dogma stands alone; each is an inference from who her child is.\n\nThe consistent shape of Marian doctrine is that it never terminates in her. Every title turns back to Christ, and every apparition that the Church has approved has said, in effect, what she said at Cana.",
+    story: "Everything the Church holds about Mary follows from one thing, and it is not a claim about her: it is a claim about her Son. She is called Mother of God because the child she bore is God — the title was defined at Ephesus in 431 to settle a dispute about Christ, not about her, and the crowds who acclaimed the definition understood that a lesser title for the mother would have meant a lesser claim about the child.\n\nThe Gospels give her very little space and use it precisely. She is asked, and consents. She goes into the hill country to help her cousin and sings a song about God overturning the social order. She bears the child in a stable, hears from Simeon that a sword will pass through her own soul, loses the boy for three days, and is told at Cana that his hour has not yet come — and then tells the servants to do whatever he says. She stands at the Cross when almost everyone else has gone. She is in the upper room when the Spirit comes. Then the record stops.\n\nWhat the tradition added afterwards was not stories but conclusions. If she is the mother of the Holy One, then sin never had her — the Immaculate Conception, defined in 1854, meaning that she was preserved from original sin from the first instant of her existence, by her Son's merits applied in advance. If she is the mother of the risen Lord, then death does not hold her body — the Assumption, defined in 1950. Neither dogma stands alone; each is an inference from who her child is.\n\nThe consistent shape of Marian doctrine is that it never terminates in her. Every title turns back to Christ, and every apparition that the Church has approved has said, in effect, what she said at Cana.\n\n— The age of Christ —\n\nThe dates in her timeline are ranges because there are two ways of reckoning his age, and they give different answers.\n\n**The traditional reckoning — from the Gospels.** Luke says Jesus was \"about thirty\" when he began his ministry (Luke 3:23). John's Gospel mentions three Passovers during it, which suggests about three years (the other Gospels could fit into one). Thirty plus three gives the age at death the tradition has always kept: thirty-three.\n\n**The historical reckoning — from Roman and Judean dates.** Matthew places the birth under Herod the Great, who died in about 4 BC, so the birth was around 6–4 BC. Luke dates John the Baptist's preaching to the fifteenth year of Tiberius, about AD 28–29. The crucifixion fell on a Passover Friday under Pontius Pilate, which fits AD 30 or AD 33. There is no year zero, so the span runs from about thirty-three (born 5 BC, died AD 30) to about thirty-eight (born 6 BC, died AD 33) — most often put at thirty-six or thirty-seven.\n\nThe two don't contradict each other so much as measure differently: \"about thirty\" is Luke's approximation, and our BC/AD calendar, worked out by Dionysius Exiguus in 525, is itself a few years out. Nothing in the faith depends on which is right.",
 
     timeline: [
       { year: "c. 18 BC", event: "Born — the date is a traditional reckoning, not a record" },
-      { year: "c. 5 BC", event: "The Annunciation; the Visitation; the Magnificat" },
-      { year: "c. 4 BC", event: "The Nativity at Bethlehem; the Presentation; the flight into Egypt" },
-      { year: "c. AD 8", event: "The finding in the Temple — the last words of hers recorded before Cana" },
-      { year: "c. AD 30", event: "The wedding at Cana" },
-      { year: "c. AD 33", event: "Calvary, and the upper room at Pentecost" },
+      { year: "c. 7–5 BC", event: "The Annunciation; the Visitation; the Magnificat" },
+      { year: "c. 6–4 BC", event: "The Nativity at Bethlehem, before Herod the Great died; the Presentation; the flight into Egypt" },
+      { year: "c. AD 6–8", event: "The finding in the Temple — the last words of hers recorded before Cana" },
+      { year: "c. AD 28–30", event: "The wedding at Cana" },
+      { year: "AD 30 or 33", event: "Calvary, and the upper room at Pentecost — see \"The age of Christ\" above" },
       { year: "431", event: "The Council of Ephesus defines her as Theotokos, God-bearer" },
       { year: "649", event: "The Lateran Council affirms her perpetual virginity" },
       { year: "1854", event: "Pius IX defines the Immaculate Conception in Ineffabilis Deus, 8 December" },
@@ -3707,13 +3817,7 @@ window.SAINTS = [
       },
       {
         title: "The image at Guadalupe",
-        text: "What is said to have been handed over at Tepeyac in 1531 was not a practice but a picture: the image on Juan Diego's tilma, which is still exhibited and still the object of the most visited Marian pilgrimage in the world. The evangelistic effect was immediate and enormous, and it worked partly because the figure is a native woman speaking Nahuatl rather than a European one.",
-        source: "Nican Mopohua; the shrine at Tepeyac",
-        legend: false,
-      },
-      {
-        title: "Guadalupe",
-        text: "In December 1531, ten years after the fall of Tenochtitlan, she appeared near Mexico City to Juan Diego, an indigenous convert, speaking Nahuatl and appearing as a native woman. The image on his cloak is still there. Nine million are said to have been baptised in the decade that followed. She is patroness of the Americas.",
+        text: "In December 1531, ten years after the fall of Tenochtitlan, she appeared at Tepeyac, near Mexico City, to Juan Diego, an indigenous convert — speaking Nahuatl and appearing as a native woman rather than a European one. What was handed over there was not a practice but a picture: the image on Juan Diego's tilma, which is still exhibited and still the object of the most visited Marian pilgrimage in the world. The evangelistic effect was immediate and enormous; nine million are said to have been baptised in the decade that followed. She is patroness of the Americas.",
         source: "Nican Mopohua; the shrine at Tepeyac",
         legend: false,
       },
@@ -3745,6 +3849,10 @@ window.SAINTS = [
     ],
 
     miracles: "The healings recorded at Lourdes are the most heavily documented: of thousands of claims, a medical bureau has judged around seventy inexplicable, and the Church has recognised those.",
+    causeMiracles: {
+      process: "Not applicable: the Mother of God was never 'canonized' — her cult is apostolic. The nearest equivalent is the Church's recognition of miracles at Marian shrines, above all the roughly seventy cures at Lourdes declared miraculous by the diocesan bishops after the medical bureau's review.",
+      items: [],
+    },
 
     sufferings: "The tradition counts seven: Simeon's prophecy, the flight into Egypt, the loss of the child in the Temple, meeting her Son on the way to Calvary, standing at the Cross, receiving his body, and the burial. The Gospel records no complaint from her at any of them.",
 
@@ -3761,7 +3869,13 @@ window.SAINTS = [
       "Her instruction to the servants is the whole of Marian devotion in one line: it points away from her",
     ],
     method: "",
-    devotions: ["The Rosary", "The Angelus", "The Memorare", "The seasonal antiphons at Compline", "The Seven Sorrows"],
+    devotions: [
+      "The prayer of Israel — the Psalms and the Temple: she and Joseph kept the Law, presenting the child and offering the sacrifice of the poor (Luke 2:22-24)",
+      "The yearly Passover pilgrimage to Jerusalem (Luke 2:41)",
+      "Pondering: she \"kept all these things, pondering them in her heart\" — said twice (Luke 2:19, 2:51)",
+      "The Magnificat — praise woven almost entirely from the Psalms and Hannah's song (Luke 1:46-55; 1 Samuel 2:1-10)",
+      "Persevering prayer with the apostles in the upper room, waiting for the Spirit (Acts 1:14)",
+    ],
     school: "",
     influencedBy: [],
     influenced: ["St. Bernard of Clairvaux", "St. Dominic", "St. Louis de Montfort", "St. Alphonsus Liguori", "St. Maximilian Kolbe"],
@@ -3788,7 +3902,11 @@ window.SAINTS = [
   },
 
   cult: {
-    patronages: ["The universal Church", "The Americas (under the title of Guadalupe)", "Countless nations, dioceses, orders and parishes"],
+    patronages: [
+      { of: "The universal Church", why: "" },
+      { of: "The Americas", why: "Under the title of Our Lady of Guadalupe" },
+      { of: "Countless nations, dioceses, orders and parishes", why: "" },
+    ],
     invokedAgainst: [],
     attributes: ["Blue mantle", "Crown of twelve stars", "Crescent moon", "Lily", "The child", "The pierced heart"],
     relics: "None. There are no bodily relics of Mary anywhere in the Church, which is itself part of the historical argument for the Assumption: the ancient world collected relics of everyone, and no city ever claimed hers.",
@@ -3800,7 +3918,7 @@ window.SAINTS = [
       "Walsingham, Norfolk — England's national shrine, and the nearest of these to Cambridge",
       "Guanare, Venezuela — the basilica of Our Lady of Coromoto",
     ],
-    devotions: ["The Rosary", "The Angelus", "The Brown Scapular", "The Miraculous Medal", "The Five First Saturdays — asked for at Pontevedra in 1925", "The Pillar — the oldest of the Spanish devotions"],
+    devotions: ["The Rosary", "The Angelus", "The Brown Scapular", "The Miraculous Medal", "The Five First Saturdays — asked for at Pontevedra in 1925", "The Pillar — the oldest of the Spanish devotions", "The Memorare", "The seasonal Marian antiphons at Compline (Alma Redemptoris Mater, Ave Regina Caelorum, Regina Caeli, Salve Regina)", "The Seven Sorrows"],
     foundations: [],
   },
 
@@ -3857,7 +3975,7 @@ core({
   anecdotes: [{ title: "\"I am a Catholic priest\"", text: "When the SS commandant asked for a volunteer to die in place of Gajowniczek, a married man with children, Kolbe stepped forward and simply said 'I am a Catholic priest.' He led the starving men in prayer and hymns for two weeks; the guards, wanting the bunker empty, finally killed him by injection.", source: "Documented survivor testimony, including Gajowniczek's own", legend: false }],
   patronages: [{ of: "Journalists, families, prisoners, the pro-life movement", why: "His media apostolate and his death" }],
   attributes: ["Franciscan habit with concentration-camp stripes", "A Miraculous Medal", "Barbed wire"],
-  related: ["carlo-acutis", "john-paul-ii", "francis-of-assisi"],
+  related: ["carlo-acutis", "john-paul-ii", "francis-of-assisi", "fulton-sheen"],
   cards: [{ q: "How did St. Maximilian Kolbe die?", a: "He volunteered to take the place of a stranger condemned to starve at Auschwitz, and was finally killed by lethal injection on 14 August 1941" }],
 }),
 
@@ -3876,7 +3994,7 @@ core({
   patronages: [{ of: "The internet and computer programmers", why: "His own tech skill turned to evangelisation" }],
   attributes: ["Jeans and trainers (deliberately ordinary dress in art)", "A laptop", "A monstrance"],
   relics: "Body preserved and visible (not formally declared incorrupt but embalmed/prepared) in a glass tomb at the Shrine of the Renunciation, Assisi.",
-  related: ["pier-giorgio-frassati", "maximilian-kolbe", "philip-neri"],
+  related: ["pier-giorgio-frassati", "maximilian-kolbe", "philip-neri", "fulton-sheen"],
   cards: [{ q: "St. Carlo Acutis — feast day and canonization?", a: "12 October; canonized 7 September 2025 by Pope Leo XIV, jointly with Pier Giorgio Frassati — Leo XIV's first canonization" }],
 }),
 
@@ -5720,11 +5838,13 @@ core({
 }),
 
 // Added 15 August — St. Damian of Molokai, St. Gianna Beretta Molla,
-// Ven. Fulton Sheen, and Servant of God Clare Crockett, "to get to know."
-// Sheen and Crockett are NOT yet canonized — see the new `causeStage` field
+// Fulton Sheen, and Servant of God Clare Crockett, "to get to know."
+// None of the four was canonized when added — see the `causeStage` field
 // (servant | venerable | blessed | saint, defaulting to "saint" in core()).
-// Neither has an official liturgical feast day yet, so `feast` is left
-// unset for both — the calendar sync already skips any saint without one.
+// Sheen was beatified on 24 September 2026 and given a feast (9 December);
+// he has since been rewritten as a full dossier below. Crockett still has
+// no liturgical feast, so her `feast` is left unset — the calendar sync
+// already skips any saint without one.
 core({
   slug: "damian-of-molokai", listTier: "toKnow", name: "St. Damian of Molokai", sortName: "Damian of Molokai",
   birthName: "Jozef De Veuster", religiousName: "Fr. Damien de Veuster, SS.CC.",
@@ -5782,30 +5902,224 @@ core({
   ],
 }),
 
-core({
-  slug: "fulton-sheen", listTier: "toKnow", causeStage: "venerable", name: "Ven. Fulton J. Sheen", sortName: "Fulton Sheen",
-  birthName: "Peter John Sheen", religiousName: "Archbishop Fulton John Sheen",
-  titles: ["Archbishop", "Broadcaster"],
-  note: "Not yet canonized — Venerable since 2012, and to be beatified on 24 September 2026 at The Dome at America's Center in St. Louis, at a Mass presided over by Cardinal Tagle. The miracle (the recovery of a stillborn child in 2010) was approved in 2019 and a beatification was scheduled for that December, then postponed — first by a dispute over his remains, then by a review of his handling of clergy misconduct cases. After that review the cause was cleared. Until the 24th the correct style is Venerable; from that date, Blessed.",
-  rank: "Not yet beatified — no liturgical feast", feast: "",
-  born: "8 May 1895", bornPlace: "El Paso, Illinois, USA",
-  died: "9 December 1979", diedPlace: "New York City, USA", ageAtDeath: "84",
-  nationality: "American", order: "Diocesan clergy; Auxiliary Bishop of New York, then Bishop of Rochester", state: "Bishop, broadcaster",
-  summary: "An American bishop and pioneering religious broadcaster who reached tens of millions through the radio program 'The Catholic Hour' and, from 1951, the prime-time television program 'Life Is Worth Living,' for which he won an Emmy Award — one of the first major American media figures to bring serious catechesis and apologetics into mainstream broadcast television. He also spent sixteen years as national director of the Society for the Propagation of the Faith, raising large sums for the missions. Declared Venerable in 2012, his cause was cleared for beatification in 2019 but the ceremony itself was delayed six years by a jurisdictional dispute; it is now scheduled for September 2026.",
-  charism: "Bringing serious Catholic teaching into the most popular mass media of his era, on its own terms, without diluting the content.",
-  anecdotes: [
-    { title: "Winning an Emmy against Milton Berle and Edward R. Murrow", text: "Sheen's television program 'Life Is Worth Living' was nominated against major entertainment programming of the day, and won the 1952 Emmy Award for Most Outstanding Television Personality — an archbishop in cassock and cape, drawing prime-time ratings against established entertainers.", source: "Widely documented contemporary broadcasting history", legend: false },
-    { title: "\"I have to speak on television and I am opposed to it, I am afraid of it\"", text: "Sheen recounted opening one broadcast by describing his own nervous reluctance about the still-new medium of television — a self-deprecating opening that became characteristic of his on-air style, disarming an audience that might otherwise have expected a stiff, formal churchman.", source: "Recounted in his own memoirs and standard biographies", legend: false },
+// Fulton Sheen — beatified 24 September 2026 at The Dome at America's Center,
+// St. Louis: Cardinal Tagle presiding for Pope Leo XIV, who assigned 9 December
+// (his death date) as the feast, for the calendar of the Church in the United
+// States. Promoted that day from a "toKnow" core scaffold to a "favourite"
+// full dossier, and from causeStage "venerable" to "blessed". He now HAS a
+// feast, so the Google Calendar saints sync will pick him up — re-run
+// `node plan/scripts/gcal_sync.mjs saints` after this change.
+{
+  slug: "fulton-sheen", listTier: "favourite",
+  name: "Bl. Fulton J. Sheen",
+  sortName: "Fulton Sheen",
+  depth: "full",
+  causeStage: "blessed",
+
+  identity: {
+    birthName: "Peter John Sheen",
+    religiousName: "Archbishop Fulton John Sheen",
+    originalName: "",
+    epithets: ["America's Bishop", "The first televangelist"],
+    titles: ["Archbishop", "Preacher", "Broadcaster", "Missionary director"],
+    doctorTitle: "",
+    doctorDeclared: "",
+    rank: "Feast of 9 December, assigned at his beatification for the calendar of the Church in the United States — not on the General Roman Calendar",
+  },
+
+  dates: {
+    feast: "12-09",
+    feastLabel: "9 December",
+    altFeasts: [],
+    born: "8 May 1895",
+    bornPlace: "El Paso, Illinois, USA",
+    died: "9 December 1979",
+    diedPlace: "New York City, USA",
+    deathManner: "Heart disease, two years after open-heart surgery — found dead in his private chapel, before the Blessed Sacrament",
+    ageAtDeath: "84",
+    beatified: { date: "24 September 2026", by: "Pope Leo XIV", note: "Declared Blessed by apostolic letter, read at a Mass at The Dome at America's Center, St. Louis, by Cardinal Luis Antonio Tagle, who presided as the Pope's delegate; the English proclamation was read by Bishop Louis Tylka of Peoria. A newly commissioned image was unveiled simultaneously in St. Louis and at Sheen's tomb in Peoria, where a relic was presented for veneration" },
+    canonized: null,
+    landmarks: [
+      { date: "8 May 1895", event: "Born Peter John Sheen above his father's hardware store in El Paso, Illinois; the family soon moved to a farm near Peoria" },
+      { date: "20 September 1919", event: "Ordained a priest of the Diocese of Peoria by Bishop Edmund Dunne" },
+      { date: "1923", event: "Doctorate in philosophy at the Catholic University of Louvain; first American to win the Cardinal Mercier Prize for International Philosophy" },
+      { date: "1925", event: "Louvain grants him the agrégation en philosophie; God and Intelligence in Modern Philosophy published with an introduction by G. K. Chesterton" },
+      { date: "c. 1926–27", event: "Recalled by his bishop from a promising academic career to be a curate at St. Patrick's, Peoria — a deliberate test of obedience, which he accepted without complaint and which was ended after about nine months" },
+      { date: "1930", event: "Begins preaching on NBC's The Catholic Hour, which he keeps up for twenty years" },
+      { date: "1950", event: "Appointed national director of the Society for the Propagation of the Faith, a post he holds for sixteen years" },
+      { date: "11 June 1951", event: "Consecrated Auxiliary Bishop of New York in Rome" },
+      { date: "12 February 1952", event: "Life Is Worth Living debuts on the DuMont network, Tuesdays at 8 p.m., opposite Milton Berle and Frank Sinatra" },
+      { date: "1952", event: "Wins the Emmy for Most Outstanding Television Personality" },
+      { date: "late 1950s", event: "The dispute with Cardinal Spellman over mission funds; Pius XII decides in Sheen's favour, and Sheen's public career in New York is quietly shut down" },
+      { date: "21 October 1966", event: "Installed as Bishop of Rochester, New York" },
+      { date: "1968", event: "Offers the inner-city parish of St. Bridget's to the federal housing department for low-income housing; the backlash forces him to withdraw it" },
+      { date: "6 October 1969", event: "Resigns Rochester; named titular Archbishop of Newport, and returns to writing and preaching" },
+      { date: "2 October 1979", event: "Embraced by John Paul II at St. Patrick's Cathedral: 'You have written and spoken well of the Lord Jesus Christ. You are a loyal son of the Church.'" },
+      { date: "9 December 1979", event: "Dies in his private chapel, before the Blessed Sacrament" },
+      { date: "2002", event: "His cause is opened by Bishop Daniel Jenky in Peoria" },
+      { date: "28 June 2012", event: "Declared Venerable by Benedict XVI" },
+      { date: "5 July 2019", event: "Francis approves the miracle of James Fulton Engstrom" },
+      { date: "27 June 2019", event: "His remains are moved from the crypt of St. Patrick's, New York, to the Cathedral of St. Mary of the Immaculate Conception, Peoria, after a five-year legal dispute" },
+      { date: "3 December 2019", event: "The beatification set for that 21 December is postponed at the request of some US bishops — a delay of nearly seven years" },
+      { date: "24 September 2026", event: "Beatified in St. Louis; his feast set for 9 December" },
+    ],
+  },
+
+  life: {
+    nationality: "American",
+    era: "Twentieth-century America — the Depression, the radio age, the Cold War, the first decade of network television, and Vatican II",
+    places: ["El Paso and Peoria, Illinois — birth, boyhood on the family farm, ordination, and now his tomb", "St. Paul, Minnesota — seminary", "Washington, D.C. — the Catholic University of America, where he taught for over twenty years", "Louvain — doctorate and agrégation", "New York — twenty-five years of broadcasting, the Society for the Propagation of the Faith, auxiliary bishop, and his death", "Rochester, New York — three years as diocesan bishop", "St. Louis — beatified there, 2026"],
+    family: "Eldest of four sons of Newton Morris Sheen, a hardware dealer turned farmer, and Delia Fulton, whose maiden name he took as his own. Brothers Joseph, Thomas and Aloysius. He was not from money: the farm work he did as a boy is the background to a lifelong insistence that the Church's message had to be intelligible to people who had never read philosophy.",
+    occupation: "Farm boy, then academic philosopher, then broadcaster",
+    education: "St. Viator College, Bourbonnais, Illinois (BA, MA); St. Paul Seminary, Minnesota; the Catholic University of America (canon law); the Catholic University of Louvain (doctorate in philosophy, 1923; agrégé en philosophie, 1925); further study in Rome",
+    order: "Diocesan clergy — Diocese of Peoria, then Auxiliary Bishop of New York and Bishop of Rochester",
+    offices: ["Professor of philosophy, the Catholic University of America (late 1920s–1950)", "Preacher on NBC's The Catholic Hour (1930–1950)", "National director of the Society for the Propagation of the Faith (1950–1966)", "Auxiliary Bishop of New York and Titular Bishop of Caesariana (1951–1966)", "Bishop of Rochester, New York (1966–1969)", "Titular Archbishop of Newport (1969–1979)"],
+    stateOfLife: "Diocesan priest, then bishop and archbishop",
+    context: "He worked in the exact decades when American Catholics moved from an immigrant subculture into the national mainstream, and when the means of reaching a mass audience changed twice in one lifetime — radio, then television. Sheen took both new media seriously before most churchmen thought them respectable, and used them for straight doctrine rather than uplift.",
+  },
+
+  narrative: {
+    summary: "An Illinois farm boy who became the most-watched religious teacher of the twentieth century. Trained as a Thomist philosopher at Louvain — the first American to win the Cardinal Mercier Prize — he was recalled by his bishop to a small parish curacy as a test of obedience before being released to teach at the Catholic University of America. From 1930 he preached on NBC radio; from 1952 he appeared in cassock and cape on a prime-time television programme, Life Is Worth Living, with no script, no guests, and nothing but a blackboard, and drew up to thirty million viewers a week opposite Milton Berle and Frank Sinatra, most of them not Catholic. He won an Emmy for it and thanked his four writers: Matthew, Mark, Luke and John. For sixteen years he ran the American arm of the Society for the Propagation of the Faith and gave it everything he earned. A dispute with Cardinal Spellman over mission funds — which Sheen won at Rome and paid for at home — ended his public career in New York; three difficult years as Bishop of Rochester ended in resignation. Behind all of it was one unvarying practice: a continuous Holy Hour before the Blessed Sacrament every day from his ordination in 1919, sixty years without a break, and he was found dead in his private chapel keeping it.",
+
+    story: "Peter John Sheen was born above a hardware store in El Paso, Illinois, in 1895, the eldest of four brothers, and grew up doing farm work outside Peoria. He took his mother's maiden name, Fulton, and was ordained for the Diocese of Peoria in 1919. On the day of his ordination he made two resolutions, and kept both for sixty years: to offer the Mass every Saturday to Our Lady, and to spend a continuous Holy Hour every day in the presence of the Blessed Sacrament.\n\nHe was sent to study, and turned out to be very good at it. At Louvain he took a doctorate in philosophy in 1923 and became the first American to win the Cardinal Mercier Prize, awarded for the best philosophical treatise; in 1925 Louvain granted him the agrégation, a degree beyond the doctorate that few attempt. His first book, God and Intelligence in Modern Philosophy, carried an introduction by G. K. Chesterton. Offers followed from Oxford, Columbia and elsewhere — and his bishop, Edmund Dunne, called him home to be a curate in a poor Peoria parish. Sheen went without complaint. After about nine months the bishop told him that he had only wanted to see whether he would obey, and released him to the Catholic University of America, where he taught philosophy for over twenty years.\n\nIn 1930 he began preaching on NBC's Sunday-evening Catholic Hour. By 1950 he had an audience in the millions and was answering thousands of letters a week. In 1951 he was made an auxiliary bishop of New York, and the following February he took on something no bishop had attempted: a live prime-time commercial television programme, Life Is Worth Living, on the small DuMont network, in the Tuesday eight o'clock slot held by Milton Berle on NBC and Frank Sinatra on CBS. He had no script, no autocue, no guests and no set beyond a chair, a statue of Our Lady and a blackboard. He talked for twenty-seven minutes on conscience, suffering, communism, marriage, fear — and timed himself to the second by a studio clock. Within a year he was drawing up to thirty million viewers a week, most of them not Catholic, and an Emmy for Most Outstanding Television Personality, which he accepted by saying it was time he paid tribute to his four writers: Matthew, Mark, Luke and John. Berle, whose ratings he had taken, said that if Sheen was going to use old material, he could hardly complain.\n\nWhat the audience did not see was the money. From 1950 Sheen was national director of the Society for the Propagation of the Faith, the Church's mission-funding arm in the United States, and he channelled his television earnings and his book royalties into it rather than keeping them. He also made converts, privately and at length — Clare Boothe Luce, Henry Ford II, the violinist Fritz Kreisler, and the former Communist editor Louis Budenz among them — giving each of them, by his own account, something like twenty-five hours of instruction.\n\nIt ended in a quarrel he could not avoid. Cardinal Francis Spellman, Archbishop of New York, demanded that the Society pay the archdiocese for surplus powdered milk the federal government had given it free for the missions. Sheen refused, and when pressed appealed over Spellman's head to Pius XII, who decided for him. Spellman told him he would get even. Sheen's Good Friday sermons at St. Patrick's stopped, his television work wound down, and in 1966 he was moved out of New York to the small diocese of Rochester. There he tried to govern as he had taught — quickly, personally, and ahead of his clergy. In 1968 he offered St. Bridget's, an inner-city parish, to the federal housing department as a site for housing the poor; the backlash from priests and parishioners was so fierce that he withdrew the offer. He resigned in October 1969, a year before he had to, and was made titular Archbishop of Newport.\n\nThe last decade was quieter and, by his own account, the best. He wrote, preached retreats to priests, and kept the Holy Hour. In July 1977, at eighty-two, he had open-heart surgery. On 2 October 1979, at St. Patrick's Cathedral, John Paul II came down from the sanctuary, embraced him in front of the whole congregation, and said: 'You have written and spoken well of the Lord Jesus Christ. You are a loyal son of the Church.' Sheen said afterwards that he could die happy. He died nine weeks later, on 9 December 1979, and was found in his private chapel in front of the Blessed Sacrament — the hour he had promised at ordination being, as it happened, the last thing he did.\n\nHis cause opened in Peoria in 2002 and he was declared Venerable in 2012. In 2010 a boy in Goodfield, Illinois, James Fulton Engstrom, was born without a pulse and stayed that way for sixty-one minutes while his parents prayed to Sheen; he revived, with no impairment, and in 2019 the recovery was approved as the miracle required for beatification. Then the beatification set for December 2019 was called off three weeks beforehand, when the Bishop of Rochester objected that a New York attorney general's report might reflect badly on Sheen's handling of a priest's case; Peoria replied that the assignment in question had been made by Sheen's successor, not by Sheen. The delay ran almost seven years. On 24 September 2026, in a stadium in St. Louis, Cardinal Tagle read Pope Leo XIV's apostolic letter declaring him Blessed, before a congregation of some fifty thousand, while at his tomb in Peoria a relic was set out for veneration.",
+
+    timeline: [
+      { year: "1895", event: "Born at El Paso, Illinois, 8 May" },
+      { year: "1919", event: "Ordained for the Diocese of Peoria, 20 September; makes his ordination-day promise of a daily Holy Hour" },
+      { year: "1923", event: "Doctorate at Louvain; first American to win the Cardinal Mercier Prize" },
+      { year: "1925", event: "Agrégé en philosophie; God and Intelligence published, introduced by Chesterton" },
+      { year: "c. 1926", event: "Recalled to a Peoria curacy as a test of obedience, then released to the Catholic University of America" },
+      { year: "1930–1950", event: "Preaches on NBC's The Catholic Hour" },
+      { year: "1950–1966", event: "National director of the Society for the Propagation of the Faith" },
+      { year: "1951", event: "Consecrated Auxiliary Bishop of New York" },
+      { year: "1952–1957", event: "Life Is Worth Living on DuMont, then ABC; the 1952 Emmy" },
+      { year: "1961–1968", event: "The Fulton Sheen Program, syndicated" },
+      { year: "1966–1969", event: "Bishop of Rochester" },
+      { year: "1969–1979", event: "Titular Archbishop of Newport; writing, retreats and preaching" },
+      { year: "1979", event: "Embraced by John Paul II in October; dies 9 December in his chapel" },
+      { year: "2012", event: "Declared Venerable" },
+      { year: "2019", event: "Miracle approved; remains moved to Peoria; beatification postponed" },
+      { year: "2026", event: "Beatified at St. Louis, 24 September; feast set for 9 December" },
+    ],
+
+    conversion: "No conversion of his own — he was a cradle Catholic who never left. The turning point of his life is instead an act of obedience: at the height of his academic promise, with offers from several universities, his bishop sent him to a parish curacy and he went, which is the episode he himself treated as the foundation of everything that came after.",
+
+    anecdotes: [
+      { title: "\"My four writers — Matthew, Mark, Luke and John\"", text: "Accepting the 1952 Emmy for Most Outstanding Television Personality — against a field of professional entertainers — Sheen said it was time he paid tribute to his four writers: Matthew, Mark, Luke and John.", source: "Widely documented contemporary reporting of the 1952 Emmy Awards", legend: false },
+      { title: "The bishop's test of obedience", text: "Returning from Louvain with a doctorate, the Cardinal Mercier Prize and offers from several universities, Sheen was instead ordered by his bishop to serve as a curate in a poor parish in Peoria. He went without protest. After about nine months the bishop told him he had simply wanted to know whether he would obey, and released him to teach at the Catholic University of America.", source: "Recounted by Sheen himself in Treasure in Clay and repeated in the standard biographies", legend: false },
+      { title: "Opposite Milton Berle", text: "Life Is Worth Living was put out in the Tuesday eight o'clock slot against Milton Berle's Texaco Star Theater and Frank Sinatra — and within a year was drawing up to thirty million viewers a week, most of them not Catholic. Berle's own line about it, widely repeated, was that if Sheen was using old material he could hardly object, since they had the same Boss.", source: "Contemporary broadcasting history; Berle's remark circulates in several wordings and should be treated as a good story rather than a verbatim quotation", legend: false },
+      { title: "The angel who cleaned the blackboard", text: "His only prop was a blackboard, which he would fill and then leave — the camera cutting away and returning to find it wiped. He attributed the work to an angel, and the joke became so much a part of the programme that a posthumous anthology of his talks was published as From the Angel's Blackboard.", source: "His own on-air remarks and the standard accounts of the programme; the stagehands who actually did it were the running joke's point", legend: false },
+      { title: "\"Your Holiness, I have never counted them\"", text: "Pius XII asked Sheen how many converts he had made. He answered: 'Your Holiness, I have never counted them. I am always afraid if I did count them, I might think I made them, instead of the Lord.' The same refusal of credit is behind his standing description of his own work: 'I am only a porter who opens the door. It is the Lord who walks in and does the carpentry and the masonry and the rebuilding on the inside.'", source: "Two separately attested sayings, usually told together: the exchange with Pius XII circulates in devotional sources without a primary citation, and the porter line is quoted (with no particular occasion given) in the National Catholic Register's account of his last day. He did not, so far as can be traced, say the porter line TO the Pope — they are the same point made twice.", legend: true },
+      { title: "The milk, and the price of winning", text: "Cardinal Spellman demanded that Sheen's mission society pay the Archdiocese of New York for surplus powdered milk the US government had donated free. Sheen refused, appealed to Pius XII, and won. Spellman's reply, as Sheen recorded it, was that he would get even if it took ten years. Sheen's Good Friday preaching at St. Patrick's ended, his broadcasting wound down, and in 1966 he was moved to Rochester.", source: "Thomas C. Reeves, America's Bishop (2001), and Sheen's own guarded account in Treasure in Clay", legend: false },
+      { title: "\"You have written and spoken well of the Lord Jesus Christ\"", text: "At St. Patrick's Cathedral on 2 October 1979, John Paul II left the sanctuary to embrace the frail eighty-four-year-old archbishop in front of the congregation and told him: 'You have written and spoken well of the Lord Jesus Christ. You are a loyal son of the Church.' Sheen died nine weeks later.", source: "Contemporary reporting of the 1979 papal visit to the United States", legend: false },
+      { title: "Found where he had promised to be", text: "On 9 December 1979 Sheen was found dead in his private chapel in front of the Blessed Sacrament — sixty years, almost to the month, after promising at ordination to spend a continuous hour there every day. Asked once what he hoped would be said of him, he answered that he had kept the Holy Hour, not that he had preached well.", source: "Contemporary obituaries and Treasure in Clay", legend: false },
+      { title: "Sixty-one minutes without a pulse", text: "In September 2010, James Fulton Engstrom was born in Goodfield, Illinois, with no pulse, and had none for sixty-one minutes while his parents prayed for Sheen's intercession. He revived without the impairment such an interval normally guarantees. In July 2019 the recovery was approved as the miracle for Sheen's beatification.", source: "The decree of the Dicastery for the Causes of Saints, 2019, and contemporary reporting", legend: false },
+    ],
+
+    phenomena: [],
+    miracles: "The recovery of James Fulton Engstrom (Goodfield, Illinois, 2010), born without a pulse and without one for sixty-one minutes, approved by Pope Francis on 5 July 2019 as the miracle required for beatification.",
+    causeMiracles: {
+      process: "Modern process: one approved miracle for beatification; a second, occurring after the beatification, is needed for canonization. None has yet been approved.",
+      items: [
+        { stage: "Beatification", who: "James Fulton Engstrom, a newborn", where: "Goodfield, Illinois, near Peoria", when: "September 2010", what: "Born without a pulse, and without one for sixty-one minutes while his parents prayed to Sheen; he revived, and grew up without the impairment that interval normally guarantees.", approved: "5 July 2019, by Pope Francis", source: "Decree of the Congregation for the Causes of Saints, 2019; Wikipedia and contemporary reporting", legend: false },
+      ],
+    },
+    sufferings: "The deliberate dismantling of his public career by Cardinal Spellman after he won their dispute at Rome; three unhappy years as Bishop of Rochester ending in early resignation after his own priests and people turned on his attempt to give a parish away to house the poor; open-heart surgery at eighty-two; and, after death, a five-year lawsuit over where his body should lie and a beatification called off three weeks beforehand and delayed almost seven years.",
+    death: "Died on 9 December 1979 in New York, aged 84, of heart disease two years after open-heart surgery. He was found in his private chapel, before the Blessed Sacrament. Buried first in the crypt of St. Patrick's Cathedral, New York; since 27 June 2019 his tomb has been in the Cathedral of St. Mary of the Immaculate Conception, Peoria.",
+    lastWords: "",
+  },
+
+  spirituality: {
+    charism: "Putting the whole of Catholic doctrine, undiluted, into whatever medium the age was actually listening to — and keeping the public work fed by one fixed private hour that he never once traded away for it.",
+    teachings: [
+      "The Holy Hour is not an addition to a priest's work but the source of it: 'Not a Holy Hour of obligation, but a Holy Hour of love.'",
+      "Most opposition to the Church is opposition to a caricature — 'there are not more than a hundred people in the world who truly hate the Catholic Church, but there are millions who hate what they wrongly believe the Catholic Church to be' — so the right response is explanation, not defence.",
+      "Modern unhappiness is largely displaced guilt: Peace of Soul argues that anxiety which will not name sin as sin cannot be resolved by analysis alone.",
+      "Suffering is not an interruption of a meaningful life but the place where its meaning is decided — the argument behind the title Life Is Worth Living.",
+      "Judge yourself by a standard outside yourself: 'The humble man knows himself as he really is, for he judges himself as he judges time, by a standard outside himself, namely, God and His Moral Law.'",
+    ],
+    method: "Compose everything in full and deliver none of it from paper: he wrote his talks out, prayed them over before the Blessed Sacrament, and then spoke without script or autocue, timing himself to the second. He prepared in front of the tabernacle on principle — his standing claim was that he never gave a talk he had not first made there.",
+    devotions: ["The daily continuous Holy Hour before the Blessed Sacrament, kept from 1919 to his death", "The Mass offered every Saturday to Our Lady, a second ordination-day promise", "The Rosary", "Consecration to Our Lady — the subject of The World's First Love"],
+    school: "Neo-Thomism from Louvain and Cardinal Mercier, turned into popular apologetics — philosophy kept intact but translated into the vocabulary of a general audience",
+    influencedBy: ["St. Thomas Aquinas", "Cardinal Désiré Mercier and the Louvain school", "G. K. Chesterton, whose weekly essays he studied deliberately and who introduced his first book"],
+    influenced: ["Effectively every later Catholic broadcaster, from Mother Angelica and EWTN onwards", "His converts — Clare Boothe Luce, Henry Ford II, Fritz Kreisler, Louis Budenz, Bella Dodd, Heywood Broun", "The modern revival of Eucharistic adoration among diocesan clergy"],
+    controversies: "Three, and none of them small. The feud with Cardinal Spellman over mission funds, which Sheen won at Rome and which cost him his platform in New York. His brief, unhappy governance of Rochester, where the 1968 offer of St. Bridget's parish to the federal housing department provoked enough anger that parishioners threw stones at his car and he withdrew it. And, posthumously, the objection raised by the Diocese of Rochester in December 2019 that a New York attorney general's report might reflect badly on Sheen's handling of a priest's case — which stopped the beatification three weeks before it was due; Peoria's answer was that the assignment at issue had been made by Sheen's successor. The cause was cleared and the beatification finally held in 2026.",
+  },
+
+  dailyPractice: {
+    rhythm: "A fixed spine and an improvised day around it: Mass, the Divine Office, and one continuous hour before the Blessed Sacrament — taken early, before the day's demands could bid for it — then writing, broadcasting, correspondence, instruction of converts, and travel, with the Saturday Mass reserved to Our Lady.",
+    practices: [
+      { name: "The continuous Holy Hour", detail: "One unbroken hour before the Blessed Sacrament every day from his ordination in 1919 until his death, on the road as much as at home. 'Continuous' was the whole point: not sixty minutes accumulated across a day, but one hour not divided.", source: "Treasure in Clay, ch. 'The Hour That Makes My Day'", legend: false },
+      { name: "Prepare in front of the tabernacle", detail: "He wrote and thought through his talks in the Blessed Sacrament's presence rather than at a desk, and said he had never given one he had not first prepared there.", source: "Treasure in Clay and his retreat conferences to priests", legend: false },
+      { name: "Write it out, then speak without it", detail: "Every broadcast was composed in full and then delivered from memory, to the second, with no script and no autocue — the fluency was rehearsal, not improvisation.", source: "Standard accounts of Life Is Worth Living and his own description of his method", legend: false },
+      { name: "Saturday's Mass for Our Lady", detail: "The second of his two ordination-day resolutions, kept alongside the Holy Hour for sixty years.", source: "Treasure in Clay", legend: false },
+      { name: "Instruction at length, one person at a time", detail: "Alongside an audience of thirty million he taught converts privately, roughly twenty-five hours each — the mass medium never replaced the individual work.", source: "Contemporary reporting (TIME, 1952) and the standard biographies", legend: false },
+    ],
+    forYou: "The transferable part is not the eloquence, it is the order of operations: the hour comes first and the public work is downstream of it. You already have the fixed slot — mental prayer after Mass — so the Sheen-shaped upgrade is to stop treating it as separate from the speaking work and start preparing the speaking there. Two concrete borrowings: make the hour continuous and early rather than collected in fragments later, and write your talks out in full before delivering them from memory, which is exactly the discipline Toastmasters keeps asking for and the opposite of trusting fluency.",
+  },
+
+  writings: [
+    { title: "Treasure in Clay: The Autobiography of Fulton J. Sheen", original: "—", genre: "Autobiography", year: "1980 (posthumous)", language: "English", note: "The closest thing to a spiritual testament — and the source for the Holy Hour, the ordination promises, and his own guarded account of the Spellman years. The chapter 'The Hour That Makes My Day' is the one to read first.", translation: "—", publisher: "Image/Doubleday; reissued by Ignatius Press", free: "In copyright", difficulty: "Easy", order: 1 },
+    { title: "Life of Christ", original: "—", genre: "Life of Christ", year: "1958", language: "English", note: "His major book and the best single sample of his preaching in sustained form — organised around the Cross being present from the beginning rather than arriving at the end.", translation: "—", publisher: "Image/Doubleday", free: "In copyright", difficulty: "Accessible", order: 2 },
+    { title: "Peace of Soul", original: "—", genre: "Apologetics / spiritual psychology", year: "1949", language: "English", note: "His answer to the mid-century confidence in psychoanalysis: anxiety that refuses to name sin cannot be resolved by analysis. Dated in its examples, not in its argument.", translation: "—", publisher: "Whittlesey House; reissued by Ignatius Press", free: "In copyright", difficulty: "Accessible", order: 3 },
+    { title: "The World's First Love: Mary, Mother of God", original: "—", genre: "Mariology", year: "1952", language: "English", note: "His Marian book, and the doctrinal backing for the Saturday Mass he promised at ordination.", translation: "—", publisher: "McGraw-Hill; reissued by Ignatius Press", free: "In copyright", difficulty: "Accessible", order: 4 },
+    { title: "The Priest Is Not His Own", original: "—", genre: "Priestly spirituality", year: "1963", language: "English", note: "Written for priests, and the fullest statement of the Holy Hour argument — that the priest is victim as well as offerer.", translation: "—", publisher: "McGraw-Hill; reissued by Ignatius Press", free: "In copyright", difficulty: "Moderate", order: 5 },
+    { title: "Way to Inner Peace", original: "—", genre: "Short spiritual essays", year: "1955", language: "English", note: "Short chapters, one idea each; the humility and self-knowledge chapters are where the 'measured by the Perfect' argument actually lives.", translation: "—", publisher: "Alba House", free: "In copyright", difficulty: "Easy", order: 6 },
+    { title: "Three to Get Married", original: "—", genre: "Marriage", year: "1951", language: "English", note: "On marriage as a three-party arrangement; still the book of his most often given to engaged couples.", translation: "—", publisher: "Appleton-Century-Crofts; reissued by Scepter", free: "In copyright", difficulty: "Easy", order: 7 },
+    { title: "God and Intelligence in Modern Philosophy", original: "—", genre: "Philosophy", year: "1925", language: "English", note: "The Louvain thesis that won the Cardinal Mercier Prize, with an introduction by G. K. Chesterton. Technical, and unlike anything else on this list.", translation: "—", publisher: "Longmans, Green", free: "Scans circulate at archive.org", difficulty: "Hard — genuine scholastic philosophy", order: 8 },
+    { title: "Calvary and the Mass", original: "—", genre: "Eucharistic devotion", year: "1936", language: "English", note: "Seven short meditations on the Seven Last Words mapped onto the parts of the Mass; short enough to read in one sitting.", translation: "—", publisher: "P. J. Kenedy", free: "Widely reprinted", difficulty: "Easy", order: 9 },
   ],
-  patronages: [{ of: "None yet — patronages are formally assigned only after canonization", why: "—" }],
-  attributes: ["Episcopal cassock and cape", "A blackboard (his signature TV broadcasting prop)"],
-  related: [],
+  writingsNotes: "Sheen published more than sixty books, and a large proportion of what circulates online under his name is transcribed or paraphrased from broadcasts rather than quoted from a book — which is why several of his best-known 'quotations' cannot be traced to a page. Ignatius Press and Image hold most of the reissued titles; his broadcast talks are collected in anthologies such as From the Angel's Blackboard. Start with Treasure in Clay, then Life of Christ.",
+
+  about: {
+    hagiography: [],
+    biography: ["Thomas C. Reeves, America's Bishop: The Life and Times of Fulton J. Sheen (2001) — the standard critical life, and the fullest account of the Spellman dispute and the Rochester years", "Kathleen L. Riley, Fulton J. Sheen: An American Catholic Response to the Twentieth Century (2004)"],
+    scholarly: [],
+    devotional: ["Treasure in Clay — his own autobiography, better read as a spiritual testament than as a memoir"],
+    papal: ["Pope Leo XIV, apostolic letter of beatification, 24 September 2026"],
+    media: ["Life Is Worth Living (DuMont, then ABC, 1952–57) — surviving episodes circulate freely and are the best introduction to how he actually taught", "The Fulton Sheen Program (syndicated, 1961–68), in colour"],
+    officeOfReadings: "",
+  },
+
+  cult: {
+    patronages: [
+      { of: "No patronages formally assigned", why: "As a Blessed his public cult is permitted rather than universal; patronages are normally assigned later" },
+    ],
+    invokedAgainst: [],
+    attributes: ["Episcopal cassock, cape and pectoral cross", "A blackboard", "A microphone or television camera"],
+    iconography: "Almost always shown as he appeared on air — cassock and cape, at a blackboard. A newly commissioned image with a halo was unveiled at his beatification in St. Louis and simultaneously at his tomb in Peoria.",
+    artworks: [],
+    relics: "His tomb is in the Cathedral of St. Mary of the Immaculate Conception, Peoria, Illinois, where his remains were moved from the crypt of St. Patrick's Cathedral, New York, on 27 June 2019. A relic was presented for veneration there on the day of his beatification.",
+    incorrupt: false,
+    shrines: ["Cathedral of St. Mary of the Immaculate Conception, Peoria, Illinois — his tomb", "The Archbishop Fulton J. Sheen Museum, Peoria"],
+    devotions: ["The Holy Hour before the Blessed Sacrament, which his own cause has done more than anything else to revive"],
+    customs: "",
+    foundations: [],
+  },
+
+  connections: {
+    contemporaries: ["Cardinal Francis Spellman, Archbishop of New York — his opponent in the mission-funds dispute", "Pope Pius XII, who decided that dispute in his favour", "Bishop Edmund Dunne of Peoria, who recalled him from Louvain to a curacy to test his obedience", "Milton Berle and Frank Sinatra, his rivals in the Tuesday-night slot", "Mother Angelica, whose EWTN is the direct descendant of what he began"],
+    directors: [],
+    disciples: ["Clare Boothe Luce", "Henry Ford II", "Fritz Kreisler", "Louis Budenz", "Bella Dodd", "Heywood Broun"],
+    family: "Eldest of four sons of Newton Morris Sheen and Delia Fulton; his niece Joan Sheen Cunningham brought the lawsuit that eventually moved his body to Peoria.",
+    related: ["john-paul-ii", "thomas-aquinas", "maximilian-kolbe", "carlo-acutis"],
+  },
+
+  note: "Beatified 24 September 2026 — 'Bl.', not 'St.': he is not canonized. The 9 December feast was assigned at the beatification for the calendar of the Church in the United States, not the General Roman Calendar.",
+
   cards: [
-    { q: "Ven. Fulton Sheen — dates, and current status?", a: "Born 8 May 1895 in El Paso, Illinois, died 9 December 1979 in New York; currently Venerable (2012), with beatification scheduled for 24 September 2026 in St. Louis" },
-    { q: "What was Fulton Sheen's television program, and what did it win?", a: "'Life Is Worth Living' (from 1951) — it won the 1952 Emmy Award for Most Outstanding Television Personality" },
-    { q: "Why was Sheen's beatification delayed for six years?", a: "A jurisdictional dispute between the Diocese of Peoria (which sponsored his cause) and the Archdiocese of New York, resolved only in early 2026" },
+    { q: "Bl. Fulton J. Sheen — feast day, dates, status?", a: "9 December; born 8 May 1895 at El Paso, Illinois, died 9 December 1979 in New York, aged 84. Beatified 24 September 2026 at St. Louis — Blessed, not yet canonized." },
+    { q: "What did Sheen promise on his ordination day, and how long did he keep it?", a: "A continuous Holy Hour before the Blessed Sacrament every day, and the Saturday Mass for Our Lady — kept for sixty years, from 1919 until he was found dead in his chapel in 1979." },
+    { q: "What was Life Is Worth Living, and what was remarkable about its slot?", a: "A live prime-time television programme on DuMont from February 1952 — no script, no guests, just a blackboard — opposite Milton Berle and Frank Sinatra, drawing up to thirty million viewers a week, most of them not Catholic." },
+    { q: "How did Sheen accept his 1952 Emmy?", a: "By saying it was time he paid tribute to his four writers: Matthew, Mark, Luke and John." },
+    { q: "What did Sheen answer when Pius XII asked how many converts he had made?", a: "'Your Holiness, I have never counted them. I am always afraid if I did count them, I might think I made them, instead of the Lord.' Elsewhere: 'I am only a porter who opens the door' — the Lord does the rebuilding inside." },
+    { q: "Why did his bishop recall him from Louvain to a Peoria curacy?", a: "Purely to see whether he would obey. He went without complaint, and after about nine months the bishop released him to the Catholic University of America." },
+    { q: "What ended Sheen's public career in New York?", a: "His refusal to let the Society for the Propagation of the Faith pay Cardinal Spellman for donated surplus milk. Pius XII decided for Sheen; Spellman shut down his preaching and broadcasting and, in 1966, moved him to Rochester." },
+    { q: "What was the miracle approved for his beatification?", a: "James Fulton Engstrom, born in Illinois in 2010 with no pulse for sixty-one minutes while his parents prayed to Sheen, recovered without impairment; approved 5 July 2019." },
+    { q: "Why did his beatification take nearly seven years longer than planned?", a: "It was called off three weeks before the December 2019 date when the Diocese of Rochester objected over a priest's case; Peoria answered that the assignment had been made by Sheen's successor. Cleared, it was finally held on 24 September 2026." },
+    { q: "Where is his tomb?", a: "The Cathedral of St. Mary of the Immaculate Conception, Peoria — moved there from St. Patrick's, New York, in June 2019 after a five-year lawsuit." },
   ],
-}),
+},
 
 core({
   slug: "clare-crockett", listTier: "toKnow", causeStage: "servant", name: "Servant of God Clare Crockett", sortName: "Clare Crockett",
@@ -6380,7 +6694,7 @@ core({
     diedPlace: "Palma de Mallorca, Spain",
     deathManner: "Died peacefully after forty-six years as doorkeeper of the Jesuit college of Montesión, having kept his extensive private mystical life almost entirely hidden even from his own community",
     ageAtDeath: "85",
-    beatified: { date: "1825", by: "Pope Leo XII" },
+    beatified: { date: "25 May 1825", by: "Pope Leo XII" },
     canonized: { date: "15 January 1888", by: "Pope Leo XIII", note: "Canonized the same day as his own spiritual protégé, St. Peter Claver" },
     landmarks: [
       { date: "1544", event: "At twelve, prepared for First Communion by the visiting Jesuit Peter Faber, hosted by his family at Segovia" },
@@ -6443,6 +6757,10 @@ core({
 
     phenomena: ["Recurring visions of Christ, Our Lady, and the saints recorded across decades in his private notebooks, discovered only after his death", "A prophetic dove-and-birds vision in his youth, later confirmed by seven years of demonic assault on his chastity", "Multiple ecstatic visions on the feast of the Assumption", "A vision of St. Francis of Assisi asking him why he wept"],
     miracles: "Miracles attributed to his intercession were examined in the processes leading to his beatification (1825) and canonization (1888).",
+    causeMiracles: {
+      process: "Beatified 25 May 1825 and canonized 15 January 1888 (with Peter Claver and John Berchmans). The long gap is the suppression of the Jesuits (1773–1814), which froze the cause. The specific miracles approved at either stage have not been traced here.",
+      items: [],
+    },
     sufferings: "The deaths of his wife, mother, and young son within a few years of each other, alongside the collapse of his business; initial rejection by the Jesuits for age and lack of education; seven years of intense demonic assault specifically targeting his chastity, endured largely in secret.",
     death: "Died peacefully at Palma de Mallorca on 31 October 1617, aged 85, after forty-six years as doorkeeper of Montesión College — his extensive private mystical life unknown to almost everyone around him until his notebooks were read after his death.",
     lastWords: "",
@@ -6510,34 +6828,200 @@ core({
 },
 
 
-core({
-  slug: "nicholas-of-flue", listTier: "toKnow", name: "St. Nicholas of Flüe", sortName: "Nicholas of Flüe",
-  originalName: "Niklaus von Flüe (German)",
-  epithets: ["Brother Klaus (Bruder Klaus)"],
-  titles: ["Hermit", "Patron of Switzerland"], rank: "Not on the General Roman Calendar; 21 March in the Roman Martyrology",
-  feast: "03-21", feastLabel: "21 March",
-  altFeasts: [{ date: "09-25", label: "25 September", calendar: "Switzerland and Germany" }],
-  born: "1417", bornPlace: "Flüeli, near Sachseln, Obwalden, Switzerland",
-  died: "21 March 1487", diedPlace: "The Ranft, Sachseln, Switzerland", deathManner: "Natural, with his wife and children around him", ageAtDeath: "about 70",
-  beatified: { date: "1669" },
-  canonized: { date: "1947", by: "Pope Pius XII" },
-  nationality: "Swiss (Obwalden, in the Old Swiss Confederacy)", state: "Married layman, then hermit", era: "Late medieval Switzerland",
-  family: "Married Dorothea Wyss around 1445–46; they had ten children.",
-  summary: "A farmer, soldier, councillor and judge in Obwalden who in 1467, at about fifty and with his wife Dorothea's consent, left his family and his offices to live as a hermit in the Ranft gorge near their home. Tradition says he lived his last twenty years there on no food but the Eucharist. People came from far beyond Switzerland for his counsel, and his advice to the quarrelling cantons at the Diet of Stans in 1481 is credited with keeping the Confederacy from civil war.",
-  charism: "Peace made out of solitude: a man who left public life and became the one voice the whole Confederacy would listen to.",
-  writings: [{ title: "\"My Lord and my God\" — his usual prayer", original: "Mein Herr und mein Gott", genre: "Prayer", year: "first written down c. 1500", language: "German", note: "Quoted in the Catechism of the Catholic Church, §226; in this library" }],
-  patronages: [
-    { of: "Switzerland", why: "His counsel at the Diet of Stans (1481) kept the Confederacy together" },
-    { of: "The Pontifical Swiss Guard", why: "As patron of Switzerland" },
+{
+  slug: "nicholas-of-flue", listTier: "toKnow",
+  name: "St. Nicholas of Flüe",
+  sortName: "Nicholas of Flüe",
+  depth: "full",
+
+  identity: {
+    birthName: "Niklaus von Flüe",
+    religiousName: "Bruder Klaus (Brother Klaus) — never a member of any order; the name is what the people called him",
+    originalName: "Niklaus von Flüe (German)",
+    epithets: ["Brother Klaus (Bruder Klaus)", "Father of the Fatherland (Landesvater)", "The hermit of the Ranft"],
+    titles: ["Hermit", "Married layman", "Peacemaker", "Patron of Switzerland"],
+    doctorTitle: "",
+    doctorDeclared: "",
+    rank: "Not on the General Roman Calendar; 21 March in the Roman Martyrology. Solemnity in Switzerland (25 September); kept on 25 September in Germany too",
+  },
+
+  dates: {
+    feast: "03-21",
+    feastLabel: "21 March",
+    altFeasts: [{ date: "09-25", label: "25 September", calendar: "Switzerland and Germany — moved off 21 March so as not to clash with the old feast of St. Benedict" }],
+    born: "1417",
+    bornPlace: "Flüeli, near Sachseln, Obwalden, Switzerland",
+    died: "21 March 1487",
+    diedPlace: "The Ranft, Sachseln, Switzerland",
+    deathManner: "Natural, after a short, very painful illness, with his wife and children around him",
+    ageAtDeath: "about 70",
+    beatified: { date: "1649 / 8 March 1669", by: "Innocent X (cult permitted, 1649); confirmed by Clement IX (1669)", note: "An equivalent beatification — the cult was approved rather than a miracle judged. Clement X extended the Mass and Office to all of Catholic Switzerland and the diocese of Constance on 26 September 1671." },
+    canonized: { date: "15 May 1947 (Ascension Day)", by: "Pope Pius XII" },
+    landmarks: [
+      { date: "1417", event: "Born at Flüeli to Heinrich von Flüe and Hemma Ruobert, well-off free farmers; baptised at Kerns" },
+      { date: "1446", event: "Fights at Ragaz in the Old Zürich War" },
+      { date: "c. 1445–46", event: "Marries Dorothea Wyss; ten children follow, the eldest, Hans, within the year" },
+      { date: "1459", event: "Begins some nine years as a judge; also sits on the cantonal council. Declines to stand for Landammann" },
+      { date: "1460", event: "Serves as a captain in the Thurgau campaign against Archduke Sigismund of Austria" },
+      { date: "October 1467", event: "Leaves home, with Dorothea's consent, the youngest child still an infant" },
+      { date: "1467", event: "Turned back near Liestal; returns to Obwalden and settles in the Ranft gorge, minutes below his own house" },
+      { date: "27 April 1469", event: "The Ranft chapel consecrated by Thomas Weldner, auxiliary bishop of Constance, who also tests his fast" },
+      { date: "22 December 1481", event: "The Diet of Stans: his counsel, carried by the parish priest Heimo Amgrund, averts the break-up of the Confederacy" },
+      { date: "4 December 1482", event: "Dictates his letter to the Council of Bern — 'Peace is always in God, for God is peace'" },
+      { date: "21 March 1487", event: "Dies in the Ranft; buried in the parish church at Sachseln" },
+    ],
+  },
+
+  life: {
+    nationality: "Swiss (Obwalden, in the Old Swiss Confederacy)",
+    era: "Late medieval Switzerland — the Old Zürich War, the Burgundian Wars, and the quarrels that followed them",
+    places: ["Flüeli — his farm and family home", "The Ranft — the gorge of the Melchaa, a few minutes' walk below the house, where he lived for twenty years", "Liestal — where he turned back from leaving the country", "Stans — the Diet of 1481", "Sachseln — his tomb, in the parish church"],
+    family: "Son of Heinrich von Flüe and Hemma Ruobert; two brothers, Peter and Egloff. Married Dorothea Wyss, a farmer's daughter, around 1445–46; they had five sons and five daughters. Hans, the eldest, was about twenty and able to run the farm when his father left.",
+    occupation: "Farmer; soldier; councillor and judge",
+    education: "None formal. He could not read — everything he taught was spoken, and his one surviving letter was dictated.",
+    order: "None — a lay hermit, living under the direction of his parish clergy",
+    offices: ["Member of the cantonal council of Obwalden", "Judge, c. 1459–1467", "Captain in the Thurgau campaign (1460)", "Declined the office of Landammann"],
+    stateOfLife: "Married layman, then hermit (with his wife's consent)",
+    context: "A prosperous, respected farmer at the centre of his canton's public life, in a small peasant confederacy that was winning wars and learning to quarrel over the spoils.",
+  },
+
+  narrative: {
+    summary: "A farmer, soldier, councillor and judge in Obwalden who in 1467, at about fifty and with his wife Dorothea's consent, left his family and his offices to live as a hermit in the Ranft gorge a few minutes from their home. Contemporaries — including the bishop's own investigator — attested that he lived his last twenty years on no food but the Eucharist. People came from far beyond Switzerland for his counsel, and his advice to the quarrelling cantons at the Diet of Stans in 1481 is credited with keeping the Confederacy from civil war. He is the patron of Switzerland, honoured by Protestants as well as Catholics, and his short prayer is quoted in the Catechism.",
+
+    story: "Niklaus was born in 1417 at Flüeli, on the slope above Sachseln, to a family of free farmers who owned their own land. He grew up doing what men of his standing did in Obwalden: farming, fighting, and governing. He fought at Ragaz in 1446, in the Old Zürich War, and in 1460 served as a captain in the Thurgau campaign against Archduke Sigismund of Austria — where, the early accounts say, he protected a convent of nuns at Diessenhofen from being plundered by his own side. He married Dorothea Wyss, a farmer's daughter much younger than him, around 1445, and they had ten children. He sat on the cantonal council, served about nine years as a judge, and turned down the chance to be Landammann, the head of the canton.\n\nAll the while he had an inner life that did not fit the outer one. He later told visitors of visions from childhood, and in his forties it became a crisis. One vision he described was of a lily growing from his mouth, which he was lost in admiring until a horse came by and ate it — his worldly cares, he understood, devouring the life God meant for him. He also spoke of a disgust with the injustice he saw as a judge, including a verdict he watched being bent. For two years he was in something close to despair, unable to stay and unable to go.\n\nIn October 1467, when his youngest child was still an infant and Hans, the eldest, could run the farm, he left — with Dorothea's consent, which every account treats as the hinge of the whole story. She did not follow him and did not stop him. He set out for Alsace, meaning to join a community of devout men abroad, but near Liestal, just across the border, he turned back: the early biography says the town appeared to him as if in flames, and a peasant he met advised him that a Confederate would not be welcome abroad and should serve God at home. He went back to Obwalden, was found by hunters living rough in the Melchtal, and finally settled in the Ranft, the gorge below his own house. His neighbours built him a cell and a chapel; the chapel was consecrated on 27 April 1469.\n\nFrom then on he ate nothing. That is the claim of every contemporary, and it was tested: the canton kept watch on the gorge for a month, and the auxiliary bishop of Constance, Thomas Weldner, came to consecrate the chapel and examine him. The story is that the bishop asked him which was the greatest virtue, and when Klaus answered 'obedience', ordered him under obedience to eat; Klaus obeyed, took a little bread in wine, and could barely keep it down. Asked how he lived, he would only say, 'God knows.' He received Communion at Mass in his chapel, where he endowed a chaplain so that Mass could be said there. Modern historians argue about the fast; the Church has never defined it, but it was accepted by the men who investigated it at the time.\n\nThe man who had left public life became the one voice all of public life listened to. Pilgrims, scholars, diplomats and princes came to the Ranft — the abbot Albrecht von Bonstetten, who wrote the first account of him in 1479, the Nuremberg pilgrim Hans von Waldheim, envoys from Milan and Austria. He received them in the afternoons and gave them short, plain counsel. He kept by him a picture — a wheel of six spokes around a central face, which he explained as the mystery of God going out in creation and returning — and used it to teach.\n\nIn December 1481 the Confederacy nearly broke apart at the Diet of Stans. The victorious cantons had fallen out over the spoils of the Burgundian Wars and over whether to admit Fribourg and Solothurn as members; the country cantons feared being outvoted by the towns. On 22 December, with the delegates about to go home and the alliance with them, the parish priest of Stans, Heimo Amgrund, walked through the night to the Ranft and back. Whatever Klaus said — it was never written down — the Diet reconvened, reached agreement within hours, and the Stanser Verkommnis was sealed; Fribourg and Solothurn were admitted. Bern sent him a gift of money in thanks, and his reply, dictated on 4 December 1482, is his one authentic surviving text: 'Obedience is the greatest honour in heaven and on earth… Peace is always in God, for God is peace.'\n\nIn March 1487 he fell ill with severe pain and died after about eight days, on 21 March, his wife and children with him. He was buried at Sachseln. His tomb became a pilgrimage at once; Archduke Sigismund of Austria had a solemn requiem held for him. The Reformation, which split the Confederacy he had held together, did not split his memory: Zwingli invoked him, and Swiss Protestants still honour him as the Landesvater.\n\nThe cult was permitted in 1649 and confirmed by Clement IX in 1669, but canonization waited nearly three centuries — the Swiss bishops tried in 1869, 1929 and 1935, and no miracle reported in the nineteenth century passed Rome. Two healings in the canton of Solothurn, in 1937 and 1939, finally did. In August 1941, with war all around Switzerland, the bishops vowed a national pilgrimage to Brother Klaus if the country was spared; it was, and in 1944 Pius XII waived the third miracle then required. He was canonized on Ascension Day, 15 May 1947 — Switzerland's first native saint, 460 years after his death.",
+
+    timeline: [
+      { year: "1417", event: "Born at Flüeli, Obwalden" },
+      { year: "1446", event: "Fights at Ragaz in the Old Zürich War" },
+      { year: "c. 1445–46", event: "Marries Dorothea Wyss" },
+      { year: "1459–1467", event: "Judge and councillor; declines to be Landammann" },
+      { year: "1460", event: "Captain in the Thurgau campaign" },
+      { year: "1465–67", event: "Two years of inner crisis" },
+      { year: "1467", event: "Leaves home with Dorothea's consent (October); turns back at Liestal; settles in the Ranft" },
+      { year: "1469", event: "Ranft chapel consecrated, 27 April; his fast examined by the bishop's auxiliary" },
+      { year: "1479", event: "Albrecht von Bonstetten, abbot of Einsiedeln, writes the first account of him" },
+      { year: "1481", event: "Diet of Stans, 22 December — his counsel averts civil war" },
+      { year: "1482", event: "Letter to the Council of Bern, 4 December" },
+      { year: "1487", event: "Dies in the Ranft, 21 March" },
+      { year: "1649", event: "Innocent X permits his cult (equivalent beatification)" },
+      { year: "1669", event: "Clement IX confirms it, 8 March" },
+      { year: "1872", event: "Pius IX recognises his heroic virtue" },
+      { year: "1937, 1939", event: "The two healings in Solothurn later approved for canonization" },
+      { year: "1947", event: "Canonized by Pius XII, 15 May" },
+      { year: "1984", event: "John Paul II celebrates Mass at Flüeli-Ranft and prays at his tomb in Sachseln (June)" },
+    ],
+
+    conversion: "Not a conversion from sin but a slow unfitting from a good, successful public life: visions from youth, disgust at injustice on the bench, two years of near-despair, and finally a leaving made in the open, with his wife's agreement.",
+
+    anecdotes: [
+      { title: "The lily and the horse", text: "He told visitors of a vision in which a lily grew from his mouth, so beautiful that he stood gazing at it — until a horse came past, bent down, and ate it. He understood the lily as the life God was offering him, and the horse as the business of his farm and his offices, which was consuming it.", source: "Recorded by early visitors and in Heinrich Wölflin's Vita (1501)", legend: true },
+      { title: "Dorothea's yes", text: "He did not slip away. He asked his wife, and she gave her consent — at about fifty, with ten children, the youngest a baby. The shrine at Flüeli-Ranft today presents the two of them together, and every serious account treats her consent, not his departure, as the heart of the vocation.", source: "Early biographies; the Bruder Klaus shrine, Sachseln and Flüeli-Ranft", legend: false },
+      { title: "Liestal on fire", text: "Heading for Alsace, he came in sight of Liestal and saw the town as though it were burning, which he took as a sign. A farmer he met there told him plainly that a Confederate would get no welcome abroad and should serve God in his own country. He went home.", source: "Heinrich Wölflin, Vita (1501)", legend: true },
+      { title: "The bishop's test", text: "When Thomas Weldner, auxiliary bishop of Constance, came in 1469 to consecrate the Ranft chapel, he examined Klaus's fast. He asked which virtue was greatest; Klaus answered 'obedience'. The bishop then ordered him, under obedience, to eat. Klaus did — three morsels of bread dipped in wine — and suffered so badly from it that the bishop pressed him no further.", source: "Early biographies (Wölflin, 1501)", legend: false },
+      { title: "The night walk from Stans", text: "On 22 December 1481, with the Diet of Stans breaking up and the Confederacy with it, the parish priest Heimo Amgrund walked through the night to the Ranft and back. What Klaus told him was never recorded. Within hours of his return the delegates had agreed. Nobody knows the content of the most consequential advice in Swiss history.", source: "Diebold Schilling's Lucerne chronicle; standard histories of the Stanser Verkommnis", legend: false },
+      { title: "\"God knows\"", text: "Asked by visitors how he could live without food, he usually gave no explanation at all — only that God knew. Pressed, he said that when he was present at Mass and the priest received the Sacrament, he drew from it a strength that sustained him without eating or drinking.", source: "Early visitors' accounts, as collected by Robert Durrer (1917–21)", legend: false },
+    ],
+
+    phenomena: ["Visions from childhood onward, described to visitors (the lily and the horse; the pilgrim; the fountain)", "The meditation wheel — a vision of the Holy Face at the centre of a six-spoked wheel, used as a teaching picture", "Total fast of about twenty years, living on the Eucharist — investigated in his lifetime and attested by contemporaries, debated by modern historians"],
+    miracles: "Healings at his tomb were recorded from the years after his death. None reported in the nineteenth century passed Rome; the two that did — Ida Jeker (1937) and Bertha Schürmann (1939) — are below.",
+    causeMiracles: {
+      process: "Pre-congregation cult followed by an equivalent beatification: Innocent X permitted the cult in 1649, Clement IX confirmed it for Sachseln on 8 March 1669 (lifting earlier prohibitions by the bishops of Constance), and Clement X extended it to Catholic Switzerland and the diocese of Constance on 26 September 1671. No miracle was judged for the beatification. Pius IX recognised his heroic virtue in 1872. Canonization attempts in 1869, 1929 and 1935 stalled for want of an approved miracle; the two healings below were approved, and in 1944 Pius XII dispensed the third miracle then required. The dates of the individual miracle decrees have not been traced here.",
+      items: [
+        { stage: "Canonization", who: "Ida Jeker, a farmer's daughter", where: "Büsserach, canton Solothurn — healed in the parish church of Sachseln", when: "26 June 1937", what: "Her left arm had been lame since a badly set childhood dislocation; she had had epileptic fits since twelve, and from spring 1937 a painful neuritis whose treatment left suppurating wounds. On a pilgrimage to Sachseln the priest laid Brother Klaus's robe on her bandaged arm and blessed her with his relic; she felt 'an invisible lightning bolt' go through her and the pain vanished. At home the wounds had closed without scars, and she could lift a chair with that arm.", approved: "Before the canonization of 15 May 1947; Pius XII dispensed the third miracle in 1944", source: "Schweizerische Kirchenzeitung, 'Heiligsprechungsprozess von Niklaus von Flüe (II)'; Helvetia Catholica, 'Wie Bruder Klaus zwei Solothurnerinnen heilte'", legend: false },
+        { stage: "Canonization", who: "Bertha Schürmann, a former teacher", where: "Egerkingen, canton Solothurn — at home", when: "18 May 1939, Ascension Thursday", what: "After severe angina in 1932 she had become almost wholly paralysed, with pleurisy and a kidney abscess; bedridden for over two years, judged incurable, and on 4 May 1939 told by her doctor she would soon die. Alone at home while her family was at Vespers, she prayed to Brother Klaus; at the moment the church was singing the Magnificat her pain ceased, feeling returned to her limbs, and she got up. Her doctor confirmed the next day a sudden and complete cure.", approved: "Before the canonization of 15 May 1947; Pius XII dispensed the third miracle in 1944", source: "Schweizerische Kirchenzeitung, 'Heiligsprechungsprozess von Niklaus von Flüe (II)'; Helvetia Catholica, 'Wie Bruder Klaus zwei Solothurnerinnen heilte'", legend: false },
+      ],
+    },
+    sufferings: "Two years of inner torment before he left; the cost of leaving a wife and ten children, borne by them as much as by him; the misunderstanding and suspicion of neighbours who thought him mad or a fraud; the physical ordeal of the fast when obedience made him eat; and, the early accounts say, harsh temptation and assaults in the gorge. He died after about a week of agonising pain.",
+    death: "Fell ill in March 1487 and died in the Ranft on 21 March, after about eight days of severe pain, aged about seventy. Dorothea and their children were with him. He was buried in the parish church of Sachseln, where his relics still lie.",
+    lastWords: "",
+  },
+
+  spirituality: {
+    charism: "Peace made out of solitude: a man who left public life and became the one voice the whole Confederacy would listen to.",
+    teachings: [
+      "\"Peace is always in God, for God is peace\" — and peace cannot be destroyed, but discord can destroy it (letter to Bern, 1482).",
+      "\"Obedience is the greatest honour in heaven and on earth\" — so be obedient to one another (letter to Bern, 1482).",
+      "\"Wisdom is the most loving thing of all, for it begins everything in the best way\" (letter to Bern, 1482).",
+      "Let go of whatever keeps you from God, receive whatever brings you to Him, and give yourself away — the three petitions of his prayer.",
+      "Keep out of the quarrels of foreign powers — the counsel of neutrality later read back into his memory, though the exact words attributed to him ('Do not make the fence too wide') are not from any authenticated source.",
+    ],
+    method: "Contemplation of God's Trinitarian life through an image: the meditation wheel, a face at the centre with three rays going out and three coming back, which he explained as God going out into creation and the Incarnation, and all things returning to Him. Combined with daily Mass, the Passion prayed through, and long, wordless attention.",
+    devotions: ["The Holy Eucharist — his whole physical life, on his own account", "The Passion of Christ", "The Holy Trinity, through the meditation wheel"],
+    school: "Late-medieval Rhineland lay mysticism — he had links with the Friends of God (Gottesfreunde) circles of the Upper Rhine",
+    influencedBy: ["The Friends of God (Gottesfreunde) of the Upper Rhine", "Heimo Amgrund, parish priest of Stans, his confessor and friend", "Oswald Isner, parish priest of Kerns, who first let him attempt the fast"],
+    influenced: ["Huldrych Zwingli and later Swiss Protestants, who honoured him as the Landesvater", "The Swiss neutrality tradition, which has read itself back into him", "Swiss Catholic identity in the Second World War — the 1941 bishops' vow", "Countless lay hermits and married contemplatives"],
+    controversies: "Whether a man should leave a wife and ten children at all — asked in his day and still asked. Dorothea's consent is the Church's answer; critics note that she bore the cost. The total fast is disputed by historians. And the 'Do not make the fence too wide' neutrality motto, much quoted in Swiss politics, can't be traced to him.",
+  },
+
+  dailyPractice: {
+    rhythm: "In the Ranft: from midnight until noon, prayer — vigil through the night, Mass in his chapel in the morning. In the afternoon, visitors at his cell window, then prayer again. No meals.",
+    practices: [
+      { name: "Night vigil", detail: "He prayed through the night hours, from midnight on, before the Mass of the morning.", source: "Early accounts of his day, as summarised in the standard lives", legend: false },
+      { name: "Daily Mass", detail: "He endowed a chaplaincy so that Mass could be said daily in the Ranft chapel, and drew his whole strength, he said, from it.", source: "Early biographies; the endowment of the Ranft chaplaincy", legend: false },
+      { name: "Afternoon visitors", detail: "Pilgrims, envoys and neighbours came in the afternoon; he spoke to them briefly and plainly, often using the meditation picture.", source: "Hans von Waldheim's account of his visit (1474)", legend: false },
+      { name: "His prayer", detail: "\"My Lord and my God, take from me everything that keeps me from you. My Lord and my God, give me everything that brings me to you. My Lord and my God, take me from myself and give me wholly to you.\"", source: "Recorded c. 1500; Catechism of the Catholic Church §226", legend: false },
+    ],
+    forYou: "The Ranft was a few minutes' walk from his own front door — he found solitude without leaving his place, and you can too. Take his prayer as a daily act, three lines, said slowly: let go, receive, give yourself. Keep one unbroken stretch of silence each day, even short, before the demands begin. And when you are asked for counsel, give it the way he did: briefly, plainly, and then let the other person act on it.",
+  },
+
+  writings: [
+    { title: "\"My Lord and my God\" — his usual prayer", original: "Mein Herr und mein Gott", genre: "Prayer", year: "first written down c. 1500", language: "German", note: "Quoted in the Catechism of the Catholic Church, §226; in this library", translation: "In the Catechism, §226", free: "Public domain (the German original)", difficulty: "Easy", order: 1 },
+    { title: "Letter to the Council of Bern", original: "Brief an den Rat von Bern", genre: "Letter (dictated)", year: "4 December 1482", language: "Swiss German", note: "His only authentic surviving text — dictated, since he could not write, and sealed with his seal. A short sermon on obedience, wisdom and peace, thanking Bern for a gift after Stans.", translation: "Widely translated; the German at nvf.ch", free: "Public domain", difficulty: "Easy — a page", order: 2 },
+    { title: "The Pilgrim's Tract", original: "Ein nutzlich und loblich tractat von Bruder Claus und einem bilger", genre: "Dialogue with the meditation wheel", year: "printed c. 1488", language: "German", note: "An early printed account of a pilgrim's conversation with him, explaining the meditation wheel. Not by him, and its fidelity to his words is uncertain.", translation: "—", free: "—", difficulty: "Moderate", order: 3 },
   ],
-  related: ["charles-de-foucauld"],
-  note: "His vocation is never told without his wife: the shrine at Sachseln and Flüeli-Ranft presents Niklaus von Flüe and Dorothee Wyss together, and his leaving is always described as made with her consent. He fought at Ragaz in 1446 and in the Thurgau war of 1460, served nine years as a judge, and declined to be Landammann of his canton before he left.",
+  writingsNotes: "He could not read or write. What we have is one dictated letter, one prayer written down after his death, and his words as remembered by visitors. The critical collection of every early source is Robert Durrer's Bruder Klaus: Die ältesten Quellen (1917–21, 2 vols.).",
+
+  about: {
+    hagiography: ["Albrecht von Bonstetten, Historia fratris Nicolai (1479) — written in his lifetime", "Heinrich von Gundelfingen, Historia Nicolai Underwaldensis eremitae (1488)", "Heinrich Wölflin, Vita (1501) — commissioned by the Obwalden government"],
+    biography: ["Robert Durrer, Bruder Klaus: Die ältesten Quellen (1917–21) — the source collection", "Roland Gröbli, Die Sehnsucht nach dem 'einig Wesen' (1990)"],
+    scholarly: [],
+    devotional: [],
+    papal: ["Pius XII, canonization, 15 May 1947", "John Paul II, homily at Flüeli-Ranft, June 1984", "Catechism of the Catholic Church §226 — his prayer"],
+    media: ["The shrine's site, bruderklaus.com, with the prayer, the wheel and the story of Dorothea"],
+    officeOfReadings: "",
+  },
+
+  cult: {
+    patronages: [
+      { of: "Switzerland", why: "His counsel at the Diet of Stans (1481) kept the Confederacy together" },
+      { of: "Canton Obwalden", why: "His home canton" },
+      { of: "The Pontifical Swiss Guard", why: "As patron of Switzerland" },
+      { of: "The Catholic Rural Communities Movement (KLB), Germany", why: "A farmer who became a saint without ceasing to be a countryman" },
+    ],
+    invokedAgainst: ["Discord and civil strife", "War"],
+    attributes: ["Hermit's grey habit, barefoot", "A rosary", "A staff", "The meditation wheel", "A lean, gaunt face"],
+    iconography: "A tall, emaciated old man in a plain grey-brown robe, barefoot, with a staff and rosary — often from the 1492 portrait painted for his burial chapel.",
+    artworks: ["The Sachseln altar panel and painted portrait (1492)", "The meditation wheel painting ('Radbild'), in the parish church of Sachseln"],
+    relics: "In the parish church of Sachseln, beneath the altar; his robe is kept there too and was used in the 1937 healing.",
+    incorrupt: false,
+    shrines: ["Parish church of Sachseln — his tomb", "Flüeli-Ranft — his birthplace, house and the Ranft cell and chapel"],
+    devotions: ["His prayer, 'My Lord and my God'", "Pilgrimage to Flüeli-Ranft and Sachseln"],
+    customs: "25 September is a public holiday in Obwalden.",
+    foundations: [],
+  },
+
+  connections: {
+    contemporaries: ["Dorothea Wyss, his wife", "Heimo Amgrund, parish priest of Stans, who carried his counsel to the Diet", "Albrecht von Bonstetten, abbot of Einsiedeln, his first biographer", "Archduke Sigismund of Austria, who sent him a chalice and money", "Hans von Waldheim, pilgrim from Nuremberg"],
+    directors: ["Oswald Isner, parish priest of Kerns", "Heimo Amgrund, parish priest of Stans"],
+    disciples: ["Brother Ulrich, a hermit who settled near him in the Ranft"],
+    family: "Wife Dorothea Wyss (who survived him), five sons and five daughters; the eldest, Hans, took over the farm.",
+    related: ["charles-de-foucauld"],
+  },
+
+  note: "His vocation is never told without his wife: the shrine at Sachseln and Flüeli-Ranft presents Niklaus von Flüe and Dorothee Wyss together, and his leaving is always described as made with her consent. Both canonization healings came from the canton of Solothurn — one of the two cantons whose admission to the Confederacy he made possible at Stans.",
+
   cards: [
     { q: "St. Nicholas of Flüe — patron of which country, and why?", a: "Switzerland. His counsel to the cantons at the Diet of Stans in 1481 is credited with preventing a civil war." },
     { q: "Which prayer of Brother Klaus does the Catechism quote?", a: "\"My Lord and my God, take from me everything that keeps me from you…\" — §226." },
     { q: "How did Nicholas of Flüe become a hermit?", a: "In 1467, aged about fifty, he left his wife Dorothea and their ten children, with her consent, for a hermitage in the Ranft gorge near their home." },
+    { q: "Brother Klaus — feast days?", a: "21 March (his death, in the Roman Martyrology); 25 September in Switzerland (a solemnity) and Germany." },
+    { q: "What did he eat in the Ranft?", a: "Nothing, by every contemporary account, for about twenty years — only the Eucharist. The auxiliary bishop of Constance tested it in 1469 by ordering him, under obedience, to eat." },
+    { q: "What is Brother Klaus's one authentic surviving text?", a: "His dictated letter to the Council of Bern, 4 December 1482: 'Peace is always in God, for God is peace.'" },
+    { q: "Who carried his counsel to the Diet of Stans?", a: "Heimo Amgrund, parish priest of Stans, who walked to the Ranft and back on the night of 21–22 December 1481." },
+    { q: "Which miracles were approved for his canonization?", a: "Two healings in canton Solothurn: Ida Jeker of Büsserach (1937, touched with his robe at Sachseln) and Bertha Schürmann of Egerkingen (Ascension Day 1939). Pius XII waived the third in 1944." },
+    { q: "When was he canonized?", a: "15 May 1947, Ascension Day, by Pius XII — Switzerland's first saint, 460 years after his death." },
   ],
-}),
+},
 
 core({
   slug: "claude-la-colombiere", listTier: "toKnow", name: "St. Claude La Colombière", sortName: "Claude La Colombière",
@@ -6717,6 +7201,11 @@ window.SAINT_SOURCES = {
   "nicholas-of-flue": [
     { label: "Bruder Klaus shrine, Sachseln and Flüeli-Ranft — origin of his prayer (German)", url: "https://bruderklaus.com/niklaus-von-fluee-dorothee-wyss/gebete/ursprung-des-bk-gebets/" },
     { label: "Wikipedia — Nicholas of Flüe", url: "https://en.wikipedia.org/wiki/Nicholas_of_Flüe" },
+    { label: "Wikipedia (German) — Niklaus von Flüe", url: "https://de.wikipedia.org/wiki/Niklaus_von_Flüe" },
+    { label: "Schweizerische Kirchenzeitung — the canonization process, part II (German)", url: "https://www.kirchenzeitung.ch/article/heiligsprechungsprozess-von-niklaus-von-fluee-ii-12050" },
+    { label: "Helvetia Catholica — the two Solothurn healings (German)", url: "http://helvetia-catholica.blogspot.com/2007/04/wie-bruder-klaus-zwei-solothurnerinnen.html" },
+    { label: "Ökumenisches Heiligenlexikon — 1649, 1669, 1671 (German)", url: "https://www.heiligenlexikon.de/BiographienN/Nikolaus_von_Fluee.htm" },
+    { label: "Letter to the Council of Bern, 1482 (German)", url: "https://www.nvf.ch/bern.asp" },
   ],
   "claude-la-colombiere": [
     { label: "Œuvres complètes, vol. IV (1901) — his London sermons", url: "https://archive.org/details/oeuvrescompletes0004vari_b0v6" },
@@ -6739,12 +7228,15 @@ window.SAINT_SOURCES = {
     { label: "Britannica — John of the Cross", url: "https://www.britannica.com/biography/John-of-the-Cross" },
     { label: "ICS Publications — Collected Works of St. John of the Cross", url: "https://www.icspublications.org/products/the-collected-works-of-st-john-of-the-cross" },
     { label: "My Catholic Life — St. John of the Cross, 14 December", url: "https://mycatholic.life/saints/saints-of-the-liturgical-year/14-december-saint-john-of-the-cross-priest-and-doctor-memorial/" },
+    { label: "De la rueca a la pluma — 350 years since the beatification of John of the Cross (Spanish)", url: "https://delaruecaalapluma.com/2025/01/25/350-anos-de-la-beatificacion-de-fray-juan-de-la-cruz/" },
   ],
   "therese-of-lisieux": [
     { label: "Wikipedia — Thérèse of Lisieux", url: "https://en.wikipedia.org/wiki/Th%C3%A9r%C3%A8se_of_Lisieux" },
     { label: "Vatican — John Paul II homily, 19 Oct 1997 (declaring her Doctor)", url: "https://www.vatican.va/content/john-paul-ii/en/homilies/1997/documents/hf_jp-ii_hom_19101997.html" },
     { label: "Catholic Culture — Divini Amoris Scientia", url: "https://www.catholicculture.org/culture/library/view.cfm?recnum=232" },
     { label: "Society of the Little Flower — Who is St. Thérèse", url: "https://www.littleflower.org/st-therese/who-is-st-therese/" },
+    { label: "Vehementer exultamus hodie — bull of canonization (1925), with all four miracles", url: "https://www.papalencyclicals.net/stt02002" },
+    { label: "Archives of the Carmel of Lisieux — history of the beatification and canonization", url: "https://archives.carmeldelisieux.fr/en/naissance-dune-sainte/la-beatification-et-la-canonisation/historique-de-la-beatification-et-de-la-canonisation/" },
   ],
   "thomas-aquinas": [
     { label: "Wikipedia — Thomas Aquinas", url: "https://en.wikipedia.org/wiki/Thomas_Aquinas" },
@@ -6762,6 +7254,8 @@ window.SAINT_SOURCES = {
   "padre-pio": [
     { label: "Padre Pio da Pietrelcina — Feast, 23 September", url: "https://www.padrepiodapietrelcina.com/en/feast-st-padre-pio-pietrelcina-september-23rd/" },
     { label: "Catholic Online — St. Padre Pio", url: "https://www.catholic.org/saints/saint.php?saint_id=311" },
+    { label: "Voce di Padre Pio — Beatification (the De Martino miracle)", url: "https://www.vocedipadrepio.com/en/beatification/" },
+    { label: "Catholic News Agency — Young man healed by Padre Pio recounts his cure", url: "https://www.catholicnewsagency.com/news/39950/young-man-healed-by-padre-pio-recounts-story-of-miraculous-cure" },
   ],
   "peter-of-alcantara": [
     { label: "Wikipedia — Peter of Alcántara", url: "https://en.wikipedia.org/wiki/Peter_of_Alc%C3%A1ntara" },
@@ -6774,12 +7268,16 @@ window.SAINT_SOURCES = {
   "mother-teresa": [
     { label: "Catholic Culture — Mother Teresa's feast day formally set", url: "https://www.catholicculture.org/news/headlines/index.cfm?storyid=64754" },
     { label: "Vatican News — St. Teresa of Calcutta's feast inscribed in the Roman Calendar", url: "https://www.vaticannews.va/en/vatican-city/news/2025-02/mother-saint-teresa-calcutta-inscribed-roman-calendar.html" },
+    { label: "National Catholic Register — The miracles that made Mother Teresa a saint", url: "https://www.ncregister.com/news/the-miracles-that-made-mother-teresa-a-saint" },
+    { label: "NPR — How the Church documented Mother Teresa's two miracles", url: "https://www.npr.org/sections/parallels/2016/08/31/491937448/how-the-catholic-church-documented-mother-teresas-two-miracles" },
   ],
   "francis-de-sales": [
     { label: "Vatican News — Saint Francis de Sales, Bishop and Doctor", url: "https://www.vaticannews.va/en/saints/01/24/saint-francis-de-sales--bishop-of-geneva-and-doctor-of--the-chur.html" },
+    { label: "Catholic Encyclopedia (1909) — St. Francis de Sales", url: "https://www.newadvent.org/cathen/06220a.htm" },
   ],
   "alphonsus-liguori": [
     { label: "Redemptorists (Baltimore Province) — August 1, feast day of St. Alphonsus Liguori", url: "https://redemptorists.net/news/august-1-the-feast-day-of-st-alphonsus-liguori" },
+    { label: "Domenico Condito — the Catanzaro miracle (Italian)", url: "https://domenicocondito.blogspot.com/2025/10/santalfonso-maria-de-liguori-il.html" },
   ],
   "carlo-acutis": [
     { label: "Wikipedia — Canonization of Carlo Acutis and Pier Giorgio Frassati", url: "https://en.wikipedia.org/wiki/Canonization_of_Carlo_Acutis_and_Pier_Giorgio_Frassati" },
@@ -6811,6 +7309,8 @@ window.SAINT_SOURCES = {
   "john-bosco": [
     { label: "Wikipedia — John Bosco", url: "https://en.wikipedia.org/wiki/John_Bosco" },
     { label: "Vatican State — 31 January, Saint John Bosco", url: "https://www.vaticanstate.va/en/state-and-government/general-informations/saint-of-the-day/1427-31-gennaio-san-giovanni-bosco.html" },
+    { label: "Pius XI, Geminata laetitia — decretal letter of canonization (1934), Italian", url: "https://www.vatican.va/content/pius-xi/it/letters/documents/hf_p-xi_lett_19340401_geminata-laetitia.html" },
+    { label: "Parrocchia di Pontenure — the beatification miracle of Teresa Callegari (Italian)", url: "https://www.parrocchiapontenure.it/2024/01/don-bosco-agli-onori-degli-altari-quel-miracolo-piacentino-per-la-beatificazione/" },
   ],
   "vincent-de-paul": [
     { label: "Franciscan Media — Saint John Vianney (cross-ref, same feast-day batch search)", url: "https://www.franciscanmedia.org/saint-of-the-day/saint-john-vianney/" },
@@ -6825,6 +7325,7 @@ window.SAINT_SOURCES = {
     { label: "Wikipedia — John Vianney", url: "https://en.wikipedia.org/wiki/John_Vianney" },
     { label: "Franciscan Media — Saint John Vianney", url: "https://www.franciscanmedia.org/saint-of-the-day/saint-john-vianney/" },
     { label: "Nashville Catholic — St. John Vianney, patron of parish priests", url: "https://www.nashvillecatholic.org/news/posts/st-john-vianney-the-patron-saint-of-parish-priests-confessors" },
+    { label: "Sanctuaire d'Ars — the Curé of Ars", url: "https://www.arsnet.org/en/the-cure-dars/" },
   ],
   "bernard-of-clairvaux": [
     { label: "Wikipedia — Bernard of Clairvaux", url: "https://en.wikipedia.org/wiki/Bernard_of_Clairvaux" },
@@ -6900,5 +7401,17 @@ window.SAINT_SOURCES = {
   irenaeus: [
     { label: "National Catholic Register — St. Irenaeus of Lyon, Doctor of Unity", url: "https://www.ncregister.com/cna/st-irenaeus-of-lyon-the-legacy-of-the-early-church-father-and-doctor-of-unity" },
     { label: "Wikipedia — Irenaeus", url: "https://en.wikipedia.org/wiki/Irenaeus" },
+  ],
+  "fulton-sheen": [
+    { label: "Vatican News — Fulton Sheen to be beatified in St. Louis on 24 September", url: "https://www.vaticannews.va/en/vatican-city/news/2026-03/fulton-sheen-to-be-beatified-in-st-louis-on-24-september.html" },
+    { label: "EWTN News — live updates from the beatification, 24 September 2026 (feast day, apostolic letter, the relic at Peoria)", url: "https://www.ewtnnews.com/world/us/live-updates-beatification-of-fulton-sheen" },
+    { label: "Archbishop Fulton J. Sheen Foundation — biography", url: "https://www.celebratesheen.com/biography1" },
+    { label: "The Catholic University of America — Sheen archives biography", url: "https://fulton-sheen.catholic.edu/bio/" },
+    { label: "Wikipedia — Fulton J. Sheen", url: "https://en.wikipedia.org/wiki/Fulton_J._Sheen" },
+    { label: "National Catholic Register — Venerable Fulton J. Sheen's Last Day (the \"only a porter\" line)", url: "https://www.ncregister.com/commentaries/venerable-fulton-j-sheen-s-last-day" },
+    { label: "Papal Artifacts — Venerable Fulton J. Sheen (the Pius XII exchange about counting converts)", url: "https://www.papalartifacts.com/portfolio-item/venerable-fulton-j-sheen/" },
+  ],
+  "philip-neri": [
+    { label: "Roberto de Mattei — The Miracle of the Palazzo Massimo, Then and Now", url: "https://www.robertodemattei.it/en/the-miracle-of-the-palazzo-massimo-then-and-now/" },
   ],
 };
